@@ -5,7 +5,7 @@ document.getElementById("submit-button").addEventListener("click", function() {
         // Hide the main container and show the coming soon container
         document.getElementById("main-container").style.display = "none";
         document.getElementById("coming-soon-container").style.display = "block";
-        document.getElementById("coming-soon-message").innerHTML = `Thank you for your input! We're cooking something cool. Sign up for early access!`;
+        document.getElementById("coming-soon-message").innerHTML = `We're cookin'. Sign up for early access!`;
     } else {
         alert("Please enter a description for your ideal assistant.");
     }
