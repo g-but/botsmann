@@ -1,3 +1,8 @@
+import { MongoClient } from 'mongodb';
+
+const uri = process.env.MONGODB_URI;
+const client = new MongoClient(uri);
+
 export default async function handler(req, res) {
     if (req.method === 'POST') {
         const { email } = req.body;
@@ -8,11 +13,16 @@ export default async function handler(req, res) {
         }
 
         try {
-            // Log the email to the console (replace this with your database logic)
-            console.log('Received email:', email);
+            await client.connect();
+            const database = client.db('botsmann');
+            const emails = database.collection('emails');
+            await emails.insertOne({ email });
             res.status(200).json({ message: 'Email saved successfully' });
         } catch (error) {
+            console.error('Error saving email:', error);
             res.status(500).json({ error: 'Failed to save email' });
+        } finally {
+            await client.close();
         }
     } else {
         res.setHeader('Allow', ['POST']);
