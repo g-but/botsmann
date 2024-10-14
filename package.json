@@ -1,0 +1,14 @@
+{
+  "name": "botsmann",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "mongodb": "^6.9.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
