@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "vercel dev"
+    "start": "node server.js",
+    "dev": "vercel dev",
+    "start:dev": "node start-server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
