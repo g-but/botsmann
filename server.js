@@ -13,6 +13,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
+// Log environment variables (only for debugging purposes, do not log sensitive data in production)
+console.log('Environment Variables:', {
+    MONGODB_URI: process.env.MONGODB_URI,
+    EMAIL_USER: process.env.EMAIL_USER,
+    EMAIL_TO: process.env.EMAIL_TO,
+});
+
 // MongoDB connection
 console.log('Connecting to MongoDB with URI:', process.env.MONGODB_URI);
 
@@ -43,6 +50,15 @@ const transporter = nodemailer.createTransport({
     },
 });
 
+// Test email configuration
+transporter.verify((error, success) => {
+    if (error) {
+        console.error('Email transporter configuration failed:', error);
+    } else {
+        console.log('Email transporter is configured and ready to send emails');
+    }
+});
+
 // API endpoint for form submission
 app.post('/api/consultations', async (req, res) => {
     try {
@@ -60,19 +76,19 @@ app.post('/api/consultations', async (req, res) => {
         }
 
         // Save to MongoDB
+        console.log('Attempting to save consultation to MongoDB...');
         const consultation = new Consultation({ name, email, message });
         await consultation.save();
         console.log('Consultation saved to MongoDB:', consultation);
 
         // Send email
+        console.log('Attempting to send email...');
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: process.env.EMAIL_TO,
             subject: 'New Consultation Request',
             text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
         };
-
-        console.log('Mail options prepared:', mailOptions);
 
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
@@ -82,8 +98,7 @@ app.post('/api/consultations', async (req, res) => {
                     message: 'Failed to send email',
                 });
             }
-            console.log('Email sent:', info.response);
-
+            console.log('Email sent successfully:', info.response);
             res.status(201).json({
                 success: true,
                 message: 'Consultation request received successfully',
