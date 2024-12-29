@@ -1,39 +1,41 @@
-document.getElementById("submit-button").addEventListener("click", function() {
-    const userInput = document.getElementById("assistant-type").value;
+// script.js
 
-    if (userInput.trim() !== "") {
-        // Hide the main container and show the coming soon container
-        document.getElementById("main-container").style.display = "none";
-        document.getElementById("coming-soon-container").style.display = "block";
-        document.getElementById("coming-soon-message").innerHTML = `We're cookin'. Sign up for early access!`;
-    } else {
-        alert("Please enter a description for your ideal assistant.");
+function showPrompt(solutionType) {
+    const promptSection = document.getElementById('promptContent');
+    let promptText = '';
+
+    switch(solutionType) {
+        case 'personal':
+            promptText = "Unlock the potential of AI for your personal life. Get personalized solutions to enhance your day-to-day tasks. Enter your email to get started:";
+            break;
+        case 'professional':
+            promptText = "Discover how AI can transform your professional workflow. Let's craft solutions that drive productivity. Enter your email to learn more:";
+            break;
+        case 'business':
+            promptText = "Elevate your business with automation and robotics. We tailor AI solutions for your unique business needs. Enter your email to see how we can help:";
+            break;
+        default:
+            promptText = "Enter your email to discover our solutions.";
     }
-});
 
-document.getElementById("signup-button").addEventListener("click", async function() {
-    const emailInput = document.getElementById("email-field").value;
+    promptSection.innerHTML = `
+        <p>${promptText}</p>
+        <input type="email" placeholder="Your email address" id="emailInput">
+        <button type="submit" onclick="submitEmail()">Get Started</button>
+    `;
+}
 
-    if (emailInput.trim() !== "") {
-        try {
-            const response = await fetch('/api/saveEmail', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email: emailInput }),
-            });
-
-            const result = await response.json();
-            if (response.ok) {
-                alert(`Thank you for signing up! We'll keep you in the loop at ${emailInput}.`);
-            } else {
-                alert(`Error: ${result.error}`);
-            }
-        } catch (error) {
-            alert("An error occurred while saving your email. Please try again later.");
-        }
+function submitEmail() {
+    const email = document.getElementById('emailInput').value;
+    if (validateEmail(email)) {
+        alert("Thank you! We'll be in touch soon.");
+        // Here you could add your email submission logic (e.g., sending to a server)
     } else {
         alert("Please enter a valid email address.");
     }
-});
+}
+
+function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
