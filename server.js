@@ -16,10 +16,7 @@ app.use(express.static('public'));
 // MongoDB connection
 console.log('Connecting to MongoDB with URI:', process.env.MONGODB_URI);
 
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
+mongoose.connect(process.env.MONGODB_URI)
     .then(() => {
         console.log('Connected to MongoDB successfully');
     })
@@ -86,11 +83,11 @@ app.post('/api/consultations', async (req, res) => {
                 });
             }
             console.log('Email sent:', info.response);
-        });
 
-        res.status(201).json({
-            success: true,
-            message: 'Consultation request received successfully',
+            res.status(201).json({
+                success: true,
+                message: 'Consultation request received successfully',
+            });
         });
     } catch (error) {
         console.error('Error in API endpoint:', error);
@@ -101,7 +98,7 @@ app.post('/api/consultations', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 4000; // Change to 4000
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
