@@ -1,38 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tailored AI Assistants & Robots</title>
+    <title>Botsmann | Personal AI Solutions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
-    <div class="container" id="main-container">
-        <header class="header">
-            <h1 class="title">Describe Your Perfect Assistant</h1>
-            <p class="subtext">What would it do to make your life easier and more fun?</p>
-        </header>
-        <main class="main-content">
-            <div class="input-section">
-                <input type="text" id="assistant-type" class="input-field" placeholder="E.g., schedule appointments, clean up, brainstorm ideas">
-                <button id="submit-button" class="submit-button">Submit</button>
+    <div class="container">
+        <section class="hero">
+            <h1>AI-Powered Personal Solutions</h1>
+            <p>Experience the future of personal automation with Botsmann's intelligent assistants and robotic solutions.</p>
+            <a href="#contact" class="button">Get Started</a>
+        </section>
+
+        <div class="solutions">
+            <div class="solution-card">
+                <h3>AI Personal Assistants</h3>
+                <p>From health tracking to legal advice, our AI assistants provide comprehensive support for your daily needs.</p>
             </div>
-        </main>
-    </div>
-    <div class="container" id="coming-soon-container" style="display: none;">
-        <div class="spinner" id="loading-spinner"></div>
-        <p class="coming-soon" id="coming-soon-message">We're cookin'. Sign up for early access!</p>
-        <div class="email-signup">
-            <input type="email" id="email-field" class="email-field" placeholder="Enter your email to join the waiting list">
-            <button id="signup-button" class="signup-button">Join the Waiting List</button>
+            <div class="solution-card">
+                <h3>Home Automation</h3>
+                <p>Transform your living space with smart robots and automated systems that handle household tasks effortlessly.</p>
+            </div>
+            <div class="solution-card">
+                <h3>Professional Growth</h3>
+                <p>Accelerate your career with AI-powered coaching and personalized learning solutions.</p>
+            </div>
+        </div>
+
+        <div id="contact" class="contact-form">
+            <h2>Schedule a Free Consultation</h2>
+            <form onsubmit="submitForm(event)">
+                <input type="text" class="form-input" name="name" placeholder="Your Name" required>
+                <input type="email" class="form-input" name="email" placeholder="Your Email" required>
+                <textarea class="form-input" name="message" rows="4" placeholder="How can we help?"></textarea>
+                <button type="submit" class="button">Submit</button>
+                <div id="formStatus"></div>
+            </form>
         </div>
     </div>
-    <script src="script.js"></script>
-</body>
 
+    <script>
+    async function validateFormClient(formData) {
+        const errors = [];
+        
+        if (formData.name.length < 2) {
+            errors.push('Name must be at least 2 characters long');
+        }
+        
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+            errors.push('Please enter a valid email address');
+        }
+        
+        if (formData.message.length < 10) {
+            errors.push('Message must be at least 10 characters long');
+        }
+        
+        return errors;
+    }
+
+    async function submitForm(event) {
+        event.preventDefault();
+        
+        const form = event.target;
+        const submitButton = form.querySelector('button[type="submit"]');
+        const statusDiv = document.getElementById('formStatus');
+        
+        // Clear previous status messages
+        statusDiv.innerHTML = '';
+        
+        const formData = {
+            name: form.name.value.trim(),
+            email: form.email.value.trim(),
+            message: form.message.value.trim()
+        };
+
+        // Client-side validation
+        const validationErrors = await validateFormClient(formData);
+        if (validationErrors.length > 0) {
+            statusDiv.innerHTML = `
+                <div style="color: #dc3545; margin-top: 16px; padding: 12px;">
+                    ${validationErrors.map(err => `• ${err}`).join('<br>')}
+                </div>
+            `;
+            return;
+        }
+        
+        // Show loading state
+        submitButton.disabled = true;
+        submitButton.innerHTML = `
+            <span class="spinner"></span>
+            Sending...
+        `;
+        
+        try {
+            const response = await fetch('/api/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                // Success
+                statusDiv.innerHTML = `
+                    <div style="color: #10a37f; margin-top: 16px; padding: 12px; background: #e6f7f3; border-radius: 6px;">
+                        <p style="margin: 0;">Thank you! Your message has been sent successfully.</p>
+                        <p style="margin: 8px 0 0;">We'll get back to you at ${formData.email} soon.</p>
+                    </div>
+                `;
+                form.reset();
+            } else {
+                throw new Error(result.errors ? result.errors.join(', ') : result.message);
+            }
+        } catch (error) {
+            statusDiv.innerHTML = `
+                <div style="color: #dc3545; margin-top: 16px; padding: 12px; background: #fdf1f1; border-radius: 6px;">
+                    <p style="margin: 0;">Error: ${error.message}</p>
+                    <p style="margin: 8px 0 0;">Please try again or contact us directly.</p>
+                </div>
+            `;
+        } finally {
+            submitButton.disabled = false;
+            submitButton.innerHTML = 'Submit';
+        }
+    }
+    </script>
+</body>
 </html>
