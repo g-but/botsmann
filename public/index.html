@@ -3,106 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Botsmann | Personal AI Solutions</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>Botsmann</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
+    <nav>
+        <div class="logo">Botsmann</div>
+        <div class="nav-links">
+            <a href="#solutions">Solutions</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <main>
         <section class="hero">
-            <h1>AI-Powered Personal Solutions</h1>
-            <p>Experience the future of personal automation with Botsmann's intelligent assistants and robotic solutions.</p>
-            <a href="#contact" class="button">Get Started</a>
+            <h1>AI Solutions for 
+                <span class="gradient-text">Human Progress</span>
+            </h1>
+            <p>Transforming industries through advanced robotics and artificial intelligence</p>
         </section>
 
-        <div class="solutions">
-            <div class="solution-card">
-                <h3>AI Personal Assistants</h3>
-                <p>From health tracking to legal advice, our AI assistants provide comprehensive support for your daily needs.</p>
-            </div>
-            <div class="solution-card">
-                <h3>Home Automation</h3>
-                <p>Transform your living space with smart robots and automated systems that handle household tasks effortlessly.</p>
-            </div>
-            <div class="solution-card">
-                <h3>Professional Growth</h3>
-                <p>Accelerate your career with AI-powered coaching and personalized learning solutions.</p>
-            </div>
-        </div>
-
-        <div id="contact" class="contact-form">
-            <h2>Schedule a Free Consultation</h2>
-            <form id="consultationForm" onsubmit="submitForm(event)">
-                <input type="text" class="form-input" name="name" placeholder="Your Name" required>
-                <input type="email" class="form-input" name="email" placeholder="Your Email" required>
-                <textarea class="form-input" name="message" rows="4" placeholder="How can we help?" required></textarea>
-                <button type="submit" class="button">Submit</button>
-                <div id="formStatus"></div>
+        <section id="contact" class="contact-form">
+            <form id="consultationForm">
+                <div class="form-group">
+                    <input type="text" id="name" required>
+                    <label for="name">Full Name</label>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" required>
+                    <label for="email">Email</label>
+                </div>
+                <div class="form-group">
+                    <textarea id="message" required></textarea>
+                    <label for="message">Message</label>
+                </div>
+                <button type="submit">
+                    <span>Send Message</span>
+                    <div class="spinner"></div>
+                </button>
             </form>
-        </div>
-    </div>
-
-    <script>
-    async function submitForm(event) {
-        event.preventDefault();
-        
-        const form = event.target;
-        const submitButton = form.querySelector('button[type="submit"]');
-        const statusDiv = document.getElementById('formStatus');
-        
-        statusDiv.innerHTML = '';
-        
-        const formData = {
-            name: form.name.value.trim(),
-            email: form.email.value.trim(),
-            message: form.message.value.trim()
-        };
-
-        // Basic validation
-        if (formData.name.length < 2 || formData.message.length < 10) {
-            statusDiv.innerHTML = `
-                <div style="color: #dc3545; margin-top: 16px; padding: 12px;">
-                    Please ensure name is at least 2 characters and message is at least 10 characters.
-                </div>
-            `;
-            return;
-        }
-        
-        submitButton.disabled = true;
-        submitButton.innerHTML = `
-            <span class="spinner"></span>
-            Sending...
-        `;
-        
-        try {
-            const response = await fetch('/api/consultations', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-                statusDiv.innerHTML = `
-                    <div style="color: #10a37f; margin-top: 16px; padding: 12px; background: #e6f7f3; border-radius: 6px;">
-                        <p style="margin: 0;">Thank you! Your message has been sent successfully.</p>
-                        <p style="margin: 8px 0 0;">We'll get back to you at ${formData.email} soon.</p>
-                    </div>
-                `;
-                form.reset();
-            } else {
-                throw new Error(result.message || 'Failed to submit form');
-            }
-        } catch (error) {
-            statusDiv.innerHTML = `
-                <div style="color: #dc3545; margin-top: 16px; padding: 12px; background: #fdf1f1; border-radius: 6px;">
-                    <p style="margin: 0;">Error: ${error.message}</p>
-                    <p style="margin: 8px 0 0;">Please try again or contact us directly.</p>
-                </div>
-            `;
-        } finally {
-            submitButton.disabled = false;
-            submitButton.innerHTML = 'Subm
+        </section>
+    </main>
+</body>
+</html>
