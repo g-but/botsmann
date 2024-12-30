@@ -9,19 +9,16 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: ['http://localhost:3000', 'http://localhost:5000', 'http://127.0.0.1:5500'],
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type']
+}));
 app.use(express.json());
 app.use(express.static('public'));
 
-// Log environment variables (only for debugging purposes, do not log sensitive data in production)
-console.log('Environment Variables:', {
-    MONGODB_URI: process.env.MONGODB_URI,
-    EMAIL_USER: process.env.EMAIL_USER,
-    EMAIL_TO: process.env.EMAIL_TO,
-});
-
 // MongoDB connection
-console.log('Connecting to MongoDB with URI:', process.env.MONGODB_URI);
+console.log('Connecting to MongoDB...');
 
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => {
@@ -53,9 +50,9 @@ const transporter = nodemailer.createTransport({
 // Test email configuration
 transporter.verify((error, success) => {
     if (error) {
-        console.error('Email transporter configuration failed:', error);
+        console.error('Email configuration failed:', error);
     } else {
-        console.log('Email transporter is configured and ready to send emails');
+        console.log('Email configuration successful');
     }
 });
 
@@ -64,11 +61,10 @@ app.post('/api/consultations', async (req, res) => {
     try {
         const { name, email, message } = req.body;
 
-        console.log('Incoming request:', { name, email, message });
+        console.log('Received submission:', { name, email, message });
 
         // Validate fields
         if (!name || !email || !message) {
-            console.log('Validation failed: Missing fields');
             return res.status(400).json({
                 success: false,
                 message: 'All fields are required',
@@ -76,39 +72,45 @@ app.post('/api/consultations', async (req, res) => {
         }
 
         // Save to MongoDB
-        console.log('Attempting to save consultation to MongoDB...');
         const consultation = new Consultation({ name, email, message });
         await consultation.save();
-        console.log('Consultation saved to MongoDB:', consultation);
+        console.log('Saved to MongoDB:', consultation);
 
         // Send email
-        console.log('Attempting to send email...');
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: process.env.EMAIL_TO,
             subject: 'New Consultation Request',
-            text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
+            text: `
+Name: ${name}
+Email: ${email}
+Message: ${message}
+Time: ${new Date().toLocaleString()}
+            `,
         };
 
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.error('Error sending email:', error);
-                return res.status(500).json({
-                    success: false,
-                    message: 'Failed to send email',
-                });
-            }
-            console.log('Email sent successfully:', info.response);
-            res.status(201).json({
-                success: true,
-                message: 'Consultation request received successfully',
+        await new Promise((resolve, reject) => {
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.error('Email sending failed:', error);
+                    reject(error);
+                } else {
+                    console.log('Email sent:', info.response);
+                    resolve(info);
+                }
             });
         });
+
+        res.status(201).json({
+            success: true,
+            message: 'Consultation request received successfully'
+        });
+
     } catch (error) {
-        console.error('Error in API endpoint:', error);
+        console.error('Request failed:', error);
         res.status(500).json({
             success: false,
-            message: 'An error occurred while processing your request',
+            message: 'An error occurred while processing your request'
         });
     }
 });
