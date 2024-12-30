@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Botsmann | Personal AI Solutions</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
@@ -32,10 +32,10 @@
 
         <div id="contact" class="contact-form">
             <h2>Schedule a Free Consultation</h2>
-            <form onsubmit="submitForm(event)">
+            <form id="consultationForm" onsubmit="submitForm(event)">
                 <input type="text" class="form-input" name="name" placeholder="Your Name" required>
                 <input type="email" class="form-input" name="email" placeholder="Your Email" required>
-                <textarea class="form-input" name="message" rows="4" placeholder="How can we help?"></textarea>
+                <textarea class="form-input" name="message" rows="4" placeholder="How can we help?" required></textarea>
                 <button type="submit" class="button">Submit</button>
                 <div id="formStatus"></div>
             </form>
@@ -43,25 +43,6 @@
     </div>
 
     <script>
-    async function validateFormClient(formData) {
-        const errors = [];
-        
-        if (formData.name.length < 2) {
-            errors.push('Name must be at least 2 characters long');
-        }
-        
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(formData.email)) {
-            errors.push('Please enter a valid email address');
-        }
-        
-        if (formData.message.length < 10) {
-            errors.push('Message must be at least 10 characters long');
-        }
-        
-        return errors;
-    }
-
     async function submitForm(event) {
         event.preventDefault();
         
@@ -77,11 +58,11 @@
             message: form.message.value.trim()
         };
 
-        const validationErrors = await validateFormClient(formData);
-        if (validationErrors.length > 0) {
+        // Basic validation
+        if (formData.name.length < 2 || formData.message.length < 10) {
             statusDiv.innerHTML = `
                 <div style="color: #dc3545; margin-top: 16px; padding: 12px;">
-                    ${validationErrors.map(err => `• ${err}`).join('<br>')}
+                    Please ensure name is at least 2 characters and message is at least 10 characters.
                 </div>
             `;
             return;
@@ -113,7 +94,7 @@
                 `;
                 form.reset();
             } else {
-                throw new Error(result.message || 'Something went wrong');
+                throw new Error(result.message || 'Failed to submit form');
             }
         } catch (error) {
             statusDiv.innerHTML = `
@@ -124,9 +105,4 @@
             `;
         } finally {
             submitButton.disabled = false;
-            submitButton.innerHTML = 'Submit';
-        }
-    }
-    </script>
-</body>
-</html>
+            submitButton.innerHTML = 'Subm
