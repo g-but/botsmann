@@ -1,4 +1,4 @@
-const { exec } = require('child_process');
+import { exec } from 'child_process';
 
 // Define the port your server uses
 const port = 4000;
@@ -13,20 +13,28 @@ function checkAndKillPort(port) {
         }
         if (stdout) {
             console.log(`Command output: ${stdout}`);
-            const pid = stdout.trim();
-            console.log(`Extracted PID: ${pid}`);
-            if (pid && !isNaN(pid)) {
-                const killCommand = process.platform === 'win32' ? `taskkill /PID ${pid} /F` : `kill -9 ${pid}`;
-                exec(killCommand, (killErr, killStdout, killStderr) => {
-                    if (killErr) {
-                        console.error(`Error killing process: ${killStderr}`);
-                        return;
-                    }
-                    console.log(`Killed process on port ${port}`);
-                    startServer();
+            const pids = stdout.trim().split('\n').filter(pid => pid); // Handle multiple PIDs
+            if (pids.length > 0) {
+                const killCommands = pids.map(pid => {
+                    const killCommand = process.platform === 'win32' ? `taskkill /PID ${pid} /F` : `kill -9 ${pid}`;
+                    return new Promise((resolve, reject) => {
+                        exec(killCommand, (killErr, _, killStderr) => {
+                            if (killErr) {
+                                console.error(`Error killing process ${pid}: ${killStderr}`);
+                                reject(killErr);
+                            } else {
+                                console.log(`Killed process ${pid} on port ${port}`);
+                                resolve();
+                            }
+                        });
+                    });
                 });
+
+                Promise.all(killCommands)
+                    .then(() => startServer())
+                    .catch(() => console.error('Failed to kill some processes.'));
             } else {
-                console.error('PID not found or invalid.');
+                console.error('No valid PIDs found.');
                 startServer();
             }
         } else {
