@@ -205,3 +205,51 @@ button:hover {
 #signUpButton:hover {
   background: #0056cc;
 }
+
+/* P06f5 */
+#contactUsButton {
+  width: 200px;
+  padding: 1rem;
+  background: var(--primary);
+  color: var(--text);
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin: 0 auto;
+  display: block;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(90deg, #4776E6, #8E54E9);
+}
+
+#contactUsButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* P86aa */
+.solutions #contactUsButton {
+  width: 200px;
+  padding: 1rem;
+  background: var(--primary);
+  color: var(--text);
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin: 0 auto;
+  display: block;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(90deg, #4776E6, #8E54E9);
+}
+
+.solutions #contactUsButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
