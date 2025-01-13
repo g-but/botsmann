@@ -34,6 +34,6 @@ document.getElementById('consultationForm').addEventListener('submit', async (ev
     }
 });
 
-document.getElementById('signUpButton').addEventListener('click', () => {
+document.getElementById('contactUsButton').addEventListener('click', () => {
     document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
 });
