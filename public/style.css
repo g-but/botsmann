@@ -185,3 +185,18 @@ button:hover {
 .back-button:hover {
   opacity: 0.9;
 }
+
+#signUpButton {
+  padding: 1rem 2rem;
+  background: var(--primary);
+  color: var(--text);
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#signUpButton:hover {
+  background: #0056cc;
+}

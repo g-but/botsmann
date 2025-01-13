@@ -33,3 +33,7 @@ document.getElementById('consultationForm').addEventListener('submit', async (ev
         console.error('Request error:', error);
     }
 });
+
+document.getElementById('signUpButton').addEventListener('click', () => {
+    document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+});
