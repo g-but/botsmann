@@ -1,9 +1,8 @@
-/** @type {import('jest').Config} */
 module.exports = {
+  preset: 'ts-jest',
   testEnvironment: 'node',
-  transform: {
-    "^.+\\.(ts|tsx)$": "ts-jest"
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
   },
-  moduleFileExtensions: ["ts", "tsx", "js"],
-  testMatch: ["**/?(*.)+(spec|test).[tj]s?(x)"]
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 }; 
