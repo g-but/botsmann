@@ -1,0 +1,27 @@
+import { notFound } from 'next/navigation';
+import bots, { Bot } from '../../../data/bots';
+
+export default async function BotPage({ params }: any) {
+  const bot: Bot | undefined = bots.find((bot) => bot.slug === params.slug);
+  if (!bot) {
+    return notFound();
+  }
+
+  return (
+    <div className="container mx-auto py-8">
+      <h1 className="text-3xl mb-6">{bot.title}</h1>
+      <p>{bot.description}</p>
+      {/* If the overview includes HTML (see lawyer bot), render it carefully */}
+      <div className="mb-4" dangerouslySetInnerHTML={{ __html: bot.overview }} />
+      <div>
+        <h3 className="text-xl font-bold mb-2">Features</h3>
+        <ul className="list-disc ml-6 mb-4">
+          {bot.features.map((feature: string) => (
+            <li key={feature}>{feature}</li>
+          ))}
+        </ul>
+        <p>{bot.details}</p>
+      </div>
+    </div>
+  );
+} 
