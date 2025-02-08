@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import bots from '../data/bots';
+import bots from '@/app/data/bots';
 
 export default async function BotPage({ params }: { params: { slug: string } }) {
   const bot = bots.find((bot) => bot.slug === params.slug);
