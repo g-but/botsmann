@@ -1,18 +1,29 @@
 'use client';
 
-import React from 'react';
+import Link from 'next/link';
 
 export default function Header() {
   return (
-    <header className="p-4 bg-gray-800 text-white">
-      <nav className="flex justify-between items-center max-w-6xl mx-auto">
-        <div className="text-xl font-bold">Botsmann</div>
-        <div className="space-x-4">
-          <a href="/" className="hover:text-gray-300">Home</a>
-          <a href="/about" className="hover:text-gray-300">About</a>
-          <a href="/bots" className="hover:text-gray-300">Bots</a>
-        </div>
-      </nav>
+    <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-xl">
+      <div className="mx-auto flex h-16 max-w-screen-xl items-center justify-between px-6">
+        <Link href="/" className="flex items-center space-x-2">
+          <span className="text-xl font-semibold text-openai-gray">Botsmann</span>
+        </Link>
+        <nav className="flex items-center space-x-8">
+          <Link href="/bots" className="text-sm font-medium text-gray-600 hover:text-openai-green transition-colors">
+            Bots
+          </Link>
+          <Link href="/about" className="text-sm font-medium text-gray-600 hover:text-openai-green transition-colors">
+            About
+          </Link>
+          <Link 
+            href="/about" 
+            className="rounded-md bg-openai-green px-4 py-2 text-sm font-medium text-white hover:bg-opacity-90 transition-opacity"
+          >
+            Contact Us
+          </Link>
+        </nav>
+      </div>
     </header>
   );
 }
