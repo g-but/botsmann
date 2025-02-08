@@ -4,19 +4,23 @@ import Link from 'next/link';
 
 export default function BotsList() {
   return (
-    <div className="container mx-auto py-8">
-      <h1 className="text-3xl mb-6">Our AI Bots</h1>
-      <ul>
+    <div className="mx-auto max-w-screen-xl px-6 py-12">
+      <h1 className="mb-8 text-4xl font-semibold tracking-tight">Our AI Bots</h1>
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {bots.map((bot) => (
-          <li key={bot.slug} className="mb-4 p-4 border rounded shadow">
-            <h2 className="text-2xl">{bot.title}</h2>
-            <p>{bot.description}</p>
-            <Link href={`/bots/${bot.slug}`} className="text-blue-500 hover:underline">
-              Read More
-            </Link>
-          </li>
+          <Link 
+            key={bot.slug} 
+            href={`/bots/${bot.slug}`}
+            className="group rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+          >
+            <h2 className="mb-2 text-xl font-semibold text-gray-900">{bot.title}</h2>
+            <p className="mb-4 text-gray-600">{bot.description}</p>
+            <span className="text-sm font-medium text-openai-green group-hover:underline">
+              Learn more →
+            </span>
+          </Link>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
