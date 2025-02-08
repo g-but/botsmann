@@ -13,6 +13,9 @@ export default function Header() {
           <Link href="/bots" className="text-sm font-medium text-gray-600 hover:text-openai-green transition-colors">
             Bots
           </Link>
+          <Link href="/blog" className="text-sm font-medium text-gray-600 hover:text-openai-green transition-colors">
+            Blog
+          </Link>
           <Link href="/about" className="text-sm font-medium text-gray-600 hover:text-openai-green transition-colors">
             About
           </Link>
