@@ -32,10 +32,10 @@ const bots: Bot[] = [
       'Ticket management',
       'FAQ automation',
       'Sentiment analysis',
-      'Seamless human handoff'
+      'Seamless handoff'
     ],
     details: 'Enhance your customer support operations with AI-powered automation that understands and responds to customer needs effectively.'
   }
-]
+] as const;
 
 export default bots;

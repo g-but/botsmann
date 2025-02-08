@@ -7,7 +7,7 @@ export default function BotsList() {
     <div className="container mx-auto py-8">
       <h1 className="text-3xl mb-6">Our AI Bots</h1>
       <ul>
-        {bots.map((bot: Bot) => (
+        {bots.map((bot) => (
           <li key={bot.slug} className="mb-4 p-4 border rounded shadow">
             <h2 className="text-2xl">{bot.title}</h2>
             <p>{bot.description}</p>

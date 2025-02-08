@@ -1,8 +1,8 @@
 import { notFound } from 'next/navigation';
 import bots, { Bot } from '../../data/bots';
 
-export default async function BotPage({ params }: any) {
-  const bot: Bot | undefined = bots.find((bot) => bot.slug === params.slug);
+export default async function BotPage({ params }: { params: { slug: string } }) {
+  const bot = bots.find((bot) => bot.slug === params.slug);
     return notFound();
   }
 
@@ -14,7 +14,7 @@ export default async function BotPage({ params }: any) {
       <div>
         <h3 className="text-xl font-bold mb-2">Features</h3>
         <ul className="list-disc ml-6 mb-4">
-          {bot.features.map((feature: string) => (
+          {bot.features.map((feature) => (
             <li key={feature}>{feature}</li>
           ))}
         </ul>
