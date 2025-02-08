@@ -1,5 +1,5 @@
-import { Bot } from '@/data/bots';
-import bots from '@/data/bots';
+import { Bot } from '../../src/data/bots';
+import bots from '../../src/data/bots';
 import Link from 'next/link';
 
 export default function BotsList() {
