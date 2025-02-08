@@ -1,5 +1,6 @@
 import { Bot } from '@/data/bots';
 import bots from '@/data/bots';
+import Link from 'next/link';
 
 export default function BotsList() {
   return (
@@ -10,9 +11,9 @@ export default function BotsList() {
           <li key={bot.slug} className="mb-4 p-4 border rounded shadow">
             <h2 className="text-2xl">{bot.title}</h2>
             <p>{bot.description}</p>
-            <a href={`/bots/${bot.slug}`} className="text-blue-500 hover:underline">
+            <Link href={`/bots/${bot.slug}`} className="text-blue-500 hover:underline">
               Read More
-            </a>
+            </Link>
           </li>
         ))}
       </ul>
