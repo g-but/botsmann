@@ -1,6 +1,6 @@
 [build]
   command = "npm run build"
-  publish = "out"
+  publish = "build"
 
 [build.environment]
   NEXT_PUBLIC_SITE_URL = "https://botsmann.netlify.app"
