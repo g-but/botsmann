@@ -7,6 +7,10 @@ interface EmailParams {
 }
 
 export async function sendEmail({ to, subject, text }: EmailParams) {
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    throw new Error('Email credentials not configured');
+  }
+
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {

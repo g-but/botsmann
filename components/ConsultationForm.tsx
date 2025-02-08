@@ -49,6 +49,7 @@ export default function ConsultationForm() {
         <input
           {...register('name', { required: 'Name is required' })}
           type="text"
+          id="name"
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
         />
         {errors.name && (
@@ -69,6 +70,7 @@ export default function ConsultationForm() {
             },
           })}
           type="email"
+          id="email"
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
         />
         {errors.email && (
@@ -83,6 +85,7 @@ export default function ConsultationForm() {
         <textarea
           {...register('message', { required: 'Message is required' })}
           rows={4}
+          id="message"
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
         />
         {errors.message && (
