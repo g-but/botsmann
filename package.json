@@ -1,11 +1,12 @@
 {
   "name": "botsmann",
   "version": "1.0.0",
+  "private": true,
   "scripts": {
-    "build": "next build",
     "dev": "next dev",
+    "build": "next build",
     "start": "next start",
-    "test": "jest"
+    "lint": "next lint"
   },
   "dependencies": {
     "next": "14.0.4",
