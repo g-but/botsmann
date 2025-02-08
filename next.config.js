@@ -5,6 +5,13 @@ const nextConfig = {
   experimental: {
     typedRoutes: true,
     serverActions: true
+  },
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': '.'
+    };
+    return config;
   }
 }
 
