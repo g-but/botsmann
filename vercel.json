@@ -4,8 +4,8 @@
     { "src": "package.json", "use": "@vercel/next" }
   ],
   "env": {
-    "MONGODB_URI": "@mongodb-uri",
-    "EMAIL_USER": "@email-user",
-    "EMAIL_PASS": "@email-pass"
+    "MONGODB_URI": "${MONGODB_URI}",
+    "EMAIL_USER": "${EMAIL_USER}",
+    "EMAIL_PASS": "${EMAIL_PASS}"
   }
 }
