@@ -7,7 +7,7 @@ export interface Bot {
   details: string;
 }
 
-const bots: Bot[] = [
+export default [
   {
     slug: 'lawyer-bot',
     title: 'Legal Assistant Bot',
@@ -36,4 +36,4 @@ const bots: Bot[] = [
     ],
     details: 'Enhance your customer support operations with AI-powered automation that understands and responds to customer needs effectively.'
   }
-];
+] as Bot[];
