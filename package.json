@@ -2,12 +2,10 @@
   "name": "botsmann",
   "version": "1.0.0",
   "scripts": {
-    "vercel-build": "next build",
+    "build": "next build",
     "dev": "next dev",
-    "deploy": "vercel deploy --prod",
-    "start": "next start -p 3001",
-    "test": "jest",
-    "test:integration": "start-server-and-test 'next start -p 3001' http://localhost:3001 'jest'"
+    "start": "next start",
+    "test": "jest"
   },
   "dependencies": {
     "@contentful/rich-text-react-renderer": "^16.0.1",
