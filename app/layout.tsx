@@ -1,4 +1,5 @@
 import '@/app/globals.css';
+import { ReactNode } from 'react';
 
 export const metadata = {
   title: 'Botsmann - AI Bot Suite',
@@ -8,7 +9,7 @@ export const metadata = {
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <html lang="en">
