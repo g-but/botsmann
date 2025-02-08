@@ -25,17 +25,17 @@ const bots: Bot[] = [
   {
     slug: 'customer-service-bot',
     title: 'Customer Service Bot',
-    description: '24/7 customer support automation solution',
-    overview: 'Provide round-the-clock customer support with our intelligent Customer Service Bot.',
+    description: 'Intelligent customer support automation',
+    overview: 'Our Customer Service Bot provides 24/7 support and handles common customer inquiries.',
     features: [
+      'Natural language understanding',
       'Multi-language support',
-      'Ticket management',
+      'Ticket creation and routing',
       'FAQ automation',
-      'Sentiment analysis',
-      'Seamless handoff'
+      'Sentiment analysis'
     ],
-    details: 'Enhance your customer support operations with AI-powered automation that understands and responds to customer needs effectively.'
+    details: 'Built with state-of-the-art AI models to provide human-like customer interactions.'
   }
-]
+];
 
 export default bots;
