@@ -1,13 +1,11 @@
 /** @type {import('next').NextConfig} */
-module.exports = {
+const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   experimental: {
     typedRoutes: true,
     serverActions: true
-  },
-  webpack: (config) => {
-    config.resolve.fallback = { fs: false, path: false };
-    return config;
   }
-};
+}
+
+module.exports = nextConfig
