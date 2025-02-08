@@ -2,13 +2,17 @@ import ConsultationForm from '../../components/ConsultationForm';
 
 export default function About() {
   return (
-    <main className="max-w-3xl mx-auto p-4">
-      <h1 className="text-center text-4xl font-bold mb-6">About Us</h1>
-      <p className="mb-6 text-lg">
-        We are a dedicated consulting firm focused on providing innovative AI and robotics solutions that transform industries.
-        Our mission is to empower businesses and individuals with cutting-edge technology and strategic consultation.
+    <div className="mx-auto max-w-screen-xl px-6 py-12">
+      <h1 className="mb-6 text-4xl font-semibold tracking-tight">About Botsmann</h1>
+      <p className="mb-12 text-lg text-gray-600">
+        We specialize in developing cutting-edge AI solutions that help businesses automate tasks,
+        enhance productivity, and unlock new possibilities. Our suite of specialized bots is designed
+        to tackle specific challenges across various industries.
       </p>
-      <ConsultationForm />
-    </main>
+      <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
+        <h2 className="mb-6 text-2xl font-semibold">Get in Touch</h2>
+        <ConsultationForm />
+      </div>
+    </div>
   );
-} 
+}  
