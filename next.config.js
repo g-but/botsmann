@@ -6,13 +6,15 @@ const nextConfig = {
     appDir: true
   },
   webpack: (config) => {
-    config.resolve.fallback = { fs: false, path: false };
+    config.resolve = {
+      ...config.resolve,
+      fallback: { fs: false, path: false },
+      alias: {
+        ...config.resolve.alias,
+        '@': '/vercel/path0/src'
+      }
+    };
     return config;
-  },
-  env: {
-    MONGODB_URI: process.env.MONGODB_URI,
-    EMAIL_USER: process.env.EMAIL_USER,
-    EMAIL_PASS: process.env.EMAIL_PASS
   }
 };
 
