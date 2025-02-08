@@ -1,5 +1,5 @@
-import '@/app/globals.css';
 import { ReactNode } from 'react';
+import '@/app/globals.css';
 
 export const metadata = {
   title: 'Botsmann - AI Bot Suite',
