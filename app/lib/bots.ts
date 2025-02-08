@@ -37,5 +37,3 @@ const bots: Bot[] = [
     details: 'Enhance your customer support operations with AI-powered automation that understands and responds to customer needs effectively.'
   }
 ];
-
-export default bots;
