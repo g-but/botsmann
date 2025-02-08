@@ -10,18 +10,21 @@ export default function BotPage({ params }: { params: { slug: string } }) {
   }
 
   return (
-    <div className="container mx-auto py-8">
-      <h1 className="text-3xl mb-6">{bot.title}</h1>
-      <p className="mb-4">{bot.description}</p>
-      <div className="mb-6" dangerouslySetInnerHTML={{ __html: bot.overview }} />
+    <div className="mx-auto max-w-screen-xl px-6 py-12">
+      <h1 className="mb-6 text-4xl font-semibold tracking-tight">{bot.title}</h1>
+      <p className="mb-8 text-lg text-gray-600">{bot.description}</p>
+      <div className="mb-12" dangerouslySetInnerHTML={{ __html: bot.overview }} />
       <div>
-        <h3 className="text-xl mb-4">Features</h3>
-        <ul className="list-disc pl-6 mb-4">
+        <h3 className="mb-4 text-2xl font-semibold">Features</h3>
+        <ul className="grid gap-3">
           {bot.features.map((feature) => (
-            <li key={feature} className="mb-2">{feature}</li>
+            <li key={feature} className="flex items-start">
+              <span className="mr-2 text-openai-green">•</span>
+              {feature}
+            </li>
           ))}
         </ul>
-        <p>{bot.details}</p>
+        <p className="mt-8 text-gray-600">{bot.details}</p>
       </div>
     </div>
   );
