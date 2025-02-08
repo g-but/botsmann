@@ -1,11 +1,9 @@
 {
   "version": 2,
   "builds": [
-    { "src": "package.json", "use": "@vercel/next" }
-  ],
-  "env": {
-    "MONGODB_URI": "${MONGODB_URI}",
-    "EMAIL_USER": "${EMAIL_USER}",
-    "EMAIL_PASS": "${EMAIL_PASS}"
-  }
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ]
 }
