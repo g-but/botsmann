@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import mongoose from 'mongoose';
+import { sendEmail } from '../../../src/lib/email';
+import { MailchimpService } from '../../../src/lib/mailchimp';
 
 // MongoDB Schema
 const ConsultationSchema = new mongoose.Schema({
@@ -11,6 +13,13 @@ const ConsultationSchema = new mongoose.Schema({
 
 // Get or create model
 const Consultation = mongoose.models.Consultation || mongoose.model('Consultation', ConsultationSchema);
+
+// Initialize Mailchimp service
+const mailchimpService = new MailchimpService({
+  apiKey: process.env.MAILCHIMP_API_KEY || '',
+  serverPrefix: process.env.MAILCHIMP_SERVER_PREFIX || '',
+  listId: process.env.MAILCHIMP_LIST_ID || ''
+});
 
 export async function POST(req: Request) {
   try {
@@ -35,9 +44,29 @@ export async function POST(req: Request) {
     // Create consultation
     const consultation = await Consultation.create({ name, email, message });
 
-    // Email notification will be implemented in the next step
-    // For now, just log the consultation
-    console.log('New consultation created:', consultation);
+    // Add subscriber to Mailchimp
+    try {
+      await mailchimpService.addSubscriber(email, name);
+    } catch (mailchimpError) {
+      console.error('Failed to add subscriber to Mailchimp:', mailchimpError);
+      // Continue execution even if Mailchimp fails
+    }
+
+    // Send email notification to admin
+    try {
+      await sendEmail({
+        to: process.env.EMAIL_TO || 'butaeff@gmail.com',
+        subject: 'New Consultation Request',
+        text: `
+Name: ${name}
+Email: ${email}
+Message: ${message}
+        `.trim()
+      });
+    } catch (emailError) {
+      console.error('Failed to send email notification:', emailError);
+      // Continue execution even if email fails
+    }
 
     return NextResponse.json({ success: true, data: consultation });
   } catch (error) {
@@ -47,4 +76,4 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
-} 
+}     
