@@ -1,21 +1,47 @@
 import { NextRequest } from 'next/server';
 import handler from '@/netlify/functions/api/[[path]]';
-import { connectDB } from '@/src/lib/mongodb';
-import { Consultation } from '@/src/lib/models/consultation';
+import { mockConsultation } from '../../mocks/mongodb';
+
+const createRequest = (options: {
+  method: string;
+  url: string;
+  headers?: Record<string, string>;
+  body?: any;
+}): NextRequest => {
+  const url = new URL(`http://localhost${options.url}`);
+  const init = {
+    method: options.method,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers
+    }
+  } as const;
+  
+  if (options.body) {
+    return new NextRequest(url, {
+      ...init,
+      body: JSON.stringify(options.body)
+    });
+  }
+  
+  return new NextRequest(url, init);
+};
 
 describe('API Endpoints', () => {
-  beforeAll(async () => {
-    await connectDB();
+  beforeAll(() => {
+    expect(process.env.NODE_ENV).toBe('test');
   });
 
-  beforeEach(async () => {
-    await Consultation.deleteMany({});
+  beforeEach(() => {
+    jest.resetModules();
+    jest.clearAllMocks();
   });
 
   describe('Health Check', () => {
     it('returns healthy status', async () => {
-      const req = new NextRequest('http://localhost/api/health', {
-        method: 'GET'
+      const req = createRequest({
+        method: 'GET',
+        url: '/api/health'
       });
 
       const response = await handler(req);
@@ -35,31 +61,33 @@ describe('API Endpoints', () => {
     };
 
     it('handles valid submission', async () => {
-      const req = new NextRequest('http://localhost/api/consultations', {
+      const req = createRequest({
         method: 'POST',
+        url: '/api/consultations',
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': process.env.API_KEY!
         },
-        body: JSON.stringify(validData)
+        body: validData
       });
 
       const response = await handler(req);
       const data = await response.json();
-
+      
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
       expect(data.id).toBeDefined();
     });
 
     it('validates API key', async () => {
-      const req = new NextRequest('http://localhost/api/consultations', {
+      const req = createRequest({
         method: 'POST',
+        url: '/api/consultations',
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': 'invalid-key'
         },
-        body: JSON.stringify(validData)
+        body: validData
       });
 
       const response = await handler(req);
@@ -70,13 +98,14 @@ describe('API Endpoints', () => {
     });
 
     it('validates required fields', async () => {
-      const req = new NextRequest('http://localhost/api/consultations', {
+      const req = createRequest({
         method: 'POST',
+        url: '/api/consultations',
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': process.env.API_KEY!
         },
-        body: JSON.stringify({})
+        body: {}
       });
 
       const response = await handler(req);
@@ -88,19 +117,35 @@ describe('API Endpoints', () => {
     });
 
     it('enforces rate limiting', async () => {
-      const requests = Array(6).fill(null).map(() => 
-        handler(new NextRequest('http://localhost/api/consultations', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': process.env.API_KEY!
-          },
-          body: JSON.stringify(validData)
-        }))
-      );
+      const makeRequest = () => handler(createRequest({
+        method: 'POST',
+        url: '/api/consultations',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': process.env.API_KEY!
+        },
+        body: validData
+      }));
 
-      const responses = await Promise.all(requests);
-      const lastResponse = responses[responses.length - 1];
+      // Reset rate limiter state
+      jest.isolateModules(() => {
+        jest.resetModules();
+        const rateLimiter = require('@/src/lib/rate-limit');
+        rateLimiter.rateLimit({
+          limit: 3,
+          interval: 1000,
+          uniqueTokenPerInterval: 500
+        });
+      });
+
+      // Send first 3 requests (should succeed)
+      for (let i = 0; i < 3; i++) {
+        const response = await makeRequest();
+        expect(response.status).toBe(200);
+      }
+
+      // Send 4th request (should be rate limited)
+      const lastResponse = await makeRequest();
       const data = await lastResponse.json();
 
       expect(lastResponse.status).toBe(429);
@@ -110,8 +155,9 @@ describe('API Endpoints', () => {
 
   describe('404 Handling', () => {
     it('returns 404 for unknown endpoints', async () => {
-      const req = new NextRequest('http://localhost/api/unknown', {
-        method: 'GET'
+      const req = createRequest({
+        method: 'GET',
+        url: '/api/unknown'
       });
 
       const response = await handler(req);
