@@ -5,17 +5,39 @@
 [functions]
   node_bundler = "esbuild"
   included_files = ["app/api/**"]
-  
+  external_node_modules = ["mongodb"]
+
 [[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/api/:splat"
+  from = "/api/health"
+  to = "/.netlify/functions/api/health"
   status = 200
-  force = true
+
+[[redirects]]
+  from = "/api/consultations"
+  to = "/.netlify/functions/api/consultations"
+  status = 200
+
+[[redirects]]
+  from = "/api/products/search"
+  to = "/.netlify/functions/api/products/search"
+  status = 200
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  force = true
+
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Headers = "Origin, X-Requested-With, Content-Type, Accept, x-api-key"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
 
 [[headers]]
   for = "/*"
