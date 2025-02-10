@@ -4,6 +4,7 @@ import { Consultation } from '@/src/lib/models/consultation';
 import { rateLimit } from '@/src/lib/rate-limit';
 import { CustomerSchema } from '@/src/lib/schemas/customer';
 import { createErrorResponse } from '@/src/lib/schemas/errors';
+import { validateApiKey } from '@/src/lib/middleware/auth';
 import { ZodError } from 'zod';
 
 const limiter = rateLimit({
@@ -14,6 +15,13 @@ const limiter = rateLimit({
 
 export async function POST(req: Request) {
   try {
+    // Validate API key first
+    const authResponse = await validateApiKey(req);
+    if (authResponse) {
+      return authResponse;
+    }
+
+    // Check rate limit
     const { isRateLimited } = await limiter.check('CONSULTATION_FORM');
     if (isRateLimited) {
       throw Object.assign(new Error('Rate limit exceeded'), { code: 'RATE_LIMIT' });
@@ -61,4 +69,4 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
-}     
+}          
