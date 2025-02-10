@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 import { connectDB } from '@/src/lib/mongodb';
 import { Consultation } from '@/src/lib/models/consultation';
 import { rateLimit } from '@/src/lib/rate-limit';
 import { CustomerSchema } from '@/src/lib/schemas/customer';
 import { createErrorResponse } from '@/src/lib/schemas/errors';
 import { validateApiKey } from '@/src/lib/middleware/auth';
+import { monitorRequest } from '@/src/lib/middleware/monitoring';
 import { ZodError } from 'zod';
 
 const limiter = rateLimit({
@@ -13,7 +15,7 @@ const limiter = rateLimit({
   uniqueTokenPerInterval: 500,
 });
 
-export async function POST(req: Request) {
+async function handler(req: NextRequest) {
   try {
     // Validate API key first
     const authResponse = await validateApiKey(req);
@@ -69,4 +71,6 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
-}          
+}
+
+export const POST = (req: NextRequest) => monitorRequest(req, handler);   
