@@ -1,7 +1,8 @@
 backend:
   name: git-gateway
   branch: main
-  auth_scope: repo
+  identity_url: "https://botsmann.com/.netlify/identity"
+  gateway_url: "https://botsmann.com/.netlify/git/github"
   commit_messages:
     create: "Create {{collection}} "{{slug}}""
     update: "Update {{collection}} "{{slug}}""
