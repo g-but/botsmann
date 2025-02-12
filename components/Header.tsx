@@ -21,8 +21,8 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-screen-xl items-center justify-between px-6">
-        <Link href="/" className="flex flex-col items-center">
+      <div className="mx-auto flex h-20 max-w-screen-xl items-center justify-between px-6">
+        <Link href="/" className="flex flex-col items-center mr-8">
           <span className="text-xl font-semibold text-openai-gray">Botsmann</span>
           <span className="text-xs text-gray-400">v0.0.1</span>
         </Link>
@@ -103,13 +103,13 @@ export default function Header() {
         <div
           className={`${
             isMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
-          } fixed inset-0 top-16 z-50 transform bg-white transition-all duration-300 ease-in-out lg:hidden`}
+          } fixed inset-0 top-20 z-50 transform bg-white/95 backdrop-blur-sm transition-all duration-300 ease-in-out lg:hidden shadow-xl`}
         >
           <nav className="h-full overflow-y-auto px-6 py-8">
-            <div className="flex flex-col space-y-6">
+            <div className="flex flex-col space-y-8">
               {/* Mobile Bots Section */}
-              <div className="space-y-3">
-                <Link href="/bots" className="flex items-center min-h-[44px] text-base font-medium text-gray-900 hover:text-openai-green active:text-openai-green transition-colors">
+              <div className="space-y-4">
+                <Link href="/bots" className="flex items-center min-h-[44px] text-lg font-medium text-gray-900 hover:text-openai-green active:text-openai-green transition-colors">
                   Bots
                 </Link>
                 <div className="flex flex-col space-y-4 pl-4">
@@ -135,8 +135,8 @@ export default function Header() {
               </div>
               
               {/* Mobile Projects Section */}
-              <div className="space-y-3">
-                <Link href="/projects" className="flex items-center min-h-[44px] text-base font-medium text-gray-900 hover:text-openai-green active:text-openai-green transition-colors">
+              <div className="space-y-4">
+                <Link href="/projects" className="flex items-center min-h-[44px] text-lg font-medium text-gray-900 hover:text-openai-green active:text-openai-green transition-colors">
                   Projects
                 </Link>
                 <div className="flex flex-col space-y-4 pl-4">
@@ -146,22 +146,27 @@ export default function Header() {
                   <Link href="/projects/roboshop" className="flex items-center min-h-[44px] text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
                     Roboshop
                   </Link>
+                  <Link href="/projects/venture-credit" className="flex items-center min-h-[44px] text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
+                    Venture Credit
+                  </Link>
                 </div>
               </div>
               
               {/* Other Navigation Items */}
-              <Link href="/blog" className="text-sm font-medium text-gray-600 hover:text-openai-green">
-                Blog
-              </Link>
-              <Link href="/about" className="text-sm font-medium text-gray-600 hover:text-openai-green">
-                About
-              </Link>
-              <Link 
-                href="/contact"
-                className="inline-flex items-center justify-center rounded-md bg-openai-green px-4 py-2 text-sm font-medium text-white hover:bg-opacity-90 transition-opacity"
-              >
-                Contact Us
-              </Link>
+              <div className="mt-4 flex flex-col space-y-4">
+                <Link href="/blog" className="flex items-center min-h-[44px] text-base font-medium text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
+                  Blog
+                </Link>
+                <Link href="/about" className="flex items-center min-h-[44px] text-base font-medium text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
+                  About
+                </Link>
+                <Link 
+                  href="/contact"
+                  className="flex items-center justify-center min-h-[44px] rounded-md bg-openai-green px-6 py-3 text-base font-medium text-white hover:bg-opacity-90 transition-opacity"
+                >
+                  Contact Us
+                </Link>
+              </div>
             </div>
           </nav>
         </div>
