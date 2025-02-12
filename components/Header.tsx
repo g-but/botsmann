@@ -46,31 +46,43 @@ export default function Header() {
         </button>
 
         <nav className="hidden lg:flex items-center space-x-8">
+          {/* Bots Dropdown - Small chatbot assistants */}
           <div className="relative group">
             <button className="text-sm font-medium text-gray-600 hover:text-openai-green transition-colors">
               Bots
             </button>
             <div className="absolute left-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 w-48 py-2 mt-1 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50">
+              <Link href="/bots/swiss-german-teacher" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                Swiss German Teacher
+              </Link>
+              <Link href="/bots/medical-expert" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                Medical Expert
+              </Link>
+              <Link href="/bots/legal-expert" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                Legal Expert
+              </Link>
               <Link href="/bots/artistic-advisor" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                 Artistic Advisor
               </Link>
               <Link href="/bots/auto-shopper" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                 Auto Shopper
               </Link>
-              <Link href="/bots/gov-spending-tracker" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                Gov Spending Tracker
-              </Link>
-              <Link href="/bots/legal-expert" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                Legal Expert
-              </Link>
-              <Link href="/bots/medical-expert" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                Medical Expert
-              </Link>
-              <Link href="/bots/swiss-german-teacher" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                Swiss German Teacher
+            </div>
+          </div>
+
+          {/* Solutions Dropdown - Enterprise automation solutions */}
+          <div className="relative group">
+            <button className="text-sm font-medium text-gray-600 hover:text-openai-green transition-colors">
+              Solutions
+            </button>
+            <div className="absolute left-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 w-48 py-2 mt-1 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50">
+              <Link href="/solutions/venture-credit" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                Venture Credit
               </Link>
             </div>
           </div>
+
+          {/* Projects Dropdown - Transformational initiatives */}
           <div className="relative group">
             <button className="text-sm font-medium text-gray-600 hover:text-openai-green transition-colors">
               Projects
@@ -100,61 +112,72 @@ export default function Header() {
 
         {/* Mobile Menu Overlay */}
         <div
+          id="mobile-menu"
           className={`${
             isMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
-          } fixed inset-0 top-16 z-50 transform bg-white transition-all duration-300 ease-in-out lg:hidden`}
+          } fixed inset-0 top-16 z-[100] transform bg-white/95 backdrop-blur-sm transition-all duration-300 ease-in-out lg:hidden shadow-xl`}
         >
-          <nav className="h-full overflow-y-auto px-6 py-6">
-            <div className="flex flex-col space-y-4">
-              {/* Mobile Bots Section */}
-              <div className="space-y-2">
-                <span className="text-sm font-medium text-gray-900">Bots</span>
-                <div className="flex flex-col space-y-2 pl-4">
-                  <Link href="/bots/artistic-advisor" className="text-sm text-gray-600 hover:text-openai-green">
-                    Artistic Advisor
+          <nav className="h-full overflow-y-auto px-6 py-8">
+            <div className="flex flex-col space-y-6">
+              {/* Mobile Bots Section - Small chatbot assistants */}
+              <div className="space-y-3">
+                <span className="text-base font-medium text-gray-900">Bots</span>
+                <div className="flex flex-col space-y-4 pl-4">
+                  <Link href="/bots/swiss-german-teacher" className="flex items-center min-h-[44px] text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
+                    Swiss German Teacher
                   </Link>
-                  <Link href="/bots/auto-shopper" className="text-sm text-gray-600 hover:text-openai-green">
-                    Auto Shopper
-                  </Link>
-                  <Link href="/bots/gov-spending-tracker" className="text-sm text-gray-600 hover:text-openai-green">
-                    Gov Spending Tracker
-                  </Link>
-                  <Link href="/bots/legal-expert" className="text-sm text-gray-600 hover:text-openai-green">
-                    Legal Expert
-                  </Link>
-                  <Link href="/bots/medical-expert" className="text-sm text-gray-600 hover:text-openai-green">
+                  <Link href="/bots/medical-expert" className="flex items-center min-h-[44px] text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
                     Medical Expert
                   </Link>
-                  <Link href="/bots/swiss-german-teacher" className="text-sm text-gray-600 hover:text-openai-green">
-                    Swiss German Teacher
+                  <Link href="/bots/legal-expert" className="flex items-center min-h-[44px] text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
+                    Legal Expert
+                  </Link>
+                  <Link href="/bots/artistic-advisor" className="flex items-center min-h-[44px] text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
+                    Artistic Advisor
+                  </Link>
+                  <Link href="/bots/auto-shopper" className="flex items-center min-h-[44px] text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
+                    Auto Shopper
                   </Link>
                 </div>
               </div>
               
-              {/* Mobile Projects Section */}
-              <div className="space-y-2">
-                <span className="text-sm font-medium text-gray-900">Projects</span>
-                <div className="flex flex-col space-y-2 pl-4">
-                  <Link href="/projects/libertech/gov-spending" className="text-sm text-gray-600 hover:text-openai-green">
+              {/* Mobile Solutions Section - Enterprise automation solutions */}
+              <div className="space-y-3">
+                <span className="text-base font-medium text-gray-900">Solutions</span>
+                <div className="flex flex-col space-y-4 pl-4">
+                  <Link href="/solutions/venture-credit" className="flex items-center min-h-[44px] text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
+                    Venture Credit
+                  </Link>
+                </div>
+              </div>
+              
+              {/* Mobile Projects Section - Transformational initiatives */}
+              <div className="space-y-3">
+                <span className="text-base font-medium text-gray-900">Projects</span>
+                <div className="flex flex-col space-y-4 pl-4">
+                  <Link href="/projects/libertech/gov-spending" className="flex items-center min-h-[44px] text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
                     Gov Spending
                   </Link>
-                  <Link href="/projects/roboshop" className="text-sm text-gray-600 hover:text-openai-green">
+                  <Link href="/projects/roboshop" className="flex items-center min-h-[44px] text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
                     Roboshop
                   </Link>
                 </div>
               </div>
               
               {/* Other Navigation Items */}
-              <Link href="/blog" className="text-sm font-medium text-gray-600 hover:text-openai-green">
+              <Link 
+                href="/blog" 
+                className="flex items-center min-h-[44px] text-base font-medium text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
                 Blog
               </Link>
-              <Link href="/about" className="text-sm font-medium text-gray-600 hover:text-openai-green">
+              <Link 
+                href="/about" 
+                className="flex items-center min-h-[44px] text-base font-medium text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
                 About
               </Link>
               <Link 
                 href="/contact"
-                className="inline-flex items-center justify-center rounded-md bg-openai-green px-4 py-2 text-sm font-medium text-white hover:bg-opacity-90 transition-opacity"
-              >
+                className="inline-flex items-center justify-center rounded-md bg-openai-green px-6 py-3 text-base font-medium text-white hover:bg-opacity-90 transition-opacity min-h-[44px]">
                 Contact Us
               </Link>
             </div>
