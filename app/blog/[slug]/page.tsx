@@ -1,5 +1,5 @@
 export async function generateStaticParams() {
-  return [];
+  return [{ slug: 'placeholder' }];
 }
 
 export default async function BlogPost({ params }: { params: { slug: string } }) {
