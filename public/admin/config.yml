@@ -1,20 +1,33 @@
 backend:
   name: git-gateway
   branch: main
+  commit_messages:
+    create: 'content: create {{collection}} "{{slug}}"'
+    update: 'content: update {{collection}} "{{slug}}"'
+    delete: 'content: delete {{collection}} "{{slug}}"'
+    uploadMedia: 'content: upload "{{path}}"'
+    deleteMedia: 'content: delete "{{path}}"'
 
+# Publish mode enables editorial workflow
+publish_mode: editorial_workflow
+
+# Media and public folders
 media_folder: "public/uploads"
 public_folder: "/uploads"
 
 collections:
   - name: "blog"
-    label: "Blog"
+    label: "Blog Posts"
     folder: "content/posts"
     create: true
-    slug: "{{slug}}"
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Publish Date", name: "date", widget: "datetime" }
+      - { label: "Featured Image", name: "thumbnail", widget: "image", required: false }
+      - { label: "Description", name: "description", widget: "text" }
       - { label: "Body", name: "body", widget: "markdown" }
+      - { label: "Tags", name: "tags", widget: "list", required: false }
 
   - name: "navigation"
     label: "Navigation"
