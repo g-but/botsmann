@@ -6,6 +6,12 @@ import Image from 'next/image';
 
 const projects = [
   {
+    title: 'Venture Credit',
+    description: 'Enterprise-grade automation for venture credit operations. Automatically ingest and analyze portfolio company reports, monitor debt metrics, and make data-driven decisions.',
+    href: '/projects/venture-credit',
+    image: '/venture-credit.png'
+  },
+  {
     title: 'LiberTech',
     description: 'Technologies dedicated to maximizing human liberty and minimizing government power. Featuring innovative solutions like the Venmo-style government spending tracker.',
     href: '/projects/libertech',
