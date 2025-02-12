@@ -3,8 +3,8 @@ import { connectDB } from '../../src/lib/mongodb';
 import { Consultation } from '../../src/lib/models/consultation';
 import { CustomerSchema } from '../../src/lib/schemas/customer';
 import { EmailService } from '../../src/lib/email/service';
-import { validateApiKey } from '../../../src/lib/middleware/auth';
-import { monitorRequest } from '../../../src/lib/middleware/monitoring';
+import { validateApiKey } from '../../src/lib/middleware/auth';
+import { monitorRequest } from '../../src/lib/middleware/monitoring';
 
 const emailService = new EmailService();
 
