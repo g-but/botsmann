@@ -27,7 +27,11 @@ export default function RootLayout({
           {`
             if (window.netlifyIdentity) {
               window.netlifyIdentity.on("init", user => {
-                if (!user) {
+                const hash = window.location.hash;
+                if (hash && hash.includes('invite_token')) {
+                  const token = hash.replace('#invite_token=', '');
+                  window.netlifyIdentity.acceptInvite(token);
+                } else if (!user) {
                   window.netlifyIdentity.on("login", () => {
                     document.location.href = "/admin/";
                   });
