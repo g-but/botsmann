@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-ses": "^3.511.0",
-    "@contentlayer/core": "^0.3.4",
+    "@contentlayer/core": "0.3.4",
     "@sendgrid/mail": "^8.1.1",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.10",
