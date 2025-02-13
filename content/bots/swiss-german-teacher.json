@@ -1,0 +1,25 @@
+{
+  "id": "swiss-german-teacher",
+  "title": "Swiss German Teacher",
+  "description": "An AI tutor specialized in teaching Swiss German dialect and culture",
+  "overview": "Master Swiss German dialects with our AI-powered language tutor, designed to help you learn through interactive conversations and real-world scenarios.",
+  "features": [
+    {
+      "title": "Interactive Learning",
+      "description": "Practice conversations with AI tutor",
+      "icon": "💬"
+    },
+    {
+      "title": "Dialect Training",
+      "description": "Learn regional variations and pronunciations",
+      "icon": "🗣️"
+    },
+    {
+      "title": "Cultural Context",
+      "description": "Understand Swiss customs and expressions",
+      "icon": "🇨🇭"
+    }
+  ],
+  "details": "Our Swiss German teacher uses advanced AI to provide personalized language lessons, helping you master both formal and colloquial Swiss German through interactive conversations.",
+  "path": "/bots/swiss-german-teacher"
+}

@@ -22,8 +22,60 @@ export const Post = defineDocumentType(() => ({
   },
 }));
 
+export const Bot = defineDocumentType(() => ({
+  name: 'Bot',
+  filePathPattern: 'bots/**/*.json',
+  contentType: 'data',
+  fields: {
+    id: { type: 'string', required: true },
+    title: { type: 'string', required: true },
+    description: { type: 'string', required: true },
+    overview: { type: 'string', required: true },
+    features: {
+      type: 'list',
+      of: { type: 'json' },
+      required: true,
+    },
+    details: { type: 'string', required: true },
+    path: { type: 'string', required: true },
+  },
+}));
+
+export const Project = defineDocumentType(() => ({
+  name: 'Project',
+  filePathPattern: 'projects/**/*.json',
+  contentType: 'data',
+  fields: {
+    id: { type: 'string', required: true },
+    title: { type: 'string', required: true },
+    description: { type: 'string', required: true },
+    overview: { type: 'string', required: true },
+    features: {
+      type: 'list',
+      of: { type: 'json' },
+      required: true,
+    },
+    details: { type: 'string', required: true },
+    image: { type: 'string' },
+    path: { type: 'string', required: true },
+  },
+}));
+
+export const Navigation = defineDocumentType(() => ({
+  name: 'Navigation',
+  filePathPattern: 'navigation/**/*.json',
+  contentType: 'data',
+  fields: {
+    items: {
+      type: 'list',
+      of: { type: 'json' },
+      required: true,
+    },
+  },
+}));
+
 export default makeSource({
   contentDirPath: 'content',
-  documentTypes: [Post],
+  documentTypes: [Post, Bot, Project, Navigation],
   disableImportAliasWarning: true,
 });

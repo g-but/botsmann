@@ -1,77 +1,51 @@
-'use client';
-
 import React from 'react';
 import Link from 'next/link';
-import bots from '../../../data/bots';
+import fs from 'fs';
+import path from 'path';
+import { BotPage } from '@/src/components/bots/BotPage';
+import { notFound } from 'next/navigation';
 
-export default function SwissGermanTeacher() {
-  const bot = bots.find(b => b.slug === 'swiss-german-teacher');
+async function getBot() {
+  try {
+    const botPath = path.join(process.cwd(), 'content', 'bots', 'swiss-german-teacher.json');
+    const content = fs.readFileSync(botPath, 'utf8');
+    return JSON.parse(content);
+  } catch (error) {
+    return null;
+  }
+}
+
+export default async function SwissGermanTeacher() {
+  const bot = await getBot();
 
   if (!bot) {
-    return <div>Bot not found</div>;
+    notFound();
   }
 
+  const steps = [
+    {
+      title: "Start Learning",
+      description: "Begin with basic phrases and greetings in Swiss German.",
+      image: "/swiss-german/step1.png"
+    },
+    {
+      title: "Practice Conversations",
+      description: "Engage in interactive dialogues with our AI tutor.",
+      image: "/swiss-german/step2.png"
+    },
+    {
+      title: "Master Dialects",
+      description: "Learn regional variations and authentic pronunciations.",
+      image: "/swiss-german/step3.png"
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-white">
-      <main className="mx-auto max-w-screen-xl px-6 py-16">
-        <div className="mb-16">
-          <h1 className="mb-4 text-4xl font-semibold tracking-tight text-gray-900">{bot.title}</h1>
-          <p className="mb-8 text-lg text-gray-600">{bot.overview}</p>
-        </div>
-
-        <div className="grid gap-8 md:grid-cols-2">
-          <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-            <h2 className="mb-4 text-2xl font-semibold text-gray-900">Features</h2>
-            <ul className="space-y-4">
-              {bot.features.map((feature, index) => (
-                <li key={index} className="flex items-start">
-                  <svg
-                    className="mr-3 h-5 w-5 flex-shrink-0 text-openai-green"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  <span className="text-gray-600">{feature}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-            <h2 className="mb-4 text-2xl font-semibold text-gray-900">How It Works</h2>
-            <p className="mb-6 text-gray-600">{bot.details}</p>
-            <Link
-              href="/about"
-              className="inline-flex items-center justify-center rounded-md bg-openai-green px-4 py-2 text-sm font-medium text-white hover:bg-opacity-90"
-            >
-              Start Learning
-            </Link>
-          </div>
-        </div>
-
-        <div className="mt-16">
-          <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-            <h2 className="mb-4 text-2xl font-semibold text-gray-900">Ready to Master Swiss German?</h2>
-            <p className="mb-6 text-gray-600">
-              Start your journey to fluency with our AI-powered Swiss German teacher. Get personalized
-              lessons, instant feedback, and cultural insights.
-            </p>
-            <Link
-              href="/about"
-              className="inline-flex items-center justify-center rounded-md bg-openai-green px-4 py-2 text-sm font-medium text-white hover:bg-opacity-90"
-            >
-              Contact Us
-            </Link>
-          </div>
-        </div>
-      </main>
-    </div>
+    <BotPage
+      title={bot.title}
+      overview={bot.overview}
+      features={bot.features}
+      howItWorks={steps}
+    />
   );
 }

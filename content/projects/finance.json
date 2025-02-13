@@ -1,0 +1,31 @@
+{
+  "id": "finance",
+  "title": "Project Finance Management",
+  "description": "Full transparency project finance and management tool. Start projects, manage funding through donations/credit/investments, track tasks and costs, with complete public visibility.",
+  "overview": "A comprehensive platform for transparent project finance management and tracking.",
+  "features": [
+    {
+      "title": "Funding Management",
+      "description": "Handle multiple funding sources transparently",
+      "icon": "💵"
+    },
+    {
+      "title": "Cost Tracking",
+      "description": "Real-time project cost monitoring",
+      "icon": "📊"
+    },
+    {
+      "title": "Task Management",
+      "description": "Integrated task and milestone tracking",
+      "icon": "✅"
+    },
+    {
+      "title": "Public Dashboard",
+      "description": "Complete visibility of project finances",
+      "icon": "📈"
+    }
+  ],
+  "details": "Our project finance platform provides complete transparency in project funding and execution, enabling efficient management of resources while maintaining public trust.",
+  "image": "/finance.png",
+  "path": "/projects/finance"
+}

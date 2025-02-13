@@ -1,0 +1,30 @@
+{
+  "id": "gov-spending-tracker",
+  "title": "Government Spending Tracker",
+  "description": "Track and analyze government spending with social features",
+  "overview": "A transparent, social platform for tracking and engaging with government spending in real-time.",
+  "features": [
+    {
+      "title": "Transaction Tracking",
+      "description": "Monitor every government payment with comprehensive details",
+      "icon": "💰"
+    },
+    {
+      "title": "Social Features",
+      "description": "Like, comment, and share government transactions",
+      "icon": "💬"
+    },
+    {
+      "title": "Real-time Updates",
+      "description": "Stay informed about government spending as it happens",
+      "icon": "⚡"
+    },
+    {
+      "title": "Public Oversight",
+      "description": "Enable citizen participation in financial monitoring",
+      "icon": "👥"
+    }
+  ],
+  "details": "Our government spending tracker transforms how citizens interact with public finance by creating a Venmo-like social experience around government transactions.",
+  "path": "/bots/gov-spending-tracker"
+}

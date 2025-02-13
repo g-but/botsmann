@@ -1,37 +1,16 @@
-'use client';
-
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Project } from '@/src/types/project';
+import { allProjects } from 'contentlayer/generated';
 
-const projects = [
-  {
-    title: 'Governance',
-    description: 'Technologies dedicated to maximizing transparency and accountability in government spending, featuring innovative solutions like the Venmo-style spending tracker.',
-    href: '/projects/governance',
-    image: '/governance.png'
-  },
-  {
-    title: 'Credit',
-    description: 'Enterprise-grade automation for venture credit operations. Automatically ingest and analyze portfolio company reports, monitor debt metrics, and make data-driven decisions.',
-    href: '/projects/credit',
-    image: '/credit.png'
-  },
-  {
-    title: 'Shopping',
-    description: 'AI-powered shopping assistant that finds exactly what you need with just one word. Integrating with multiple e-commerce platforms for the best results.',
-    href: '/projects/shopping',
-    image: '/shopping.png'
-  },
-  {
-    title: 'Project Finance',
-    description: 'Full transparency project finance and management tool. Start projects, manage funding through donations/credit/investments, track tasks and costs, with complete public visibility.',
-    href: '/projects/finance',
-    image: '/finance.png'
-  }
-];
+async function getProjects(): Promise<Project[]> {
+  return allProjects;
+}
 
-export default function Projects() {
+export default async function Projects() {
+  const projects = await getProjects();
+  
   return (
     <div className="min-h-screen bg-white">
       <main className="mx-auto max-w-screen-xl px-6 py-16">
@@ -46,8 +25,8 @@ export default function Projects() {
         <div className="grid gap-8 md:grid-cols-2">
           {projects.map((project) => (
             <Link
-              key={project.title}
-              href={project.href}
+              key={project.id}
+              href={project.path}
               className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white transition-shadow hover:shadow-lg"
             >
               <div className="aspect-video w-full bg-gray-100 relative">

@@ -1,0 +1,31 @@
+{
+  "id": "credit",
+  "title": "Venture Credit Operations",
+  "description": "Enterprise-grade automation for venture credit operations. Automatically ingest and analyze portfolio company reports, monitor debt metrics, and make data-driven decisions.",
+  "overview": "Streamline venture credit operations with AI-powered automation and analytics.",
+  "features": [
+    {
+      "title": "Automated Analysis",
+      "description": "Automatically analyze portfolio company reports",
+      "icon": "📊"
+    },
+    {
+      "title": "Debt Monitoring",
+      "description": "Real-time monitoring of key debt metrics",
+      "icon": "📈"
+    },
+    {
+      "title": "Risk Assessment",
+      "description": "AI-powered risk analysis and predictions",
+      "icon": "⚠️"
+    },
+    {
+      "title": "Portfolio Insights",
+      "description": "Comprehensive portfolio analytics and reporting",
+      "icon": "📋"
+    }
+  ],
+  "details": "Our venture credit automation platform helps financial institutions streamline operations and make data-driven decisions through advanced analytics and AI.",
+  "image": "/credit.png",
+  "path": "/projects/credit"
+}

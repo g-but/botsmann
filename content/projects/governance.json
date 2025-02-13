@@ -1,0 +1,31 @@
+{
+  "id": "governance",
+  "title": "Government Spending Tracker",
+  "description": "A transparent, social platform for tracking and engaging with government spending in real-time.",
+  "overview": "Transform how citizens interact with public finance through our Venmo-like social experience for government transactions.",
+  "features": [
+    {
+      "title": "Transaction Tracking",
+      "description": "Every government payment tracked with unique ID, timestamp, and purpose",
+      "icon": "💰"
+    },
+    {
+      "title": "Social Engagement",
+      "description": "Like, comment, and share government transactions",
+      "icon": "💬"
+    },
+    {
+      "title": "Real-time Updates",
+      "description": "See government spending as it happens",
+      "icon": "⚡"
+    },
+    {
+      "title": "Public Oversight",
+      "description": "Citizens can follow and monitor specific agencies or programs",
+      "icon": "👥"
+    }
+  ],
+  "details": "Our government spending tracker transforms how citizens interact with public finance by creating a Venmo-like social experience around government transactions.",
+  "image": "/governance.png",
+  "path": "/projects/governance"
+}

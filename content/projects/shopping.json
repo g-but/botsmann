@@ -1,0 +1,31 @@
+{
+  "id": "shopping",
+  "title": "AI Shopping Assistant",
+  "description": "AI-powered shopping assistant that finds exactly what you need with just one word. Integrating with multiple e-commerce platforms for the best results.",
+  "overview": "Transform online shopping with our revolutionary one-word query system and AI-powered product matching.",
+  "features": [
+    {
+      "title": "One-Word Search",
+      "description": "Find products with a single word query",
+      "icon": "🔍"
+    },
+    {
+      "title": "Multi-Platform",
+      "description": "Search across multiple e-commerce sites",
+      "icon": "🌐"
+    },
+    {
+      "title": "Price Comparison",
+      "description": "Automatic price tracking and comparison",
+      "icon": "💲"
+    },
+    {
+      "title": "Smart Recommendations",
+      "description": "AI-powered product recommendations",
+      "icon": "🎯"
+    }
+  ],
+  "details": "Our AI shopping assistant revolutionizes e-commerce by understanding exactly what you need from a single word, making online shopping more efficient and intuitive than ever before.",
+  "image": "/shopping.png",
+  "path": "/projects/shopping"
+}
