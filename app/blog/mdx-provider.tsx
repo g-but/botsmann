@@ -31,6 +31,7 @@ export const components = {
 };
 
 export function MDXContent({ code }: { code: string }) {
+  'use client';
   const Component = useMDXComponent(code);
   return <Component components={components} />;
 }
