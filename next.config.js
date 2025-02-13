@@ -15,6 +15,10 @@ const nextConfig = {
   // Configure static paths
   trailingSlash: true,
   distDir: 'out',
+  // Vercel-specific optimizations
+  swcMinify: true,
+  reactStrictMode: true,
+  poweredByHeader: false,
 };
 
 module.exports = withContentlayer(nextConfig);
