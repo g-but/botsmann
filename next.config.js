@@ -17,9 +17,14 @@ const nextConfig = {
   },
   // Vercel deployment settings
   trailingSlash: true,
-  output: 'standalone',
+  output: 'export',
   distDir: '.next',
-  generateBuildId: async () => 'build'
+  generateBuildId: async () => 'build',
+  // Disable server components for static export
+  experimental: {
+    appDir: true,
+    serverComponents: false
+  }
 };
 
 module.exports = withContentlayer(nextConfig);
