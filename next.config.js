@@ -3,7 +3,7 @@ const { withContentlayer } = require('next-contentlayer');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
-  distDir: '.next',
+  distDir: 'out',
   images: {
     unoptimized: true,
     domains: ['fonts.gstatic.com'],
