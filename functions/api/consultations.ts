@@ -6,6 +6,17 @@ interface ConsultationRequest {
   message: string;
 }
 
+interface ConsultationResponse {
+  id: string;
+  createdAt: string;
+  data: ConsultationRequest;
+}
+
+function validateEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
 export const handler: Handler = async (event, context) => {
   if (event.httpMethod !== 'POST') {
     return {
@@ -17,22 +28,35 @@ export const handler: Handler = async (event, context) => {
   try {
     const body = JSON.parse(event.body || '{}') as ConsultationRequest;
     
-    // Basic validation
-    if (!body.name || !body.email || !body.message) {
+    // Validation
+    const errors: string[] = [];
+    if (!body.name?.trim()) errors.push('Name is required');
+    if (!body.email?.trim()) errors.push('Email is required');
+    else if (!validateEmail(body.email)) errors.push('Invalid email format');
+    if (!body.message?.trim()) errors.push('Message is required');
+
+    if (errors.length > 0) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: 'Missing required fields' }),
+        body: JSON.stringify({ 
+          error: 'Validation failed',
+          details: errors
+        }),
       };
     }
 
-    // Store consultation data (simplified version)
-    const consultation = {
+    // Store consultation data
+    const consultation: ConsultationResponse = {
       id: Date.now().toString(),
-      ...body,
       createdAt: new Date().toISOString(),
+      data: {
+        name: body.name.trim(),
+        email: body.email.trim(),
+        message: body.message.trim()
+      }
     };
 
-    // In a real implementation, you would store this data somewhere
+    // Log the consultation (would be stored in a database in production)
     console.log('Received consultation:', consultation);
 
     return {
@@ -46,8 +70,11 @@ export const handler: Handler = async (event, context) => {
   } catch (error) {
     console.error('Error processing consultation:', error);
     return {
-      statusCode: 400,
-      body: JSON.stringify({ error: 'Invalid request data' }),
+      statusCode: 500,
+      body: JSON.stringify({ 
+        error: 'Failed to process consultation request',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      }),
     };
   }
 };
