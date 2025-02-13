@@ -17,7 +17,7 @@ const nextConfig = {
   },
   // Vercel deployment settings
   trailingSlash: true,
-  output: 'standalone'
+  output: 'export'
 };
 
 module.exports = withContentlayer(nextConfig);
