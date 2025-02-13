@@ -2,23 +2,20 @@ const { withContentlayer } = require('next-contentlayer');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
-  distDir: '.next',
   images: {
     unoptimized: true,
     domains: ['fonts.gstatic.com'],
   },
-  // Configure static paths
-  trailingSlash: true,
-  // Ensure static export
   experimental: {
     mdxRs: true,
-    outputFileTracingRoot: process.env.VERCEL ? '/vercel/path0' : undefined
+    appDir: true
   },
-  // Vercel-specific optimizations
   swcMinify: true,
   reactStrictMode: true,
   poweredByHeader: false,
+  env: {
+    NEXT_PUBLIC_VERCEL_ENV: process.env.VERCEL_ENV || 'development'
+  }
 };
 
 module.exports = withContentlayer(nextConfig);
