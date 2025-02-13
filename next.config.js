@@ -6,6 +6,12 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // Ensure static site generation works with Contentlayer
+  experimental: {
+    appDir: true,
+  },
+  // Disable server components for static export
+  serverComponents: false,
 };
 
 module.exports = withContentlayer(nextConfig);
