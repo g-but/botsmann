@@ -9,9 +9,12 @@ const nextConfig = {
   // Ensure static site generation works with Contentlayer
   experimental: {
     appDir: true,
+    mdxRs: true,
   },
-  // Disable server components for static export
-  serverComponents: false,
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
+  // Configure static paths
+  trailingSlash: true,
+  distDir: 'out',
 };
 
 module.exports = withContentlayer(nextConfig);
