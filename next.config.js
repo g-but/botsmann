@@ -1,15 +1,11 @@
 const { withContentlayer } = require('next-contentlayer');
+const withMDX = require('@next/mdx')();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
   images: {
     unoptimized: true,
-  },
-  // Ensure static site generation works with Contentlayer
-  experimental: {
-    appDir: true,
-    mdxRs: true,
   },
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
   // Configure static paths
@@ -21,4 +17,5 @@ const nextConfig = {
   poweredByHeader: false,
 };
 
-module.exports = withContentlayer(nextConfig);
+// Combine withMDX and withContentlayer
+module.exports = withContentlayer(withMDX(nextConfig));
