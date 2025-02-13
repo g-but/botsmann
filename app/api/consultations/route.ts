@@ -1,11 +1,7 @@
-import type { NextRequest } from 'next/server';
-import { connectDB } from '@/src/lib/mongodb';
-import { Consultation } from '@/src/lib/models/consultation';
+import { NextResponse } from 'next/server';
 import { rateLimit } from '@/src/lib/rate-limit';
 import { CustomerSchema } from '@/src/lib/schemas/customer';
 import { createErrorResponse } from '@/src/lib/schemas/errors';
-import { validateApiKey } from '@/src/lib/middleware/auth';
-import { monitorRequest } from '@/src/lib/middleware/monitoring';
 import { EmailService } from '@/src/lib/email/service';
 import { ZodError } from 'zod';
 
@@ -17,31 +13,20 @@ const limiter = rateLimit({
 
 const emailService = new EmailService();
 
-async function handler(req: NextRequest) {
-  let body;
+export async function POST(req: Request) {
   try {
-    // Validate API key first
-    const authResponse = await validateApiKey(req);
-    if (authResponse) {
-      return authResponse;
-    }
-
     // Check rate limit
     const rateLimitKey = 'CONSULTATION_FORM';
     const { isRateLimited } = await limiter.check(rateLimitKey);
     if (isRateLimited) {
-      throw Object.assign(new Error('Rate limit exceeded'), { code: 'RATE_LIMIT' });
+      return NextResponse.json(
+        createErrorResponse('Rate limit exceeded', 'RATE_LIMIT'),
+        { status: 429 }
+      );
     }
     
-    body = await req.json();
+    const body = await req.json();
     const validatedData = CustomerSchema.parse(body);
-    
-    // Connect to DB (skipped in test environment)
-    if (process.env.NODE_ENV !== 'test') {
-      await connectDB();
-    }
-    
-    const consultation = await Consultation.create(validatedData);
 
     // Send emails asynchronously
     try {
@@ -54,57 +39,27 @@ async function handler(req: NextRequest) {
       // Don't return error response, continue with success
     }
     
-    return new Response(
-      JSON.stringify({ success: true, id: consultation._id }),
-      { 
-        status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      }
-    );
+    return NextResponse.json({ success: true });
   } catch (error: any) {
     console.error('Consultation submission error:', error);
-
-    if (error.code === 'RATE_LIMIT') {
-      return new Response(
-        JSON.stringify(createErrorResponse(
-          'Rate limit exceeded. Please try again later.',
-          'RATE_LIMIT'
-        )),
-        { 
-          status: 429,
-          headers: { 'Content-Type': 'application/json' }
-        }
-      );
-    }
     
     if (error instanceof ZodError) {
-      return new Response(
-        JSON.stringify(createErrorResponse(
+      return NextResponse.json(
+        createErrorResponse(
           'Validation failed',
           'VALIDATION_ERROR',
           error.errors.map(err => ({
             field: err.path.join('.'),
             message: err.message
           }))
-        )),
-        { 
-          status: 400,
-          headers: { 'Content-Type': 'application/json' }
-        }
+        ),
+        { status: 400 }
       );
     }
     
-    return new Response(
-      JSON.stringify(createErrorResponse(
-        'Failed to submit consultation',
-        'INTERNAL_ERROR'
-      )),
-      { 
-        status: 500,
-        headers: { 'Content-Type': 'application/json' }
-      }
+    return NextResponse.json(
+      createErrorResponse('Failed to submit consultation', 'INTERNAL_ERROR'),
+      { status: 500 }
     );
   }
-}
-
-export const POST = (req: NextRequest) => monitorRequest(req, handler);           
+}                                
