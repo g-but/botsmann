@@ -39,7 +39,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "netlify/functions/**/*.ts",
-    "dist/types/**/*.ts"
+    "dist/types/**/*.ts",
+    ".vercel/output/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
