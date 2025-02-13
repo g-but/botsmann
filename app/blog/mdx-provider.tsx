@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { MDXProvider } from '@mdx-js/react';
+import { useMDXComponent } from 'next-contentlayer/hooks';
 
 const components = {
   h1: (props: any) => (
@@ -30,6 +30,7 @@ const components = {
   ),
 };
 
-export function MDXProviderWrapper({ children }: { children: React.ReactNode }) {
-  return <MDXProvider components={components}>{children}</MDXProvider>;
+export function MDXContent({ code }: { code: string }) {
+  const Component = useMDXComponent(code);
+  return <Component components={components} />;
 }
