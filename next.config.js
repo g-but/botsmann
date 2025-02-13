@@ -19,6 +19,11 @@ const nextConfig = {
   trailingSlash: true,
   generateBuildId: async () => {
     return 'build-' + Date.now();
+  },
+  // Vercel build output configuration
+  distDir: '.vercel/output',
+  generateBuildId: async () => {
+    return 'build-' + Date.now();
   }
 };
 
