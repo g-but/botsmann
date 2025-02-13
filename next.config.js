@@ -7,7 +7,8 @@ const nextConfig = {
     domains: ['fonts.gstatic.com'],
   },
   experimental: {
-    mdxRs: true
+    mdxRs: true,
+    appDir: true
   },
   swcMinify: true,
   reactStrictMode: true,
@@ -17,14 +18,8 @@ const nextConfig = {
   },
   // Vercel deployment settings
   trailingSlash: true,
-  output: 'export',
-  distDir: '.next',
-  generateBuildId: async () => 'build',
-  // Disable server components for static export
-  experimental: {
-    appDir: true,
-    serverComponents: false
-  }
+  output: 'standalone',
+  distDir: '.next'
 };
 
 module.exports = withContentlayer(nextConfig);
