@@ -7,8 +7,7 @@ const nextConfig = {
     domains: ['fonts.gstatic.com'],
   },
   experimental: {
-    mdxRs: true,
-    serverActions: true
+    mdxRs: true
   },
   swcMinify: true,
   reactStrictMode: true,
@@ -17,8 +16,8 @@ const nextConfig = {
     NEXT_PUBLIC_VERCEL_ENV: process.env.VERCEL_ENV || 'development'
   },
   // Vercel deployment settings
-  output: 'export',
-  distDir: 'out'
+  trailingSlash: true,
+  output: 'export'
 };
 
 module.exports = withContentlayer(nextConfig);
