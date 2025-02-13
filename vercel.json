@@ -1,9 +1,8 @@
 {
   "version": 2,
   "framework": "nextjs",
-  "buildCommand": "next build",
+  "buildCommand": "npm run build",
   "installCommand": "npm install",
-  "devCommand": "next dev",
   "regions": ["fra1"],
   "headers": [
     {
