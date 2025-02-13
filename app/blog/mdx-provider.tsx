@@ -1,7 +1,4 @@
-'use client';
-
 import React from 'react';
-import { useMDXComponent } from 'next-contentlayer/hooks';
 
 export const components = {
   h1: (props: any) => (
@@ -29,9 +26,3 @@ export const components = {
     <a className="text-openai-green hover:text-opacity-80" {...props} />
   ),
 };
-
-export function MDXContent({ code }: { code: string }) {
-  'use client';
-  const Component = useMDXComponent(code);
-  return <Component components={components} />;
-}

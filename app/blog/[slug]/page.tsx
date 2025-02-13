@@ -1,6 +1,6 @@
 import { allPosts } from 'contentlayer/generated';
 import { notFound } from 'next/navigation';
-import { MDXContent } from '../mdx-provider';
+import { MDXRenderer } from '../components/MDXRenderer';
 
 export async function generateStaticParams() {
   return allPosts.map((post) => ({
@@ -26,7 +26,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
         <span>{post.author}</span>
       </div>
       <div className="prose prose-lg">
-        <MDXContent code={post.body.code} />
+        <MDXRenderer code={post.body.code} />
       </div>
     </article>
   );
