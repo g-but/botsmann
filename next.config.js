@@ -15,7 +15,10 @@ const nextConfig = {
   poweredByHeader: false,
   env: {
     NEXT_PUBLIC_VERCEL_ENV: process.env.VERCEL_ENV || 'development'
-  }
+  },
+  // Vercel deployment settings
+  output: 'standalone',
+  outputFileTracing: true
 };
 
 module.exports = withContentlayer(nextConfig);
