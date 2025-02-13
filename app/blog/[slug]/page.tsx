@@ -1,23 +1,37 @@
+import { allPosts } from 'contentlayer/generated';
+import { useMDXComponent } from 'next-contentlayer/hooks';
+import { notFound } from 'next/navigation';
+import { MDXProviderWrapper } from '../mdx-provider';
+
 export async function generateStaticParams() {
-  // For now, generate a static page for the placeholder
-  // Later, this will be populated from the CMS content
-  return [
-    { slug: 'placeholder' },
-    { slug: 'welcome' }
-  ];
+  return allPosts.map((post) => ({
+    slug: post.slug,
+  }));
 }
 
-export default async function BlogPost({ params }: { params: { slug: string } }) {
+export default function BlogPost({ params }: { params: { slug: string } }) {
+  const post = allPosts.find((post) => post.slug === params.slug);
+
+  if (!post) {
+    notFound();
+  }
+
+  const MDXContent = useMDXComponent(post.body.code);
+
   return (
     <article className="max-w-4xl mx-auto py-16 px-4">
-      <h1 className="text-4xl font-bold mb-4">
-        {params.slug === 'placeholder' ? 'Blog Post' : 'Welcome to Our Blog'}
-      </h1>
-      <time className="text-gray-500 mb-8 block">
-        {new Date().toLocaleDateString()}
-      </time>
+      <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
+      <div className="flex items-center gap-4 text-sm text-gray-500 mb-8">
+        <time dateTime={post.date}>
+          {new Date(post.date).toLocaleDateString()}
+        </time>
+        <span>•</span>
+        <span>{post.author}</span>
+      </div>
       <div className="prose prose-lg">
-        <p>This page is under construction.</p>
+        <MDXProviderWrapper>
+          <MDXContent />
+        </MDXProviderWrapper>
       </div>
     </article>
   );
