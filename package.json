@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "@aws-sdk/client-ses": "^3.744.0",
-    "@mdx-js/loader": "^3.0.0",
-    "@mdx-js/react": "^3.0.0",
+    "@mdx-js/loader": "^2.3.0",
+    "@mdx-js/react": "^2.3.0",
     "@next/mdx": "^13.5.8",
     "@sendgrid/mail": "^8.1.4",
     "@tailwindcss/forms": "^0.5.7",
