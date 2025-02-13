@@ -1,5 +1,4 @@
 const { withContentlayer } = require('next-contentlayer');
-const withMDX = require('@next/mdx')();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -7,7 +6,6 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
   // Configure static paths
   trailingSlash: true,
   distDir: 'out',
@@ -17,5 +15,4 @@ const nextConfig = {
   poweredByHeader: false,
 };
 
-// Combine withMDX and withContentlayer
-module.exports = withContentlayer(withMDX(nextConfig));
+module.exports = withContentlayer(nextConfig);
