@@ -14,6 +14,10 @@ const nextConfig = {
   poweredByHeader: false,
   env: {
     NEXT_PUBLIC_VERCEL_ENV: process.env.VERCEL_ENV || 'development'
+  },
+  // Vercel-specific configuration
+  generateBuildId: async () => {
+    return 'build-' + Date.now();
   }
 };
 
