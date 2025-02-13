@@ -7,7 +7,8 @@ const nextConfig = {
     domains: ['fonts.gstatic.com'],
   },
   experimental: {
-    mdxRs: true
+    mdxRs: true,
+    serverActions: true
   },
   swcMinify: true,
   reactStrictMode: true,
