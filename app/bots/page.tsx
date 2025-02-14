@@ -17,7 +17,7 @@ export default async function BotsList() {
         {bots.map((bot) => (
           <Link 
             key={bot.id} 
-            href={bot.path}
+            href={`/bots/${bot.id}`}
             className="group flex h-full flex-col rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
           >
             <div>
