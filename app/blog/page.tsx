@@ -25,11 +25,11 @@ export default function Blog() {
                 <span>{post.author}</span>
               </div>
               <h2 className="mt-4 text-2xl font-semibold tracking-tight text-gray-900">
-                <Link href={post.url} className="hover:text-openai-green">{post.title}</Link>
+                <Link href={`/blog/${post.slug}`} className="hover:text-openai-green">{post.title}</Link>
               </h2>
               <p className="mt-4 text-gray-600">{post.excerpt}</p>
               <div className="mt-4">
-                <Link href={post.url} className="inline-flex items-center text-sm font-medium text-openai-green hover:text-opacity-80">
+                <Link href={`/blog/${post.slug}`} className="inline-flex items-center text-sm font-medium text-openai-green hover:text-opacity-80">
                   Read more
                   <svg className="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
