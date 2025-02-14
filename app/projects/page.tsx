@@ -26,7 +26,7 @@ export default async function Projects() {
           {projects.map((project) => (
             <Link
               key={project.id}
-              href={project.path}
+              href={`/projects/${project.id}`}
               className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white transition-shadow hover:shadow-lg"
             >
               <div className="aspect-video w-full bg-gray-100 relative">
