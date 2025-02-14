@@ -2,9 +2,12 @@ const { withContentlayer } = require('next-contentlayer');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone",
+  output: 'standalone',
   images: {
     unoptimized: true,
+  },
+  experimental: {
+    typedRoutes: true,
   }
 };
 
