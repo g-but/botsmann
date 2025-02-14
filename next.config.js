@@ -7,7 +7,8 @@ const nextConfig = {
     unoptimized: true,
   },
   experimental: {
-    typedRoutes: true,
+    typedRoutes: false,
+    outputFileTracingRoot: process.env.VERCEL ? '/vercel/path0' : undefined,
   }
 };
 

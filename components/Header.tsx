@@ -98,7 +98,7 @@ export default function Header() {
             About
           </Link>
           <Link 
-            href="/contact" as="/contact" 
+            href="/contact" as={"/contact" as Route} 
             className="rounded-md bg-openai-green px-4 py-2 text-sm font-medium text-white hover:bg-opacity-90 transition-opacity"
           >
             Contact Us
@@ -169,7 +169,7 @@ export default function Header() {
                 About
               </Link>
               <Link 
-                href="/contact" as="/contact"
+                href="/contact" as={"/contact" as Route}
                 className="inline-flex items-center justify-center rounded-md bg-openai-green px-4 py-2 text-sm font-medium text-white hover:bg-opacity-90 transition-opacity"
               >
                 Contact Us
