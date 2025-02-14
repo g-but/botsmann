@@ -1,9 +1,6 @@
-'use client';
-
 import React from 'react';
-import { MDXProvider } from '@mdx-js/react';
 
-const components = {
+export const components = {
   h1: (props: any) => (
     <h1 className="mb-8 text-4xl font-semibold tracking-tight text-gray-900" {...props} />
   ),
@@ -29,7 +26,3 @@ const components = {
     <a className="text-openai-green hover:text-opacity-80" {...props} />
   ),
 };
-
-export function MDXProviderWrapper({ children }: { children: React.ReactNode }) {
-  return <MDXProvider components={components}>{children}</MDXProvider>;
-}

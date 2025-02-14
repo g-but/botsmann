@@ -1,0 +1,25 @@
+{
+  "id": "libertech",
+  "title": "LiberTech",
+  "description": "Maximizing human liberty through technological innovation",
+  "overview": "LiberTech is revolutionizing public finance and governance through innovative technology solutions that promote transparency and citizen engagement.",
+  "features": [
+    {
+      "title": "Spending Tracker",
+      "description": "Monitor government spending in real-time",
+      "icon": "💰"
+    },
+    {
+      "title": "Public Finance",
+      "description": "Transparent financial management tools",
+      "icon": "📊"
+    },
+    {
+      "title": "Citizen Engagement",
+      "description": "Direct participation in governance",
+      "icon": "👥"
+    }
+  ],
+  "details": "Our platform combines cutting-edge technology with user-centric design to make government operations more transparent, efficient, and accountable to citizens.",
+  "path": "/projects/libertech"
+}

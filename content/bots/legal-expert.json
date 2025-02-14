@@ -1,0 +1,35 @@
+{
+  "id": "legal-expert",
+  "title": "Legal Expert Assistant",
+  "description": "Navigate legal complexities with AI guidance",
+  "overview": "Comprehensive legal research and analysis support for legal professionals.",
+  "features": [
+    {
+      "title": "Legal Research",
+      "description": "Efficient search through case law and statutes",
+      "icon": "⚖️"
+    },
+    {
+      "title": "Document Analysis",
+      "description": "AI-powered legal document review and analysis",
+      "icon": "📄"
+    },
+    {
+      "title": "Case Law Insights",
+      "description": "Relevant case law suggestions and analysis",
+      "icon": "🔍"
+    },
+    {
+      "title": "Regulatory Compliance",
+      "description": "Stay updated with regulatory requirements",
+      "icon": "✅"
+    },
+    {
+      "title": "Contract Review",
+      "description": "Automated contract analysis and suggestions",
+      "icon": "📝"
+    }
+  ],
+  "details": "Our Legal Expert Assistant combines advanced legal knowledge with AI capabilities to provide comprehensive support for legal research and analysis.",
+  "path": "/bots/legal-expert"
+}

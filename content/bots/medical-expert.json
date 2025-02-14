@@ -1,0 +1,35 @@
+{
+  "id": "medical-expert",
+  "title": "Medical Expert Assistant",
+  "description": "AI-powered medical knowledge and consultation support",
+  "overview": "Supporting healthcare professionals with evidence-based insights and comprehensive research analysis.",
+  "features": [
+    {
+      "title": "Evidence-based Insights",
+      "description": "Access the latest medical research and clinical guidelines",
+      "icon": "🔬"
+    },
+    {
+      "title": "Research Assistance",
+      "description": "Quickly find and analyze relevant medical studies",
+      "icon": "📊"
+    },
+    {
+      "title": "Case Analysis",
+      "description": "Get AI-powered analysis of complex medical cases",
+      "icon": "🏥"
+    },
+    {
+      "title": "Literature Review",
+      "description": "Comprehensive review of medical literature",
+      "icon": "📚"
+    },
+    {
+      "title": "Clinical Guidelines",
+      "description": "Stay updated with the latest clinical guidelines",
+      "icon": "📋"
+    }
+  ],
+  "details": "Designed to assist medical professionals in staying current with research, analyzing cases, and making informed decisions based on the latest medical evidence.",
+  "path": "/bots/medical-expert"
+}

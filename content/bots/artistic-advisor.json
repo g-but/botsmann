@@ -1,0 +1,35 @@
+{
+  "id": "artistic-advisor",
+  "title": "Artistic Advisor",
+  "description": "Enhance your creative process with AI insights",
+  "overview": "Get expert guidance on composition, style analysis, and technique refinement for your artistic projects.",
+  "features": [
+    {
+      "title": "Style Analysis",
+      "description": "Understand different artistic styles and techniques",
+      "icon": "🎨"
+    },
+    {
+      "title": "Composition Guidance",
+      "description": "Get feedback on composition and layout",
+      "icon": "🖼️"
+    },
+    {
+      "title": "Technique Suggestions",
+      "description": "Learn new artistic techniques and methods",
+      "icon": "✏️"
+    },
+    {
+      "title": "Color Theory",
+      "description": "Expert guidance on color combinations",
+      "icon": "🌈"
+    },
+    {
+      "title": "Art History Insights",
+      "description": "Learn from historical art movements",
+      "icon": "📚"
+    }
+  ],
+  "details": "The Artistic Advisor AI helps artists explore new techniques, refine their style, and gain insights from art history while maintaining their unique creative vision.",
+  "path": "/bots/artistic-advisor"
+}
