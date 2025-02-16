@@ -19,9 +19,10 @@ export default function MobileMenu() {
       <div
         id="mobile-menu-overlay"
         style={{
-          display: isOpen ? 'block' : 'none',
+          visibility: isOpen ? 'visible' : 'hidden',
           transform: `translateY(${isOpen ? '0' : '-100%'})`,
-          opacity: isOpen ? 1 : 0
+          opacity: isOpen ? 1 : 0,
+          pointerEvents: isOpen ? 'auto' : 'none'
         }}
         className="fixed inset-0 top-16 bottom-0 z-[100] bg-white transition-all duration-300 ease-in-out lg:hidden"
       >
