@@ -18,8 +18,9 @@ export default function MobileMenu() {
       
       <div
         id="mobile-menu-overlay"
+        style={{ visibility: isOpen ? 'visible' : 'hidden' }}
         className={`fixed inset-0 top-16 bottom-0 z-[100] transform bg-white transition-all duration-300 ease-in-out lg:hidden ${
-          isOpen ? 'translate-y-0 opacity-100 pointer-events-auto' : '-translate-y-full opacity-0 pointer-events-none'
+          isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
         }`}
       >
         <nav className="h-full overflow-y-auto px-6 py-6">
