@@ -5,7 +5,8 @@ const nextConfig = {
     unoptimized: true 
   },
   experimental: { 
-    typedRoutes: true
+    typedRoutes: true,
+    serverActions: false
   },
   env: {
     NEXT_PUBLIC_DEPLOY_TIME: new Date().toUTCString()
@@ -21,7 +22,10 @@ const nextConfig = {
   }],
   pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
   trailingSlash: false,
-  distDir: '.next'
+  distDir: '.next',
+  serverRuntimeConfig: {
+    PROJECT_ROOT: __dirname
+  }
 };
 
 module.exports = nextConfig;
