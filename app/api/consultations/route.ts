@@ -45,7 +45,7 @@ async function handler(req: NextRequest) {
           return new Response(
             JSON.stringify(createErrorResponse(
               'Database service unavailable',
-              'SERVICE_UNAVAILABLE'
+              'INTERNAL_ERROR'
             )),
             { 
               status: 503,
@@ -134,4 +134,4 @@ async function handler(req: NextRequest) {
   }
 }
 
-export const POST = (req: NextRequest) => monitorRequest(req, handler);                                                                                                                                                                                                                                                  
+export const POST = (req: NextRequest) => monitorRequest(req, handler);                                                                                                                                                                                                                                                                        
