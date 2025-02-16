@@ -18,9 +18,12 @@ export default function MobileMenu() {
       
       <div
         id="mobile-menu-overlay"
-        className={`fixed inset-0 top-16 bottom-0 z-[100] transform bg-white transition-all duration-300 ease-in-out lg:hidden ${
-          isOpen ? 'block translate-y-0 opacity-100' : 'hidden -translate-y-full opacity-0'
-        }`}
+        style={{
+          display: isOpen ? 'block' : 'none',
+          transform: `translateY(${isOpen ? '0' : '-100%'})`,
+          opacity: isOpen ? 1 : 0
+        }}
+        className="fixed inset-0 top-16 bottom-0 z-[100] bg-white transition-all duration-300 ease-in-out lg:hidden"
       >
         <button 
           onClick={() => setIsOpen(false)}
