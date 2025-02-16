@@ -21,7 +21,10 @@ const nextConfig = {
   }],
   pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
   trailingSlash: false,
-  distDir: '.next'
+  distDir: '.next',
+  async redirects() {
+    return [];
+  }
 };
 
 module.exports = nextConfig;
