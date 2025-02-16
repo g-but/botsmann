@@ -39,7 +39,20 @@ async function handler(req: NextRequest) {
     // Connect to DB (skipped in test environment)
     if (process.env.NODE_ENV !== 'test') {
       try {
-        await connectDB();
+        const db = await connectDB();
+        if (!db) {
+          throw new Error('Database connection failed');
+        }
+        
+        // Ensure model is initialized
+        if (!mongoose.models.Consultation) {
+          mongoose.model('Consultation', new mongoose.Schema({
+            name: String,
+            email: String,
+            message: String,
+            createdAt: { type: Date, default: Date.now }
+          }));
+        }
       } catch (error) {
         console.error('Failed to connect to database:', error);
         return new Response(
@@ -55,7 +68,8 @@ async function handler(req: NextRequest) {
       }
     }
     
-    const consultation = await Consultation.create(validatedData);
+    try {
+      const consultation = await Consultation.create(validatedData);
 
     // Send emails asynchronously
     try {
@@ -121,4 +135,4 @@ async function handler(req: NextRequest) {
   }
 }
 
-export const POST = (req: NextRequest) => monitorRequest(req, handler);                                            
+export const POST = (req: NextRequest) => monitorRequest(req, handler);                                                                  
