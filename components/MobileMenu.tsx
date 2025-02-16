@@ -19,8 +19,8 @@ export default function MobileMenu() {
       <div
         id="mobile-menu-overlay"
         className={`${
-          isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
-        } fixed inset-0 top-16 bottom-0 z-[100] transform bg-white transition-all duration-300 ease-in-out lg:hidden overflow-hidden`}
+          isOpen ? 'translate-y-0 opacity-100 visible' : '-translate-y-full opacity-0 invisible'
+        } fixed inset-0 top-16 bottom-0 z-[100] transform bg-white transition-all duration-300 ease-in-out lg:hidden`}
       >
         <nav className="h-full overflow-y-auto px-6 py-6">
           <div className="flex flex-col space-y-6">
