@@ -42,14 +42,12 @@ export default function MobileMenu() {
     }
   }, []);
 
-  // Close menu when route changes
   useEffect(() => {
     if (isOpen) {
       setIsOpen(false);
     }
   }, [router]);
 
-  // Handle escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
@@ -78,14 +76,11 @@ export default function MobileMenu() {
             animate="open"
             exit="closed"
             variants={menuVariants}
-            className="fixed inset-0 top-16 bottom-0 z-[100] bg-white/95 backdrop-blur-sm lg:hidden"
             drag="y"
             dragConstraints={{ top: 0, bottom: 0 }}
-            dragElastic={0.2}
+            dragElastic={0.1}
             onDragEnd={handleDragEnd}
-            aria-label="Mobile menu"
-            role="dialog"
-            aria-modal="true"
+            className="fixed inset-0 top-16 bottom-0 z-[100] bg-white/95 backdrop-blur-sm lg:hidden overflow-y-auto"
           >
             <motion.button 
               onClick={() => setIsOpen(false)}
@@ -96,7 +91,7 @@ export default function MobileMenu() {
             >
               ✖
             </motion.button>
-            <nav className="h-full overflow-y-auto px-6 py-8" role="navigation">
+            <nav className="h-full px-6 py-8" role="navigation">
               <motion.div 
                 className="flex flex-col space-y-10"
                 initial={{ opacity: 0, y: 20 }}
@@ -114,22 +109,22 @@ export default function MobileMenu() {
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.2 }}
                     >
-                      <Link href="/bots/artistic-advisor" className="flex items-center py-2 text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
+                      <Link href="/bots/artistic-advisor" className="mobile-menu-link">
                         Artistic Advisor
                       </Link>
-                      <Link href="/bots/auto-shopper" className="flex items-center py-2 text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
+                      <Link href="/bots/auto-shopper" className="mobile-menu-link">
                         Auto Shopper
                       </Link>
-                      <Link href="/bots/gov-spending-tracker" className="flex items-center py-2 text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
+                      <Link href="/bots/gov-spending-tracker" className="mobile-menu-link">
                         Gov Spending Tracker
                       </Link>
-                      <Link href="/bots/legal-expert" className="flex items-center py-2 text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
+                      <Link href="/bots/legal-expert" className="mobile-menu-link">
                         Legal Expert
                       </Link>
-                      <Link href="/bots/medical-expert" className="flex items-center py-2 text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
+                      <Link href="/bots/medical-expert" className="mobile-menu-link">
                         Medical Expert
                       </Link>
-                      <Link href="/bots/swiss-german-teacher" className="flex items-center py-2 text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
+                      <Link href="/bots/swiss-german-teacher" className="mobile-menu-link">
                         Swiss German Teacher
                       </Link>
                     </motion.div>
