@@ -70,7 +70,7 @@ export default function MobileMenu() {
         aria-controls="mobile-menu-overlay"
       />
       
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {isOpen && (
           <motion.div
             id="mobile-menu-overlay"
