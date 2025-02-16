@@ -5,8 +5,7 @@ const nextConfig = {
     unoptimized: true 
   },
   experimental: { 
-    typedRoutes: true,
-    serverActions: true
+    typedRoutes: true
   },
   env: {
     NEXT_PUBLIC_DEPLOY_TIME: new Date().toUTCString()
