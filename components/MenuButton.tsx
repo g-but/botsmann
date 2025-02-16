@@ -7,14 +7,8 @@ interface MenuButtonProps {
 }
 
 export function MenuButton({ onToggle }: MenuButtonProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  
   const handleClick = () => {
-    const newState = !isOpen;
-    setIsOpen(newState);
-    onToggle(newState);
-    
-    // State is handled in MobileMenu component
+    onToggle((prev) => !prev);
   };
 
   useEffect(() => {

@@ -8,8 +8,12 @@ import { MenuButton } from './MenuButton';
 export default function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
   
-  const handleToggle = (state: boolean) => {
-    setIsOpen(state);
+  const handleToggle = (prevState: boolean) => {
+    setIsOpen(!prevState);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
   };
 
   return (
@@ -18,11 +22,15 @@ export default function MobileMenu() {
       
       <div
         id="mobile-menu-overlay"
-        style={{ visibility: isOpen ? 'visible' : 'hidden' }}
-        className={`fixed inset-0 top-16 bottom-0 z-[100] transform bg-white transition-all duration-300 ease-in-out lg:hidden ${
-          isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
-        }`}
+        className={`mobile-menu-overlay ${isOpen ? 'visible' : 'hidden'}`}
       >
+        <button 
+          onClick={handleClose}
+          className="absolute top-4 right-4 p-2 text-gray-600 hover:text-openai-green"
+          aria-label="Close menu"
+        >
+          ✖
+        </button>
         <nav className="h-full overflow-y-auto px-6 py-6">
           <div className="flex flex-col space-y-6">
             {/* Mobile menu content */}
