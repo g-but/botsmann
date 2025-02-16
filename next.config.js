@@ -19,7 +19,9 @@ const nextConfig = {
       }
     ]
   }],
-  pageExtensions: ['js', 'jsx', 'ts', 'tsx']
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
+  trailingSlash: false,
+  distDir: '.next'
 };
 
 module.exports = nextConfig;
