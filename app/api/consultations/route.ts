@@ -39,15 +39,7 @@ async function handler(req: NextRequest) {
     // Connect to DB (skipped in test environment)
     if (process.env.NODE_ENV !== 'test') {
       try {
-        const db = await connectDB();
-        if (!db) {
-          throw new Error('Database connection failed');
-        }
-        
-        // Check database connection state
-        if (!db.connection.readyState) {
-          throw new Error('Database connection not ready');
-        }
+        await connectDB();
       } catch (error) {
         console.error('Failed to connect to database:', error);
         return new Response(
@@ -129,4 +121,4 @@ async function handler(req: NextRequest) {
   }
 }
 
-export const POST = (req: NextRequest) => monitorRequest(req, handler);                                                                                                                                                                                                      
+export const POST = (req: NextRequest) => monitorRequest(req, handler);                                                                                                                                                                                                                            
