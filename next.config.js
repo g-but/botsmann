@@ -29,7 +29,15 @@ const nextConfig = {
   }],
   pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
   trailingSlash: false,
-  distDir: '.next'
+  distDir: '.next',
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: '/api/:path*'
+      }
+    ];
+  }
 };
 
 module.exports = nextConfig;
