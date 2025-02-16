@@ -44,15 +44,9 @@ async function handler(req: NextRequest) {
           throw new Error('Database connection failed');
         }
         
-        // Ensure model is initialized
-        if (!mongoose.models.Consultation) {
-          const ConsultationSchema = new mongoose.Schema({
-            name: { type: String, required: true },
-            email: { type: String, required: true },
-            message: { type: String, required: true },
-            createdAt: { type: Date, default: Date.now }
-          });
-          mongoose.model('Consultation', ConsultationSchema);
+        // Ensure database connection
+        if (!mongoose.connection.readyState) {
+          throw new Error('Database connection not ready');
         }
       } catch (error) {
         console.error('Failed to connect to database:', error);
@@ -135,4 +129,4 @@ async function handler(req: NextRequest) {
   }
 }
 
-export const POST = (req: NextRequest) => monitorRequest(req, handler);                                                                                                              
+export const POST = (req: NextRequest) => monitorRequest(req, handler);                                                                                                                                    
