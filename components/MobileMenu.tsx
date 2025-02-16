@@ -96,15 +96,15 @@ export default function MobileMenu() {
             >
               ✖
             </motion.button>
-            <nav className="h-full overflow-y-auto px-6 py-6" role="navigation">
+            <nav className="h-full overflow-y-auto px-6 py-8" role="navigation">
               <motion.div 
-                className="flex flex-col space-y-8"
+                className="flex flex-col space-y-10"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
               >
                 <div className="space-y-8">
-                  <div>
+                  <div className="space-y-4">
                     <Link href="/bots" className="flex items-center text-xl font-semibold text-gray-900 hover:text-openai-green active:text-openai-green transition-colors">
                       Bots
                     </Link>
