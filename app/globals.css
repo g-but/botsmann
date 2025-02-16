@@ -37,4 +37,10 @@ body {
   .input-primary {
     @apply w-full rounded-xl border-2 border-gray-200 bg-transparent px-4 py-3 text-gray-900 outline-none transition-colors focus:border-green-600;
   }
+  .mobile-menu-overlay {
+    @apply fixed inset-0 top-16 bottom-0 z-[100] bg-white transition-all duration-300 ease-in-out lg:hidden overflow-hidden;
+  }
+  .mobile-menu-link {
+    @apply flex items-center py-2 text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors;
+  }
 }

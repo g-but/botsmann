@@ -20,32 +20,32 @@ export default function MobileMenu() {
         id="mobile-menu-overlay"
         className={`${
           isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
-        } fixed inset-0 top-16 z-50 transform bg-white transition-all duration-300 ease-in-out lg:hidden`}
+        } fixed inset-0 top-16 bottom-0 z-[100] transform bg-white transition-all duration-300 ease-in-out lg:hidden overflow-hidden`}
       >
         <nav className="h-full overflow-y-auto px-6 py-6">
-          <div className="flex flex-col space-y-4">
+          <div className="flex flex-col space-y-6">
             {/* Mobile menu content */}
-            <div className="space-y-4">
-              <Link href="/bots" className="flex items-center min-h-[44px] text-lg font-medium text-gray-900 hover:text-openai-green active:text-openai-green transition-colors">
+            <div className="space-y-6">
+              <Link href="/bots" className="flex items-center text-lg font-medium text-gray-900 hover:text-openai-green active:text-openai-green transition-colors">
                 Bots
               </Link>
-              <div className="flex flex-col space-y-4 pl-4">
-                <Link href="/bots/artistic-advisor" className="flex items-center min-h-[44px] text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
+              <div className="flex flex-col space-y-4 pl-4 border-l border-gray-100">
+                <Link href="/bots/artistic-advisor" className="flex items-center py-2 text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
                   Artistic Advisor
                 </Link>
-                <Link href="/bots/auto-shopper" className="flex items-center min-h-[44px] text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
+                <Link href="/bots/auto-shopper" className="flex items-center py-2 text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
                   Auto Shopper
                 </Link>
-                <Link href="/bots/gov-spending-tracker" className="flex items-center min-h-[44px] text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
+                <Link href="/bots/gov-spending-tracker" className="flex items-center py-2 text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
                   Gov Spending Tracker
                 </Link>
-                <Link href="/bots/legal-expert" className="flex items-center min-h-[44px] text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
+                <Link href="/bots/legal-expert" className="flex items-center py-2 text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
                   Legal Expert
                 </Link>
-                <Link href="/bots/medical-expert" className="flex items-center min-h-[44px] text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
+                <Link href="/bots/medical-expert" className="flex items-center py-2 text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
                   Medical Expert
                 </Link>
-                <Link href="/bots/swiss-german-teacher" className="flex items-center min-h-[44px] text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
+                <Link href="/bots/swiss-german-teacher" className="flex items-center py-2 text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
                   Swiss German Teacher
                 </Link>
               </div>
