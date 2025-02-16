@@ -19,7 +19,15 @@ const nextConfig = {
       }
     ]
   }],
-  pageExtensions: ['js', 'jsx', 'ts', 'tsx']
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
+  async rewrites() {
+    return [
+      {
+        source: '/contact',
+        destination: '/contact/page'
+      }
+    ];
+  }
 };
 
 module.exports = nextConfig;
