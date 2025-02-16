@@ -8,24 +8,20 @@ import { MenuButton } from './MenuButton';
 export default function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
   
-  const handleToggle = (prevState: boolean) => {
-    setIsOpen(!prevState);
-  };
-
-  const handleClose = () => {
-    setIsOpen(false);
+  const handleToggle = () => {
+    setIsOpen(prev => !prev);
   };
 
   return (
     <>
-      <MenuButton onToggle={handleToggle} />
+      <MenuButton isOpen={isOpen} onToggle={handleToggle} />
       
       <div
         id="mobile-menu-overlay"
         className={`mobile-menu-overlay ${isOpen ? 'visible' : 'hidden'}`}
       >
         <button 
-          onClick={handleClose}
+          onClick={() => setIsOpen(false)}
           className="absolute top-4 right-4 p-2 text-gray-600 hover:text-openai-green"
           aria-label="Close menu"
         >

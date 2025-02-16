@@ -3,33 +3,19 @@
 import React, { useState, useEffect } from 'react';
 
 interface MenuButtonProps {
-  onToggle: (isOpen: boolean) => void;
+  isOpen: boolean;
+  onToggle: () => void;
 }
 
-export function MenuButton({ onToggle }: MenuButtonProps) {
-  const handleClick = () => {
-    onToggle((prev) => !prev);
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event: Event) => {
-      const target = event.target as Element;
-      if (isOpen && !target.closest('#mobile-menu-overlay')) {
-        setIsOpen(false);
-        onToggle(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isOpen, onToggle]);
-
+export function MenuButton({ isOpen, onToggle }: MenuButtonProps) {
   return (
     <button
       type="button"
-      onClick={handleClick}
+      onClick={onToggle}
       className="lg:hidden rounded-md p-2 text-gray-600 hover:bg-gray-100 hover:text-openai-green focus:outline-none focus:ring-2 focus:ring-openai-green"
       aria-controls="mobile-menu"
       aria-expanded={isOpen}
+      aria-label="Toggle menu"
     >
       <span className="sr-only">Open main menu</span>
       <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
