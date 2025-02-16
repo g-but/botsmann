@@ -18,11 +18,13 @@ export default function MobileMenu() {
       
       <div
         id="mobile-menu-overlay"
-        className={`mobile-menu-overlay ${isOpen ? 'visible' : 'hidden'}`}
+        className={`fixed inset-0 top-16 bottom-0 z-[100] transform bg-white transition-all duration-300 ease-in-out lg:hidden ${
+          isOpen ? 'block translate-y-0 opacity-100' : 'hidden -translate-y-full opacity-0'
+        }`}
       >
         <button 
           onClick={() => setIsOpen(false)}
-          className="absolute top-4 right-4 p-2 text-gray-600 hover:text-openai-green"
+          className="absolute top-4 right-4 p-2 text-gray-600 hover:text-openai-green focus:outline-none focus:ring-2 focus:ring-openai-green"
           aria-label="Close menu"
         >
           ✖
