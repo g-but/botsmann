@@ -98,21 +98,22 @@ export default function MobileMenu() {
             </motion.button>
             <nav className="h-full overflow-y-auto px-6 py-6" role="navigation">
               <motion.div 
-                className="flex flex-col space-y-6"
+                className="flex flex-col space-y-8"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
               >
-                <div className="space-y-6">
-                  <Link href="/bots" className="flex items-center text-lg font-medium text-gray-900 hover:text-openai-green active:text-openai-green transition-colors">
-                    Bots
-                  </Link>
-                  <motion.div 
-                    className="flex flex-col space-y-4 pl-4 border-l border-gray-100"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.2 }}
-                  >
+                <div className="space-y-8">
+                  <div>
+                    <Link href="/bots" className="flex items-center text-xl font-semibold text-gray-900 hover:text-openai-green active:text-openai-green transition-colors">
+                      Bots
+                    </Link>
+                    <motion.div 
+                      className="mt-4 flex flex-col space-y-4 pl-4 border-l-2 border-gray-200"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                    >
                     <Link href="/bots/artistic-advisor" className="flex items-center py-2 text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
                       Artistic Advisor
                     </Link>
@@ -135,20 +136,20 @@ export default function MobileMenu() {
                 </div>
                 
                 <motion.div 
-                  className="flex flex-col space-y-4"
+                  className="flex flex-col space-y-6"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3 }}
                 >
-                  <Link href="/blog" className="text-sm font-medium text-gray-600 hover:text-openai-green">
+                  <Link href="/blog" className="text-lg font-medium text-gray-800 hover:text-openai-green">
                     Blog
                   </Link>
-                  <Link href="/about" className="text-sm font-medium text-gray-600 hover:text-openai-green">
+                  <Link href="/about" className="text-lg font-medium text-gray-800 hover:text-openai-green">
                     About
                   </Link>
                   <Link 
                     href={'/contact' as Route}
-                    className="inline-flex items-center justify-center rounded-md bg-openai-green px-4 py-2 text-sm font-medium text-white hover:bg-opacity-90 transition-opacity"
+                    className="inline-flex items-center justify-center rounded-md bg-openai-green px-6 py-3 text-base font-semibold text-white hover:bg-opacity-90 transition-opacity"
                   >
                     Contact Us
                   </Link>
