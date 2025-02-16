@@ -44,9 +44,8 @@ async function handler(req: NextRequest) {
           throw new Error('Database connection failed');
         }
         
-        // Ensure database connection
-        const db = await connectDB();
-        if (!db) {
+        // Check database connection state
+        if (!db.connection.readyState) {
           throw new Error('Database connection not ready');
         }
       } catch (error) {
@@ -130,4 +129,4 @@ async function handler(req: NextRequest) {
   }
 }
 
-export const POST = (req: NextRequest) => monitorRequest(req, handler);                                                                                                                                                                                
+export const POST = (req: NextRequest) => monitorRequest(req, handler);                                                                                                                                                                                                      
