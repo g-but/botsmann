@@ -45,7 +45,8 @@ async function handler(req: NextRequest) {
         }
         
         // Ensure database connection
-        if (!mongoose.connection.readyState) {
+        const db = await connectDB();
+        if (!db) {
           throw new Error('Database connection not ready');
         }
       } catch (error) {
@@ -129,4 +130,4 @@ async function handler(req: NextRequest) {
   }
 }
 
-export const POST = (req: NextRequest) => monitorRequest(req, handler);                                                                                                                                    
+export const POST = (req: NextRequest) => monitorRequest(req, handler);                                                                                                                                                                                
