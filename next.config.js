@@ -18,7 +18,8 @@ const nextConfig = {
         value: 'no-store, must-revalidate'
       }
     ]
-  }]
+  }],
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx']
 };
 
 module.exports = nextConfig;
