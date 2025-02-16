@@ -39,7 +39,20 @@ async function handler(req: NextRequest) {
     // Connect to DB (skipped in test environment)
     if (process.env.NODE_ENV !== 'test') {
       try {
-        await connectDB();
+        const db = await connectDB();
+        if (!db || !db.connection || db.connection.readyState !== 1) {
+          console.error('Database connection not ready');
+          return new Response(
+            JSON.stringify(createErrorResponse(
+              'Database service unavailable',
+              'SERVICE_UNAVAILABLE'
+            )),
+            { 
+              status: 503,
+              headers: { 'Content-Type': 'application/json' }
+            }
+          );
+        }
       } catch (error) {
         console.error('Failed to connect to database:', error);
         return new Response(
@@ -121,4 +134,4 @@ async function handler(req: NextRequest) {
   }
 }
 
-export const POST = (req: NextRequest) => monitorRequest(req, handler);                                                                                                                                                                                                                            
+export const POST = (req: NextRequest) => monitorRequest(req, handler);                                                                                                                                                                                                                                                  
