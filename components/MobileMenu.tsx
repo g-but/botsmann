@@ -78,7 +78,7 @@ export default function MobileMenu() {
             animate="open"
             exit="closed"
             variants={menuVariants}
-            className="fixed inset-0 top-16 bottom-0 z-[100] bg-white lg:hidden"
+            className="fixed inset-0 top-16 bottom-0 z-[100] bg-white/95 backdrop-blur-sm lg:hidden"
             drag="y"
             dragConstraints={{ top: 0, bottom: 0 }}
             dragElastic={0.2}
@@ -150,57 +150,6 @@ export default function MobileMenu() {
                     </Link>
                   </div>
                 </div>
-              </motion.div>
-            </nav>
-                    <Link href="/bots" className="flex items-center text-xl font-semibold text-gray-900 hover:text-openai-green active:text-openai-green transition-colors">
-                      Bots
-                    </Link>
-                    <motion.div 
-                      className="mt-4 flex flex-col space-y-4 pl-4 border-l-2 border-gray-200"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.2 }}
-                    >
-                    <Link href="/bots/artistic-advisor" className="flex items-center py-2 text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
-                      Artistic Advisor
-                    </Link>
-                    <Link href="/bots/auto-shopper" className="flex items-center py-2 text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
-                      Auto Shopper
-                    </Link>
-                    <Link href="/bots/gov-spending-tracker" className="flex items-center py-2 text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
-                      Gov Spending Tracker
-                    </Link>
-                    <Link href="/bots/legal-expert" className="flex items-center py-2 text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
-                      Legal Expert
-                    </Link>
-                    <Link href="/bots/medical-expert" className="flex items-center py-2 text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
-                      Medical Expert
-                    </Link>
-                    <Link href="/bots/swiss-german-teacher" className="flex items-center py-2 text-base text-gray-600 hover:text-openai-green active:text-openai-green transition-colors">
-                      Swiss German Teacher
-                    </Link>
-                  </motion.div>
-                </div>
-                
-                <motion.div 
-                  className="flex flex-col space-y-6"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <Link href="/blog" className="text-lg font-medium text-gray-800 hover:text-openai-green">
-                    Blog
-                  </Link>
-                  <Link href="/about" className="text-lg font-medium text-gray-800 hover:text-openai-green">
-                    About
-                  </Link>
-                  <Link 
-                    href={'/contact' as Route}
-                    className="inline-flex items-center justify-center rounded-md bg-openai-green px-6 py-3 text-base font-semibold text-white hover:bg-opacity-90 transition-opacity"
-                  >
-                    Contact Us
-                  </Link>
-                </motion.div>
               </motion.div>
             </nav>
           </motion.div>
