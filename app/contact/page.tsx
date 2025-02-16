@@ -1,6 +1,6 @@
-import React from 'react';
+'use client';
 
-export const dynamic = 'force-dynamic';
+import React from 'react';
 
 export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
