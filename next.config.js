@@ -5,8 +5,7 @@ const nextConfig = {
     unoptimized: true 
   },
   experimental: { 
-    typedRoutes: true,
-    serverActions: false
+    typedRoutes: true
   },
   serverRuntimeConfig: {
     mongodbTimeout: 30000,
