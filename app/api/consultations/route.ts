@@ -68,8 +68,7 @@ async function handler(req: NextRequest) {
       }
     }
     
-    try {
-      const consultation = await Consultation.create(validatedData);
+    const consultation = await Consultation.create(validatedData);
 
     // Send emails asynchronously
     try {
@@ -135,4 +134,4 @@ async function handler(req: NextRequest) {
   }
 }
 
-export const POST = (req: NextRequest) => monitorRequest(req, handler);                                                                  
+export const POST = (req: NextRequest) => monitorRequest(req, handler);                                                                                        
