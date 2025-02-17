@@ -18,9 +18,27 @@ export class EmailService {
     this.adminEmail = process.env.ADMIN_EMAIL || 'butaeff@gmail.com';
   }
 
+  private async sendEmail(params: any, type: 'welcome' | 'admin'): Promise<void> {
+    try {
+      const result = await this.ses.send(new SendEmailCommand(params));
+      console.info(`Successfully sent ${type} email. MessageId: ${result.MessageId}`);
+    } catch (error: any) {
+      if (error.name === 'MessageRejected') {
+        console.error(`${type} email rejected:`, error.message);
+        throw new Error(`Failed to send ${type} email: ${error.message}`);
+      } else if (error.name === 'ConfigurationSetDoesNotExist') {
+        console.error(`AWS SES configuration error for ${type} email:`, error.message);
+        throw new Error('Email service misconfigured');
+      } else {
+        console.error(`Unknown error sending ${type} email:`, error);
+        throw new Error('Failed to send email');
+      }
+    }
+  }
+
   async sendWelcomeEmail(customer: Customer): Promise<void> {
     const params = {
-      Source: this.fromEmail,
+      Source: this.fromEmail || 'butaeff@gmail.com',
       Destination: {
         ToAddresses: [customer.email]
       },
@@ -36,19 +54,14 @@ export class EmailService {
       }
     };
 
-    try {
-      await this.ses.send(new SendEmailCommand(params));
-    } catch (error) {
-      console.error('Failed to send welcome email:', error);
-      throw error;
-    }
+    await this.sendEmail(params, 'welcome');
   }
 
   async sendAdminNotification(customer: Customer): Promise<void> {
     const params = {
-      Source: this.fromEmail,
+      Source: this.fromEmail || 'butaeff@gmail.com',
       Destination: {
-        ToAddresses: [this.adminEmail]
+        ToAddresses: [this.adminEmail || 'butaeff@gmail.com']
       },
       Message: {
         Subject: {
@@ -62,11 +75,6 @@ export class EmailService {
       }
     };
 
-    try {
-      await this.ses.send(new SendEmailCommand(params));
-    } catch (error) {
-      console.error('Failed to send admin notification:', error);
-      throw error;
-    }
+    await this.sendEmail(params, 'admin');
   }
 }
