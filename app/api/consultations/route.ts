@@ -228,6 +228,25 @@ export async function POST(req: NextRequest) {
         }
       }
     );
+  } catch (error) {
+    console.error('API Error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Internal Server Error';
+    return new Response(
+      JSON.stringify({
+        success: false,
+        message: errorMessage,
+        code: 'ERROR',
+        timestamp: new Date().toISOString()
+      }),
+      {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json',
+          ...corsHeaders
+        }
+      }
+    );
+  }
       
       // Validate and ensure proper JSON structure
       try {
@@ -285,4 +304,4 @@ export async function POST(req: NextRequest) {
       }
     );
   }
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
