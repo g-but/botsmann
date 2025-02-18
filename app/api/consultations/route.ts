@@ -24,6 +24,13 @@ const corsHeaders = {
   'Access-Control-Expose-Headers': 'Content-Type'
 };
 
+export async function GET() {
+  return NextResponse.json({ message: 'API endpoint is working' }, {
+    status: 200,
+    headers: corsHeaders
+  });
+}
+
 export async function OPTIONS() {
   return NextResponse.json(null, {
     status: 200,
@@ -123,10 +130,10 @@ export async function POST(request: NextRequest) {
     
     const errorMessage = error instanceof Error ? error.message : 'Internal Server Error';
     return NextResponse.json({
-        success: false,
-        message: errorMessage,
-        code: 'ERROR',
-        timestamp: new Date().toISOString()
+      success: false,
+      message: errorMessage,
+      code: 'ERROR',
+      timestamp: new Date().toISOString()
     }, {
       status: 500,
       headers: corsHeaders
