@@ -41,7 +41,7 @@ export async function OPTIONS(request: NextRequest) {
   });
 }
 
-export const runtime = 'nodejs';
+export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
 const allowedOrigins = ['https://www.botsmann.com', 'https://botsmann.com'];
@@ -49,6 +49,20 @@ const allowedOrigins = ['https://www.botsmann.com', 'https://botsmann.com'];
 export async function POST(request: NextRequest) {
   const origin = request.headers.get('origin') || '';
   const isAllowedOrigin = allowedOrigins.includes(origin);
+  
+  // Handle preflight requests
+  if (request.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        ...corsHeaders,
+        'Access-Control-Allow-Origin': isAllowedOrigin ? origin : allowedOrigins[0],
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, x-api-key, Accept',
+        'Access-Control-Allow-Credentials': 'true'
+      }
+    });
+  }
   
   // Add CORS headers to all responses
   const headers = {
@@ -172,4 +186,4 @@ export async function POST(request: NextRequest) {
       headers: corsHeaders
     });
   }
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
