@@ -21,7 +21,8 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, x-api-key, Accept',
   'Access-Control-Max-Age': '86400',
-  'Access-Control-Expose-Headers': 'Content-Type'
+  'Access-Control-Expose-Headers': 'Content-Type',
+  'Content-Type': 'application/json'
 };
 
 export async function GET() {
@@ -44,33 +45,8 @@ export async function OPTIONS() {
 }
 
 export async function POST(request: NextRequest) {
-  
   console.log('Received POST request:', request.method);
   console.log('Request headers:', Object.fromEntries(request.headers));
-  
-  // Handle preflight requests
-  if (request.method === 'OPTIONS') {
-    console.log('Handling OPTIONS request');
-    return new Response(null, {
-      status: 200,
-      headers: corsHeaders
-    });
-  }
-  
-  // Handle actual POST request
-  if (request.method !== 'POST') {
-    return new Response(JSON.stringify({
-      success: false,
-      message: `Method ${request.method} Not Allowed`,
-      code: 'METHOD_NOT_ALLOWED'
-    }), {
-      status: 405,
-      headers: {
-        'Content-Type': 'application/json',
-        ...corsHeaders
-      }
-    });
-  }
 
   try {
     // Validate API key first
@@ -164,4 +140,4 @@ export async function POST(request: NextRequest) {
       headers: corsHeaders
     });
   }
-}                                                                                                                                                                                                                                                                                                                                                                
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
