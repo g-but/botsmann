@@ -1,28 +1,35 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-export function middleware(request: NextRequest) {
-  // Only run on /api routes
-  if (!request.nextUrl.pathname.startsWith('/api/')) {
-    return NextResponse.next()
-  }
+const allowedOrigins = ['https://www.botsmann.com', 'https://botsmann.com', 'http://localhost:3000'];
 
-  // Handle OPTIONS request
+export function middleware(request: NextRequest) {
+  const origin = request.headers.get('origin') || '';
+  const isAllowedOrigin = allowedOrigins.includes(origin);
+
+  // Handle preflight requests
   if (request.method === 'OPTIONS') {
     return new NextResponse(null, {
       status: 204,
       headers: {
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': isAllowedOrigin ? origin : allowedOrigins[0],
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, x-api-key, Accept',
         'Access-Control-Max-Age': '86400',
+        'Access-Control-Allow-Credentials': 'true'
       },
-    })
+    });
   }
 
-  const response = NextResponse.next()
-  response.headers.set('Access-Control-Allow-Origin', '*')
-  return response
+  // Handle actual requests
+  const response = NextResponse.next();
+  
+  if (isAllowedOrigin) {
+    response.headers.set('Access-Control-Allow-Origin', origin);
+    response.headers.set('Access-Control-Allow-Credentials', 'true');
+  }
+  
+  return response;
 }
 
 export const config = {

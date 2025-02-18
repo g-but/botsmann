@@ -46,8 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   // Handle OPTIONS request
   if (req.method === 'OPTIONS') {
-    res.status(204).end();
-    return;
+    return res.status(204).json({});
   }
 
   // Handle POST request
