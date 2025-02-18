@@ -25,9 +25,16 @@ export default function ConsultationForm() {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
-          'x-api-key': process.env.NEXT_PUBLIC_API_KEY || ''
+          'x-api-key': 'development-key',
+          'Accept': 'application/json'
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          preferences: {
+            newsletter: true,
+            productUpdates: true
+          }
+        }),
       });
       
       if (!response.ok) {
