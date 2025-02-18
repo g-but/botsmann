@@ -1,5 +1,29 @@
 {
   "buildCommand": "next build",
   "devCommand": "next dev",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "routes": [
+    {
+      "src": "/api/consultations",
+      "methods": ["OPTIONS", "POST"],
+      "dest": "/api/consultations",
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, x-api-key, Accept",
+        "Access-Control-Max-Age": "86400",
+        "Access-Control-Allow-Credentials": "true"
+      }
+    }
+  ],
+  "functions": {
+    "app/api/consultations/route.ts": {
+      "maxDuration": 10,
+      "memory": 1024
+    },
+    "pages/api/consultations.ts": {
+      "maxDuration": 10,
+      "memory": 1024
+    }
+  }
 }
