@@ -34,6 +34,7 @@ export default function ConsultationForm() {
       
       console.log('Submitting form data:', formData);
       
+      console.log('Sending request to:', '/api/consultations');
       const response = await fetch('/api/consultations', {
         method: 'POST',
         headers: { 
@@ -44,6 +45,7 @@ export default function ConsultationForm() {
         body: JSON.stringify(formData),
         cache: 'no-store'
       });
+      console.log('Response status:', response.status);
       
       const responseData = await response.json();
       console.log('Server response:', responseData);
