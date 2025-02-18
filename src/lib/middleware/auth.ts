@@ -1,4 +1,4 @@
-import { createErrorResponse } from '@/src/lib/schemas/errors';
+import { NextResponse } from 'next/server';
 
 const API_KEY = process.env.API_KEY || 'development-key';
 
@@ -11,28 +11,26 @@ export async function validateApiKey(req: Request) {
   const apiKey = req.headers.get('x-api-key');
   
   if (!apiKey) {
-    return new Response(
-      JSON.stringify(createErrorResponse(
-        'API key is required',
-        'UNAUTHORIZED'
-      )),
-      { 
-        status: 401,
-        headers: { 'Content-Type': 'application/json' }
-      }
-    );
+    return NextResponse.json({
+      success: false,
+      message: 'API key is required',
+      code: 'UNAUTHORIZED',
+      timestamp: new Date().toISOString()
+    }, {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 
   if (apiKey !== API_KEY) {
-    return new Response(
-      JSON.stringify(createErrorResponse(
-        'Invalid API key',
-        'UNAUTHORIZED'
-      )),
-      { 
-        status: 401,
-        headers: { 'Content-Type': 'application/json' }
-      }
-    );
+    return NextResponse.json({
+      success: false,
+      message: 'Invalid API key',
+      code: 'UNAUTHORIZED',
+      timestamp: new Date().toISOString()
+    }, {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 }
