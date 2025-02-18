@@ -316,6 +316,28 @@ export async function POST(req: NextRequest) {
       }
     );
   }
+  } catch (error) {
+    console.error('API Error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Internal Server Error';
+    const statusCode = error instanceof ZodError ? 400 : 500;
+    
+    return new Response(
+      JSON.stringify({
+        success: false,
+        message: errorMessage,
+        code: error instanceof ZodError ? 'VALIDATION_ERROR' : 'ERROR',
+        timestamp: new Date().toISOString(),
+        details: error instanceof ZodError ? error.errors : undefined
+      }),
+      {
+        status: statusCode,
+        headers: {
+          'Content-Type': 'application/json',
+          ...corsHeaders
+        }
+      }
+    );
+  }
       
       // Validate and ensure proper JSON structure
       try {
@@ -373,4 +395,4 @@ export async function POST(req: NextRequest) {
       }
     );
   }
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
