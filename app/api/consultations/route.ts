@@ -149,12 +149,12 @@ export async function POST(req: NextRequest) {
     const response = await monitorRequest(req, handler);
     
     // Ensure we have a valid JSON response
-    let responseBody;
+    let responseBody: string = '';
     try {
       // If response.body is a ReadableStream, we need to read it
       if (response.body instanceof ReadableStream) {
         const reader = response.body.getReader();
-        const chunks = [];
+        const chunks: Uint8Array[] = [];
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
@@ -167,18 +167,17 @@ export async function POST(req: NextRequest) {
           offset += chunk.length;
         }
         responseBody = new TextDecoder().decode(concatenated);
-      } else {
+      } else if (typeof response.body === 'string') {
         responseBody = response.body;
+      } else {
+        responseBody = JSON.stringify({
+          success: response.ok,
+          message: response.ok ? 'Form submitted successfully' : 'Failed to submit form'
+        });
       }
       
-      // Ensure it's valid JSON
-      JSON.parse(responseBody);
-    } catch (e) {
-      console.error('Invalid JSON response:', e);
-      responseBody = JSON.stringify({ 
-        success: response.ok,
-        message: response.ok ? 'Form submitted successfully' : 'Failed to submit form'
-      });
+      // Ensure it's valid JSON by parsing and stringifying
+      responseBody = JSON.stringify(JSON.parse(responseBody));
     }
 
     const headers = new Headers(response.headers);
@@ -208,4 +207,4 @@ export async function POST(req: NextRequest) {
       }
     );
   }
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
