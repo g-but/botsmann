@@ -124,8 +124,9 @@ async function handler(req: NextRequest) {
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Headers': '*',
+  'Access-Control-Allow-Credentials': 'true',
   'Access-Control-Max-Age': '86400'
 };
 
@@ -161,4 +162,4 @@ export async function POST(req: NextRequest) {
       }
     );
   }
-}                                                                                                                                                                                                                                                                                                                                                              
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                      
