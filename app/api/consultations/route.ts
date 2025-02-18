@@ -146,62 +146,88 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Handle the form submission directly
-    try {
-      const body = await req.json();
-      const validatedData = CustomerSchema.parse(body);
-      
-      // Connect to DB (skipped in test environment)
-      if (process.env.NODE_ENV !== 'test') {
-        try {
-          await connectDB();
-        } catch (error) {
-          console.error('Failed to connect to database:', error);
-          return new Response(
-            JSON.stringify({
-              success: false,
-              message: 'Database connection error',
-              code: 'DB_ERROR',
-              timestamp: new Date().toISOString()
-            }),
-            { 
-              status: 503,
-              headers: { 
-                'Content-Type': 'application/json',
-                ...corsHeaders
-              }
-            }
-          );
-        }
-      }
-      
-      const consultation = await Consultation.create(validatedData);
+    // Validate API key first
+    const authResponse = await validateApiKey(req);
+    if (authResponse) {
+      return authResponse;
+    }
 
-      // Send emails asynchronously
-      try {
-        await Promise.all([
-          emailService.sendWelcomeEmail(validatedData),
-          emailService.sendAdminNotification(validatedData),
-        ]);
-      } catch (emailError) {
-        console.error('Failed to send emails:', emailError);
-      }
-      
+    // Check rate limit
+    const rateLimitKey = 'CONSULTATION_FORM';
+    const { isRateLimited } = await limiter.check(rateLimitKey);
+    if (isRateLimited) {
       return new Response(
         JSON.stringify({
-          success: true,
-          message: 'Form submitted successfully',
-          id: consultation._id,
+          success: false,
+          message: 'Rate limit exceeded. Please try again later.',
+          code: 'RATE_LIMIT',
           timestamp: new Date().toISOString()
         }),
-        { 
-          status: 200,
-          headers: { 
+        {
+          status: 429,
+          headers: {
             'Content-Type': 'application/json',
             ...corsHeaders
           }
         }
       );
+    }
+
+    const body = await req.json();
+    const validatedData = CustomerSchema.parse(body);
+
+    // Connect to DB (skipped in test environment)
+    if (process.env.NODE_ENV !== 'test') {
+      try {
+        await connectDB();
+      } catch (error) {
+        console.error('Failed to connect to database:', error);
+        return new Response(
+          JSON.stringify({
+            success: false,
+            message: 'Database connection error',
+            code: 'DB_ERROR',
+            timestamp: new Date().toISOString()
+          }),
+          {
+            status: 503,
+            headers: {
+              'Content-Type': 'application/json',
+              ...corsHeaders
+            }
+          }
+        );
+      }
+    }
+
+    const consultation = await Consultation.create(validatedData);
+
+    // Send emails asynchronously
+    try {
+      await Promise.all([
+        emailService.sendWelcomeEmail(validatedData),
+        emailService.sendAdminNotification(validatedData),
+      ]);
+    } catch (emailError) {
+      console.error('Failed to send emails:', emailError);
+    }
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message: 'Form submitted successfully',
+        id: consultation._id,
+        code: 'SUCCESS',
+        timestamp: new Date().toISOString()
+      }),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          ...corsHeaders
+        }
+      }
+    );
       
       // Validate and ensure proper JSON structure
       try {
@@ -259,4 +285,4 @@ export async function POST(req: NextRequest) {
       }
     );
   }
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
