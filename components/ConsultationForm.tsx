@@ -22,50 +22,50 @@ export default function ConsultationForm() {
     setSubmitSuccess(false);
     
     try {
-      try {
-        const formData = {
-          name: data.name,
-          email: data.email,
-          message: data.message,
-          preferences: {
-            newsletter: true,
-            productUpdates: true
-          }
-        };
-        
-        console.log('Submitting form data:', formData);
-        
-        const apiUrl = '/api/consultations';
-        console.log('Sending request to:', apiUrl);
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'x-api-key': process.env.NEXT_PUBLIC_API_KEY || 'development-key',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify(formData),
-          cache: 'no-store'
-        });
-        console.log('Response status:', response.status);
-        
-        const responseData = await response.json().catch(() => null);
-        console.log('Response data:', responseData);
-        
-        if (!response.ok || !responseData) {
-          throw new Error(responseData?.message || `HTTP error! status: ${response.status}`);
+      const formData = {
+        name: data.name,
+        email: data.email,
+        message: data.message,
+        preferences: {
+          newsletter: true,
+          productUpdates: true
         }
-        
-        console.log('Form submission successful:', responseData);
-        reset();
-        setSubmitSuccess(true);
-      } catch (error: unknown) {
-        console.error('Form submission error:', error);
-        const errorMessage = error instanceof Error ? error.message : 'Failed to submit form';
-        setSubmitError(errorMessage);
-      } finally {
-        setIsSubmitting(false);
+      };
+      
+      console.log('Submitting form data:', formData);
+      
+      const apiUrl = '/api/consultations';
+      console.log('Sending request to:', apiUrl);
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-api-key': process.env.NEXT_PUBLIC_API_KEY || 'development-key',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(formData),
+        cache: 'no-store'
+      });
+      console.log('Response status:', response.status);
+      
+      const responseData = await response.json().catch(() => null);
+      console.log('Response data:', responseData);
+      
+      if (!response.ok || !responseData) {
+        throw new Error(responseData?.message || `HTTP error! status: ${response.status}`);
       }
+      
+      console.log('Form submission successful:', responseData);
+      reset();
+      setSubmitSuccess(true);
+    } catch (error: unknown) {
+      console.error('Form submission error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to submit form';
+      setSubmitError(errorMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   };
 
   return (
