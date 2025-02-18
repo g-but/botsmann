@@ -44,6 +44,16 @@ export default function ConsultationForm() {
         body: JSON.stringify(formData),
       });
       
+      const responseData = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(responseData.message || `HTTP error! status: ${response.status}`);
+      }
+      
+      console.log('Form submission successful:', responseData);
+      reset();
+      setSubmitSuccess(true);
+      
       let responseData;
       try {
         responseData = await response.json();
