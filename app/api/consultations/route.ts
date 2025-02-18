@@ -34,17 +34,16 @@ export async function GET() {
 export async function OPTIONS() {
   return new Response(null, {
     status: 204,
-    headers: corsHeaders
+    headers: {
+      ...corsHeaders,
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, x-api-key, Accept',
+      'Access-Control-Max-Age': '86400'
+    }
   });
 }
 
 export async function POST(request: NextRequest) {
-  if (request.method === 'OPTIONS') {
-    return new Response(null, {
-      status: 204,
-      headers: corsHeaders
-    });
-  }
   
   console.log('Received POST request:', request.method);
   console.log('Request headers:', Object.fromEntries(request.headers));
@@ -165,4 +164,4 @@ export async function POST(request: NextRequest) {
       headers: corsHeaders
     });
   }
-}                                                                                                                                                                                                                                                                        
+}                                                                                                                                                                                                                                                                                                                                                                
