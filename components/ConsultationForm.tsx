@@ -34,7 +34,7 @@ export default function ConsultationForm() {
       
       console.log('Submitting form data:', formData);
       
-      const response = await fetch('/api/consultations/route', {
+      const response = await fetch('/api/consultations', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
