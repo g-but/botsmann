@@ -21,6 +21,16 @@ export default function ConsultationForm() {
       setIsSubmitting(true);
       setSubmitError('');
       
+      const formData = {
+        name: data.name,
+        email: data.email,
+        message: data.message,
+        preferences: {
+          newsletter: true,
+          productUpdates: true
+        }
+      };
+      
       const response = await fetch('/api/consultations', {
         method: 'POST',
         headers: { 
@@ -28,13 +38,7 @@ export default function ConsultationForm() {
           'x-api-key': 'development-key',
           'Accept': 'application/json'
         },
-        body: JSON.stringify({
-          ...data,
-          preferences: {
-            newsletter: true,
-            productUpdates: true
-          }
-        }),
+        body: JSON.stringify(formData),
       });
       
       if (!response.ok) {
