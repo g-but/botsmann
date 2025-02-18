@@ -45,9 +45,24 @@ export async function POST(request: NextRequest) {
   // Handle preflight requests
   if (request.method === 'OPTIONS') {
     console.log('Handling OPTIONS request');
-    return NextResponse.json(null, {
+    return new Response(null, {
       status: 200,
       headers: corsHeaders
+    });
+  }
+  
+  // Handle actual POST request
+  if (request.method !== 'POST') {
+    return new Response(JSON.stringify({
+      success: false,
+      message: `Method ${request.method} Not Allowed`,
+      code: 'METHOD_NOT_ALLOWED'
+    }), {
+      status: 405,
+      headers: {
+        'Content-Type': 'application/json',
+        ...corsHeaders
+      }
     });
   }
 
@@ -143,4 +158,4 @@ export async function POST(request: NextRequest) {
       headers: corsHeaders
     });
   }
-}                                                                                        
+}                                                                                                                                                                                
