@@ -21,35 +21,45 @@ export default function ConsultationForm() {
       setIsSubmitting(true);
       setSubmitError('');
       
-      const formData = {
-        name: data.name,
-        email: data.email,
-        message: data.message,
-        preferences: {
-          newsletter: true,
-          productUpdates: true
-        }
-      };
-      
-      console.log('Submitting form data:', formData);
-      
-      const response = await fetch('/api/consultations', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'x-api-key': 'development-key',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(formData),
-      });
+      try {
+        const formData = {
+          name: data.name,
+          email: data.email,
+          message: data.message,
+          preferences: {
+            newsletter: true,
+            productUpdates: true
+          }
+        };
+        
+        console.log('Submitting form data:', formData);
+        
+        const response = await fetch('/api/consultations', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'x-api-key': 'development-key',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(formData),
+        });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ error: 'Failed to parse error response' }));
-        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+        const responseData = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(responseData.error || `HTTP error! status: ${response.status}`);
+        }
+        
+        console.log('Form submission successful:', responseData);
+        setSubmitError('');
+        setIsSubmitting(false);
+        return true;
+      } catch (error) {
+        console.error('Form submission error:', error);
+        setSubmitError(error.message || 'Failed to submit form');
+        setIsSubmitting(false);
+        return false;
       }
-      
-      const responseData = await response.json();
-      console.log('Form submission successful:', responseData);
       
       if (!response.ok) {
         const errorData = await response.json();
