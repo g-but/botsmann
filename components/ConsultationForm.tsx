@@ -51,24 +51,21 @@ export default function ConsultationForm() {
         
         const responseData = await response.json().catch(() => null);
         console.log('Response data:', responseData);
-      
-      const responseData = await response.json();
-      console.log('Server response:', responseData);
-      
-      if (!response.ok) {
-        throw new Error(responseData.message || `HTTP error! status: ${response.status}`);
+        
+        if (!response.ok || !responseData) {
+          throw new Error(responseData?.message || `HTTP error! status: ${response.status}`);
+        }
+        
+        console.log('Form submission successful:', responseData);
+        reset();
+        setSubmitSuccess(true);
+      } catch (error: unknown) {
+        console.error('Form submission error:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Failed to submit form';
+        setSubmitError(errorMessage);
+      } finally {
+        setIsSubmitting(false);
       }
-      
-      console.log('Form submission successful:', responseData);
-      reset();
-      setSubmitSuccess(true);
-    } catch (error: unknown) {
-      console.error('Form submission error:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Failed to submit form';
-      setSubmitError(errorMessage);
-    } finally {
-      setIsSubmitting(false);
-    }
   };
 
   return (
