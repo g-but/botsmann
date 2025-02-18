@@ -40,6 +40,13 @@ export async function OPTIONS() {
 }
 
 export async function POST(request: NextRequest) {
+  if (request.method === 'OPTIONS') {
+    return NextResponse.json(null, {
+      status: 204,
+      headers: corsHeaders
+    });
+  }
+
   console.log('Received POST request:', request.method);
   console.log('Request headers:', Object.fromEntries(request.headers));
 
@@ -135,4 +142,4 @@ export async function POST(request: NextRequest) {
       headers: corsHeaders
     });
   }
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
