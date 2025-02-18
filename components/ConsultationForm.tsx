@@ -34,8 +34,9 @@ export default function ConsultationForm() {
       
       console.log('Submitting form data:', formData);
       
-      console.log('Sending request to:', '/api/consultations');
-      const response = await fetch('/api/consultations', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://www.botsmann.com';
+      console.log('Sending request to:', `${apiUrl}/api/consultations`);
+      const response = await fetch(`${apiUrl}/api/consultations`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
