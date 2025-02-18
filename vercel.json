@@ -1,5 +1,11 @@
 {
   "buildCommand": "next build",
   "devCommand": "next dev",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "rewrites": [
+    {
+      "source": "/api/consultations",
+      "destination": "/api/consultations"
+    }
+  ]
 }
