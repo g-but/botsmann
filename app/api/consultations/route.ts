@@ -1,12 +1,12 @@
 import type { NextRequest } from 'next/server';
 import { connectDB } from '@/src/lib/mongodb';
-import { Consultation } from '@/src/lib/models/consultation';
 import { rateLimit } from '@/src/lib/rate-limit';
 import { CustomerSchema } from '@/src/lib/schemas/customer';
 import { validateApiKey } from '@/src/lib/middleware/auth';
 import { EmailService } from '@/src/lib/email/service';
 import { ZodError } from 'zod';
 import { NextResponse } from 'next/server';
+import mongoose from 'mongoose';
 
 const limiter = rateLimit({
   limit: process.env.NODE_ENV === 'test' ? 3 : 5,
@@ -98,7 +98,17 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const consultation = await Consultation.create(validatedData);
+    const ConsultationModel = mongoose.models.Consultation || mongoose.model('Consultation', new mongoose.Schema({
+      name: String,
+      email: String,
+      message: String,
+      preferences: {
+        newsletter: Boolean,
+        productUpdates: Boolean
+      }
+    }));
+    
+    const consultation = await ConsultationModel.create(validatedData);
 
     // Send emails asynchronously
     try {
@@ -147,4 +157,4 @@ export async function POST(request: NextRequest) {
       headers: corsHeaders
     });
   }
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
