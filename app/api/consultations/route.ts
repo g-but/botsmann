@@ -32,7 +32,7 @@ export async function GET() {
   });
 }
 
-export async function OPTIONS() {
+export async function OPTIONS(request: NextRequest) {
   return NextResponse.json(null, {
     status: 204,
     headers: corsHeaders
@@ -43,16 +43,16 @@ export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
+  // Handle preflight requests
+  if (request.method === 'OPTIONS') {
+    return NextResponse.json(null, {
+      status: 204,
+      headers: corsHeaders
+    });
+  }
+
   console.log('Received POST request:', request.method);
   console.log('Request headers:', Object.fromEntries(request.headers));
-
-  // Add CORS headers to all responses
-  const headers = {
-    ...corsHeaders,
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, x-api-key, Accept'
-  };
 
   try {
     // Validate API key first
@@ -146,4 +146,4 @@ export async function POST(request: NextRequest) {
       headers: corsHeaders
     });
   }
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
