@@ -39,22 +39,19 @@ export async function OPTIONS() {
   });
 }
 
+export const runtime = 'edge';
+
 export async function POST(request: NextRequest) {
   console.log('Received POST request:', request.method);
   console.log('Request headers:', Object.fromEntries(request.headers));
 
-  // Skip DB and email operations during build/static generation
-  if (process.env.NEXT_PHASE === 'phase-production-build' || process.env.NEXT_PHASE === 'phase-static-generation') {
-    return NextResponse.json({
-      success: true,
-      message: 'Build time request - skipping DB operations',
-      code: 'BUILD_TIME',
-      timestamp: new Date().toISOString()
-    }, {
-      status: 200,
-      headers: corsHeaders
-    });
-  }
+  // Add CORS headers to all responses
+  const headers = {
+    ...corsHeaders,
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, x-api-key, Accept'
+  };
 
   try {
     // Validate API key first
@@ -148,4 +145,4 @@ export async function POST(request: NextRequest) {
       headers: corsHeaders
     });
   }
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
