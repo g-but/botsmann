@@ -24,14 +24,6 @@ const corsHeaders = {
   'Access-Control-Expose-Headers': 'Content-Type'
 };
 
-// Helper function to create consistent response format
-const createApiResponse = (data: any, status: number = 200) => {
-  return NextResponse.json(data, {
-    status,
-    headers: corsHeaders
-  });
-};
-
 export async function OPTIONS() {
   return NextResponse.json(null, {
     status: 200,
@@ -51,12 +43,15 @@ export async function POST(request: NextRequest) {
     const rateLimitKey = 'CONSULTATION_FORM';
     const { isRateLimited } = await limiter.check(rateLimitKey);
     if (isRateLimited) {
-      return createApiResponse({
+      return NextResponse.json({
         success: false,
         message: 'Rate limit exceeded. Please try again later.',
         code: 'RATE_LIMIT',
         timestamp: new Date().toISOString()
-      }, 429);
+      }, {
+        status: 429,
+        headers: corsHeaders
+      });
     }
 
     const body = await request.json();
@@ -68,12 +63,15 @@ export async function POST(request: NextRequest) {
         await connectDB();
       } catch (error) {
         console.error('Failed to connect to database:', error);
-        return createApiResponse({
+        return NextResponse.json({
           success: false,
           message: 'Database connection error',
           code: 'DB_ERROR',
           timestamp: new Date().toISOString()
-        }, 503);
+        }, {
+          status: 503,
+          headers: corsHeaders
+        });
       }
     }
 
@@ -89,32 +87,41 @@ export async function POST(request: NextRequest) {
       console.error('Failed to send emails:', emailError);
     }
 
-    return createApiResponse({
+    return NextResponse.json({
       success: true,
       message: 'Form submitted successfully',
       id: consultation._id,
       code: 'SUCCESS',
       timestamp: new Date().toISOString()
+    }, {
+      status: 200,
+      headers: corsHeaders
     });
   } catch (error: unknown) {
     console.error('API Error:', error);
     
     if (error instanceof ZodError) {
-      return createApiResponse({
+      return NextResponse.json({
         success: false,
         message: 'Validation failed',
         code: 'VALIDATION_ERROR',
         details: error.errors,
         timestamp: new Date().toISOString()
-      }, 400);
+      }, {
+        status: 400,
+        headers: corsHeaders
+      });
     }
     
     const errorMessage = error instanceof Error ? error.message : 'Internal Server Error';
-    return createApiResponse({
+    return NextResponse.json({
       success: false,
       message: errorMessage,
       code: 'ERROR',
       timestamp: new Date().toISOString()
-    }, 500);
+    }, {
+      status: 500,
+      headers: corsHeaders
+    });
   }
 }
