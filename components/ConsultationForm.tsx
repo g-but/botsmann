@@ -54,9 +54,10 @@ export default function ConsultationForm() {
         setSubmitError('');
         setIsSubmitting(false);
         return true;
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('Form submission error:', error);
-        setSubmitError(error.message || 'Failed to submit form');
+        const errorMessage = error instanceof Error ? error.message : 'Failed to submit form';
+        setSubmitError(errorMessage);
         setIsSubmitting(false);
         return false;
       }
