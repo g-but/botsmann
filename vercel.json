@@ -1,5 +1,12 @@
 {
   "buildCommand": "next build",
   "devCommand": "next dev",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "routes": [
+    {
+      "src": "/api/consultations",
+      "methods": ["POST", "OPTIONS"],
+      "dest": "/pages/api/consultations"
+    }
+  ]
 }
