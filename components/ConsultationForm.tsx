@@ -17,55 +17,46 @@ export default function ConsultationForm() {
   const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
+    setIsSubmitting(true);
+    setSubmitError('');
+    setSubmitSuccess(false);
+    
     try {
-      setIsSubmitting(true);
-      setSubmitError('');
-      
-      try {
-        const formData = {
-          name: data.name,
-          email: data.email,
-          message: data.message,
-          preferences: {
-            newsletter: true,
-            productUpdates: true
-          }
-        };
-        
-        console.log('Submitting form data:', formData);
-        
-        const response = await fetch('/api/consultations', {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'x-api-key': 'development-key',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify(formData),
-        });
-
-        const responseData = await response.json();
-        
-        if (!response.ok) {
-          throw new Error(responseData.error || `HTTP error! status: ${response.status}`);
+      const formData = {
+        name: data.name,
+        email: data.email,
+        message: data.message,
+        preferences: {
+          newsletter: true,
+          productUpdates: true
         }
-        
-        console.log('Form submission successful:', responseData);
-        setSubmitError('');
-        setIsSubmitting(false);
-        return true;
-      } catch (error: unknown) {
-        console.error('Form submission error:', error);
-        const errorMessage = error instanceof Error ? error.message : 'Failed to submit form';
-        setSubmitError(errorMessage);
-        setIsSubmitting(false);
-        return false;
+      };
+      
+      console.log('Submitting form data:', formData);
+      
+      const response = await fetch('/api/consultations', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-api-key': 'development-key',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const responseData = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(responseData.error || `HTTP error! status: ${response.status}`);
       }
       
+      console.log('Form submission successful:', responseData);
       reset();
       setSubmitSuccess(true);
-    } catch (error: any) {
-      setSubmitError(error.message || 'Failed to submit form. Please try again.');
+    } catch (error: unknown) {
+      console.error('Form submission error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to submit form';
+      setSubmitError(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
