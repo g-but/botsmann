@@ -25,21 +25,14 @@ const corsHeaders = {
   'Content-Type': 'application/json'
 };
 
-export async function GET() {
-  return NextResponse.json({ message: 'API endpoint is working' }, {
-    status: 200,
-    headers: corsHeaders
-  });
-}
-
 export async function OPTIONS(request: NextRequest) {
-  return NextResponse.json(null, {
+  return new Response(null, {
     status: 204,
     headers: corsHeaders
   });
 }
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
@@ -154,4 +147,4 @@ export async function POST(request: NextRequest) {
       headers: corsHeaders
     });
   }
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
