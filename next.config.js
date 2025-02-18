@@ -10,15 +10,14 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_DEPLOY_TIME: new Date().toUTCString()
   },
-  headers: async () => [{
-    source: '/:path*',
-    headers: [
+  async rewrites() {
+    return [
       {
-        key: 'Cache-Control',
-        value: 'no-store, must-revalidate'
+        source: '/api/:path*',
+        destination: '/api/:path*'
       }
     ]
-  }]
+  }
 };
 
 module.exports = nextConfig;

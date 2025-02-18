@@ -1,5 +1,9 @@
 {
-  "buildCommand": "next build",
-  "devCommand": "next dev",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "functions": {
+    "api/**/*.ts": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  }
 }
