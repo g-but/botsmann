@@ -39,8 +39,12 @@ export async function OPTIONS() {
 }
 
 export async function POST(request: NextRequest) {
+  console.log('Received POST request:', request.method);
+  console.log('Request headers:', Object.fromEntries(request.headers));
+  
   // Handle preflight requests
   if (request.method === 'OPTIONS') {
+    console.log('Handling OPTIONS request');
     return NextResponse.json(null, {
       status: 200,
       headers: corsHeaders
@@ -139,4 +143,4 @@ export async function POST(request: NextRequest) {
       headers: corsHeaders
     });
   }
-}
+}                                                                                        
