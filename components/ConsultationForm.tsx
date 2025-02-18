@@ -147,3 +147,5 @@ export default function ConsultationForm() {
     </div>
   );
 }
+
+export default ConsultationForm;
