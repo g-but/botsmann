@@ -40,15 +40,21 @@ export async function OPTIONS() {
 }
 
 export async function POST(request: NextRequest) {
-  if (request.method === 'OPTIONS') {
-    return NextResponse.json(null, {
-      status: 204,
+  console.log('Received POST request:', request.method);
+  console.log('Request headers:', Object.fromEntries(request.headers));
+
+  // Skip DB and email operations during build/static generation
+  if (process.env.NEXT_PHASE === 'phase-production-build' || process.env.NEXT_PHASE === 'phase-static-generation') {
+    return NextResponse.json({
+      success: true,
+      message: 'Build time request - skipping DB operations',
+      code: 'BUILD_TIME',
+      timestamp: new Date().toISOString()
+    }, {
+      status: 200,
       headers: corsHeaders
     });
   }
-
-  console.log('Received POST request:', request.method);
-  console.log('Request headers:', Object.fromEntries(request.headers));
 
   try {
     // Validate API key first
@@ -142,4 +148,4 @@ export async function POST(request: NextRequest) {
       headers: corsHeaders
     });
   }
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
