@@ -45,7 +45,8 @@ export async function OPTIONS() {
   });
 }
 
-export async function POST(req: NextRequest) {
+export const POST = async (req: NextRequest) => {
+  // Handle preflight requests
   if (req.method === 'OPTIONS') {
     return new NextResponse(null, {
       status: 200,
@@ -125,4 +126,4 @@ export async function POST(req: NextRequest) {
       code: 'ERROR'
     }, 500);
   }
-}
+}                                                                                        
