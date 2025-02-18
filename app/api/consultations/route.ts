@@ -124,21 +124,38 @@ export async function POST(req: NextRequest) {
         }
       }
     );
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('API Error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Internal Server Error';
-    const statusCode = error instanceof ZodError ? 400 : 500;
     
+    if (error instanceof ZodError) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: 'Validation failed',
+          code: 'VALIDATION_ERROR',
+          timestamp: new Date().toISOString(),
+          details: error.errors
+        }),
+        {
+          status: 400,
+          headers: {
+            'Content-Type': 'application/json',
+            ...corsHeaders
+          }
+        }
+      );
+    }
+    
+    const errorMessage = error instanceof Error ? error.message : 'Internal Server Error';
     return new Response(
       JSON.stringify({
         success: false,
         message: errorMessage,
-        code: error instanceof ZodError ? 'VALIDATION_ERROR' : 'ERROR',
-        timestamp: new Date().toISOString(),
-        details: error instanceof ZodError ? error.errors : undefined
+        code: 'ERROR',
+        timestamp: new Date().toISOString()
       }),
       {
-        status: statusCode,
+        status: 500,
         headers: {
           'Content-Type': 'application/json',
           ...corsHeaders
@@ -147,3 +164,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+}                                                                                        
