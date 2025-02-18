@@ -158,7 +158,7 @@ export async function POST(req: NextRequest) {
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
-          chunks.push(value);
+          if (value) chunks.push(value);
         }
         const concatenated = new Uint8Array(chunks.reduce((acc, chunk) => acc + chunk.length, 0));
         let offset = 0;
@@ -178,6 +178,12 @@ export async function POST(req: NextRequest) {
       
       // Ensure it's valid JSON by parsing and stringifying
       responseBody = JSON.stringify(JSON.parse(responseBody));
+    } catch (error) {
+      console.error('Error processing response:', error);
+      responseBody = JSON.stringify({
+        success: false,
+        message: 'Failed to process form submission'
+      });
     }
 
     const headers = new Headers(response.headers);
@@ -207,4 +213,4 @@ export async function POST(req: NextRequest) {
       }
     );
   }
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
