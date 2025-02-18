@@ -146,41 +146,62 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const response = await monitorRequest(req, handler);
-    
-    // Ensure we have a valid JSON response
-    let responseBody: string = '';
+    // Handle the form submission directly
     try {
-      // If response.body is a ReadableStream, we need to read it
-      if (response.body instanceof ReadableStream) {
-        const reader = response.body.getReader();
-        const chunks: Uint8Array[] = [];
-        let result: ReadableStreamReadResult<Uint8Array>;
-        
-        do {
-          result = await reader.read();
-          if (result.value) {
-            chunks.push(result.value);
-          }
-        } while (!result.done);
-        
-        const concatenated = new Uint8Array(chunks.reduce((acc, chunk) => acc + chunk.length, 0));
-        let offset = 0;
-        for (const chunk of chunks) {
-          concatenated.set(chunk, offset);
-          offset += chunk.length;
+      const body = await req.json();
+      const validatedData = CustomerSchema.parse(body);
+      
+      // Connect to DB (skipped in test environment)
+      if (process.env.NODE_ENV !== 'test') {
+        try {
+          await connectDB();
+        } catch (error) {
+          console.error('Failed to connect to database:', error);
+          return new Response(
+            JSON.stringify({
+              success: false,
+              message: 'Database connection error',
+              code: 'DB_ERROR',
+              timestamp: new Date().toISOString()
+            }),
+            { 
+              status: 503,
+              headers: { 
+                'Content-Type': 'application/json',
+                ...corsHeaders
+              }
+            }
+          );
         }
-        responseBody = new TextDecoder().decode(concatenated);
-      } else if (typeof response.body === 'string') {
-        responseBody = response.body;
-      } else {
-        // Default response if body is null or undefined
-        responseBody = JSON.stringify({
-          success: response.ok,
-          message: response.ok ? 'Form submitted successfully' : 'Failed to submit form',
-          timestamp: new Date().toISOString()
-        });
       }
+      
+      const consultation = await Consultation.create(validatedData);
+
+      // Send emails asynchronously
+      try {
+        await Promise.all([
+          emailService.sendWelcomeEmail(validatedData),
+          emailService.sendAdminNotification(validatedData),
+        ]);
+      } catch (emailError) {
+        console.error('Failed to send emails:', emailError);
+      }
+      
+      return new Response(
+        JSON.stringify({
+          success: true,
+          message: 'Form submitted successfully',
+          id: consultation._id,
+          timestamp: new Date().toISOString()
+        }),
+        { 
+          status: 200,
+          headers: { 
+            'Content-Type': 'application/json',
+            ...corsHeaders
+          }
+        }
+      );
       
       // Validate and ensure proper JSON structure
       try {
@@ -238,4 +259,4 @@ export async function POST(req: NextRequest) {
       }
     );
   }
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
