@@ -126,7 +126,7 @@ export async function OPTIONS(req: NextRequest) {
   return new NextResponse(null, {
     status: 200,
     headers: {
-      'Access-Control-Allow-Origin': 'https://www.botsmann.com',
+      'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
       'Access-Control-Max-Age': '86400'
@@ -134,4 +134,12 @@ export async function OPTIONS(req: NextRequest) {
   });
 }
 
-export const POST = (req: NextRequest) => monitorRequest(req, handler);                                                                                        
+export const POST = async (req: NextRequest) => {
+  const response = await monitorRequest(req, handler);
+  const headers = new Headers(response.headers);
+  headers.set('Access-Control-Allow-Origin', '*');
+  return new Response(response.body, {
+    status: response.status,
+    headers
+  });
+};                                                                                                                                                                                                                           
