@@ -139,11 +139,19 @@ export async function OPTIONS() {
 
 export async function POST(req: NextRequest) {
   try {
+    if (req.method === 'OPTIONS') {
+      return new NextResponse(null, {
+        status: 200,
+        headers: corsHeaders
+      });
+    }
+
     const response = await monitorRequest(req, handler);
     const headers = new Headers(response.headers);
     Object.entries(corsHeaders).forEach(([key, value]) => {
       headers.set(key, value);
     });
+    headers.set('Content-Type', 'application/json');
     
     return new Response(response.body, {
       status: response.status,
@@ -151,8 +159,9 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error('API Error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Internal Server Error';
     return new Response(
-      JSON.stringify({ error: 'Internal Server Error' }),
+      JSON.stringify({ error: errorMessage }),
       {
         status: 500,
         headers: {
@@ -162,4 +171,4 @@ export async function POST(req: NextRequest) {
       }
     );
   }
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
