@@ -47,20 +47,18 @@ export default function ConsultationForm() {
       let responseData;
       try {
         responseData = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(responseData.error || `HTTP error! status: ${response.status}`);
+        }
+        
+        console.log('Form submission successful:', responseData);
+        reset();
+        setSubmitSuccess(true);
       } catch (parseError) {
-        console.error('Failed to parse response:', parseError);
-        throw new Error('Invalid server response');
+        console.error('Form submission error:', parseError);
+        throw new Error(parseError instanceof Error ? parseError.message : 'Failed to process form submission');
       }
-
-      const responseData = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(responseData.error || `HTTP error! status: ${response.status}`);
-      }
-      
-      console.log('Form submission successful:', responseData);
-      reset();
-      setSubmitSuccess(true);
     } catch (error: unknown) {
       console.error('Form submission error:', error);
       const errorMessage = error instanceof Error ? error.message : 'Failed to submit form';
