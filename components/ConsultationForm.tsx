@@ -44,15 +44,20 @@ export default function ConsultationForm() {
         body: JSON.stringify(formData),
       });
       
-      const responseData = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(responseData.message || `HTTP error! status: ${response.status}`);
+      try {
+        const responseData = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(responseData.message || `HTTP error! status: ${response.status}`);
+        }
+        
+        console.log('Form submission successful:', responseData);
+        reset();
+        setSubmitSuccess(true);
+      } catch (error) {
+        console.error('Error processing response:', error);
+        throw new Error('Failed to process server response');
       }
-      
-      console.log('Form submission successful:', responseData);
-      reset();
-      setSubmitSuccess(true);
       
       let responseData;
       try {
