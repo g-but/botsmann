@@ -62,11 +62,6 @@ export default function ConsultationForm() {
         return false;
       }
       
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Submission failed');
-      }
-      
       reset();
       setSubmitSuccess(true);
     } catch (error: any) {
