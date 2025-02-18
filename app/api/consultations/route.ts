@@ -45,18 +45,10 @@ export async function OPTIONS() {
   });
 }
 
-export const POST = async (req: NextRequest) => {
-  // Handle preflight requests
-  if (req.method === 'OPTIONS') {
-    return new NextResponse(null, {
-      status: 200,
-      headers: corsHeaders
-    });
-  }
-
+export async function POST(request: NextRequest) {
   try {
     // Validate API key first
-    const authResponse = await validateApiKey(req);
+    const authResponse = await validateApiKey(request);
     if (authResponse) {
       return authResponse;
     }
@@ -72,7 +64,7 @@ export const POST = async (req: NextRequest) => {
       }, 429);
     }
 
-    const body = await req.json();
+    const body = await request.json();
     const validatedData = CustomerSchema.parse(body);
 
     // Connect to DB (skipped in test environment)
@@ -126,4 +118,4 @@ export const POST = async (req: NextRequest) => {
       code: 'ERROR'
     }, 500);
   }
-}                                                                                        
+}
