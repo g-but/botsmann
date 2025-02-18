@@ -30,24 +30,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const origin = req.headers.origin || '';
   const isAllowedOrigin = allowedOrigins.includes(origin);
   
-  // Set CORS headers
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': isAllowedOrigin ? origin : allowedOrigins[0],
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, x-api-key, Accept',
-    'Access-Control-Max-Age': '86400',
-    'Access-Control-Allow-Credentials': 'true',
-    'Content-Type': 'application/json'
-  };
-  
-  Object.entries(corsHeaders).forEach(([key, value]) => {
-    res.setHeader(key, value);
-  });
-
   // Handle OPTIONS request
   if (req.method === 'OPTIONS') {
-    return res.status(204).json({});
+    res.setHeader('Access-Control-Allow-Origin', isAllowedOrigin ? origin : allowedOrigins[0]);
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-api-key, Accept');
+    res.setHeader('Access-Control-Max-Age', '86400');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Content-Type', 'application/json');
+    return res.status(204).end();
   }
+
+  // Set CORS headers for other requests
+  res.setHeader('Access-Control-Allow-Origin', isAllowedOrigin ? origin : allowedOrigins[0]);
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Content-Type', 'application/json');
 
   // Handle POST request
   if (req.method === 'POST') {
