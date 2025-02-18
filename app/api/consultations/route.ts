@@ -147,13 +147,47 @@ export async function POST(req: NextRequest) {
     }
 
     const response = await monitorRequest(req, handler);
+    
+    // Ensure we have a valid JSON response
+    let responseBody;
+    try {
+      // If response.body is a ReadableStream, we need to read it
+      if (response.body instanceof ReadableStream) {
+        const reader = response.body.getReader();
+        const chunks = [];
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          chunks.push(value);
+        }
+        const concatenated = new Uint8Array(chunks.reduce((acc, chunk) => acc + chunk.length, 0));
+        let offset = 0;
+        for (const chunk of chunks) {
+          concatenated.set(chunk, offset);
+          offset += chunk.length;
+        }
+        responseBody = new TextDecoder().decode(concatenated);
+      } else {
+        responseBody = response.body;
+      }
+      
+      // Ensure it's valid JSON
+      JSON.parse(responseBody);
+    } catch (e) {
+      console.error('Invalid JSON response:', e);
+      responseBody = JSON.stringify({ 
+        success: response.ok,
+        message: response.ok ? 'Form submitted successfully' : 'Failed to submit form'
+      });
+    }
+
     const headers = new Headers(response.headers);
     Object.entries(corsHeaders).forEach(([key, value]) => {
       headers.set(key, value);
     });
     headers.set('Content-Type', 'application/json');
     
-    return new Response(response.body, {
+    return new Response(responseBody, {
       status: response.status,
       headers
     });
@@ -161,7 +195,10 @@ export async function POST(req: NextRequest) {
     console.error('API Error:', error);
     const errorMessage = error instanceof Error ? error.message : 'Internal Server Error';
     return new Response(
-      JSON.stringify({ error: errorMessage }),
+      JSON.stringify({ 
+        success: false,
+        error: errorMessage 
+      }),
       {
         status: 500,
         headers: {
@@ -171,4 +208,4 @@ export async function POST(req: NextRequest) {
       }
     );
   }
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
