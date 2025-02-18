@@ -8,6 +8,7 @@ import { validateApiKey } from '@/src/lib/middleware/auth';
 import { monitorRequest } from '@/src/lib/middleware/monitoring';
 import { EmailService } from '@/src/lib/email/service';
 import { ZodError } from 'zod';
+import { NextResponse } from 'next/server';
 
 const limiter = rateLimit({
   limit: process.env.NODE_ENV === 'test' ? 3 : 5,
@@ -121,4 +122,16 @@ async function handler(req: NextRequest) {
   }
 }
 
-export const POST = (req: NextRequest) => monitorRequest(req, handler);                                            
+export async function OPTIONS(req: NextRequest) {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': 'https://www.botsmann.com',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
+      'Access-Control-Max-Age': '86400'
+    }
+  });
+}
+
+export const POST = (req: NextRequest) => monitorRequest(req, handler);                                                                                        
