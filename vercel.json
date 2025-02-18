@@ -5,7 +5,7 @@
   "rewrites": [
     {
       "source": "/api/consultations",
-      "destination": "/api/consultations"
+      "destination": "/pages/api/consultations"
     }
   ],
   "headers": [
