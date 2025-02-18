@@ -38,11 +38,19 @@ export default function ConsultationForm() {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
-          'x-api-key': 'development-key',
+          'x-api-key': process.env.NEXT_PUBLIC_API_KEY || 'development-key',
           'Accept': 'application/json'
         },
         body: JSON.stringify(formData),
       });
+      
+      let responseData;
+      try {
+        responseData = await response.json();
+      } catch (parseError) {
+        console.error('Failed to parse response:', parseError);
+        throw new Error('Invalid server response');
+      }
 
       const responseData = await response.json();
       
