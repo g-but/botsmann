@@ -66,7 +66,6 @@ function ConsultationForm() {
       setIsSubmitting(false);
     }
   };
-  };
 
   return (
     <div className="mx-auto max-w-xl">
