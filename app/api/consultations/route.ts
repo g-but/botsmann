@@ -122,24 +122,43 @@ async function handler(req: NextRequest) {
   }
 }
 
-export async function OPTIONS(req: NextRequest) {
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
+  'Access-Control-Max-Age': '86400'
+};
+
+export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
-      'Access-Control-Max-Age': '86400'
-    }
+    headers: corsHeaders
   });
 }
 
-export const POST = async (req: NextRequest) => {
-  const response = await monitorRequest(req, handler);
-  const headers = new Headers(response.headers);
-  headers.set('Access-Control-Allow-Origin', '*');
-  return new Response(response.body, {
-    status: response.status,
-    headers
-  });
-};                                                                                                                                                                                                                           
+export async function POST(req: NextRequest) {
+  try {
+    const response = await monitorRequest(req, handler);
+    const headers = new Headers(response.headers);
+    Object.entries(corsHeaders).forEach(([key, value]) => {
+      headers.set(key, value);
+    });
+    
+    return new Response(response.body, {
+      status: response.status,
+      headers
+    });
+  } catch (error) {
+    console.error('API Error:', error);
+    return new Response(
+      JSON.stringify({ error: 'Internal Server Error' }),
+      {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json',
+          ...corsHeaders
+        }
+      }
+    );
+  }
+}                                                                                                                                                                                                                                                                                                                                                              
