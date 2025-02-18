@@ -1,11 +1,5 @@
 {
   "buildCommand": "next build",
   "devCommand": "next dev",
-  "framework": "nextjs",
-  "functions": {
-    "app/api/consultations/route.ts": {
-      "maxDuration": 10,
-      "memory": 1024
-    }
-  }
+  "framework": "nextjs"
 }
