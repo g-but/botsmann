@@ -31,14 +31,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const isAllowedOrigin = allowedOrigins.includes(origin);
   
   // Set CORS headers for all requests
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-api-key, Accept');
-  res.setHeader('Content-Type', 'application/json');
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, x-api-key, Accept',
+    'Content-Type': 'application/json'
+  };
+
+  // Set CORS headers
+  Object.entries(corsHeaders).forEach(([key, value]) => {
+    res.setHeader(key, value);
+  });
 
   // Handle OPTIONS request
   if (req.method === 'OPTIONS') {
     return res.status(204).end();
+  }
+
+  // Only allow POST requests
+  if (req.method !== 'POST') {
+    return res.status(405).json({
+      success: false,
+      message: 'Method not allowed',
+      code: 'METHOD_NOT_ALLOWED',
+      timestamp: new Date().toISOString()
+    });
   }
 
   // Handle POST request
