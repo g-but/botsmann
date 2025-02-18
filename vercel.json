@@ -2,16 +2,29 @@
   "buildCommand": "next build",
   "devCommand": "next dev",
   "framework": "nextjs",
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/consultations",
-      "methods": ["POST", "OPTIONS"],
-      "dest": "/api/consultations",
-      "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, x-api-key, Accept"
-      }
+      "source": "/api/consultations",
+      "destination": "/api/consultations"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/consultations",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "POST, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, x-api-key, Accept"
+        }
+      ]
     }
   ]
 }
