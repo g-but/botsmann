@@ -177,7 +177,8 @@ export async function POST(req: NextRequest) {
         // Default response if body is null or undefined
         responseBody = JSON.stringify({
           success: response.ok,
-          message: response.ok ? 'Form submitted successfully' : 'Failed to submit form'
+          message: response.ok ? 'Form submitted successfully' : 'Failed to submit form',
+          timestamp: new Date().toISOString()
         });
       }
       
@@ -187,20 +188,26 @@ export async function POST(req: NextRequest) {
         responseBody = JSON.stringify({
           success: parsed.success ?? response.ok,
           message: parsed.message ?? (response.ok ? 'Form submitted successfully' : 'Failed to submit form'),
-          data: parsed.data ?? null
+          data: parsed.data ?? null,
+          timestamp: parsed.timestamp ?? new Date().toISOString(),
+          code: parsed.code ?? (response.ok ? 'SUCCESS' : 'ERROR')
         });
       } catch (parseError) {
         console.error('Invalid JSON response:', parseError);
         responseBody = JSON.stringify({
           success: false,
-          message: 'Invalid response format'
+          message: 'Invalid response format',
+          code: 'INVALID_FORMAT',
+          timestamp: new Date().toISOString()
         });
       }
     } catch (error) {
       console.error('Error processing response:', error);
       responseBody = JSON.stringify({
         success: false,
-        message: 'Failed to process form submission'
+        message: 'Failed to process form submission',
+        code: 'PROCESSING_ERROR',
+        timestamp: new Date().toISOString()
       });
     }
 
@@ -231,4 +238,4 @@ export async function POST(req: NextRequest) {
       }
     );
   }
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
