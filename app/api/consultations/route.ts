@@ -155,11 +155,15 @@ export async function POST(req: NextRequest) {
       if (response.body instanceof ReadableStream) {
         const reader = response.body.getReader();
         const chunks: Uint8Array[] = [];
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          if (value) chunks.push(value);
-        }
+        let result: ReadableStreamReadResult<Uint8Array>;
+        
+        do {
+          result = await reader.read();
+          if (result.value) {
+            chunks.push(result.value);
+          }
+        } while (!result.done);
+        
         const concatenated = new Uint8Array(chunks.reduce((acc, chunk) => acc + chunk.length, 0));
         let offset = 0;
         for (const chunk of chunks) {
@@ -170,14 +174,28 @@ export async function POST(req: NextRequest) {
       } else if (typeof response.body === 'string') {
         responseBody = response.body;
       } else {
+        // Default response if body is null or undefined
         responseBody = JSON.stringify({
           success: response.ok,
           message: response.ok ? 'Form submitted successfully' : 'Failed to submit form'
         });
       }
       
-      // Ensure it's valid JSON by parsing and stringifying
-      responseBody = JSON.stringify(JSON.parse(responseBody));
+      // Validate and ensure proper JSON structure
+      try {
+        const parsed = JSON.parse(responseBody);
+        responseBody = JSON.stringify({
+          success: parsed.success ?? response.ok,
+          message: parsed.message ?? (response.ok ? 'Form submitted successfully' : 'Failed to submit form'),
+          data: parsed.data ?? null
+        });
+      } catch (parseError) {
+        console.error('Invalid JSON response:', parseError);
+        responseBody = JSON.stringify({
+          success: false,
+          message: 'Invalid response format'
+        });
+      }
     } catch (error) {
       console.error('Error processing response:', error);
       responseBody = JSON.stringify({
@@ -213,4 +231,4 @@ export async function POST(req: NextRequest) {
       }
     );
   }
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
