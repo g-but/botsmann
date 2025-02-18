@@ -26,20 +26,14 @@ const corsHeaders = {
 
 // Helper function to create consistent response format
 const createApiResponse = (data: any, status: number = 200) => {
-  return new Response(JSON.stringify({
-    ...data,
-    timestamp: new Date().toISOString()
-  }), {
+  return NextResponse.json(data, {
     status,
-    headers: {
-      'Content-Type': 'application/json',
-      ...corsHeaders
-    }
+    headers: corsHeaders
   });
 };
 
 export async function OPTIONS() {
-  return new NextResponse(null, {
+  return NextResponse.json(null, {
     status: 200,
     headers: corsHeaders
   });
@@ -60,7 +54,8 @@ export async function POST(request: NextRequest) {
       return createApiResponse({
         success: false,
         message: 'Rate limit exceeded. Please try again later.',
-        code: 'RATE_LIMIT'
+        code: 'RATE_LIMIT',
+        timestamp: new Date().toISOString()
       }, 429);
     }
 
@@ -76,7 +71,8 @@ export async function POST(request: NextRequest) {
         return createApiResponse({
           success: false,
           message: 'Database connection error',
-          code: 'DB_ERROR'
+          code: 'DB_ERROR',
+          timestamp: new Date().toISOString()
         }, 503);
       }
     }
@@ -97,7 +93,8 @@ export async function POST(request: NextRequest) {
       success: true,
       message: 'Form submitted successfully',
       id: consultation._id,
-      code: 'SUCCESS'
+      code: 'SUCCESS',
+      timestamp: new Date().toISOString()
     });
   } catch (error: unknown) {
     console.error('API Error:', error);
@@ -107,7 +104,8 @@ export async function POST(request: NextRequest) {
         success: false,
         message: 'Validation failed',
         code: 'VALIDATION_ERROR',
-        details: error.errors
+        details: error.errors,
+        timestamp: new Date().toISOString()
       }, 400);
     }
     
@@ -115,7 +113,8 @@ export async function POST(request: NextRequest) {
     return createApiResponse({
       success: false,
       message: errorMessage,
-      code: 'ERROR'
+      code: 'ERROR',
+      timestamp: new Date().toISOString()
     }, 500);
   }
 }
