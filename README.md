@@ -186,6 +186,10 @@ For details on specific bots, see their individual README files:
 - [Medical Expert (Imhotep)](./app/bots/medical-expert/README.md)
 - [Research Assistant (Nerd)](./app/bots/research-assistant/README.md)
 
+## Navigation
+
+The header now features a single **Solutions** mega menu. The dropdown opens on hover and displays links in a concise grid. A small offset keeps the menu visible when moving the cursor from the label to the panel. The previous Bots and Projects menus were removed to streamline navigation.
+
 ## License
 
 [MIT License](LICENSE) 
