@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Disclosure } from '@headlessui/react';
 import { menuItems } from '@/data/menuItems';
-import MegaMenu from './MegaMenu';
+import MegaMenu from '@/apps/web/components/nav/MegaMenu';
 
 export default function Navigation() {
   const pathname = usePathname();
@@ -16,16 +16,15 @@ export default function Navigation() {
         <div className="flex-1 flex items-center space-x-8">
           {menuItems.map((item) => {
             if (item.isButton) return null;
-            const isActive = pathname === item.path;
             if (item.children) {
-              return <MegaMenu key={item.label} item={item} isActive={isActive} />;
+              return <MegaMenu key={item.label} item={item} />;
             }
             return (
               <Link
                 key={item.label}
                 href={item.path}
                 className={`text-sm font-medium transition-colors ${
-                  isActive ? 'text-openai-green' : 'text-gray-600'
+                  pathname === item.path ? 'text-openai-green' : 'text-gray-600'
                 } hover:text-openai-green`}
               >
                 {item.label}
@@ -66,25 +65,49 @@ export default function Navigation() {
             </Disclosure.Button>
             <Disclosure.Panel className="space-y-2 pt-2 pb-3">
               {menuItems.map((item) => (
-                <div key={item.label} className="px-4">
-                  <Link href={item.path} className="block py-2 text-gray-700" onClick={() => close()}>
-                    {item.label}
-                  </Link>
-                  {item.children && (
-                    <div className="pl-4">
-                      {item.children.map((child) => (
-                        <Link
-                          key={child.label}
-                          href={child.path}
-                          className="block py-1 text-gray-600 text-sm"
-                          onClick={() => close()}
-                        >
-                          {child.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                item.children ? (
+                  <Disclosure key={item.label} as="div" className="px-4">
+                    {({ open: subOpen }) => {
+                      const children = item.children ?? [];
+                      return (
+                        <>
+                          <Disclosure.Button className="flex w-full items-center justify-between py-2 text-gray-700">
+                            <span>{item.label}</span>
+                            <svg
+                              className={`h-4 w-4 transform transition-transform ${subOpen ? 'rotate-180' : ''}`}
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          </Disclosure.Button>
+                          <Disclosure.Panel className="space-y-1 pl-4">
+                            {children.map((child) => (
+                              <Link
+                                key={child.label}
+                                href={child.path}
+                                className="block py-1 text-gray-600 text-sm"
+                                onClick={() => close()}
+                              >
+                                {child.label}
+                              </Link>
+                            ))}
+                          </Disclosure.Panel>
+                        </>
+                      );
+                    }}
+                  </Disclosure>
+                ) : (
+                  <div key={item.label} className="px-4">
+                    <Link href={item.path} className="block py-2 text-gray-700" onClick={() => close()}>
+                      {item.label}
+                    </Link>
+                  </div>
+                )
               ))}
             </Disclosure.Panel>
           </>
