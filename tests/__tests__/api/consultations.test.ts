@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import { createMocks } from 'node-mocks-http';
 import { POST } from '@/app/api/consultations/route';
-import { connectDB } from '@/src/lib/mongodb';
-import { Consultation } from '@/src/lib/models/consultation';
+import { connectDB } from '@/lib/mongodb';
+import { Consultation } from '@/lib/models/consultation';
 
 describe('Consultations API', () => {
   beforeAll(async () => {

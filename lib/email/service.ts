@@ -1,5 +1,5 @@
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
-import type { Customer } from '@/src/lib/schemas/customer';
+import type { Customer } from '@/lib/schemas/customer';
 
 export class EmailService {
   private ses: SESClient;

@@ -333,7 +333,7 @@ const OverviewView: React.FC<any> = ({ files, categoriesWithFiles, caseDescripti
     <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700">
       <h3 className="text-lg font-bold text-white mb-4">📂 File Categories</h3>
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        {categoriesWithFiles.map((cat) => (
+        {categoriesWithFiles.map((cat: { id: string; title: string; icon: string; count: number }) => (
           <div key={cat.id} className="bg-slate-900/50 rounded-lg p-4 border border-slate-700">
             <div className="flex items-center justify-between mb-2">
               <span className="text-2xl">{cat.icon}</span>
@@ -364,7 +364,7 @@ const FilesView: React.FC<any> = ({
       </button>
     </div>
 
-    {categoriesWithFiles.map((category) => (
+    {categoriesWithFiles.map((category: { id: string; title: string; icon: string; count: number; files: UploadedFile[] }) => (
       <div key={category.id} className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-slate-700 overflow-hidden">
         <div className="px-6 py-4 bg-slate-900/50 border-b border-slate-700">
           <div className="flex items-center justify-between">
@@ -379,7 +379,7 @@ const FilesView: React.FC<any> = ({
         </div>
 
         <div className="p-4 space-y-2">
-          {category.files.map((file) => (
+          {category.files.map((file: UploadedFile) => (
             <div
               key={file.id}
               className={`flex items-center gap-4 p-4 rounded-lg border transition-all ${
@@ -436,7 +436,7 @@ const ChatView: React.FC<any> = ({ messages, inputMessage, setInputMessage, hand
     </div>
 
     <div className="flex-1 overflow-auto p-6 space-y-4">
-      {messages.map((msg) => (
+      {messages.map((msg: { id: string; sender: string; senderName: string; avatar: string; content: string; timestamp: Date }) => (
         <div key={msg.id} className={`flex gap-3 ${msg.sender === 'user' ? 'justify-end' : ''}`}>
           {msg.sender !== 'user' && (
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white flex-shrink-0">

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { NextSection } from '../../../src/components/navigation/NextSection';
+import { NextSection } from '@/components/navigation/NextSection';
 
 export default function TechnoCapital() {
   const [formSubmitted, setFormSubmitted] = useState(false);
