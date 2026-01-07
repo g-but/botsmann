@@ -1,12 +1,12 @@
 import type { NextRequest } from 'next/server';
-import { connectDB } from '@/src/lib/mongodb';
-import { Consultation } from '@/src/lib/models/consultation';
-import { rateLimit } from '@/src/lib/rate-limit';
-import { CustomerSchema } from '@/src/lib/schemas/customer';
-import { createErrorResponse } from '@/src/lib/schemas/errors';
-import { validateApiKey } from '@/src/lib/middleware/auth';
-import { monitorRequest } from '@/src/lib/middleware/monitoring';
-import { EmailService } from '@/src/lib/email/service';
+import { connectDB } from '@/lib/mongodb';
+import { Consultation } from '@/lib/models/consultation';
+import { rateLimit } from '@/lib/rate-limit';
+import { CustomerSchema } from '@/lib/schemas/customer';
+import { createErrorResponse } from '@/lib/schemas/errors';
+import { validateApiKey } from '@/lib/middleware/auth';
+import { monitorRequest } from '@/lib/middleware/monitoring';
+import { EmailService } from '@/lib/email/service';
 import { ZodError } from 'zod';
 
 const limiter = rateLimit({

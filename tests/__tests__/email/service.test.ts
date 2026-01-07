@@ -1,5 +1,5 @@
-import { EmailService } from '@/src/lib/email/service';
-import { CustomerSchema } from '@/src/lib/schemas/customer';
+import { EmailService } from '@/lib/email/service';
+import { CustomerSchema } from '@/lib/schemas/customer';
 
 describe('EmailService', () => {
   let emailService: EmailService;

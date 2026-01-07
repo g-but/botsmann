@@ -106,16 +106,16 @@ const AICaseAnalysis: React.FC<AICaseAnalysisProps> = ({ intake, onContinue, onB
   };
 
   const getConsiderations = (intake: CaseIntake) => {
-    const base = [
-      { text: 'Case eligibility confirmed based on provided details', type: 'success' as const }
+    const base: { text: string; type: 'success' | 'warning' }[] = [
+      { text: 'Case eligibility confirmed based on provided details', type: 'success' }
     ];
 
     if (intake.urgency === 'urgent') {
-      base.push({ text: 'Expedited process may be available', type: 'warning' as const });
+      base.push({ text: 'Expedited process may be available', type: 'warning' });
     }
 
     if (!intake.files || intake.files.length === 0) {
-      base.push({ text: 'Additional documentation will be required', type: 'warning' as const });
+      base.push({ text: 'Additional documentation will be required', type: 'warning' });
     }
 
     return base;

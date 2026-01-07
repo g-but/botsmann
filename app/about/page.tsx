@@ -1,6 +1,6 @@
 import React from 'react';
 import ConsultationForm from '@/components/ConsultationForm';
-import { NextSection } from '@/src/components/navigation/NextSection';
+import { NextSection } from '@/components/navigation/NextSection';
 
 export default function About() {
   return (

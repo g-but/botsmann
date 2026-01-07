@@ -144,7 +144,7 @@ export default function HomePage() {
             {featuredBots.map((bot) => (
               <Link
                 key={bot.id}
-                href={bot.href}
+                href={bot.href as any}
                 className="group relative bg-white/70 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100/50"
               >
                 {bot.status === 'soon' && (
