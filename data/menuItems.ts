@@ -69,6 +69,10 @@ export const menuItems: MenuItem[] = [
     path: "/blog"
   },
   {
+    label: "How It Works",
+    path: "/how-it-works"
+  },
+  {
     label: "About",
     path: "/about"
   },
