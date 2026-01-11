@@ -33,7 +33,7 @@ export default function CollaborationForm() {
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
-      console.log('Collaboration form submitted:', data);
+      console.info('Collaboration form submitted:', data);
       
       // In production, we would send this data to an API endpoint
       // await fetch('/api/collaboration', {
@@ -45,7 +45,7 @@ export default function CollaborationForm() {
       setSubmitSuccess(true);
       reset();
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.info('Error submitting form:', error);
       setSubmitError('Something went wrong. Please try again later.');
     } finally {
       setIsSubmitting(false);

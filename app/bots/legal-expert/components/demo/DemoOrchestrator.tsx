@@ -74,7 +74,7 @@ const DemoOrchestrator: React.FC = () => {
             {steps.map((step, idx) => {
               const isCompleted = idx < currentStepIndex;
               const isCurrent = idx === currentStepIndex;
-              const isUpcoming = idx > currentStepIndex;
+              const _isUpcoming = idx > currentStepIndex;
 
               return (
                 <div key={step.id} className="flex flex-col items-center">

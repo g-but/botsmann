@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 /**
  * Future vision and development timeline component with a realistic
  * roadmap for the Dr. Imhotep health assistant.
  */
 const FutureVisionSection: React.FC = () => {
-  const [applicationType, setApplicationType] = useState('developer');
   
   const roadmapItems = [
     {

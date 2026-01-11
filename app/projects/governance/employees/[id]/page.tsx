@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { sampleTeamMembers } from '../../data/sampleData';
 
 export default function EmployeeDetailPage({ params }: { params: { id: string } }) {
-  const router = useRouter();
+  const _router = useRouter();
   const employeeId = params.id;
   
   // Find the employee with the matching ID
@@ -92,6 +92,7 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
             <div className="flex flex-col md:flex-row md:items-center md:justify-between">
               <div className="flex items-center">
                 {employee.imageUrl ? (
+                  /* eslint-disable-next-line @next/next/no-img-element -- Dynamic external image URL from data */
                   <img
                     className="h-16 w-16 rounded-full border-4 border-white"
                     src={employee.imageUrl}

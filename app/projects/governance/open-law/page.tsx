@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import DetailedComponentsNav from '../components/DetailedComponentsNav';
 
 /**
  * Law Transparency Framework Detailed Page
@@ -58,7 +57,7 @@ type Laws = {
 
 export default function LawFrameworkPage() {
   // State for the interactive law effectiveness tracker demo
-  const [selectedLaw, setSelectedLaw] = useState<string>('env-protection-act');
+  const [selectedLaw, _setSelectedLaw] = useState<string>('env-protection-act');
   
   // Mock data for laws
   const laws: Laws = {
@@ -142,10 +141,10 @@ export default function LawFrameworkPage() {
     }
   };
   
-  const selectedLawData = laws[selectedLaw];
+  const _selectedLawData = laws[selectedLaw];
   
   // Function to determine goal status color
-  const getStatusColor = (status: string): string => {
+  const _getStatusColor = (status: string): string => {
     switch (status) {
       case 'achieved':
         return 'bg-green-50 text-green-800';
@@ -407,6 +406,7 @@ export default function LawFrameworkPage() {
             <h2 className="text-3xl font-bold mb-8">The Results Speak for Themselves</h2>
             
             <div className="bg-white text-gray-900 rounded-lg p-8 shadow-lg">
+              {/* eslint-disable @next/next/no-img-element -- External stock images for testimonial avatars */}
               <div className="flex justify-center mb-6">
                 <div className="flex -space-x-2">
                   <img className="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491349174775-aaafddd81942?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&q=80" alt="" />
@@ -414,6 +414,7 @@ export default function LawFrameworkPage() {
                   <img className="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&q=80" alt="" />
                 </div>
               </div>
+              {/* eslint-enable @next/next/no-img-element */}
               <blockquote className="text-xl italic font-medium text-gray-900 mb-4">
                 "Cities that have implemented the Open Law framework have seen a 43% increase in successful policy outcomes. Laws that don't work get fixed or removed. Accountability is no longer optional."
               </blockquote>

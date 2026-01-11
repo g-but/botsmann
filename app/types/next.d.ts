@@ -1,4 +1,4 @@
-import { LinkProps } from 'next/link';
+import type { LinkProps as _LinkProps } from 'next/link';
 
 declare module 'next/link' {
   interface LinkProps {

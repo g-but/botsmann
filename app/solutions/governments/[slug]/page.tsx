@@ -10,7 +10,7 @@ export default function SolutionPage() {
   const category = "governments";  // Hard-coded since this file is under governments
 
   const solutionData: SolutionData | undefined = solutionsData[category]?.find(
-    (s: any) => s.slug === slug
+    (s: SolutionData) => s.slug === slug
   );
 
   if (!solutionData) {

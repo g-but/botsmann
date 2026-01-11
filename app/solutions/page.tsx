@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import type { Route } from 'next';
 import solutions from '@/data/solutions.json';
 

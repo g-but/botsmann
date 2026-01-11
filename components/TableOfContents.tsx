@@ -11,9 +11,20 @@ interface TableOfContentsProps {
   items: TOCItem[];
 }
 
+// Get all IDs from items and their subitems (pure function, no dependencies)
+const getAllIds = (items: TOCItem[]): string[] => {
+  return items.reduce<string[]>((acc, item) => {
+    acc.push(item.id);
+    if (item.subItems && item.subItems.length > 0) {
+      acc = [...acc, ...getAllIds(item.subItems)];
+    }
+    return acc;
+  }, []);
+};
+
 export default function TableOfContents({ items }: TableOfContentsProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
-  
+
   // Update active section based on scroll position
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -45,17 +56,6 @@ export default function TableOfContents({ items }: TableOfContentsProps) {
       });
     };
   }, [items]);
-
-  // Get all IDs from items and their subitems
-  const getAllIds = (items: TOCItem[]): string[] => {
-    return items.reduce<string[]>((acc, item) => {
-      acc.push(item.id);
-      if (item.subItems && item.subItems.length > 0) {
-        acc = [...acc, ...getAllIds(item.subItems)];
-      }
-      return acc;
-    }, []);
-  };
 
   // Handle smooth scrolling when clicking a TOC item
   const scrollToSection = (id: string) => {

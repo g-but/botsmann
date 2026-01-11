@@ -21,7 +21,6 @@
  * ```
  */
 import React from 'react';
-import Link from 'next/link';
 
 interface HeroSectionProps {
   title: string;
@@ -32,7 +31,7 @@ interface HeroSectionProps {
 /**
  * Hero section component with improved call-to-action and mobile responsiveness
  */
-const HeroSection: React.FC<HeroSectionProps> = ({ title, overview, getTryLink }) => {
+const HeroSection: React.FC<HeroSectionProps> = ({ getTryLink }) => {
   return (
     <section className="mb-12 md:mb-16 pt-8 md:pt-12 px-4 md:px-0">
       <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">

@@ -15,7 +15,7 @@ export default function BusinessesSolutions() {
         <p className="text-lg text-gray-700 mt-4">{genericInfo}</p>
       </header>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {businesses.map((solution: any) => (
+        {businesses.map((solution: { slug: string; title: string; overview: string }) => (
           <Link
             key={solution.slug}
             href={`/solutions/businesses/${solution.slug}`}

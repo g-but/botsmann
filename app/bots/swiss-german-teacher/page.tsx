@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from 'react';
-import Link from 'next/link';
 import bots from '../../../data/bots';
-import dynamic from 'next/dynamic';
 
 // Components
 import BotNavigation from '../BotNavigation';

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 
 /**
@@ -10,26 +10,26 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
   const [lastScrollY, setLastScrollY] = useState(0);
 
   // Restructured menu items following the requested flow
-  const menuItems = [
+  const menuItems = useMemo(() => [
     { id: 'patient-features', label: 'For Patients' },
     { id: 'for-professionals', label: 'For Professionals' },
     { id: 'health-education', label: 'Health Education' },
     { id: 'coming-soon', label: 'Future Products' },
     { id: 'vision-and-join', label: 'Vision & Join Us' }
-  ];
+  ], []);
 
   // Handle scroll events to show/hide navigation and highlight active section
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      
+
       // Show navigation after scrolling down 200px
       if (currentScrollY > 200) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
       }
-      
+
       // Determine active section
       if (currentScrollY > 100) {
         // Find which section is currently in view
@@ -42,15 +42,15 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
           }
         }
       }
-      
+
       setLastScrollY(currentScrollY);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll(); // Initial check
-    
+
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+  }, [lastScrollY, menuItems]);
 
   // Handle smooth scrolling when clicking a menu item
   const scrollToSection = (id: string) => {

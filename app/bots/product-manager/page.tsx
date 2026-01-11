@@ -12,7 +12,6 @@
  */
 
 import React from 'react';
-import Link from 'next/link';
 import bots from '../../../data/bots';
 import HeroSection from './components/hero/HeroSection';
 import FeaturesSection from './components/features/FeaturesSection';

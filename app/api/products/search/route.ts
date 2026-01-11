@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { searchAmazon } from '@/lib/platforms/amazon';
 import { searchRicardo } from '@/lib/platforms/ricardo';
 import { processQuery } from '@/lib/nlp';
-import { ProductResult } from '@/types/products';
 
 export async function POST(req: Request) {
   try {

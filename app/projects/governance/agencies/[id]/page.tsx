@@ -7,7 +7,7 @@ import AgencyProfile from '../../components/AgencyProfile';
 import { sampleAgencies } from '../../data/sampleData';
 
 export default function AgencyDetailPage({ params }: { params: { id: string } }) {
-  const router = useRouter();
+  const _router = useRouter();
   const agencyId = params.id;
   
   const agency = sampleAgencies.find(a => a.id === agencyId);

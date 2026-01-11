@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { AgencyData } from './AgencyProfile';
 
 export interface TaxPayment {
@@ -72,7 +71,7 @@ interface CitizenProfileProps {
   agencies: AgencyData[];
 }
 
-const CitizenProfile: React.FC<CitizenProfileProps> = ({ citizen, agencies }) => {
+const CitizenProfile: React.FC<CitizenProfileProps> = ({ citizen, agencies: _agencies }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'tax' | 'benefits' | 'advisory'>('overview');
   const [advisoryDistribution, setAdvisoryDistribution] = useState<AdvisoryDistribution[]>([]);
   const [sliderTotal, setSliderTotal] = useState(100);
@@ -140,6 +139,7 @@ const CitizenProfile: React.FC<CitizenProfileProps> = ({ citizen, agencies }) =>
           <div className="md:flex md:items-center md:justify-between">
             <div className="flex-1 min-w-0 flex items-center">
               {citizen.avatarUrl ? (
+                /* eslint-disable-next-line @next/next/no-img-element -- Dynamic external avatar URL from data */
                 <img
                   className="h-16 w-16 rounded-full border-4 border-white"
                   src={citizen.avatarUrl}

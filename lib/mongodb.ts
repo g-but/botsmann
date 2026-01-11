@@ -6,13 +6,15 @@ interface GlobalMongoose {
 }
 
 declare global {
+  // eslint-disable-next-line no-var
   var mongoose: GlobalMongoose;
 }
 
-let cached = (global as any).mongoose || { conn: null, promise: null };
+const globalWithMongoose = global as typeof globalThis & { mongoose: GlobalMongoose };
+const cached = globalWithMongoose.mongoose || { conn: null, promise: null };
 
-if (!(global as any).mongoose) {
-  (global as any).mongoose = cached;
+if (!globalWithMongoose.mongoose) {
+  globalWithMongoose.mongoose = cached;
 }
 
 export async function connectDB() {
