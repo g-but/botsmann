@@ -1,3 +1,5 @@
+import type { BotMenuItem, BotAccentColor } from '../types/bot';
+
 export interface Bot {
   slug: string;
   title: string;
@@ -6,6 +8,14 @@ export interface Bot {
   features: string[];
   details: string;
   tryLink?: string;
+  // Navigation configuration (optional for backwards compatibility)
+  nav?: {
+    navTitle: string;
+    emoji: string;
+    navDescription?: string;
+    accentColor: BotAccentColor;
+    menuItems: BotMenuItem[];
+  };
 }
 
 const bots: Bot[] = [
@@ -23,7 +33,20 @@ const bots: Bot[] = [
       'Swiss Culture: Insider tips on history and social life.'
     ],
     details: "Type a word, and Heidi delivers a table comparing High German and Züridütsch with real-life examples. Send a sentence or email, and get a tailored response to communicate effortlessly. Discover tonight's events in Zurich with the 'Browse Events' feature. Heidi follows your learning progress, tests you in a smart way, and helps you remember more while introducing you to local activities. With cultural tips and local know-how, she's your shortcut to thriving in Switzerland.",
-    tryLink: 'https://chatgpt.com/g/g-rni41WTSh-heidi-tell'
+    tryLink: 'https://chatgpt.com/g/g-rni41WTSh-heidi-tell',
+    nav: {
+      navTitle: 'Heidi',
+      emoji: '🇨🇭',
+      navDescription: 'Swiss German Teacher',
+      accentColor: 'red',
+      menuItems: [
+        { id: 'demo', label: 'Demo', icon: '💬', section: 'demo' },
+        { id: 'features', label: 'Features', icon: '✨', section: 'features' },
+        { id: 'communication', label: 'Communication', icon: '✉️', section: 'communication' },
+        { id: 'culture', label: 'Culture', icon: '🏔️', section: 'culture' },
+        { id: 'waitlist', label: 'Join Waitlist', icon: '📝', section: 'waitlist' }
+      ]
+    }
   },
   {
     slug: 'research-assistant',
@@ -39,7 +62,23 @@ const bots: Bot[] = [
       'Integration & Collaboration'
     ],
     details: 'The Research Assistant Bot transforms how academics, scientists, journalists, and industry professionals conduct research. It automatically organizes uploaded materials, keeps you updated with the latest developments in your field, generates structured content with proper citations, and challenges your thinking with insightful questions. The unique Big Discovery Mode helps identify research gaps and novel connections between concepts, potentially leading to breakthrough insights.',
-    tryLink: 'https://chatgpt.com/g/research-assistant'
+    tryLink: 'https://chatgpt.com/g/research-assistant',
+    nav: {
+      navTitle: 'Nerd',
+      emoji: '🔬',
+      navDescription: 'AI Research Assistant',
+      accentColor: 'indigo',
+      menuItems: [
+        { id: 'demo', label: 'Demo', icon: '💻', section: 'demo' },
+        { id: 'features', label: 'Features', icon: '✨', section: 'features' },
+        { id: 'scraping', label: 'Web Scraping', icon: '🌐', section: 'scraping' },
+        { id: 'drafts', label: 'Drafts', icon: '📝', section: 'drafts' },
+        { id: 'questions', label: 'Daily Questions', icon: '❓', section: 'questions' },
+        { id: 'discovery', label: 'Discovery', icon: '💡', section: 'discovery' },
+        { id: 'integration', label: 'Integration', icon: '🔗', section: 'integration' },
+        { id: 'roadmap', label: 'Roadmap', icon: '🗺️', section: 'roadmap' }
+      ]
+    }
   },
   {
     slug: 'medical-expert',
@@ -53,7 +92,20 @@ const bots: Bot[] = [
       'Medical literature review',
       'Clinical guidelines integration'
     ],
-    details: 'Designed to assist medical professionals in staying current with research, analyzing cases, and making informed decisions based on the latest medical evidence.'
+    details: 'Designed to assist medical professionals in staying current with research, analyzing cases, and making informed decisions based on the latest medical evidence.',
+    nav: {
+      navTitle: 'Imhotep',
+      emoji: '⚕️',
+      navDescription: 'AI Health Assistant',
+      accentColor: 'green',
+      menuItems: [
+        { id: 'demo', label: 'Demo', icon: '💻', section: 'demo' },
+        { id: 'features', label: 'Features', icon: '✨', section: 'features' },
+        { id: 'professionals', label: 'For Professionals', icon: '👨‍⚕️', section: 'professionals' },
+        { id: 'harm-reduction', label: 'Harm Reduction', icon: '🛡️', section: 'harm-reduction' },
+        { id: 'vision', label: 'Vision', icon: '🚀', section: 'vision' }
+      ]
+    }
   },
   {
     slug: 'legal-expert',
@@ -67,7 +119,21 @@ const bots: Bot[] = [
       'Regulatory compliance',
       'Contract review assistance'
     ],
-    details: 'Our Legal Expert Assistant combines advanced legal knowledge with AI capabilities to provide comprehensive support for legal research and analysis.'
+    details: 'Our Legal Expert Assistant combines advanced legal knowledge with AI capabilities to provide comprehensive support for legal research and analysis.',
+    nav: {
+      navTitle: 'Lex',
+      emoji: '⚖️',
+      navDescription: 'AI Legal Assistant',
+      accentColor: 'blue',
+      menuItems: [
+        { id: 'demo', label: 'Demo', icon: '💻', section: 'demo' },
+        { id: 'features', label: 'Features', icon: '⚖️', section: 'features' },
+        { id: 'testimonials', label: 'Testimonials', icon: '💬', section: 'testimonials' },
+        { id: 'vision', label: 'Vision', icon: '🚀', section: 'vision' },
+        { id: 'technology', label: 'Technology', icon: '⚙️', section: 'technology' },
+        { id: 'get-started', label: 'Join Waitlist', icon: '✨', section: 'get-started' }
+      ]
+    }
   },
   {
     slug: 'artistic-advisor',
@@ -81,7 +147,20 @@ const bots: Bot[] = [
       'Color theory assistance',
       'Art history insights'
     ],
-    details: 'The Artistic Advisor AI helps artists explore new techniques, refine their style, and gain insights from art history while maintaining their unique creative vision.'
+    details: 'The Artistic Advisor AI helps artists explore new techniques, refine their style, and gain insights from art history while maintaining their unique creative vision.',
+    nav: {
+      navTitle: 'Muse',
+      emoji: '🎨',
+      navDescription: 'AI Artistic Advisor',
+      accentColor: 'amber',
+      menuItems: [
+        { id: 'demo', label: 'Demo', icon: '🖼️', section: 'demo' },
+        { id: 'features', label: 'Features', icon: '✨', section: 'features' },
+        { id: 'styles', label: 'Styles', icon: '🎭', section: 'styles' },
+        { id: 'techniques', label: 'Techniques', icon: '🖌️', section: 'techniques' },
+        { id: 'get-started', label: 'Get Started', icon: '🚀', section: 'get-started' }
+      ]
+    }
   },
   {
     slug: 'product-manager',
@@ -96,8 +175,39 @@ const bots: Bot[] = [
       'Quality Assurance: Comprehensive testing and validation strategies',
       'Cursor-Optimized: Specifically designed for Cursor development workflow'
     ],
-    details: 'Trident transforms the development process by providing comprehensive project management and technical guidance. It helps organize tasks, create detailed implementation plans, and optimize workflows specifically for Cursor development. By leveraging AI capabilities, it produces clear specifications, architecture diagrams, and risk assessments that developers can immediately use for implementation.'
+    details: 'Trident transforms the development process by providing comprehensive project management and technical guidance. It helps organize tasks, create detailed implementation plans, and optimize workflows specifically for Cursor development. By leveraging AI capabilities, it produces clear specifications, architecture diagrams, and risk assessments that developers can immediately use for implementation.',
+    nav: {
+      navTitle: 'Trident',
+      emoji: '🔱',
+      navDescription: 'AI Product Manager',
+      accentColor: 'indigo',
+      menuItems: [
+        { id: 'demo', label: 'Demo', icon: '💻', section: 'demo' },
+        { id: 'features', label: 'Features', icon: '✨', section: 'features' },
+        { id: 'workflow', label: 'Workflow', icon: '🔄', section: 'workflow' },
+        { id: 'showcase', label: 'Showcase', icon: '🎯', section: 'showcase' },
+        { id: 'examples', label: 'Examples', icon: '📋', section: 'examples' },
+        { id: 'integration', label: 'Integration', icon: '🔗', section: 'integration' },
+        { id: 'testimonials', label: 'Testimonials', icon: '💬', section: 'testimonials' },
+        { id: 'pricing', label: 'Pricing', icon: '💰', section: 'pricing' },
+        { id: 'get-started', label: 'Get Started', icon: '🚀', section: 'get-started' }
+      ]
+    }
   }
 ];
 
 export default bots;
+
+/**
+ * Helper to get a bot by slug
+ */
+export const getBotBySlug = (slug: string): Bot | undefined => {
+  return bots.find(b => b.slug === slug);
+};
+
+/**
+ * Helper to get bot's try link with fallback
+ */
+export const getBotTryLink = (bot: Bot | undefined): string => {
+  return bot?.tryLink || 'https://chat.openai.com/';
+};

@@ -1,31 +1,11 @@
-/**
- * Imhotep (Medical Expert) Bot Page
- * 
- * This is the main page component for the Imhotep medical expert bot.
- * It orchestrates all the sections and components that make up the bot's interface,
- * providing a comprehensive medical information and advice experience.
- * 
- * The page includes:
- * - Hero section with introduction
- * - Medical disclaimer
- * - Features and how-to sections
- * - Interactive demo for asking health questions
- * - Health topics explorer
- * - Common health Q&A
- * - Patient intake form
- * 
- * @module ImhotepPage
- */
-
 'use client';
 
 import React from 'react';
-import bots from '../../../data/bots';
+import { getBotBySlug, getBotTryLink } from '@/data/bots';
 import BotNavigation from '../BotNavigation';
-// Import the styles
+import { BotSection, BotNotFoundFallback } from '@/components/shared';
 import './styles.css';
 
-// Basic component imports
 import HeroSection from './components/hero/HeroSection';
 import DisclaimerSection from './components/disclaimer/DisclaimerSection';
 import PatientFeaturesSection from './components/patient/PatientFeaturesSection';
@@ -34,85 +14,58 @@ import HealthEducationSection from './components/education/HealthEducationSectio
 import FutureProductsSection from './components/future/FutureProductsSection';
 import VisionAndJoinSection from './components/vision/VisionAndJoinSection';
 
-/**
- * Main page component for the Imhotep health assistant bot
- * with restructured sections for improved flow
- * 
- * @returns {JSX.Element} The rendered page
- */
 export default function MedicalExpert() {
-  // Find bot data from the global bots configuration
-  const bot = bots.find(b => b.slug === 'medical-expert');
+  const bot = getBotBySlug('medical-expert');
+  const tryLink = getBotTryLink(bot);
 
-  // Function to get the ChatGPT bot URL
-  const getTryLink = () => {
-    return bot?.tryLink || 'https://chat.openai.com/';
-  };
-
-  // Menu items for navigation
-  const menuItems = [
-    { id: 'patient-features', label: 'For Patients', icon: '👨‍👩‍👧‍👦', section: 'patient-features' },
-    { id: 'for-professionals', label: 'For Professionals', icon: '👨‍⚕️', section: 'for-professionals' },
-    { id: 'health-education', label: 'Health Education', icon: '📚', section: 'health-education' },
-    { id: 'coming-soon', label: 'Future Products', icon: '🔮', section: 'coming-soon' },
-    { id: 'vision-and-join', label: 'Vision & Join Us', icon: '🌟', section: 'vision-and-join' }
-  ];
-
-  // If bot data is not found, show error
-  if (!bot) {
-    return <div className="p-8 text-center">Health Assistant bot configuration not found</div>;
+  if (!bot || !bot.nav) {
+    return <BotNotFoundFallback botName="Imhotep" />;
   }
+
+  const { nav } = bot;
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Bot-specific Navigation */}
       <BotNavigation
-        botTitle="Imhotep"
-        botEmoji="⚕️"
-        botDescription="AI Medical Expert"
-        accentColor="green"
-        menuItems={menuItems}
-        chatLink={getTryLink()}
+        botTitle={nav.navTitle}
+        botEmoji={nav.emoji}
+        botDescription={nav.navDescription}
+        accentColor={nav.accentColor}
+        menuItems={nav.menuItems}
+        chatLink={tryLink}
       />
-      
+
       <main className="mx-auto max-w-screen-xl px-6 pt-24">
-        {/* Hero Section */}
-        <HeroSection 
-          title="Imhotep"
+        <HeroSection
+          title={nav.navTitle}
           overview="Your AI health companion for evidence-based wellness"
-          getTryLink={getTryLink}
+          getTryLink={() => tryLink}
         />
-        
-        {/* Medical Disclaimer */}
+
         <DisclaimerSection />
-        
-        {/* Patient Features Section */}
-        <section id="patient-features" className="scroll-mt-24 my-16">
-          <PatientFeaturesSection 
+
+        <BotSection id="patient-features">
+          <PatientFeaturesSection
             features={bot.features}
-            getTryLink={getTryLink}
+            getTryLink={() => tryLink}
           />
-        </section>
-        
-        {/* Healthcare Professionals Section */}
-        <section id="for-professionals" className="scroll-mt-24 my-16">
+        </BotSection>
+
+        <BotSection id="for-professionals">
           <HealthcareProfessionalsSection />
-        </section>
-        
-        {/* Health Education Section */}
-        <section id="health-education" className="scroll-mt-24 my-16">
-          <HealthEducationSection getTryLink={getTryLink} />
-        </section>
-        
-        {/* Future Products Section */}
-        <section id="coming-soon" className="scroll-mt-24 my-16">
+        </BotSection>
+
+        <BotSection id="health-education">
+          <HealthEducationSection getTryLink={() => tryLink} />
+        </BotSection>
+
+        <BotSection id="coming-soon">
           <FutureProductsSection />
-        </section>
-        
-        {/* Vision and Join Us Section */}
-        <section id="vision-and-join" className="scroll-mt-24 my-16 mb-24">
+        </BotSection>
+
+        <BotSection id="vision-and-join" isLast>
           <VisionAndJoinSection />
-        </section>
+        </BotSection>
       </main>
     </div>
   );

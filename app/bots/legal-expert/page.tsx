@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import bots from '../../../data/bots';
+import { getBotBySlug, getBotTryLink } from '@/data/bots';
 import BotNavigation from '../BotNavigation';
+import { BotNotFoundFallback } from '@/components/shared';
 import './styles.css';
 
 import HeroSection from './components/hero/HeroSection';
@@ -15,43 +16,35 @@ import TechSection from './components/tech/TechSection';
 import CallToActionSection from './components/cta/CallToActionSection';
 
 export default function LegalExpert() {
-  const bot = bots.find(b => b.slug === 'legal-expert');
+  const bot = getBotBySlug('legal-expert');
+  const tryLink = getBotTryLink(bot);
 
-  const menuItems = [
-    { id: 'demo', label: 'Demo', icon: '💻', section: 'demo' },
-    { id: 'features', label: 'Features', icon: '⚖️', section: 'features' },
-    { id: 'testimonials', label: 'Testimonials', icon: '💬', section: 'testimonials' },
-    { id: 'vision', label: 'Vision', icon: '🚀', section: 'vision' },
-    { id: 'technology', label: 'Technology', icon: '⚙️', section: 'technology' },
-    { id: 'get-started', label: 'Join Waitlist', icon: '✨', section: 'get-started' }
-  ];
-
-  const getTryLink = () => bot?.tryLink || 'https://chat.openai.com/';
-
-  if (!bot) {
-    return <div className="p-8 text-center">Lex configuration not found</div>;
+  if (!bot || !bot.nav) {
+    return <BotNotFoundFallback botName="Lex" />;
   }
+
+  const { nav } = bot;
 
   return (
     <div className="min-h-screen bg-white">
       <BotNavigation
-        botTitle="Lex"
-        botEmoji="⚖️"
-        botDescription="AI Legal Assistant"
-        accentColor="blue"
-        menuItems={menuItems}
-        chatLink={getTryLink()}
+        botTitle={nav.navTitle}
+        botEmoji={nav.emoji}
+        botDescription={nav.navDescription}
+        accentColor={nav.accentColor}
+        menuItems={nav.menuItems}
+        chatLink={tryLink}
       />
 
       <main className="mx-auto max-w-screen-xl px-6 pt-24">
-        <HeroSection title="Lex" overview={bot.overview} getTryLink={getTryLink} />
+        <HeroSection title={nav.navTitle} overview={bot.overview} getTryLink={() => tryLink} />
         <DisclaimerSection />
         <DemoOrchestrator />
         <FeaturesSection />
         <TestimonialsSection />
         <VisionSection />
         <TechSection />
-        <CallToActionSection getTryLink={getTryLink} />
+        <CallToActionSection getTryLink={() => tryLink} />
       </main>
     </div>
   );
