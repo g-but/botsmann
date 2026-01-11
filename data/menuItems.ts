@@ -1,87 +1,188 @@
-import { MenuItem } from '@/types/navigation';
+import type { MenuItem } from '@/types/navigation';
+import type { Route } from 'next';
 
+/**
+ * Main site navigation menu items
+ * SSOT for navigation structure across desktop and mobile
+ */
 export const menuItems: MenuItem[] = [
   {
-    label: "Solutions",
-    path: "/solutions",
-    children: [
-      { label: "Individuals", path: "/solutions/individuals", description: "Personal productivity and language tools." },
-      { label: "Businesses", path: "/solutions/businesses", description: "Workflow automation for teams and enterprises." },
-      { label: "Governments", path: "/solutions/governments", description: "Transparency and citizen engagement platforms." }
-    ]
-  },
-  {
-    label: "Bots",
-    path: "/bots",
+    label: 'Solutions',
+    path: '/solutions' as Route,
     children: [
       {
-        label: "Legal Expert (Lex)",
-        path: "/bots/legal-expert",
-        description: "Ingest legal docs, get AI analysis & lawyer matches",
-        icon: "⚖️"
+        label: 'Individuals',
+        path: '/solutions/individuals' as Route,
+        description: 'Personal productivity and language tools.',
+        icon: '👤',
       },
       {
-        label: "Swiss German Teacher (Heidi)",
-        path: "/bots/swiss-german-teacher",
-        description: "Learn Züridütsch with personalized AI lessons",
-        icon: "🇨🇭"
+        label: 'Businesses',
+        path: '/solutions/businesses' as Route,
+        description: 'Workflow automation for teams and enterprises.',
+        icon: '🏢',
       },
       {
-        label: "Research Assistant (Nerd)",
-        path: "/bots/research-assistant",
-        description: "Ingest papers, organize research, discover insights",
-        icon: "🧠"
+        label: 'Governments',
+        path: '/solutions/governments' as Route,
+        description: 'Transparency and citizen engagement platforms.',
+        icon: '🏛️',
       },
-      {
-        label: "Medical Expert (Imhotep)",
-        path: "/bots/medical-expert",
-        description: "Analyze medical data for evidence-based insights",
-        icon: "⚕️"
+    ],
+    megaMenu: {
+      columns: 1,
+      header: {
+        title: 'Solutions by Audience',
+        subtitle: 'Tailored AI solutions for every sector',
+        gradient: 'bg-gradient-to-r from-emerald-50 to-teal-50',
       },
-      {
-        label: "Creative Advisor (Artr)",
-        path: "/bots/artistic-advisor",
-        description: "Upload art, get style analysis & creative feedback",
-        icon: "🎨"
-      },
-      {
-        label: "Product Manager (Trident)",
-        path: "/bots/product-manager",
-        description: "Ingest user data, get product roadmaps & analysis",
-        icon: "🔱"
-      }
-    ]
+    },
   },
   {
-    label: "Projects",
-    path: "/projects",
+    label: 'Bots',
+    path: '/bots' as Route,
     children: [
-      { label: "Credit", path: "/projects/credit", description: "Automated venture credit operations." },
-      { label: "Finance", path: "/projects/finance", description: "Open project finance management." },
-      { label: "Governance", path: "/projects/governance", description: "Transparent, accountable government tech." },
-      { label: "Recurring Fulfillment", path: "/projects/shopping", description: "Manage subscriptions and inventory." },
-      { label: "Techno-Capital", path: "/projects/techno-capital", description: "Investment fund for technological progress." }
-    ]
+      {
+        label: 'Legal Expert (Lex)',
+        path: '/bots/legal-expert' as Route,
+        description: 'Ingest legal docs, get AI analysis & lawyer matches',
+        icon: '⚖️',
+      },
+      {
+        label: 'Swiss German Teacher (Heidi)',
+        path: '/bots/swiss-german-teacher' as Route,
+        description: 'Learn Züridütsch with personalized AI lessons',
+        icon: '🇨🇭',
+      },
+      {
+        label: 'Research Assistant (Nerd)',
+        path: '/bots/research-assistant' as Route,
+        description: 'Ingest papers, organize research, discover insights',
+        icon: '🧠',
+      },
+      {
+        label: 'Medical Expert (Imhotep)',
+        path: '/bots/medical-expert' as Route,
+        description: 'Analyze medical data for evidence-based insights',
+        icon: '⚕️',
+      },
+      {
+        label: 'Creative Advisor (Artr)',
+        path: '/bots/artistic-advisor' as Route,
+        description: 'Upload art, get style analysis & creative feedback',
+        icon: '🎨',
+      },
+      {
+        label: 'Product Manager (Trident)',
+        path: '/bots/product-manager' as Route,
+        description: 'Ingest user data, get product roadmaps & analysis',
+        icon: '🔱',
+      },
+    ],
+    megaMenu: {
+      columns: 2,
+      header: {
+        title: 'Specialized AI Bots',
+        subtitle: 'Ingest data → AI analysis → Actionable outputs',
+        gradient: 'bg-gradient-to-r from-blue-50 to-cyan-50',
+      },
+      footer: {
+        label: 'View all bots',
+        href: '/bots' as Route,
+      },
+    },
   },
   {
-    label: "Knowledge",
-    path: "/knowledge",
+    label: 'Projects',
+    path: '/projects' as Route,
     children: [
-      { label: "Guides", path: "/knowledge#guides", description: "Step-by-step tutorials for building AI bots" },
-      { label: "FAQ", path: "/knowledge#faq", description: "Answers to common questions" }
-    ]
+      {
+        label: 'Credit',
+        path: '/projects/credit' as Route,
+        description: 'Automated venture credit operations.',
+        icon: '💳',
+      },
+      {
+        label: 'Finance',
+        path: '/projects/finance' as Route,
+        description: 'Open project finance management.',
+        icon: '📊',
+      },
+      {
+        label: 'Governance',
+        path: '/projects/governance' as Route,
+        description: 'Transparent, accountable government tech.',
+        icon: '🏛️',
+      },
+      {
+        label: 'Recurring Fulfillment',
+        path: '/projects/shopping' as Route,
+        description: 'Manage subscriptions and inventory.',
+        icon: '📦',
+      },
+      {
+        label: 'Techno-Capital',
+        path: '/projects/techno-capital' as Route,
+        description: 'Investment fund for technological progress.',
+        icon: '🚀',
+      },
+    ],
+    megaMenu: {
+      columns: 2,
+      header: {
+        title: 'Open Projects',
+        subtitle: 'Building the future of automation',
+        gradient: 'bg-gradient-to-r from-purple-50 to-pink-50',
+      },
+    },
   },
   {
-    label: "Blog",
-    path: "/blog"
+    label: 'Knowledge',
+    path: '/knowledge' as Route,
+    children: [
+      {
+        label: 'Guides',
+        path: '/knowledge#guides' as Route,
+        description: 'Step-by-step tutorials for building AI bots',
+        icon: '📚',
+      },
+      {
+        label: 'FAQ',
+        path: '/knowledge#faq' as Route,
+        description: 'Answers to common questions',
+        icon: '❓',
+      },
+    ],
+    megaMenu: {
+      columns: 1,
+      header: {
+        title: 'Knowledge Center',
+        subtitle: 'Learn to build and use AI bots',
+        gradient: 'bg-gradient-to-r from-amber-50 to-yellow-50',
+      },
+    },
   },
   {
-    label: "About",
-    path: "/about"
+    label: 'Blog',
+    path: '/blog' as Route,
   },
   {
-    label: "Contact Us",
-    path: "/contact",
-    isButton: true
-  }
+    label: 'About',
+    path: '/about' as Route,
+  },
+  {
+    label: 'Contact Us',
+    path: '/contact' as Route,
+    isButton: true,
+  },
 ];
+
+/**
+ * Get menu items without button items (for desktop nav)
+ */
+export const getNavItems = () => menuItems.filter((item) => !item.isButton);
+
+/**
+ * Get button items only (for CTA section)
+ */
+export const getButtonItems = () => menuItems.filter((item) => item.isButton);
