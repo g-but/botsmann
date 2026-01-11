@@ -28,12 +28,15 @@ const CONFIG = {
   VERBOSE_LOGGING: true
 };
 
+// Revalidation time in seconds (1 hour) - enables ISR instead of forcing dynamic rendering
+const REVALIDATE_INTERVAL = 3600;
+
 // Function to check if a file exists on GitHub
 async function fileExistsOnGitHub(path: string): Promise<boolean> {
   try {
-    const response = await fetch(`${GITHUB_RAW_BASE}/${path}`, { 
+    const response = await fetch(`${GITHUB_RAW_BASE}/${path}`, {
       method: 'HEAD',
-      cache: 'no-store'
+      next: { revalidate: REVALIDATE_INTERVAL }
     });
     return response.ok;
   } catch (error) {
@@ -50,19 +53,19 @@ function getCurrentDate(): string {
 // Function to determine the post date based on our configuration and the post data
 function determinePostDate(data: { published?: boolean; date?: string }): string {
   const currentDate = getCurrentDate();
-  
+
   // If post is published
   if (data.published === true) {
     // If we're forcing current date for all published posts OR if no date is provided
     if (CONFIG.FORCE_CURRENT_DATE_FOR_PUBLISHED || !data.date) {
       if (CONFIG.VERBOSE_LOGGING) {
-        console.info(`Using current date (${currentDate}) for published post.`, 
+        console.info(`Using current date (${currentDate}) for published post.`,
                     data.date ? `Original date was: ${data.date}` : 'No original date was provided.');
       }
       return currentDate;
     }
   }
-  
+
   // Otherwise use the provided date or fallback to current date
   return data.date || currentDate;
 }
@@ -71,70 +74,71 @@ function determinePostDate(data: { published?: boolean; date?: string }): string
 export async function fetchBlogPosts(): Promise<BlogPost[]> {
   try {
     console.info('Fetching all blog posts');
-    
+
     // Fetch all directories in the posts folder
+    // Use ISR with revalidation instead of no-store to support static generation
     const res = await fetch(
       `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/posts`,
-      { cache: 'no-store' } // No caching needed—daily Cron ensures freshness, and published: true controls visibility
+      { next: { revalidate: REVALIDATE_INTERVAL } }
     );
-    
+
     if (!res.ok) {
       console.info('Failed to fetch posts', res.status, res.statusText);
       return [];
     }
-    
+
     const directories = await res.json();
-    
+
     // Process each directory as a potential blog post
     const posts = await Promise.all(
       directories.map(async (dir: { type: string; name: string }) => {
         if (dir.type !== 'dir') return null;
-        
+
         const slug = dir.name;
         console.info('Processing post directory:', slug);
-        
+
         // Fetch the index.mdx file for this post
         const mdxRes = await fetch(
           `${GITHUB_RAW_BASE}/posts/${slug}/index.mdx`,
-          { cache: 'no-store' }
+          { next: { revalidate: REVALIDATE_INTERVAL } }
         );
-        
+
         if (!mdxRes.ok) {
           console.info(`Failed to fetch MDX for ${slug}:`, mdxRes.status, mdxRes.statusText);
           return null;
         }
-        
+
         const mdxContent = await mdxRes.text();
-        
+
         // Parse frontmatter and content
         const { data, content } = matter(mdxContent);
-        
+
         // Skip posts that aren't published
         if (data.published !== true) {
           console.info(`Skipping unpublished post: ${slug}`);
           return null;
         }
-        
+
         // Determine the post date based on our configuration
         const postDate = determinePostDate(data);
-        
+
         // Process featured image
         let featuredImage: string | undefined = undefined;
-        
+
         if (data.featuredImage) {
           // Remove ./ prefix if present
           const imagePath = data.featuredImage.replace(/^\.\//, '');
           featuredImage = `${GITHUB_RAW_BASE}/posts/${slug}/${imagePath}`;
-          
+
           // Verify the image exists
           try {
             const imageExists = await fileExistsOnGitHub(`posts/${slug}/${imagePath}`);
             if (!imageExists) {
               console.info(`Featured image not found for ${slug}: ${featuredImage}`);
-              
+
               // Try alternative image formats
               const fileNameWithoutExt = imagePath.replace(/\.(jpg|jpeg|png|gif|webp|jfif)$/, '');
-              
+
               // Try common image extensions
               for (const ext of ['jpg', 'jpeg', 'png', 'webp', 'jfif']) {
                 const altPath = `posts/${slug}/${fileNameWithoutExt}.${ext}`;
@@ -150,7 +154,7 @@ export async function fetchBlogPosts(): Promise<BlogPost[]> {
             featuredImage = undefined;
           }
         }
-        
+
         return {
           slug,
           title: data.title,
@@ -163,7 +167,7 @@ export async function fetchBlogPosts(): Promise<BlogPost[]> {
         };
       })
     );
-    
+
     // Filter out null values and sort by date (newest first)
     return posts
       .filter((post): post is BlogPost => post !== null)
@@ -178,63 +182,64 @@ export async function fetchBlogPosts(): Promise<BlogPost[]> {
 export async function fetchBlogPostBySlug(slug: string): Promise<BlogPost | null> {
   try {
     console.info('Fetching blog post for slug:', slug);
-    
+
     if (!slug) {
       console.info('Attempted to fetch blog post with empty slug');
       return null;
     }
-    
+
     // Fetch the index.mdx file for this post
+    // Use ISR with revalidation instead of no-store to support static generation
     const mdxRes = await fetch(
       `${GITHUB_RAW_BASE}/posts/${slug}/index.mdx`,
-      { cache: 'no-store' } // Always fetch fresh content
+      { next: { revalidate: REVALIDATE_INTERVAL } }
     );
-    
+
     if (!mdxRes.ok) {
       console.info(`Failed to fetch post for ${slug}:`, mdxRes.status, mdxRes.statusText);
       return null;
     }
-    
+
     const mdxContent = await mdxRes.text();
-    
+
     // Parse frontmatter and content
     const { data, content } = matter(mdxContent);
-    
+
     // Skip posts that aren't published
     if (data.published !== true) {
       console.info(`Skipping unpublished post: ${slug}`);
       return null;
     }
-    
+
     // Determine the post date based on our configuration
     const postDate = determinePostDate(data);
-    
+
     if (CONFIG.VERBOSE_LOGGING) {
-      console.info(`Post date for ${slug}:`, postDate, 
+      console.info(`Post date for ${slug}:`, postDate,
                   data.date ? `Original date: ${data.date}` : 'No original date found');
     }
-    
+
     // Process featured image
     let featuredImage: string | undefined = undefined;
-    
+
     if (data.featuredImage) {
       // Remove ./ prefix if present
       const imagePath = data.featuredImage.replace(/^\.\//, '');
       featuredImage = `${GITHUB_RAW_BASE}/posts/${slug}/${imagePath}`;
-      
+
       // Log the resolved featured image URL
       if (CONFIG.VERBOSE_LOGGING) {
         console.info(`Resolved featured image for ${slug}:`, featuredImage);
       }
-      
+
       // Verify the image exists
       const imageExists = await fileExistsOnGitHub(`posts/${slug}/${imagePath}`);
       if (!imageExists) {
         console.info(`Featured image not found: ${featuredImage}`);
-        
+
         // Try alternative formats
         const fileNameWithoutExt = imagePath.replace(/\.(jpg|jpeg|png|gif|webp|jfif)$/, '');
-        
+
         for (const ext of ['jpg', 'jpeg', 'png', 'webp', 'jfif']) {
           const altPath = `posts/${slug}/${fileNameWithoutExt}.${ext}`;
           if (await fileExistsOnGitHub(altPath)) {
@@ -245,7 +250,7 @@ export async function fetchBlogPostBySlug(slug: string): Promise<BlogPost | null
         }
       }
     }
-    
+
     // Return the blog post data
     return {
       slug,
@@ -261,4 +266,4 @@ export async function fetchBlogPostBySlug(slug: string): Promise<BlogPost | null
     console.info(`Failed to fetch post for ${slug}:`, error);
     return null;
   }
-} 
+}
