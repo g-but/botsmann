@@ -1,3 +1,4 @@
+import React from 'react';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import remarkGfm from 'remark-gfm';
 import rehypeSlug from 'rehype-slug';
@@ -19,10 +20,31 @@ const ServerMDXComponents = {
     <h3 className="mb-4 mt-6 text-xl font-semibold text-gray-900" {...props} />
   ),
 
-  // Text elements
-  p: (props: React.HTMLAttributes<HTMLParagraphElement>) => (
-    <p className="mb-4 text-gray-600" {...props} />
-  ),
+  // Text elements - handle block elements that MDX might wrap in <p>
+  p: ({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => {
+    // Check if children contain block-level elements (images wrapped in figure)
+    // If so, render as a div to avoid invalid HTML nesting
+    const hasBlockChild = React.Children.toArray(children).some((child) => {
+      if (React.isValidElement(child)) {
+        // Check for figure, div, or other block elements
+        const type = child.type;
+        if (typeof type === 'string' && ['figure', 'div', 'section'].includes(type)) {
+          return true;
+        }
+        // Check for custom components that render block elements
+        if (typeof type === 'function' || typeof type === 'object') {
+          return true;
+        }
+      }
+      return false;
+    });
+
+    if (hasBlockChild) {
+      return <div className="mb-4 text-gray-600" {...props}>{children}</div>;
+    }
+
+    return <p className="mb-4 text-gray-600" {...props}>{children}</p>;
+  },
   ul: (props: React.HTMLAttributes<HTMLUListElement>) => (
     <ul className="mb-4 list-disc pl-6 text-gray-600" {...props} />
   ),
@@ -107,7 +129,7 @@ export default function ServerMDXContent({ content, slug }: ServerMDXContentProp
       const { src, alt } = imgProps;
 
       if (!src) {
-        return <div className="my-8 p-4 bg-red-50 text-red-500">Image source missing</div>;
+        return <span className="block my-8 p-4 bg-red-50 text-red-500">Image source missing</span>;
       }
 
       let imageSrc = src;
@@ -118,8 +140,9 @@ export default function ServerMDXContent({ content, slug }: ServerMDXContentProp
         imageSrc = `https://raw.githubusercontent.com/g-but/botsmann-blog-content/main/posts/${slug}/${imagePath}`;
       }
 
+      // Use figure/figcaption for semantic HTML that avoids <p> nesting issues
       return (
-        <div className="my-8">
+        <figure className="my-8">
           <Image
             src={imageSrc}
             alt={alt || ''}
@@ -127,8 +150,8 @@ export default function ServerMDXContent({ content, slug }: ServerMDXContentProp
             height={450}
             className="rounded-lg"
           />
-          {alt && <p className="mt-2 text-sm text-gray-500 italic">{alt}</p>}
-        </div>
+          {alt && <figcaption className="mt-2 text-sm text-gray-500 italic">{alt}</figcaption>}
+        </figure>
       );
     }
   };

@@ -1,21 +1,31 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 
 export default function Comments({ slug }: { slug: string }) {
-  const commentsRef = useRef<HTMLDivElement>(null);
-  
-  useEffect(() => {
-    // Capture ref value at effect start for cleanup
-    const container = commentsRef.current;
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isClient, setIsClient] = useState(false);
 
-    // Load Giscus
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isClient) return;
+
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Clear any existing content first
+    container.innerHTML = '';
+
+    // Create giscus script element
     const script = document.createElement('script');
     script.src = 'https://giscus.app/client.js';
     script.setAttribute('data-repo', 'g-but/botsmann-blog-content');
-    script.setAttribute('data-repo-id', 'R_kgDOODOnUA'); // Replace with actual repo ID from Giscus setup
+    script.setAttribute('data-repo-id', 'R_kgDOODOnUA');
     script.setAttribute('data-category', 'Blog Comments');
-    script.setAttribute('data-category-id', 'DIC_kwDOODOnUM4CnkL1'); // Replace with actual category ID from Giscus setup
+    script.setAttribute('data-category-id', 'DIC_kwDOODOnUM4CnkL1');
     script.setAttribute('data-mapping', 'pathname');
     script.setAttribute('data-strict', '0');
     script.setAttribute('data-reactions-enabled', '1');
@@ -27,24 +37,23 @@ export default function Comments({ slug }: { slug: string }) {
     script.crossOrigin = 'anonymous';
     script.async = true;
 
-    if (container) {
-      container.appendChild(script);
-    }
+    container.appendChild(script);
 
     return () => {
+      // Manually clean up all children using innerHTML to prevent React reconciliation errors
+      // This runs before React tries to reconcile the DOM
       if (container) {
-        const giscusFrame = container.querySelector('iframe.giscus-frame');
-        if (giscusFrame) {
-          container.removeChild(giscusFrame);
-        }
+        container.innerHTML = '';
       }
     };
-  }, [slug]);
-  
+  }, [slug, isClient]);
+
   return (
     <div className="mt-16 pt-8 border-t border-gray-200">
       <h2 className="text-2xl font-semibold text-gray-900 mb-8">Comments</h2>
-      <div ref={commentsRef} />
+      <div ref={containerRef} className="giscus-container">
+        {!isClient && <div className="text-gray-500">Loading comments...</div>}
+      </div>
     </div>
   );
-} 
+}
