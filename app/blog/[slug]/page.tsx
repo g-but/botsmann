@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { fetchBlogPosts, fetchBlogPostBySlug } from '@/lib/blog';
 import Comments from '@/components/blog/Comments';
-import ClientMDXContent from '@/components/blog/ClientMDXContent';
+import ServerMDXContent from '@/components/blog/ServerMDXContent';
 import { Metadata } from 'next';
 import { format } from 'date-fns';
 
@@ -23,13 +23,13 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   try {
     const post = await fetchBlogPostBySlug(params.slug);
-    
+
     if (!post) {
       return {
         title: 'Post Not Found | Botsmann',
       };
     }
-    
+
     return {
       title: `${post.title} | Botsmann Blog`,
       description: post.excerpt,
@@ -65,20 +65,20 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
 export default async function BlogPost({ params }: { params: { slug: string } }) {
   console.info('Rendering blog post for slug:', params.slug);
-  
+
   try {
     if (!params.slug) {
       console.info('Missing slug parameter');
       notFound();
     }
-    
+
     const post = await fetchBlogPostBySlug(params.slug);
-    
+
     if (!post) {
       console.info('Blog post not found for slug:', params.slug);
       notFound();
     }
-    
+
     return (
       <article className="mx-auto max-w-3xl px-6 py-16">
         <header className="mb-12">
@@ -89,16 +89,16 @@ export default async function BlogPost({ params }: { params: { slug: string } })
             <span>•</span>
             <span>{post.author}</span>
           </div>
-          
+
           <h1 className="mt-4 text-4xl font-semibold tracking-tight text-gray-900">
             {post.title}
           </h1>
-          
+
           {post.tags && post.tags.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-2">
               {post.tags.map(tag => (
-                <span 
-                  key={tag} 
+                <span
+                  key={tag}
                   className="inline-block rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-700"
                 >
                   {tag}
@@ -106,10 +106,10 @@ export default async function BlogPost({ params }: { params: { slug: string } })
               ))}
             </div>
           )}
-          
+
           {post.featuredImage && (
             <div className="mt-8 relative h-96 w-full overflow-hidden rounded-lg">
-              <Image 
+              <Image
                 src={post.featuredImage}
                 alt={post.title}
                 fill
@@ -120,14 +120,14 @@ export default async function BlogPost({ params }: { params: { slug: string } })
             </div>
           )}
         </header>
-        
-        <ClientMDXContent content={post.content} slug={post.slug} />
-        
+
+        <ServerMDXContent content={post.content} slug={post.slug} />
+
         <Comments slug={post.slug} />
       </article>
     );
   } catch (error) {
     console.info('Error rendering blog post:', error);
-    throw error; // Re-throw to let Next.js error handling take over
+    throw error;
   }
-} 
+}
