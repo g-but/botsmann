@@ -1,7 +1,7 @@
 'use client';
 
-import { Fragment } from 'react';
-import { Popover, Transition } from '@headlessui/react';
+import { Fragment, useRef } from 'react';
+import { Popover, Transition, Portal } from '@headlessui/react';
 import Link from 'next/link';
 import { menuItems } from '@/data/menuItems';
 
@@ -10,14 +10,28 @@ interface SiteMenuDropdownProps {
 }
 
 export function SiteMenuDropdown({ className = '' }: SiteMenuDropdownProps) {
+  const buttonRef = useRef<HTMLButtonElement>(null);
   // Filter out button items (like "Contact Us" which is styled as CTA)
   const navItems = menuItems.filter(item => !item.isButton);
 
+  // Get button position for portal positioning
+  const getDropdownStyle = () => {
+    if (!buttonRef.current) return {};
+    const rect = buttonRef.current.getBoundingClientRect();
+    return {
+      position: 'fixed' as const,
+      top: rect.bottom + 8,
+      right: window.innerWidth - rect.right,
+      zIndex: 9999,
+    };
+  };
+
   return (
-    <Popover className={`relative ${className}`}>
+    <Popover className={className}>
       {({ open, close }) => (
         <>
           <Popover.Button
+            ref={buttonRef}
             className={`inline-flex items-center justify-center rounded-lg p-2 transition-colors focus:outline-none ${
               open ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
             }`}
@@ -38,16 +52,17 @@ export function SiteMenuDropdown({ className = '' }: SiteMenuDropdownProps) {
             </svg>
           </Popover.Button>
 
-          <Transition
-            as={Fragment}
-            enter="transition ease-out duration-200"
-            enterFrom="opacity-0 translate-y-1"
-            enterTo="opacity-100 translate-y-0"
-            leave="transition ease-in duration-150"
-            leaveFrom="opacity-100 translate-y-0"
-            leaveTo="opacity-0 translate-y-1"
-          >
-            <Popover.Panel className="absolute right-0 top-full z-50 mt-2 w-56 transform">
+          <Portal>
+            <Transition
+              as={Fragment}
+              enter="transition ease-out duration-200"
+              enterFrom="opacity-0 translate-y-1"
+              enterTo="opacity-100 translate-y-0"
+              leave="transition ease-in duration-150"
+              leaveFrom="opacity-100 translate-y-0"
+              leaveTo="opacity-0 translate-y-1"
+            >
+              <Popover.Panel static style={getDropdownStyle()} className="w-56">
               <div className="overflow-hidden rounded-xl bg-white shadow-xl ring-1 ring-black ring-opacity-5 border border-gray-100">
                 {/* Header */}
                 <div className="border-b border-gray-100 bg-gradient-to-r from-blue-50 to-purple-50 px-4 py-3">
@@ -97,6 +112,7 @@ export function SiteMenuDropdown({ className = '' }: SiteMenuDropdownProps) {
               </div>
             </Popover.Panel>
           </Transition>
+          </Portal>
         </>
       )}
     </Popover>

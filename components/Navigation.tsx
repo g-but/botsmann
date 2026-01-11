@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Dialog, Transition } from '@headlessui/react';
 import { menuItems } from '@/data/menuItems';
-import MegaMenu from './MegaMenu';
+import { MegaMenu } from './MegaMenu';
 
-export default function Navigation() {
+export function Navigation() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
