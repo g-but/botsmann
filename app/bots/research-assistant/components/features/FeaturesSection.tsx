@@ -11,7 +11,7 @@ interface FeaturesSectionProps {
  * 
  * @module FeaturesSection
  */
-const FeaturesSection: React.FC<FeaturesSectionProps> = ({ features }) => {
+const FeaturesSection: React.FC<FeaturesSectionProps> = ({ features: _features }) => {
   const [expandedFeature, setExpandedFeature] = useState<number | null>(null);
 
   // Core features with detailed explanations

@@ -37,7 +37,7 @@ async function fileExistsOnGitHub(path: string): Promise<boolean> {
     });
     return response.ok;
   } catch (error) {
-    console.error(`Error checking if file exists: ${path}`, error);
+    console.info(`Error checking if file exists: ${path}`, error);
     return false;
   }
 }
@@ -48,7 +48,7 @@ function getCurrentDate(): string {
 }
 
 // Function to determine the post date based on our configuration and the post data
-function determinePostDate(data: any): string {
+function determinePostDate(data: { published?: boolean; date?: string }): string {
   const currentDate = getCurrentDate();
   
   // If post is published
@@ -56,7 +56,7 @@ function determinePostDate(data: any): string {
     // If we're forcing current date for all published posts OR if no date is provided
     if (CONFIG.FORCE_CURRENT_DATE_FOR_PUBLISHED || !data.date) {
       if (CONFIG.VERBOSE_LOGGING) {
-        console.log(`Using current date (${currentDate}) for published post.`, 
+        console.info(`Using current date (${currentDate}) for published post.`, 
                     data.date ? `Original date was: ${data.date}` : 'No original date was provided.');
       }
       return currentDate;
@@ -70,7 +70,7 @@ function determinePostDate(data: any): string {
 // Function to fetch all blog posts
 export async function fetchBlogPosts(): Promise<BlogPost[]> {
   try {
-    console.log('Fetching all blog posts');
+    console.info('Fetching all blog posts');
     
     // Fetch all directories in the posts folder
     const res = await fetch(
@@ -79,7 +79,7 @@ export async function fetchBlogPosts(): Promise<BlogPost[]> {
     );
     
     if (!res.ok) {
-      console.error('Failed to fetch posts', res.status, res.statusText);
+      console.info('Failed to fetch posts', res.status, res.statusText);
       return [];
     }
     
@@ -87,11 +87,11 @@ export async function fetchBlogPosts(): Promise<BlogPost[]> {
     
     // Process each directory as a potential blog post
     const posts = await Promise.all(
-      directories.map(async (dir: any) => {
+      directories.map(async (dir: { type: string; name: string }) => {
         if (dir.type !== 'dir') return null;
         
         const slug = dir.name;
-        console.log('Processing post directory:', slug);
+        console.info('Processing post directory:', slug);
         
         // Fetch the index.mdx file for this post
         const mdxRes = await fetch(
@@ -100,7 +100,7 @@ export async function fetchBlogPosts(): Promise<BlogPost[]> {
         );
         
         if (!mdxRes.ok) {
-          console.error(`Failed to fetch MDX for ${slug}:`, mdxRes.status, mdxRes.statusText);
+          console.info(`Failed to fetch MDX for ${slug}:`, mdxRes.status, mdxRes.statusText);
           return null;
         }
         
@@ -111,7 +111,7 @@ export async function fetchBlogPosts(): Promise<BlogPost[]> {
         
         // Skip posts that aren't published
         if (data.published !== true) {
-          console.log(`Skipping unpublished post: ${slug}`);
+          console.info(`Skipping unpublished post: ${slug}`);
           return null;
         }
         
@@ -130,7 +130,7 @@ export async function fetchBlogPosts(): Promise<BlogPost[]> {
           try {
             const imageExists = await fileExistsOnGitHub(`posts/${slug}/${imagePath}`);
             if (!imageExists) {
-              console.warn(`Featured image not found for ${slug}: ${featuredImage}`);
+              console.info(`Featured image not found for ${slug}: ${featuredImage}`);
               
               // Try alternative image formats
               const fileNameWithoutExt = imagePath.replace(/\.(jpg|jpeg|png|gif|webp|jfif)$/, '');
@@ -140,13 +140,13 @@ export async function fetchBlogPosts(): Promise<BlogPost[]> {
                 const altPath = `posts/${slug}/${fileNameWithoutExt}.${ext}`;
                 if (await fileExistsOnGitHub(altPath)) {
                   featuredImage = `${GITHUB_RAW_BASE}/${altPath}`;
-                  console.log(`Found alternative featured image for ${slug}: ${featuredImage}`);
+                  console.info(`Found alternative featured image for ${slug}: ${featuredImage}`);
                   break;
                 }
               }
             }
           } catch (error) {
-            console.error(`Error checking featured image for ${slug}:`, error);
+            console.info(`Error checking featured image for ${slug}:`, error);
             featuredImage = undefined;
           }
         }
@@ -169,7 +169,7 @@ export async function fetchBlogPosts(): Promise<BlogPost[]> {
       .filter((post): post is BlogPost => post !== null)
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   } catch (error) {
-    console.error('Failed to fetch posts:', error);
+    console.info('Failed to fetch posts:', error);
     return [];
   }
 }
@@ -177,10 +177,10 @@ export async function fetchBlogPosts(): Promise<BlogPost[]> {
 // Function to fetch a single blog post by slug
 export async function fetchBlogPostBySlug(slug: string): Promise<BlogPost | null> {
   try {
-    console.log('Fetching blog post for slug:', slug);
+    console.info('Fetching blog post for slug:', slug);
     
     if (!slug) {
-      console.error('Attempted to fetch blog post with empty slug');
+      console.info('Attempted to fetch blog post with empty slug');
       return null;
     }
     
@@ -191,7 +191,7 @@ export async function fetchBlogPostBySlug(slug: string): Promise<BlogPost | null
     );
     
     if (!mdxRes.ok) {
-      console.error(`Failed to fetch post for ${slug}:`, mdxRes.status, mdxRes.statusText);
+      console.info(`Failed to fetch post for ${slug}:`, mdxRes.status, mdxRes.statusText);
       return null;
     }
     
@@ -202,7 +202,7 @@ export async function fetchBlogPostBySlug(slug: string): Promise<BlogPost | null
     
     // Skip posts that aren't published
     if (data.published !== true) {
-      console.log(`Skipping unpublished post: ${slug}`);
+      console.info(`Skipping unpublished post: ${slug}`);
       return null;
     }
     
@@ -210,7 +210,7 @@ export async function fetchBlogPostBySlug(slug: string): Promise<BlogPost | null
     const postDate = determinePostDate(data);
     
     if (CONFIG.VERBOSE_LOGGING) {
-      console.log(`Post date for ${slug}:`, postDate, 
+      console.info(`Post date for ${slug}:`, postDate, 
                   data.date ? `Original date: ${data.date}` : 'No original date found');
     }
     
@@ -224,13 +224,13 @@ export async function fetchBlogPostBySlug(slug: string): Promise<BlogPost | null
       
       // Log the resolved featured image URL
       if (CONFIG.VERBOSE_LOGGING) {
-        console.log(`Resolved featured image for ${slug}:`, featuredImage);
+        console.info(`Resolved featured image for ${slug}:`, featuredImage);
       }
       
       // Verify the image exists
       const imageExists = await fileExistsOnGitHub(`posts/${slug}/${imagePath}`);
       if (!imageExists) {
-        console.warn(`Featured image not found: ${featuredImage}`);
+        console.info(`Featured image not found: ${featuredImage}`);
         
         // Try alternative formats
         const fileNameWithoutExt = imagePath.replace(/\.(jpg|jpeg|png|gif|webp|jfif)$/, '');
@@ -239,7 +239,7 @@ export async function fetchBlogPostBySlug(slug: string): Promise<BlogPost | null
           const altPath = `posts/${slug}/${fileNameWithoutExt}.${ext}`;
           if (await fileExistsOnGitHub(altPath)) {
             featuredImage = `${GITHUB_RAW_BASE}/${altPath}`;
-            console.log(`Found alternative featured image: ${featuredImage}`);
+            console.info(`Found alternative featured image: ${featuredImage}`);
             break;
           }
         }
@@ -258,7 +258,7 @@ export async function fetchBlogPostBySlug(slug: string): Promise<BlogPost | null
       featuredImage
     };
   } catch (error) {
-    console.error(`Failed to fetch post for ${slug}:`, error);
+    console.info(`Failed to fetch post for ${slug}:`, error);
     return null;
   }
 } 

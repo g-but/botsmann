@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 
 /**
@@ -12,33 +12,33 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Menu items organized by value proposition
-  const menuItems = [
+  const menuItems = useMemo(() => [
     { id: 'organize', label: 'Organize Research', icon: '📚', section: 'research-system' },
     { id: 'updates', label: 'Stay Updated', icon: '🔄', section: 'web-scraping' },
     { id: 'create', label: 'Create Content', icon: '✍️', section: 'draft-generation' },
     { id: 'engage', label: 'Stay Engaged', icon: '🔍', section: 'daily-questions' },
     { id: 'collaborate', label: 'Collaborate', icon: '👥', section: 'integration' },
     { id: 'roadmap', label: '2026 Launch', icon: '🚀', section: 'roadmap' }
-  ];
+  ], []);
 
   // Handle scroll events to show/hide navigation and highlight active section
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      
+
       // Show navigation after scrolling down 200px
       if (currentScrollY > 200) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
       }
-      
+
       // Determine active section
       if (currentScrollY > 100) {
         const sectionIds = menuItems.map(item => item.section);
         // Find which section is currently in view
         const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
-        
+
         for (let i = sections.length - 1; i >= 0; i--) {
           const section = sections[i];
           if (section && section.offsetTop <= currentScrollY + 300) {
@@ -50,13 +50,13 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
           }
         }
       }
-      
+
       setLastScrollY(currentScrollY);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll(); // Initial check
-    
+
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY, menuItems]);
 

@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { CaseIntake } from '../workspace/types';
-import { LEGAL_AREAS, JURISDICTIONS } from '../workspace/constants';
+import { LEGAL_AREAS } from '../workspace/constants';
 
 interface AICaseAnalysisProps {
   intake: CaseIntake;
@@ -35,27 +35,11 @@ const AICaseAnalysis: React.FC<AICaseAnalysisProps> = ({ intake, onContinue, onB
   const [progress, setProgress] = useState(0);
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
 
-  useEffect(() => {
-    // Simulate AI analysis with progress
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          performAnalysis();
-          return 100;
-        }
-        return prev + 10;
-      });
-    }, 200);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const performAnalysis = () => {
+  const performAnalysis = useCallback(() => {
     // Mock AI analysis based on intake data
     const legalAreaName = LEGAL_AREAS.find(a => a.id === intake.legalArea)?.name || intake.legalArea;
     const jurisdictionName = intake.jurisdiction.country === 'CH'
-      ? 'Zürich, Switzerland'
+      ? 'Zurich, Switzerland'
       : 'California, United States';
 
     const mockAnalysis: AnalysisResult = {
@@ -82,9 +66,26 @@ const AICaseAnalysis: React.FC<AICaseAnalysisProps> = ({ intake, onContinue, onB
       setAnalysis(mockAnalysis);
       setIsAnalyzing(false);
     }, 500);
-  };
+  }, [intake]);
 
-  const getLaws = (intake: CaseIntake): string[] => {
+  useEffect(() => {
+    // Simulate AI analysis with progress
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          performAnalysis();
+          return 100;
+        }
+        return prev + 10;
+      });
+    }, 200);
+
+    return () => clearInterval(interval);
+  }, [performAnalysis]);
+
+  const getLaws = (_intake: CaseIntake): string[] => {
+    const intake = _intake;
     // Focus on FEDERAL laws only - no local ordinances
     if (intake.jurisdiction.country === 'CH') {
       if (intake.legalArea === 'immigration') return ['Swiss Federal Act on Foreign Nationals (FNA)', 'Federal Ordinance on Admission (OASA)'];
@@ -154,7 +155,7 @@ const AICaseAnalysis: React.FC<AICaseAnalysisProps> = ({ intake, onContinue, onB
     return ['Identification documents', 'Relevant contracts', 'Supporting evidence', 'Financial records'];
   };
 
-  const getNextSteps = (intake: CaseIntake): string[] => {
+  const getNextSteps = (_intake: CaseIntake): string[] => {
     return [
       'Review and gather all required documentation',
       'Schedule consultation with matched lawyer',

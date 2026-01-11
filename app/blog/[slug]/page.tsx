@@ -14,7 +14,7 @@ export async function generateStaticParams() {
       slug: post.slug,
     }));
   } catch (error) {
-    console.error("Error generating static params:", error);
+    console.info("Error generating static params:", error);
     return [];
   }
 }
@@ -56,7 +56,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       }
     };
   } catch (error) {
-    console.error("Error generating metadata:", error);
+    console.info("Error generating metadata:", error);
     return {
       title: 'Error | Botsmann',
     };
@@ -64,18 +64,18 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default async function BlogPost({ params }: { params: { slug: string } }) {
-  console.log('Rendering blog post for slug:', params.slug);
+  console.info('Rendering blog post for slug:', params.slug);
   
   try {
     if (!params.slug) {
-      console.error('Missing slug parameter');
+      console.info('Missing slug parameter');
       notFound();
     }
     
     const post = await fetchBlogPostBySlug(params.slug);
     
     if (!post) {
-      console.error('Blog post not found for slug:', params.slug);
+      console.info('Blog post not found for slug:', params.slug);
       notFound();
     }
     
@@ -127,7 +127,7 @@ export default async function BlogPost({ params }: { params: { slug: string } })
       </article>
     );
   } catch (error) {
-    console.error('Error rendering blog post:', error);
+    console.info('Error rendering blog post:', error);
     throw error; // Re-throw to let Next.js error handling take over
   }
 } 

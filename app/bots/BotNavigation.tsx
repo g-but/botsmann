@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, Fragment } from 'react';
 import Link from 'next/link';
+import type { Route } from 'next';
 import { usePathname } from 'next/navigation';
 import { Dialog, Transition } from '@headlessui/react';
 
@@ -34,7 +35,7 @@ const BotNavigation: React.FC<BotNavigationProps> = ({
   chatLink,
   sections = true,
 }) => {
-  const pathname = usePathname();
+  const _pathname = usePathname();
   const [activeSection, setActiveSection] = useState('');
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -217,7 +218,7 @@ const BotNavigation: React.FC<BotNavigationProps> = ({
           {/* Call-to-action button */}
           {chatLink && (
             <Link
-              href={chatLink as any}
+              href={chatLink as Route}
               className={`px-4 py-2 ${colors.accent} text-white text-sm font-medium rounded-md transition-colors shadow-sm whitespace-nowrap ml-2`}
             >
               Open Chat
@@ -323,7 +324,7 @@ const BotNavigation: React.FC<BotNavigationProps> = ({
                             <>
                               <hr className="my-4 border-gray-200" />
                               <Link
-                                href={chatLink as any}
+                                href={chatLink as Route}
                                 className={`w-full flex items-center justify-center px-4 py-3 ${colors.accent} text-white text-base font-medium rounded-md transition-colors`}
                                 onClick={() => setIsMobileMenuOpen(false)}
                               >

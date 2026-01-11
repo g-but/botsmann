@@ -25,7 +25,7 @@ const DataRoomDemo: React.FC<DataRoomDemoProps> = ({ files, lawyerUsername, lawy
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [selectedFile, setSelectedFile] = useState<UploadedFile | null>(null);
-  const [lawyerOnline, setLawyerOnline] = useState(true);
+  const [lawyerOnline, _setLawyerOnline] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -145,7 +145,7 @@ const DataRoomDemo: React.FC<DataRoomDemoProps> = ({ files, lawyerUsername, lawy
           ].map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => setActiveTab(tab.id as 'chat' | 'files' | 'timeline')}
               className={`
                 flex-1 px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium transition-colors relative
                 ${activeTab === tab.id

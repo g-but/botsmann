@@ -11,7 +11,6 @@
  * @param {Function} props.getTryLink - Function that returns the URL to join the waitlist
  */
 import React from 'react';
-import Link from 'next/link';
 
 interface HeroSectionProps {
   title: string;
@@ -19,7 +18,7 @@ interface HeroSectionProps {
   getTryLink: () => string;
 }
 
-const HeroSection: React.FC<HeroSectionProps> = ({ title, overview, getTryLink }) => {
+const HeroSection: React.FC<HeroSectionProps> = ({ getTryLink }) => {
   return (
     <section className="mb-16 pt-12">
       <div className="grid md:grid-cols-2 gap-8 items-center">

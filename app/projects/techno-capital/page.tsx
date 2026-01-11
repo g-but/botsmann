@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { NextSection } from '@/components/navigation/NextSection';
 
 export default function TechnoCapital() {

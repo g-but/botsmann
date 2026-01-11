@@ -1,7 +1,5 @@
 import React from 'react';
 import Link from 'next/link';
-import type { Route } from 'next';
-import { Bot } from '@/data/bots';
 import bots from '@/data/bots';
 
 // Bot display data with detailed explanations

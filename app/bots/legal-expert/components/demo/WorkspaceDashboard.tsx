@@ -4,6 +4,23 @@ import React, { useState, useEffect } from 'react';
 import { UploadedFile, LawyerProfile } from './types';
 import { FILE_CATEGORIES } from './constants';
 
+interface ChatMessage {
+  id: string;
+  sender: string;
+  senderName: string;
+  avatar: string;
+  content: string;
+  timestamp: Date;
+}
+
+interface CategoryWithFiles {
+  id: string;
+  title: string;
+  icon: string;
+  files: UploadedFile[];
+  count: number;
+}
+
 interface WorkspaceDashboardProps {
   files: UploadedFile[];
   lawyer: LawyerProfile;
@@ -15,6 +32,40 @@ interface WorkspaceDashboardProps {
 }
 
 type ViewMode = 'overview' | 'files' | 'chat' | 'timeline' | 'settings';
+
+interface OverviewViewProps {
+  files: UploadedFile[];
+  categoriesWithFiles: CategoryWithFiles[];
+  caseDescription: string;
+  setViewMode: (mode: ViewMode) => void;
+}
+
+interface FilesViewProps {
+  files: UploadedFile[];
+  categoriesWithFiles: CategoryWithFiles[];
+  selectedFile: string | null;
+  setSelectedFile: (id: string | null) => void;
+  onFileDelete: (fileId: string) => void;
+  onFileVisibilityChange: (fileId: string, visibility: string) => void;
+}
+
+interface ChatViewProps {
+  messages: ChatMessage[];
+  inputMessage: string;
+  setInputMessage: (msg: string) => void;
+  handleSendMessage: () => void;
+  isTyping: boolean;
+  lawyer: LawyerProfile;
+}
+
+interface TimelineViewProps {
+  files: UploadedFile[];
+  messages: ChatMessage[];
+}
+
+interface SettingsViewProps {
+  lawyer: LawyerProfile;
+}
 
 const WorkspaceDashboard: React.FC<WorkspaceDashboardProps> = ({
   files,
@@ -29,7 +80,7 @@ const WorkspaceDashboard: React.FC<WorkspaceDashboardProps> = ({
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [showAnimation, setShowAnimation] = useState(false);
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
 
@@ -293,7 +344,7 @@ const WorkspaceDashboard: React.FC<WorkspaceDashboardProps> = ({
 };
 
 // Overview View Component
-const OverviewView: React.FC<any> = ({ files, categoriesWithFiles, caseDescription, setViewMode }) => (
+const OverviewView: React.FC<OverviewViewProps> = ({ files, categoriesWithFiles, caseDescription, setViewMode }) => (
   <div className="space-y-6 animate-fadeIn">
     {/* Welcome banner */}
     <div className="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl p-6 text-white">
@@ -309,12 +360,12 @@ const OverviewView: React.FC<any> = ({ files, categoriesWithFiles, caseDescripti
 
     {/* Quick actions */}
     <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {[
-        { icon: '📁', title: 'Files', count: files.length, color: 'from-blue-500 to-cyan-500', view: 'files' },
-        { icon: '💬', title: 'Chat', count: '24/7', color: 'from-purple-500 to-pink-500', view: 'chat' },
-        { icon: '📅', title: 'Timeline', count: 'Live', color: 'from-green-500 to-emerald-500', view: 'timeline' },
-        { icon: '⚙️', title: 'Settings', count: 'Manage', color: 'from-orange-500 to-red-500', view: 'settings' }
-      ].map((action) => (
+      {([
+        { icon: '📁', title: 'Files', count: files.length, color: 'from-blue-500 to-cyan-500', view: 'files' as const },
+        { icon: '💬', title: 'Chat', count: '24/7', color: 'from-purple-500 to-pink-500', view: 'chat' as const },
+        { icon: '📅', title: 'Timeline', count: 'Live', color: 'from-green-500 to-emerald-500', view: 'timeline' as const },
+        { icon: '⚙️', title: 'Settings', count: 'Manage', color: 'from-orange-500 to-red-500', view: 'settings' as const }
+      ] as const).map((action) => (
         <button
           key={action.title}
           onClick={() => setViewMode(action.view)}
@@ -348,8 +399,8 @@ const OverviewView: React.FC<any> = ({ files, categoriesWithFiles, caseDescripti
 );
 
 // Files View Component
-const FilesView: React.FC<any> = ({
-  files,
+const FilesView: React.FC<FilesViewProps> = ({
+  files: _files,
   categoriesWithFiles,
   selectedFile,
   setSelectedFile,
@@ -428,7 +479,7 @@ const FilesView: React.FC<any> = ({
 );
 
 // Chat View Component
-const ChatView: React.FC<any> = ({ messages, inputMessage, setInputMessage, handleSendMessage, isTyping, lawyer }) => (
+const ChatView: React.FC<ChatViewProps> = ({ messages, inputMessage, setInputMessage, handleSendMessage, isTyping, lawyer }) => (
   <div className="h-full flex flex-col bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-slate-700">
     <div className="px-6 py-4 border-b border-slate-700">
       <h2 className="text-xl font-bold text-white">💬 Live Chat</h2>
@@ -488,7 +539,7 @@ const ChatView: React.FC<any> = ({ messages, inputMessage, setInputMessage, hand
 );
 
 // Timeline View Component
-const TimelineView: React.FC<any> = ({ files, messages }) => (
+const TimelineView: React.FC<TimelineViewProps> = ({ files, messages }) => (
   <div className="space-y-4 animate-fadeIn">
     <h2 className="text-2xl font-bold text-white">📅 Activity Timeline</h2>
     <div className="space-y-3">
@@ -512,7 +563,7 @@ const TimelineView: React.FC<any> = ({ files, messages }) => (
 );
 
 // Settings View Component
-const SettingsView: React.FC<any> = ({ lawyer }) => (
+const SettingsView: React.FC<SettingsViewProps> = ({ lawyer }) => (
   <div className="space-y-6 animate-fadeIn">
     <h2 className="text-2xl font-bold text-white">⚙️ Workspace Settings</h2>
 

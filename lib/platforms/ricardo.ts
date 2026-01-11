@@ -1,6 +1,6 @@
 import { ProductResult } from '@/types/products';
 
-export async function searchRicardo(category: string, attributes: Record<string, any>): Promise<ProductResult[]> {
+export async function searchRicardo(_category: string, _attributes: Record<string, unknown>): Promise<ProductResult[]> {
   if (!process.env.RICARDO_API_KEY) {
     throw new Error('Ricardo API key is not configured');
   }
@@ -31,7 +31,7 @@ export async function searchRicardo(category: string, attributes: Record<string,
       }
     ];
   } catch (error) {
-    console.error('Ricardo search error:', error);
+    console.info('Ricardo search error:', error);
     return [];
   }
 }

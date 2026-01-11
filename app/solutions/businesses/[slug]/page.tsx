@@ -10,7 +10,7 @@ export default function SolutionPage() {
   const category = "businesses";  // Hard-coded since this file is under businesses
 
   const solutionData: SolutionData | undefined = solutionsData[category]?.find(
-    (s: any) => s.slug === slug
+    (s: SolutionData) => s.slug === slug
   );
 
   if (!solutionData) {

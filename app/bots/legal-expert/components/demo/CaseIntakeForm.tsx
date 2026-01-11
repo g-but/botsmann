@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CaseIntake, Jurisdiction } from '../workspace/types';
+import { CaseIntake } from '../workspace/types';
 import { LEGAL_AREAS, JURISDICTIONS } from '../workspace/constants';
 
 interface CaseIntakeFormProps {

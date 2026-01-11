@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import type { Route } from 'next';
 import { usePathname } from 'next/navigation';
 
 /**
@@ -60,7 +61,7 @@ const DetailedComponentsNav: React.FC = () => {
   ];
 
   // Return to main governance page link
-  const backToMainLink = '/projects/governance';
+  const _backToMainLink = '/projects/governance';
   
   return (
     <div className="bg-white border-b border-gray-200 py-4 mb-8">
@@ -82,9 +83,9 @@ const DetailedComponentsNav: React.FC = () => {
             const isActive = pathname === component.path;
             
             return (
-              <Link 
+              <Link
                 key={component.id}
-                href={component.path as any}
+                href={component.path as Route}
                 className={`
                   flex items-center p-4 rounded-lg border transition-colors
                   ${isActive 

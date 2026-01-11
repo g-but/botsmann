@@ -10,8 +10,8 @@ export default function ClientMDXContent({ content, slug }: { content: string; s
   // Create a complete components map including the slug context for images
   const componentsWithContext = {
     ...MDXComponents,
-    img: (imgProps: any) => {
-      console.log('Rendering client img with props:', { src: imgProps.src, slug });
+    img: (imgProps: React.ImgHTMLAttributes<HTMLImageElement>) => {
+      console.info('Rendering client img with props:', { src: imgProps.src, slug });
       return MDXComponents.img({ 
         ...imgProps, 
         slug 

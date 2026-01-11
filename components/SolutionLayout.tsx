@@ -1,15 +1,17 @@
 import React from 'react';
 
 export interface SolutionData {
+  slug: string;
   title: string;
   overview: string;
   features: string[];
   details: string;
+  tryLink?: string;
   customSections?: {
     caseStudies?: string[];
     faq?: string[];
     testimonials?: string[];
-    [key: string]: any;
+    [key: string]: string[] | undefined;
   };
 }
 

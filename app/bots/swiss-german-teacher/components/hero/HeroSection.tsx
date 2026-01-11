@@ -6,7 +6,7 @@ interface HeroSectionProps {
   getTryLink: () => string;
 }
 
-const HeroSection = ({ getTryLink }: HeroSectionProps) => {
+const HeroSection = ({ getTryLink: _getTryLink }: HeroSectionProps) => {
   return (
     <section className="relative mb-16 overflow-hidden">
       {/* Hero Background Pattern */}
