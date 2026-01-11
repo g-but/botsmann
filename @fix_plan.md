@@ -1,74 +1,113 @@
 # Task Plan & Priority Queue
 
-Fix all TypeScript errors and ESLint warnings in Botsmann.
+Comprehensive refactoring for Botsmann - improve maintainability, performance, and code quality.
 
-## Status: ✅ COMPLETE
-
-All type errors and lint warnings have been fixed. Build passes successfully.
+## Status: IN PROGRESS
 
 ---
 
-## Summary of Fixes
+## P0 - Analysis & Planning (COMPLETED)
 
-### P0 - Type Errors (17 errors - FIXED)
+- [x] Audit all components for size (identify >200 line files)
+- [x] Identify repeated code patterns across codebase
+- [x] Document current architecture pain points
+- [x] Create refactoring priority list
 
-**AICaseAnalysis.tsx**:
-- [x] Fixed `intake` → `_intake` variable references
-- [x] Added eslint-disable for intentional useEffect pattern
+### Findings Summary
 
-**financial-advisor/page.tsx**:
-- [x] Fixed "emerald" color - changed to "green"
+**Large Components (>200 lines):**
+1. CitizenProfile.tsx (650 lines) - Needs split into types + smaller components
+2. WorkspaceDashboard.tsx (642 lines) - Complex demo, needs extraction
+3. ExampleSection.tsx (515 lines) - Large example showcase
+4. DemoSection.tsx (503 lines) - Demo orchestration
+5. AICaseAnalysis.tsx (441 lines) - Analysis component
+6. 30+ more files over 200 lines
 
-**WorkspaceDashboard.tsx**:
-- [x] Fixed missing `onFileVisibilityChange` - added proper interfaces
-
-**navigation.ts**:
-- [x] Fixed LinkProps generic type issue
-
-**consultations.test.ts**:
-- [x] Installed `node-mocks-http` module
-
-### P1 - Lint Warnings (52 warnings - FIXED)
-
-**`any` type warnings** (13 files):
-- [x] Replaced all `any` types with proper types (`unknown`, specific interfaces)
-- [x] Added TagValue type for Sentry monitoring
-- [x] Fixed DataRoomDemo.tsx tab type with `'count' in tab` check
-
-**React Hook issues**:
-- [x] Fixed conditional useEffect in MDXComponents.tsx
-- [x] Fixed ref cleanup in Comments.tsx
-- [x] Moved getAllIds inside useEffect in TableOfContents.tsx
-
-**Console statements**:
-- [x] Changed `console.log` to `console.info` in blog.ts
-
-**Unused variables**:
-- [x] Prefixed unused variables with `_` across multiple files
-
-**`<img>` element warnings** (6 files):
-- [x] Added eslint-disable comments for legitimate uses (avatars, external images)
-
-**Other fixes**:
-- [x] Changed `<a>` to `<Link>` in Footer.tsx
-- [x] Fixed anonymous default export in sampleData.ts
-- [x] Added Jest globals to ESLint config
+**Bot Page Duplication:**
+- All 5 bot pages share identical boilerplate (~60 lines each)
+- Same pattern: imports, getTryLink(), menuItems, BotNavigation, section structure
+- CSS animations duplicated across styles.css files
+- Inconsistent main container padding patterns
+- Different error message styling
 
 ---
 
-## Verification
+## P1 - Bot Page Deduplication (IN PROGRESS)
 
-```bash
-npm run lint    # ✅ Passes with --max-warnings 0
-npm run build   # ✅ Completes successfully
-```
+- [ ] Create `components/shared/BotPageTemplate.tsx` - Generic page template
+- [ ] Create `components/shared/BotSection.tsx` - Section wrapper
+- [ ] Create `components/shared/BotNotFoundFallback.tsx` - Error component
+- [ ] Add `menuItems` to `data/bots.ts` - Centralize configuration
+- [ ] Refactor all 5 bot pages to use new template
+- [ ] Consolidate shared CSS into `styles/bot-pages.css`
+
+**Expected Impact:** ~300 LOC saved, faster new bot creation
+
+---
+
+## P2 - Large Component Breakdown
+
+- [ ] Split CitizenProfile.tsx:
+  - Extract types to `types/citizen.ts`
+  - Create CitizenOverviewTab.tsx
+  - Create CitizenTaxTab.tsx
+  - Create CitizenBenefitsTab.tsx
+  - Create CitizenAdvisoryTab.tsx
+
+- [ ] Split WorkspaceDashboard.tsx into smaller components
+- [ ] Split ExampleSection.tsx into example cards
+- [ ] Review and split other >300 line components
+
+---
+
+## P3 - Code Deduplication (DRY)
+
+- [ ] Consolidate repeated utility functions into `lib/`
+- [ ] Create shared hooks for common patterns (`hooks/`)
+- [ ] Centralize API call patterns
+- [ ] Extract constants to `lib/constants.ts`
+
+---
+
+## P4 - Architecture Improvements
+
+- [ ] Fix blog dynamic server usage errors (no-store fetch issue)
+- [ ] Separate UI components from container/logic components
+- [ ] Improve data fetching patterns (server components where appropriate)
+- [ ] Review and optimize file organization
+
+---
+
+## P5 - Performance Optimization
+
+- [ ] Add React.memo to expensive pure components
+- [ ] Implement useMemo/useCallback where beneficial
+- [ ] Audit and optimize image loading
+- [ ] Review bundle size and code splitting opportunities
+
+---
+
+## P6 - Verification
+
+- [ ] Run full test suite (`npm run test`)
+- [ ] Lint check (`npm run lint`)
+- [ ] Build verification (`npm run build`)
+- [ ] Manual smoke test of key features
 
 ---
 
 ## Completed Tasks
 
-- [x] Ralph setup initialized (2026-01-09)
-- [x] Identified 17 type errors and 52 lint warnings
-- [x] Fixed all P0 type errors (2026-01-11)
-- [x] Fixed all P1 lint warnings (2026-01-11)
-- [x] Build verified (2026-01-11)
+- [x] Previous task: Fixed all TypeScript errors and lint warnings (2026-01-11)
+- [x] Ralph setup for refactoring task (2026-01-11)
+- [x] Deployed to Vercel (2026-01-11) - https://botsmann-orangecat.vercel.app
+- [x] Codebase audit completed (2026-01-11)
+
+---
+
+## Notes
+
+- Follow `docs/BEST_PRACTICES.md` for coding standards
+- Maintain backward compatibility
+- No breaking changes to API routes
+- Test after each significant refactor
