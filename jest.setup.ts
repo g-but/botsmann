@@ -2,8 +2,10 @@ import '@testing-library/jest-dom';
 import { TextEncoder, TextDecoder } from 'util';
 
 // Polyfill TextEncoder/TextDecoder for MongoDB/Mongoose
+// @ts-expect-error - Node.js TextEncoder is compatible with global TextEncoder
 global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder as typeof global.TextDecoder;
+// @ts-expect-error - Node.js TextDecoder is compatible with global TextDecoder
+global.TextDecoder = TextDecoder;
 
 // Mock fetch globally
 const mockFetch = jest.fn().mockImplementation(
