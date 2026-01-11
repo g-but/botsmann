@@ -5,6 +5,8 @@ import Link from 'next/link';
 import type { Route } from 'next';
 import { usePathname } from 'next/navigation';
 import { Dialog, Transition } from '@headlessui/react';
+import { BotSwitcher, SiteMenuDropdown } from '@/components/navigation';
+import { menuItems } from '@/data/menuItems';
 
 interface MenuItem {
   id: string;
@@ -14,6 +16,7 @@ interface MenuItem {
 }
 
 interface BotNavigationProps {
+  botSlug: string;
   botTitle: string;
   botEmoji: string;
   botDescription?: string;
@@ -27,11 +30,12 @@ interface BotNavigationProps {
  * Reusable navigation component for bot detail pages
  */
 const BotNavigation: React.FC<BotNavigationProps> = ({
+  botSlug,
   botTitle,
   botEmoji,
-  botDescription = '',
+  botDescription: _botDescription = '',
   accentColor = 'blue',
-  menuItems,
+  menuItems: sectionMenuItems,
   chatLink,
   sections = true,
 }) => {
@@ -40,22 +44,25 @@ const BotNavigation: React.FC<BotNavigationProps> = ({
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Filter site nav items (exclude button items like "Contact Us")
+  const siteNavItems = menuItems.filter(item => !item.isButton);
+
   // Handle scroll events to highlight active section
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      
+
       // Determine active section when sections are enabled
       if (sections) {
-        const sectionIds = menuItems
+        const sectionIds = sectionMenuItems
           .filter(item => item.section)
           .map(item => item.section as string);
-          
+
         // Find which section is currently in view
         const sectionElements = sectionIds
           .map(id => document.getElementById(id))
           .filter(Boolean);
-        
+
         for (let i = sectionElements.length - 1; i >= 0; i--) {
           const section = sectionElements[i];
           if (section && section.getBoundingClientRect().top <= 300) {
@@ -64,39 +71,30 @@ const BotNavigation: React.FC<BotNavigationProps> = ({
           }
         }
       }
-      
+
       setLastScrollY(currentScrollY);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll(); // Initial check
-    
+
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY, menuItems, sections]);
+  }, [lastScrollY, sectionMenuItems, sections]);
 
   // Handle smooth scrolling when clicking a menu item
   const scrollToSection = (sectionId: string | undefined) => {
     if (!sectionId) return;
-    
+
     const element = document.getElementById(sectionId);
     if (element) {
       window.scrollTo({
-        top: element.offsetTop - 100, 
+        top: element.offsetTop - 100,
         behavior: 'smooth',
       });
       setActiveSection(sectionId);
       // Close mobile menu after clicking
       setIsMobileMenuOpen(false);
     }
-  };
-
-  // Scroll to top function for logo click
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-    setIsMobileMenuOpen(false);
   };
 
   const colorClasses = {
@@ -145,61 +143,42 @@ const BotNavigation: React.FC<BotNavigationProps> = ({
   // Get the appropriate color classes or default to blue
   const colors = colorClasses[accentColor as keyof typeof colorClasses] || colorClasses.blue;
 
-  const navClasses = lastScrollY > 100 
-    ? 'bg-white shadow-md border-b border-gray-200' 
+  const navClasses = lastScrollY > 100
+    ? 'bg-white shadow-md border-b border-gray-200'
     : 'bg-white border-b border-gray-200';
 
   return (
-    <nav 
+    <nav
       className={`transition-all duration-300 w-full py-3 fixed top-0 left-0 right-0 z-50 ${navClasses}`}
     >
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6">
         <div className="flex justify-between items-center">
-          {/* Clickable logo that scrolls to top */}
-          <button 
-            onClick={scrollToTop} 
-            className="flex items-center focus:outline-none hover:opacity-90 transition-opacity"
-            aria-label="Back to top"
-          >
-            <div className={`w-10 h-10 ${colors.logo} rounded-full flex items-center justify-center mr-3`}>
-              <span className="text-xl">{botEmoji}</span>
-            </div>
-            <h2 className={`text-xl font-bold ${colors.title}`}>{botTitle}</h2>
-            {botDescription && (
-              <span className="text-sm text-gray-500 ml-2 hidden sm:inline-block">{botDescription}</span>
-            )}
-          </button>
-          
-          {/* Mobile menu button */}
-          <div className="flex items-center gap-2">
+          {/* Left side: Botsmann logo + divider + Bot Switcher */}
+          <div className="flex items-center">
+            {/* Botsmann 'B' logo - links to home */}
             <Link
-              href="/bots" 
-              className="text-sm text-gray-500 hidden md:inline-flex items-center hover:text-gray-700 mr-2"
+              href="/"
+              className="flex items-center justify-center w-9 h-9 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-sm rounded-lg hover:opacity-90 transition-opacity"
+              aria-label="Go to Botsmann home"
             >
-              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
-              </svg>
-              All Bots
+              B
             </Link>
-            
-            <button 
-              className="md:hidden p-2 rounded-md text-gray-600 hover:text-gray-800 hover:bg-gray-100 focus:outline-none"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
-                {isMobileMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
-            </button>
+
+            {/* Vertical divider */}
+            <div className="h-6 w-px bg-gray-300 mx-3" />
+
+            {/* Bot Switcher dropdown */}
+            <BotSwitcher
+              currentBotSlug={botSlug}
+              currentBotTitle={botTitle}
+              currentBotEmoji={botEmoji}
+              accentColor={accentColor}
+            />
           </div>
-          
-          {/* Desktop navigation */}
+
+          {/* Center: Desktop section navigation */}
           <div className="hidden md:flex md:space-x-1 items-center overflow-x-auto no-scrollbar">
-            {menuItems.map(item => (
+            {sectionMenuItems.map(item => (
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.section)}
@@ -214,18 +193,39 @@ const BotNavigation: React.FC<BotNavigationProps> = ({
               </button>
             ))}
           </div>
-          
-          {/* Call-to-action button */}
-          {chatLink && (
-            <Link
-              href={chatLink as Route}
-              className={`px-4 py-2 ${colors.accent} text-white text-sm font-medium rounded-md transition-colors shadow-sm whitespace-nowrap ml-2`}
+
+          {/* Right side: Site menu + Chat button */}
+          <div className="flex items-center gap-2">
+            {/* Mobile menu button */}
+            <button
+              className="md:hidden p-2 rounded-md text-gray-600 hover:text-gray-800 hover:bg-gray-100 focus:outline-none"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
             >
-              Open Chat
-            </Link>
-          )}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
+                {isMobileMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+
+            {/* Desktop: Site menu dropdown */}
+            <SiteMenuDropdown className="hidden md:block" />
+
+            {/* Call-to-action button */}
+            {chatLink && (
+              <Link
+                href={chatLink as Route}
+                className={`px-4 py-2 ${colors.accent} text-white text-sm font-medium rounded-md transition-colors shadow-sm whitespace-nowrap`}
+              >
+                Open Chat
+              </Link>
+            )}
+          </div>
         </div>
-        
+
       </div>
 
       {/* Mobile menu slide-in overlay */}
@@ -258,14 +258,19 @@ const BotNavigation: React.FC<BotNavigationProps> = ({
                 >
                   <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
                     <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
-                      {/* Header */}
-                      <div className="flex items-center justify-between px-4 py-6 border-b border-gray-200">
-                        <Dialog.Title className="text-lg font-semibold text-gray-900">
-                          Navigation
-                        </Dialog.Title>
+                      {/* Header with Botsmann branding */}
+                      <div className="flex items-center justify-between px-4 py-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50">
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center justify-center w-9 h-9 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-sm rounded-lg">
+                            B
+                          </div>
+                          <Dialog.Title className="text-lg font-semibold text-gray-900">
+                            Botsmann
+                          </Dialog.Title>
+                        </div>
                         <button
                           type="button"
-                          className="rounded-md p-2 text-gray-400 hover:bg-gray-100"
+                          className="rounded-md p-2 text-gray-400 hover:bg-white/50"
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
                           <span className="sr-only">Close menu</span>
@@ -297,15 +302,35 @@ const BotNavigation: React.FC<BotNavigationProps> = ({
                             onClick={() => setIsMobileMenuOpen(false)}
                           >
                             <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>
                             All Bots
                           </Link>
 
                           <hr className="my-4 border-gray-200" />
 
-                          {/* Section links */}
-                          {menuItems.map(item => (
+                          {/* Site Navigation */}
+                          <p className="px-3 text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
+                            Botsmann
+                          </p>
+                          {siteNavItems.map(item => (
+                            <Link
+                              key={item.label}
+                              href={item.path}
+                              className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100"
+                              onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                              <span>{item.label}</span>
+                            </Link>
+                          ))}
+
+                          <hr className="my-4 border-gray-200" />
+
+                          {/* Bot Section links */}
+                          <p className="px-3 text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
+                            {botTitle} Sections
+                          </p>
+                          {sectionMenuItems.map(item => (
                             <button
                               key={item.id}
                               onClick={() => scrollToSection(item.section)}
@@ -346,4 +371,4 @@ const BotNavigation: React.FC<BotNavigationProps> = ({
   );
 };
 
-export default BotNavigation; 
+export default BotNavigation;

@@ -49,6 +49,7 @@ export default function SwissGermanTeacher() {
   return (
     <div className="min-h-screen bg-white">
       <BotNavigation
+        botSlug={bot.slug}
         botTitle={nav.navTitle}
         botEmoji={nav.emoji}
         botDescription={nav.navDescription}
