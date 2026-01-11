@@ -1,19 +1,13 @@
 'use client';
 
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import Link from 'next/link';
 import type { Route } from 'next';
-import { usePathname } from 'next/navigation';
 import { Dialog, Transition } from '@headlessui/react';
 import { BotSwitcher, SiteMenuDropdown } from '@/components/navigation';
 import { menuItems } from '@/data/menuItems';
-
-interface MenuItem {
-  id: string;
-  label: string;
-  icon?: string;
-  section?: string;
-}
+import { useScrollNavigation, getNavColors } from '@/lib/hooks';
+import type { BotMenuItem } from '@/types/bot';
 
 interface BotNavigationProps {
   botSlug: string;
@@ -21,15 +15,16 @@ interface BotNavigationProps {
   botEmoji: string;
   botDescription?: string;
   accentColor?: string;
-  menuItems: MenuItem[];
+  menuItems: BotMenuItem[];
   chatLink?: string;
   sections?: boolean;
 }
 
 /**
  * Reusable navigation component for bot detail pages
+ * Uses shared scroll navigation hook and centralized color config
  */
-const BotNavigation: React.FC<BotNavigationProps> = ({
+export const BotNavigation: React.FC<BotNavigationProps> = ({
   botSlug,
   botTitle,
   botEmoji,
@@ -39,111 +34,28 @@ const BotNavigation: React.FC<BotNavigationProps> = ({
   chatLink,
   sections = true,
 }) => {
-  const _pathname = usePathname();
-  const [activeSection, setActiveSection] = useState('');
-  const [lastScrollY, setLastScrollY] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Use shared scroll navigation hook
+  const { activeSection, isScrolled, scrollToSection } = useScrollNavigation({
+    menuItems: sectionMenuItems,
+    scrollOffset: 300,
+    enabled: sections,
+  });
 
   // Filter site nav items (exclude button items like "Contact Us")
   const siteNavItems = menuItems.filter(item => !item.isButton);
 
-  // Handle scroll events to highlight active section
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      // Determine active section when sections are enabled
-      if (sections) {
-        const sectionIds = sectionMenuItems
-          .filter(item => item.section)
-          .map(item => item.section as string);
-
-        // Find which section is currently in view
-        const sectionElements = sectionIds
-          .map(id => document.getElementById(id))
-          .filter(Boolean);
-
-        for (let i = sectionElements.length - 1; i >= 0; i--) {
-          const section = sectionElements[i];
-          if (section && section.getBoundingClientRect().top <= 300) {
-            setActiveSection(section.id);
-            break;
-          }
-        }
-      }
-
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Initial check
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY, sectionMenuItems, sections]);
-
-  // Handle smooth scrolling when clicking a menu item
-  const scrollToSection = (sectionId: string | undefined) => {
-    if (!sectionId) return;
-
-    const element = document.getElementById(sectionId);
-    if (element) {
-      window.scrollTo({
-        top: element.offsetTop - 100,
-        behavior: 'smooth',
-      });
-      setActiveSection(sectionId);
-      // Close mobile menu after clicking
-      setIsMobileMenuOpen(false);
-    }
+  // Handle scroll to section with mobile menu close
+  const handleScrollToSection = (sectionId: string | undefined) => {
+    scrollToSection(sectionId);
+    setIsMobileMenuOpen(false);
   };
 
-  const colorClasses = {
-    blue: {
-      logo: 'bg-blue-100',
-      title: 'text-blue-900',
-      active: 'text-blue-700 bg-blue-50',
-      hover: 'hover:text-blue-700 hover:bg-blue-50',
-      accent: 'bg-blue-600 hover:bg-blue-700',
-      border: 'border-blue-300',
-    },
-    green: {
-      logo: 'bg-green-100',
-      title: 'text-green-900',
-      active: 'text-green-700 bg-green-50',
-      hover: 'hover:text-green-700 hover:bg-green-50',
-      accent: 'bg-green-600 hover:bg-green-700',
-      border: 'border-green-300',
-    },
-    indigo: {
-      logo: 'bg-indigo-100',
-      title: 'text-indigo-900',
-      active: 'text-indigo-700 bg-indigo-50',
-      hover: 'hover:text-indigo-700 hover:bg-indigo-50',
-      accent: 'bg-indigo-600 hover:bg-indigo-700',
-      border: 'border-indigo-300',
-    },
-    red: {
-      logo: 'bg-red-100',
-      title: 'text-red-900',
-      active: 'text-red-700 bg-red-50',
-      hover: 'hover:text-red-700 hover:bg-red-50',
-      accent: 'bg-red-600 hover:bg-red-700',
-      border: 'border-red-300',
-    },
-    amber: {
-      logo: 'bg-amber-100',
-      title: 'text-amber-900',
-      active: 'text-amber-700 bg-amber-50',
-      hover: 'hover:text-amber-700 hover:bg-amber-50',
-      accent: 'bg-amber-600 hover:bg-amber-700',
-      border: 'border-amber-300',
-    },
-  };
+  // Get color classes from centralized config
+  const colors = getNavColors(accentColor);
 
-  // Get the appropriate color classes or default to blue
-  const colors = colorClasses[accentColor as keyof typeof colorClasses] || colorClasses.blue;
-
-  const navClasses = lastScrollY > 100
+  const navClasses = isScrolled
     ? 'bg-white shadow-md border-b border-gray-200'
     : 'bg-white border-b border-gray-200';
 
@@ -152,9 +64,9 @@ const BotNavigation: React.FC<BotNavigationProps> = ({
       className={`transition-all duration-300 w-full py-3 fixed top-0 left-0 right-0 z-50 ${navClasses}`}
     >
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center h-12">
           {/* Left side: Botsmann logo + divider + Bot Switcher */}
-          <div className="flex items-center">
+          <div className="flex items-center h-full">
             {/* Botsmann 'B' logo - links to home */}
             <Link
               href="/"
@@ -181,7 +93,7 @@ const BotNavigation: React.FC<BotNavigationProps> = ({
             {sectionMenuItems.map(item => (
               <button
                 key={item.id}
-                onClick={() => scrollToSection(item.section)}
+                onClick={() => handleScrollToSection(item.section)}
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap flex items-center ${
                   activeSection === item.section
                     ? colors.active
@@ -333,7 +245,7 @@ const BotNavigation: React.FC<BotNavigationProps> = ({
                           {sectionMenuItems.map(item => (
                             <button
                               key={item.id}
-                              onClick={() => scrollToSection(item.section)}
+                              onClick={() => handleScrollToSection(item.section)}
                               className={`w-full text-left flex items-center px-3 py-2 rounded-md text-base font-medium transition-colors ${
                                 activeSection === item.section
                                   ? colors.active
@@ -371,4 +283,6 @@ const BotNavigation: React.FC<BotNavigationProps> = ({
   );
 };
 
+// Named export for consistency with best practices
+// Default export kept for backwards compatibility with existing imports
 export default BotNavigation;

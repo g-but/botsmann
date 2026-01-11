@@ -64,6 +64,14 @@ export const menuItems: MenuItem[] = [
     ]
   },
   {
+    label: "Knowledge",
+    path: "/knowledge",
+    children: [
+      { label: "Guides", path: "/knowledge#guides", description: "Step-by-step tutorials for building AI bots" },
+      { label: "FAQ", path: "/knowledge#faq", description: "Answers to common questions" }
+    ]
+  },
+  {
     label: "Blog",
     path: "/blog"
   },

@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaGithub, FaTwitter } from 'react-icons/fa';
 
-export default function Footer() {
+export function Footer() {
   return (
     <footer className="mt-auto border-t border-gray-200 bg-white text-sm">
       <div className="mx-auto max-w-screen-xl px-6 py-10 grid gap-8 sm:grid-cols-3">

@@ -10,7 +10,7 @@ interface MegaMenuProps {
   isActive?: boolean;
 }
 
-export default function MegaMenu({ item, isActive }: MegaMenuProps) {
+export function MegaMenu({ item, isActive }: MegaMenuProps) {
   if (!item.children) return null;
 
   return (
