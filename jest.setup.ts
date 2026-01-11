@@ -1,4 +1,9 @@
 import '@testing-library/jest-dom';
+import { TextEncoder, TextDecoder } from 'util';
+
+// Polyfill TextEncoder/TextDecoder for MongoDB/Mongoose
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder as typeof global.TextDecoder;
 
 // Mock fetch globally
 const mockFetch = jest.fn().mockImplementation(
@@ -12,16 +17,20 @@ const mockFetch = jest.fn().mockImplementation(
 // @ts-ignore - fetch mock
 global.fetch = mockFetch;
 
-// Mock environment variables
-process.env = {
-  ...process.env,
+// Store original env and test env vars
+const testEnvVars = {
   OPENAI_API_KEY: 'test_openai_key',
   AMAZON_API_KEY: 'test_amazon_key',
   AMAZON_SECRET_KEY: 'test_amazon_secret',
   RICARDO_API_KEY: 'test_ricardo_key'
 };
 
-// Reset mocks between tests
+// Set initial test environment variables
+Object.assign(process.env, testEnvVars);
+
+// Reset mocks and env vars between tests
 beforeEach(() => {
   jest.clearAllMocks();
+  // Restore test env vars that may have been modified by tests
+  Object.assign(process.env, testEnvVars);
 });

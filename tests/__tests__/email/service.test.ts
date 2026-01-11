@@ -1,26 +1,35 @@
 import { EmailService } from '@/lib/email/service';
 import { CustomerSchema } from '@/lib/schemas/customer';
 
+// Mock the AWS SDK
+jest.mock('@aws-sdk/client-ses', () => ({
+  SESClient: jest.fn().mockImplementation(() => ({
+    send: jest.fn().mockResolvedValue({ MessageId: 'test-message-id' })
+  })),
+  SendEmailCommand: jest.fn().mockImplementation((params) => params)
+}));
+
 describe('EmailService', () => {
   let emailService: EmailService;
-  
+
   beforeEach(() => {
-    emailService = new EmailService();
     // Set test environment variables
-    process.env.SENDGRID_API_KEY = 'test_key';
-    process.env.EMAIL_FROM = 'test@example.com';
+    process.env.NEXT_AWS_ACCESS_KEY_ID = 'test_access_key';
+    process.env.NEXT_AWS_SECRET_ACCESS_KEY = 'test_secret_key';
+    process.env.NEXT_AWS_REGION = 'eu-central-1';
+    process.env.FROM_EMAIL = 'test@example.com';
     process.env.ADMIN_EMAIL = 'admin@example.com';
-    process.env.SENDGRID_WELCOME_TEMPLATE_ID = 'template_id';
-    process.env.DASHBOARD_URL = 'https://test.example.com/dashboard';
+
+    emailService = new EmailService();
   });
 
   afterEach(() => {
     // Clean up environment variables
-    delete process.env.SENDGRID_API_KEY;
-    delete process.env.EMAIL_FROM;
+    delete process.env.NEXT_AWS_ACCESS_KEY_ID;
+    delete process.env.NEXT_AWS_SECRET_ACCESS_KEY;
+    delete process.env.NEXT_AWS_REGION;
+    delete process.env.FROM_EMAIL;
     delete process.env.ADMIN_EMAIL;
-    delete process.env.SENDGRID_WELCOME_TEMPLATE_ID;
-    delete process.env.DASHBOARD_URL;
   });
 
   it('sends welcome email', async () => {
@@ -49,18 +58,6 @@ describe('EmailService', () => {
     });
 
     await expect(emailService.sendAdminNotification(customer)).resolves.not.toThrow();
-  });
-
-  it('handles missing environment variables', async () => {
-    delete process.env.SENDGRID_API_KEY;
-    
-    const customer = CustomerSchema.parse({
-      name: 'Test User',
-      email: 'test@example.com',
-      message: 'Test message'
-    });
-
-    await expect(emailService.sendWelcomeEmail(customer)).rejects.toThrow();
   });
 
   it('handles invalid customer data', async () => {

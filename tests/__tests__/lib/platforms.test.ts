@@ -16,8 +16,10 @@ describe('Platform Integrations', () => {
     });
 
     it('handles API errors gracefully', async () => {
-      process.env.AMAZON_API_KEY = undefined;
+      const originalKey = process.env.AMAZON_API_KEY;
+      delete process.env.AMAZON_API_KEY;
       const results = await searchAmazon('electronics', {});
+      process.env.AMAZON_API_KEY = originalKey;
       expect(results).toEqual([]);
     });
   });
@@ -36,8 +38,10 @@ describe('Platform Integrations', () => {
     });
 
     it('handles API errors gracefully', async () => {
-      process.env.RICARDO_API_KEY = undefined;
+      const originalKey = process.env.RICARDO_API_KEY;
+      delete process.env.RICARDO_API_KEY;
       const results = await searchRicardo('electronics', {});
+      process.env.RICARDO_API_KEY = originalKey;
       expect(results).toEqual([]);
     });
   });
