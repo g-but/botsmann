@@ -141,10 +141,22 @@ export const menuItems: MenuItem[] = [
     path: '/knowledge' as Route,
     children: [
       {
-        label: 'Guides',
-        path: '/knowledge#guides' as Route,
-        description: 'Step-by-step tutorials for building AI bots',
+        label: 'All Guides',
+        path: '/knowledge/guides' as Route,
+        description: 'Step-by-step tutorials for all skill levels',
         icon: '📚',
+      },
+      {
+        label: 'Infrastructure',
+        path: '/knowledge/infrastructure' as Route,
+        description: 'Hosting, models, and cost comparisons',
+        icon: '🏗️',
+      },
+      {
+        label: 'Getting Started',
+        path: '/knowledge/guides?difficulty=Beginner' as Route,
+        description: 'Perfect for beginners new to AI',
+        icon: '🚀',
       },
       {
         label: 'FAQ',
@@ -154,11 +166,15 @@ export const menuItems: MenuItem[] = [
       },
     ],
     megaMenu: {
-      columns: 1,
+      columns: 2,
       header: {
         title: 'Knowledge Center',
-        subtitle: 'Learn to build and use AI bots',
+        subtitle: 'Learn to build AI infrastructure yourself',
         gradient: 'bg-gradient-to-r from-amber-50 to-yellow-50',
+      },
+      footer: {
+        label: 'Browse all guides',
+        href: '/knowledge/guides' as Route,
       },
     },
   },
