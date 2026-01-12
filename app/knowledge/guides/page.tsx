@@ -91,27 +91,32 @@ export default async function GuidesPage({ searchParams }: GuidesPageProps) {
           {/* Category Filter */}
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium text-gray-700">Category:</span>
-            <select
-              defaultValue={categoryFilter || ''}
-              onChange={(e) => {
-                const cat = e.target.value;
-                const url = new URL(window.location.href);
-                if (cat) {
-                  url.searchParams.set('category', cat);
-                } else {
-                  url.searchParams.delete('category');
-                }
-                window.location.href = url.toString();
-              }}
-              className="px-3 py-1.5 rounded-lg border border-gray-300 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="">All Categories</option>
+            <div className="flex flex-wrap gap-2">
+              <Link
+                href={difficultyFilter ? `/knowledge/guides?difficulty=${difficultyFilter}` : '/knowledge/guides'}
+                className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                  !categoryFilter
+                    ? 'bg-gray-900 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                All
+              </Link>
               {categories.map(([key, config]) => (
-                <option key={key} value={key}>
-                  {config.icon} {config.label}
-                </option>
+                <Link
+                  key={key}
+                  href={`/knowledge/guides?category=${key}${difficultyFilter ? `&difficulty=${difficultyFilter}` : ''}`}
+                  className={`px-3 py-1.5 rounded-full text-sm transition-colors flex items-center gap-1 ${
+                    categoryFilter === key
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  <span>{config.icon}</span>
+                  <span>{config.label}</span>
+                </Link>
               ))}
-            </select>
+            </div>
           </div>
 
           <div className="ml-auto text-sm text-gray-500">
