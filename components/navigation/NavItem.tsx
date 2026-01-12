@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useRef, useState, useCallback } from 'react';
+import { Fragment, useRef } from 'react';
 import Link from 'next/link';
 import { Popover, Transition, Portal } from '@headlessui/react';
 import type { NavItemProps } from '@/types/navigation';
@@ -16,18 +16,18 @@ import { MegaMenuPanel } from './MegaMenuPanel';
  */
 export function NavItem({ item, isActive, onNavigate }: NavItemProps) {
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const [position, setPosition] = useState({ top: 0, left: 0 });
 
-  // Update position when button is clicked
-  const updatePosition = useCallback(() => {
-    if (buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect();
-      setPosition({
-        top: rect.bottom + 8,
-        left: rect.left,
-      });
-    }
-  }, []);
+  // Calculate position dynamically on each render for reliable positioning
+  const getDropdownStyle = () => {
+    if (!buttonRef.current) return {};
+    const rect = buttonRef.current.getBoundingClientRect();
+    return {
+      position: 'fixed' as const,
+      top: rect.bottom + 8,
+      left: rect.left,
+      zIndex: 9999,
+    };
+  };
 
   // CTA Button variant
   if (item.isButton) {
@@ -62,7 +62,6 @@ export function NavItem({ item, isActive, onNavigate }: NavItemProps) {
         <>
           <Popover.Button
             ref={buttonRef}
-            onClick={updatePosition}
             className={`group inline-flex items-center gap-1 text-sm font-medium transition-colors focus:outline-none ${
               open || isActive ? 'text-blue-600' : 'text-gray-600'
             } hover:text-blue-600`}
@@ -82,11 +81,9 @@ export function NavItem({ item, isActive, onNavigate }: NavItemProps) {
               leaveTo="opacity-0 translate-y-1"
             >
               <Popover.Panel
-                className="fixed z-[9999] w-screen max-w-2xl"
-                style={{
-                  top: position.top,
-                  left: position.left,
-                }}
+                static
+                style={getDropdownStyle()}
+                className="w-screen max-w-2xl"
               >
                 <MegaMenuPanel
                   items={item.children!}
