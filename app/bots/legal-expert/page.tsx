@@ -1,9 +1,6 @@
 'use client';
 
-import React from 'react';
-import { getBotBySlug, getBotTryLink } from '@/data/bots';
-import BotNavigation from '../BotNavigation';
-import { BotNotFoundFallback } from '@/components/shared';
+import { BotPageTemplate, BotSection } from '@/components/shared';
 import './styles.css';
 
 import HeroSection from './components/hero/HeroSection';
@@ -16,37 +13,45 @@ import TechSection from './components/tech/TechSection';
 import CallToActionSection from './components/cta/CallToActionSection';
 
 export default function LegalExpert() {
-  const bot = getBotBySlug('legal-expert');
-  const tryLink = getBotTryLink(bot);
-
-  if (!bot || !bot.nav) {
-    return <BotNotFoundFallback botName="Lex" />;
-  }
-
-  const { nav } = bot;
-
   return (
-    <div className="min-h-screen bg-white">
-      <BotNavigation
-        botSlug={bot.slug}
-        botTitle={nav.navTitle}
-        botEmoji={nav.emoji}
-        botDescription={nav.navDescription}
-        accentColor={nav.accentColor}
-        menuItems={nav.menuItems}
-        chatLink={tryLink}
-      />
+    <BotPageTemplate botSlug="legal-expert" botDisplayName="Lex">
+      {({ bot, tryLink }) => (
+        <>
+          <HeroSection
+            title={bot.nav!.navTitle}
+            overview={bot.overview}
+            getTryLink={() => tryLink}
+          />
 
-      <main className="mx-auto max-w-screen-xl px-6 pt-24">
-        <HeroSection title={nav.navTitle} overview={bot.overview} getTryLink={() => tryLink} />
-        <DisclaimerSection />
-        <DemoOrchestrator />
-        <FeaturesSection />
-        <TestimonialsSection />
-        <VisionSection />
-        <TechSection />
-        <CallToActionSection getTryLink={() => tryLink} />
-      </main>
-    </div>
+          <BotSection id="disclaimer">
+            <DisclaimerSection />
+          </BotSection>
+
+          <BotSection id="demo">
+            <DemoOrchestrator />
+          </BotSection>
+
+          <BotSection id="features">
+            <FeaturesSection />
+          </BotSection>
+
+          <BotSection id="testimonials">
+            <TestimonialsSection />
+          </BotSection>
+
+          <BotSection id="vision">
+            <VisionSection />
+          </BotSection>
+
+          <BotSection id="tech">
+            <TechSection />
+          </BotSection>
+
+          <BotSection id="cta" isLast>
+            <CallToActionSection getTryLink={() => tryLink} />
+          </BotSection>
+        </>
+      )}
+    </BotPageTemplate>
   );
 }

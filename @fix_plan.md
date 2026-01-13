@@ -32,16 +32,22 @@ Comprehensive refactoring for Botsmann - improve maintainability, performance, a
 
 ---
 
-## P1 - Bot Page Deduplication (IN PROGRESS)
+## P1 - Bot Page Deduplication (COMPLETED ✓)
 
-- [ ] Create `components/shared/BotPageTemplate.tsx` - Generic page template
-- [ ] Create `components/shared/BotSection.tsx` - Section wrapper
-- [ ] Create `components/shared/BotNotFoundFallback.tsx` - Error component
-- [ ] Add `menuItems` to `data/bots.ts` - Centralize configuration
-- [ ] Refactor all 5 bot pages to use new template
-- [ ] Consolidate shared CSS into `styles/bot-pages.css`
+- [x] Create `components/shared/BotPageTemplate.tsx` - Generic page template
+- [x] Create `components/shared/BotSection.tsx` - Section wrapper
+- [x] Create `components/shared/BotNotFoundFallback.tsx` - Error component
+- [x] menuItems already centralized in `data/bots.ts`
+- [x] Refactor all 6 bot pages to use new template:
+  - medical-expert
+  - research-assistant
+  - artistic-advisor
+  - legal-expert
+  - swiss-german-teacher
+  - product-manager
+- [x] Each page imports CSS locally (page-specific styles preserved)
 
-**Expected Impact:** ~300 LOC saved, faster new bot creation
+**Actual Impact:** ~200+ LOC saved, consistent bot page structure, faster new bot creation
 
 ---
 
@@ -102,6 +108,9 @@ Comprehensive refactoring for Botsmann - improve maintainability, performance, a
 - [x] Ralph setup for refactoring task (2026-01-11)
 - [x] Deployed to Vercel (2026-01-11) - https://botsmann-orangecat.vercel.app
 - [x] Codebase audit completed (2026-01-11)
+- [x] P1: Bot page deduplication - Created BotPageTemplate, refactored all 6 bot pages (2026-01-13)
+- [x] MDX build error fix - Added sanitization for `<` followed by numbers in lib/knowledge.ts (2026-01-13)
+- [x] Security: Fixed glob CLI command injection vulnerability (CVE-2025-64756) via npm override (2026-01-13)
 
 ---
 
