@@ -53,6 +53,22 @@ function calculateReadTime(content: string): string {
 }
 
 /**
+ * Sanitize MDX content by fixing problematic patterns
+ * - Escapes `<` followed by numbers (MDX tries to parse as JSX tag)
+ * - Removes broken Unicode characters
+ */
+function sanitizeMdxContent(content: string): string {
+  return content
+    // Escape < followed by numbers (e.g., "<1%" becomes "&lt;1%")
+    // This prevents MDX from interpreting it as JSX
+    .replace(/<(\d)/g, '&lt;$1')
+    // Remove replacement character (U+FFFD) and other broken Unicode
+    .replace(/\uFFFD/g, ' ')
+    // Remove other common problematic Unicode ranges (surrogate pairs)
+    .replace(/[\uD800-\uDFFF]/g, ' ');
+}
+
+/**
  * Fetch all guides from the knowledge repository
  */
 export async function fetchAllGuides(): Promise<GuideMetadata[]> {
@@ -154,13 +170,16 @@ export async function fetchGuideBySlug(slug: string): Promise<Guide | null> {
       // Skip unpublished
       if (data.published !== true) continue;
 
+      // Sanitize content to fix broken Unicode characters
+      const sanitizedContent = sanitizeMdxContent(content);
+
       return {
         metadata: {
           slug,
           title: data.title || slug,
           description: data.description || '',
           difficulty: data.difficulty || 'Beginner',
-          readTime: data.readTime || calculateReadTime(content),
+          readTime: data.readTime || calculateReadTime(sanitizedContent),
           author: data.author,
           publishedAt: data.publishedAt || new Date().toISOString().split('T')[0],
           updatedAt: data.updatedAt,
@@ -170,8 +189,8 @@ export async function fetchGuideBySlug(slug: string): Promise<Guide | null> {
           category: data.category || 'getting-started',
           published: true,
         },
-        content,
-        tableOfContents: extractTableOfContents(content),
+        content: sanitizedContent,
+        tableOfContents: extractTableOfContents(sanitizedContent),
       };
     }
 
@@ -316,12 +335,15 @@ export async function fetchInfrastructureGuideBySlug(
 
     if (data.published !== true) return null;
 
+    // Sanitize content to fix broken Unicode characters
+    const sanitizedContent = sanitizeMdxContent(content);
+
     return {
       slug,
       title: data.title || slug,
       description: data.description || '',
       difficulty: data.difficulty || 'Intermediate',
-      readTime: data.readTime || calculateReadTime(content),
+      readTime: data.readTime || calculateReadTime(sanitizedContent),
       publishedAt: data.publishedAt || new Date().toISOString().split('T')[0],
       tags: data.tags || [],
       category: 'infrastructure',
@@ -329,8 +351,8 @@ export async function fetchInfrastructureGuideBySlug(
       comparisonType: data.comparisonType || 'tools',
       options: data.options || [],
       recommendation: data.recommendation,
-      content,
-      tableOfContents: extractTableOfContents(content),
+      content: sanitizedContent,
+      tableOfContents: extractTableOfContents(sanitizedContent),
     };
   } catch (error) {
     console.info(`Failed to fetch infrastructure guide ${slug}:`, error);
