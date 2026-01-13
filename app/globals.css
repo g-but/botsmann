@@ -12,6 +12,17 @@ body {
   background: rgb(var(--background-rgb));
 }
 
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 @layer base {
   h1 {
     @apply text-4xl font-semibold tracking-tight;
