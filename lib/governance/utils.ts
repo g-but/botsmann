@@ -1,15 +1,7 @@
 // Governance utility functions
 
-/**
- * Format a number as USD currency
- */
-export const formatCurrency = (amount: number): string => {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-  }).format(amount);
-};
+// Re-export formatCurrency from shared lib for backwards compatibility
+export { formatCurrency } from '@/lib/format';
 
 /**
  * Get the appropriate Tailwind classes for a transparency score badge

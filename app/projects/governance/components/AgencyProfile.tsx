@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { EnhancedTransaction } from './TransactionWithTraceability';
+import { formatCurrency } from '@/lib/format';
 
 export interface AgencyTeamMember {
   id: string;
@@ -75,16 +76,7 @@ interface AgencyProfileProps {
 
 const AgencyProfile: React.FC<AgencyProfileProps> = ({ agency }) => {
   const [activeTab, setActiveTab] = useState('overview');
-  
-  // Format currency
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      maximumFractionDigits: 0,
-    }).format(amount);
-  };
-  
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Agency Header */}
