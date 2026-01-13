@@ -46,3 +46,23 @@ export interface WorkspaceSection {
   files: UploadedFile[];
   aiSuggestion?: string;
 }
+
+// Workspace Dashboard types
+export interface ChatMessage {
+  id: string;
+  sender: string;
+  senderName: string;
+  avatar: string;
+  content: string;
+  timestamp: Date;
+}
+
+export interface CategoryWithFiles {
+  id: string;
+  title: string;
+  icon: string;
+  files: UploadedFile[];
+  count: number;
+}
+
+export type WorkspaceViewMode = 'overview' | 'files' | 'chat' | 'timeline' | 'settings';
