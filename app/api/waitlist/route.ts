@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { isValidEmail } from '@/lib/validation';
 
 interface WaitlistEntry {
   email: string;
@@ -84,8 +85,4 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// Email validation helper
-function isValidEmail(email: string): boolean {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-} 
+ 

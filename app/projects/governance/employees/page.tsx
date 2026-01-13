@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { sampleTeamMembers } from '../data/sampleData';
+import { formatCurrency } from '@/lib/format';
 
 export default function EmployeesPage() {
   // Helper function to get transparency score color
@@ -11,15 +12,6 @@ export default function EmployeesPage() {
     if (score >= 80) return 'text-blue-600';
     if (score >= 70) return 'text-yellow-600';
     return 'text-red-600';
-  };
-
-  // Helper function to format currency
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      maximumFractionDigits: 0,
-    }).format(amount);
   };
 
   return (

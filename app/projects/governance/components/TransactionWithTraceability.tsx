@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { formatCurrency } from '@/lib/format';
 
 // Enhanced transaction type with law traceability and agency information
 export interface EnhancedTransaction {
@@ -52,16 +53,7 @@ interface TransactionWithTraceabilityProps {
 export const TransactionWithTraceability: React.FC<TransactionWithTraceabilityProps> = ({ transaction }) => {
   const [activeTab, setActiveTab] = useState<'details' | 'laws' | 'documents' | 'timeline'>('details');
   const [expanded, setExpanded] = useState(false);
-  
-  // Format currency
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      maximumFractionDigits: 0,
-    }).format(amount);
-  };
-  
+
   return (
     <div className="bg-white shadow overflow-hidden rounded-lg">
       {/* Transaction Header */}

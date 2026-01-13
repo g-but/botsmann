@@ -4,23 +4,15 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { sampleTeamMembers } from '../../data/sampleData';
+import { formatCurrency } from '@/lib/format';
 
 export default function EmployeeDetailPage({ params }: { params: { id: string } }) {
   const _router = useRouter();
   const employeeId = params.id;
-  
+
   // Find the employee with the matching ID
   const employee = sampleTeamMembers.find(emp => emp.id === employeeId);
-  
-  // Helper function to format currency
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      maximumFractionDigits: 0,
-    }).format(amount);
-  };
-  
+
   // If employee not found, show error and link back to all employees
   if (!employee) {
     return (
