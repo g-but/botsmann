@@ -51,17 +51,19 @@ Comprehensive refactoring for Botsmann - improve maintainability, performance, a
 
 ---
 
-## P2 - Large Component Breakdown
+## P2 - Large Component Breakdown (IN PROGRESS)
 
-- [ ] Split CitizenProfile.tsx:
-  - Extract types to `types/citizen.ts`
-  - Create CitizenOverviewTab.tsx
-  - Create CitizenTaxTab.tsx
-  - Create CitizenBenefitsTab.tsx
-  - Create CitizenAdvisoryTab.tsx
+- [x] Split CitizenProfile.tsx (650→115 lines):
+  - Types already in `types/governance.ts`
+  - Created `citizen/CitizenProfileHeader.tsx`
+  - Created `citizen/CitizenProfileTabs.tsx`
+  - Created `citizen/CitizenOverviewTab.tsx`
+  - Created `citizen/CitizenTaxTab.tsx`
+  - Created `citizen/CitizenBenefitsTab.tsx`
+  - Created `citizen/CitizenAdvisoryTab.tsx`
 
-- [ ] Split WorkspaceDashboard.tsx into smaller components
-- [ ] Split ExampleSection.tsx into example cards
+- [ ] Split WorkspaceDashboard.tsx (642 lines) into smaller components
+- [ ] Split ExampleSection.tsx (515 lines) into example cards
 - [ ] Review and split other >300 line components
 
 ---
@@ -111,6 +113,7 @@ Comprehensive refactoring for Botsmann - improve maintainability, performance, a
 - [x] P1: Bot page deduplication - Created BotPageTemplate, refactored all 6 bot pages (2026-01-13)
 - [x] MDX build error fix - Added sanitization for `<` followed by numbers in lib/knowledge.ts (2026-01-13)
 - [x] Security: Fixed glob CLI command injection vulnerability (CVE-2025-64756) via npm override (2026-01-13)
+- [x] P2: Split CitizenProfile.tsx from 650→115 lines with 6 sub-components (2026-01-13)
 
 ---
 
