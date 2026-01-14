@@ -1,11 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
+/**
+ * Botsmann Knowledge Base for RAG
+ * This contains all the site content that the AI assistant can use to answer questions.
+ */
 
-// ============================================================================
-// Types
-// ============================================================================
-
-interface KnowledgeChunk {
+export interface KnowledgeChunk {
   id: string;
   topic: string;
   question: string;
@@ -13,153 +11,7 @@ interface KnowledgeChunk {
   keywords: string[];
 }
 
-interface SearchResult {
-  chunk: KnowledgeChunk;
-  score: number;
-  matchedTerms: string[];
-}
-
-// ============================================================================
-// Groq Integration (Free LLM)
-// ============================================================================
-
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const GROQ_MODEL = 'llama-3.1-8b-instant';
-
-const SYSTEM_PROMPT = `You are a helpful assistant for Botsmann, a platform that builds private AI assistants.
-
-Your role is to answer questions about Botsmann's services, AI bots, and how the platform works.
-
-Guidelines:
-- Be friendly, professional, and concise
-- Use the provided context to answer questions accurately
-- If the context doesn't contain relevant information, say so honestly
-- Encourage users to book a consultation for detailed discussions
-- Mention specific bot names (Heidi, Lex, Imhotep, Nerd, Trident, Muse) when relevant
-- Emphasize Botsmann's privacy-first approach when discussing data handling
-
-Available AI Assistants:
-- Heidi: Swiss German Teacher (live)
-- Lex: Legal Expert (coming soon)
-- Imhotep: Medical Expert (coming soon)
-- Nerd: Research Assistant (coming soon)
-- Trident: AI Product Manager (coming soon)
-- Muse: Artistic Advisor (coming soon)
-
-Key value propositions:
-- Your data stays yours (privacy-first)
-- Local or cloud deployment options
-- No subscriptions for local setups
-- Expert consulting available`;
-
-async function generateWithGroq(userMessage: string, context: string): Promise<string> {
-  const apiKey = process.env.GROQ_API_KEY;
-
-  if (!apiKey) {
-    // Fallback to template response if no API key
-    return context;
-  }
-
-  try {
-    const response = await fetch(GROQ_API_URL, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: GROQ_MODEL,
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: `Context information:\n${context}\n\n---\nUser question: ${userMessage}` }
-        ],
-        temperature: 0.7,
-        max_tokens: 1024,
-      }),
-    });
-
-    if (!response.ok) {
-      console.error('Groq API error:', await response.text());
-      return context;
-    }
-
-    const data = await response.json();
-    return data.choices?.[0]?.message?.content || context;
-  } catch (error) {
-    console.error('Groq request failed:', error);
-    return context;
-  }
-}
-
-// ============================================================================
-// Search Functions
-// ============================================================================
-
-function tokenize(text: string): string[] {
-  return text
-    .toLowerCase()
-    .replace(/[^\w\s]/g, ' ')
-    .split(/\s+/)
-    .filter(word => word.length > 2);
-}
-
-function calculateScore(
-  chunk: KnowledgeChunk,
-  queryTerms: string[]
-): { score: number; matchedTerms: string[] } {
-  const matchedTerms: string[] = [];
-  let score = 0;
-  const chunkText = `${chunk.question} ${chunk.content} ${chunk.topic}`.toLowerCase();
-  const chunkKeywords = chunk.keywords.map(k => k.toLowerCase());
-
-  for (const term of queryTerms) {
-    if (chunkKeywords.includes(term)) {
-      score += 3;
-      matchedTerms.push(term);
-      continue;
-    }
-    const partialKeywordMatch = chunkKeywords.some(k => k.includes(term) || term.includes(k));
-    if (partialKeywordMatch) {
-      score += 2;
-      matchedTerms.push(term);
-      continue;
-    }
-    if (chunkText.includes(term)) {
-      score += 1;
-      matchedTerms.push(term);
-    }
-  }
-
-  const questionTerms = tokenize(chunk.question);
-  const questionOverlap = queryTerms.filter(t => questionTerms.includes(t)).length;
-  score += questionOverlap * 0.5;
-
-  return { score, matchedTerms: Array.from(new Set(matchedTerms)) };
-}
-
-function searchKnowledge(
-  query: string,
-  chunks: KnowledgeChunk[],
-  topK: number = 3
-): SearchResult[] {
-  const queryTerms = tokenize(query);
-  if (queryTerms.length === 0) return [];
-
-  return chunks
-    .map(chunk => {
-      const { score, matchedTerms } = calculateScore(chunk, queryTerms);
-      return { chunk, score, matchedTerms };
-    })
-    .filter(result => result.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, topK);
-}
-
-// ============================================================================
-// Botsmann Knowledge Base
-// ============================================================================
-
-const knowledgeChunks: KnowledgeChunk[] = [
+export const botsmannKnowledge: KnowledgeChunk[] = [
   // About Botsmann
   {
     id: 'about-philosophy',
@@ -196,21 +48,21 @@ const knowledgeChunks: KnowledgeChunk[] = [
     topic: 'How It Works',
     question: 'How do I get started with Botsmann?',
     content: `Getting started is simple! Step 1: Book a free consultation call. We'll understand your use case—whether it's medical, legal, financial, or learning—and recommend the best approach for your needs. No commitment required, just a friendly conversation to explore possibilities.`,
-    keywords: ['start', 'begin', 'first', 'consultation', 'call', 'book', 'free', 'getting']
+    keywords: ['start', 'begin', 'first', 'consultation', 'call', 'book', 'free']
   },
   {
     id: 'how-step-2',
     topic: 'How It Works',
     question: 'What happens after the consultation?',
     content: `Step 2: We set everything up for you. You choose whether you want local deployment (runs on your computer, maximum privacy) or cloud deployment (access from anywhere). We handle all the technical complexity—configuring the AI, loading your data, and making sure everything works smoothly.`,
-    keywords: ['setup', 'configure', 'install', 'deployment', 'local', 'cloud', 'technical', 'after']
+    keywords: ['setup', 'configure', 'install', 'deployment', 'local', 'cloud', 'technical']
   },
   {
     id: 'how-step-3',
     topic: 'How It Works',
     question: 'Do I need a subscription?',
     content: `Step 3: You own it forever! Your AI assistant knows your information and is ready to help. For local setups, there are no subscriptions required—it's yours to keep. Cloud deployments have ongoing hosting costs, but you still own your data and can export it anytime.`,
-    keywords: ['subscription', 'cost', 'price', 'own', 'forever', 'keep', 'payment', 'pricing']
+    keywords: ['subscription', 'cost', 'price', 'own', 'forever', 'keep', 'payment']
   },
 
   // Bots - Heidi
@@ -337,95 +189,9 @@ const knowledgeChunks: KnowledgeChunk[] = [
     id: 'demo-available',
     topic: 'Demo',
     question: 'Can I try a demo?',
-    content: `Yes! You're using the demo right now! This assistant demonstrates how our RAG (Retrieval Augmented Generation) technology works. It searches a knowledge base to find relevant information and uses AI to generate helpful responses. This is the same technology we use to build private AI assistants for clients. Want to see how it could work with your data? Book a consultation!`,
-    keywords: ['demo', 'try', 'test', 'example', 'live', 'experience', 'sample', 'rag']
-  },
-
-  // All Bots Overview
-  {
-    id: 'bots-overview',
-    topic: 'AI Assistants',
-    question: 'What AI assistants does Botsmann offer?',
-    content: `Botsmann offers six specialized AI assistants: 1) Heidi - Swiss German Teacher (live), 2) Lex - Legal Expert (coming soon), 3) Imhotep - Medical Expert (coming soon), 4) Nerd - Research Assistant (coming soon), 5) Trident - AI Product Manager (coming soon), and 6) Muse - Artistic Advisor (coming soon). Each bot is specialized for its domain while keeping your data private and secure.`,
-    keywords: ['bots', 'assistants', 'all', 'list', 'available', 'offer', 'which']
+    content: `Yes! We have a live demo available on the website. Click "Try the Demo" on the homepage to experience our Swiss German teaching assistant (Heidi). The demo shows how our AI assistants work—you can ask questions and see intelligent responses based on a knowledge base. It's a great way to understand what private AI assistants can do for you.`,
+    keywords: ['demo', 'try', 'test', 'example', 'live', 'experience', 'sample']
   }
 ];
 
-// ============================================================================
-// API Request Schema
-// ============================================================================
-
-const ChatRequestSchema = z.object({
-  message: z.string().min(1, 'Message is required'),
-  includeContext: z.boolean().optional().default(false),
-});
-
-// ============================================================================
-// API Handlers
-// ============================================================================
-
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const { message, includeContext } = ChatRequestSchema.parse(body);
-
-    // Search the knowledge base
-    const results = searchKnowledge(message, knowledgeChunks, 3);
-
-    // Build context from search results
-    const context = results.length > 0
-      ? results.map(r => r.chunk.content).join('\n\n')
-      : "I don't have specific information about that. Try asking about Botsmann's AI assistants (Heidi, Lex, Imhotep, Nerd, Trident, Muse), how to get started, our consulting services, or privacy practices!";
-
-    // Generate response with Groq (or fallback to context)
-    const response = await generateWithGroq(message, context);
-
-    // Build response data
-    const responseData: {
-      success: boolean;
-      response: string;
-      sources: Array<{ topic: string; question: string; score: number }>;
-      context?: string;
-      llmEnabled: boolean;
-    } = {
-      success: true,
-      response,
-      sources: results.map(r => ({
-        topic: r.chunk.topic,
-        question: r.chunk.question,
-        score: r.score,
-      })),
-      llmEnabled: !!process.env.GROQ_API_KEY,
-    };
-
-    if (includeContext) {
-      responseData.context = context;
-    }
-
-    return NextResponse.json(responseData);
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { success: false, error: 'Validation failed', details: error.errors },
-        { status: 400 }
-      );
-    }
-    console.error('Chat API error:', error);
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    );
-  }
-}
-
-// GET handler for debugging/health check
-export async function GET() {
-  return NextResponse.json({
-    status: 'ok',
-    message: 'Botsmann AI Assistant API',
-    chunks: knowledgeChunks.length,
-    topics: Array.from(new Set(knowledgeChunks.map(c => c.topic))),
-    llmEnabled: !!process.env.GROQ_API_KEY,
-    llmProvider: 'Groq (free tier)',
-  });
-}
+export default botsmannKnowledge;
