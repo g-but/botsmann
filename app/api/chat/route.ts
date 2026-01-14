@@ -163,25 +163,7 @@ export async function POST(request: NextRequest) {
 
     const context = contextParts.join('\n\n---\n\n');
 
-    // Generate response using LLM
-    const llmResponse = await generateLLMResponse(
-      [
-        { role: 'system', content: SYSTEM_PROMPT },
-        {
-          role: 'user',
-          content: `Context from documents:\n\n${context}\n\n---\n\nUser question: ${message}`
-        }
-      ],
-      {
-        provider,
-        apiKey,
-        ollamaUrl,
-        temperature: 0.7,
-        maxTokens: 1024
-      }
-    );
-
-    // Format sources for response
+    // Format sources for response (prepare before LLM call)
     const sources = relevantChunks.map((chunk: {
       id: string;
       document_id: string;
@@ -194,32 +176,73 @@ export async function POST(request: NextRequest) {
       similarity: chunk.similarity
     }));
 
-    return NextResponse.json({
-      success: true,
-      response: llmResponse.content,
-      sources,
-      provider: llmResponse.provider,
-      model: llmResponse.model
-    });
+    // Try to generate response using LLM
+    try {
+      const llmResponse = await generateLLMResponse(
+        [
+          { role: 'system', content: SYSTEM_PROMPT },
+          {
+            role: 'user',
+            content: `Context from documents:\n\n${context}\n\n---\n\nUser question: ${message}`
+          }
+        ],
+        {
+          provider,
+          apiKey,
+          ollamaUrl,
+          temperature: 0.7,
+          maxTokens: 1024
+        }
+      );
 
-  } catch (error) {
-    console.error('Chat error:', error);
+      return NextResponse.json({
+        success: true,
+        response: llmResponse.content,
+        sources,
+        provider: llmResponse.provider,
+        model: llmResponse.model
+      });
 
-    // Handle specific errors
-    if (error instanceof Error) {
-      if (error.message.includes('API key')) {
+    } catch (llmError) {
+      // Handle LLM-specific errors with helpful fallbacks
+      if (llmError instanceof Error) {
+        // For API key errors, return context-only response
+        if (llmError.message.includes('API key') && relevantChunks.length > 0) {
+          const fallbackParts = relevantChunks.map((chunk: {
+            document_id: string;
+            content: string;
+          }, index: number) => {
+            const docName = documentMap.get(chunk.document_id) || 'Unknown Document';
+            return `**[Source ${index + 1}: ${docName}]**\n${chunk.content}`;
+          });
+
+          return NextResponse.json({
+            success: true,
+            response: `I found relevant information in your documents, but I need an LLM API key to generate a personalized response. Here's what I found:\n\n${fallbackParts.join('\n\n---\n\n')}\n\n---\n*To enable AI-generated responses, configure a Groq API key (free at console.groq.com) in your settings or ask your administrator to configure the server.*`,
+            sources,
+            provider: 'none',
+            model: 'context-only'
+          });
+        }
+
+        if (llmError.message.includes('Cannot connect to Ollama')) {
+          return NextResponse.json(
+            { success: false, error: 'Cannot connect to Ollama. Make sure it is running.' },
+            { status: 503 }
+          );
+        }
+
         return NextResponse.json(
-          { success: false, error: error.message },
+          { success: false, error: `${llmError.message}. Get a free API key at console.groq.com` },
           { status: 400 }
         );
       }
-      if (error.message.includes('Cannot connect to Ollama')) {
-        return NextResponse.json(
-          { success: false, error: 'Cannot connect to Ollama. Make sure it is running.' },
-          { status: 503 }
-        );
-      }
+
+      throw llmError;
     }
+
+  } catch (error) {
+    console.error('Chat error:', error);
 
     return NextResponse.json(
       { success: false, error: 'Internal server error' },
