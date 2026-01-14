@@ -24,7 +24,10 @@ interface BotPageTemplateProps {
 
 export interface BotPageRenderProps {
   bot: Bot;
+  /** The try link if available, or '#waitlist' as fallback for bots without GPTs */
   tryLink: string;
+  /** Whether the bot has an actual external try link */
+  hasExternalLink: boolean;
 }
 
 /**
@@ -59,7 +62,10 @@ export const BotPageTemplate: FC<BotPageTemplateProps> = ({
   showFooter = false,
 }) => {
   const bot = getBotBySlug(botSlug);
-  const tryLink = overrideTryLink ?? getBotTryLink(bot);
+  const rawTryLink = overrideTryLink ?? getBotTryLink(bot);
+  const hasExternalLink = Boolean(rawTryLink);
+  // Provide fallback for components that need a string
+  const tryLink = rawTryLink || '#waitlist';
   const hasScrolledToTop = useRef(false);
 
   // Handle scroll to section if hash is present in URL
@@ -106,7 +112,7 @@ export const BotPageTemplate: FC<BotPageTemplateProps> = ({
       />
 
       <main className="mx-auto max-w-screen-xl px-6 pt-24">
-        {children({ bot, tryLink })}
+        {children({ bot, tryLink, hasExternalLink })}
       </main>
 
       {showFooter && (

@@ -17,14 +17,25 @@ export default function ConsultationForm() {
   
   const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>();
 
-  const onSubmit = async (_data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     try {
       setIsSubmitting(true);
       setSubmitError('');
-      
-      // Simulate a successful submission for now
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to submit form');
+      }
+
       reset();
       setSubmitSuccess(true);
     } catch (error: unknown) {

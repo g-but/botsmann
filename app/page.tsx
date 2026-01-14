@@ -10,34 +10,34 @@ const CollaborationForm = dynamic(() => import('@/components/ConsultationForm'),
 export default function HomePage() {
   const featuredBots = [
     {
-      id: 'legal-expert',
-      title: 'Lex',
-      subtitle: 'Legal Assistant',
-      emoji: '⚖️',
-      description: 'Swiss legal assistant with AI + human lawyer collaboration, secure data room, and jurisdiction-specific expertise.',
-      href: '/bots/legal-expert',
-      status: 'live',
-      gradient: 'from-blue-500 via-blue-600 to-cyan-500'
-    },
-    {
       id: 'swiss-german-teacher',
-      title: 'Schwyzerdütsch Lehrer',
-      subtitle: 'Language Learning',
+      title: 'Heidi',
+      subtitle: 'Swiss German Teacher',
       emoji: '🇨🇭',
-      description: 'Master Swiss German with AI-powered contextual learning and cultural insights for all 26 cantons.',
+      description: 'Master Swiss German with AI-powered contextual learning, cultural insights, and dialect variations for all 26 cantons.',
       href: '/bots/swiss-german-teacher',
       status: 'live',
       gradient: 'from-red-500 via-pink-500 to-purple-500'
     },
     {
-      id: 'research-assistant',
-      title: 'Research Assistant',
-      subtitle: 'Academic Tools',
-      emoji: '🔬',
-      description: 'Enhance research workflow with AI automation that organizes materials, provides updates, and sparks innovation.',
-      href: '/bots/research-assistant',
+      id: 'legal-expert',
+      title: 'Lex',
+      subtitle: 'Legal Assistant',
+      emoji: '⚖️',
+      description: 'Swiss legal assistant with AI analysis, lawyer collaboration, and jurisdiction-specific expertise.',
+      href: '/bots/legal-expert',
       status: 'soon',
-      gradient: 'from-purple-500 via-indigo-500 to-blue-500'
+      gradient: 'from-blue-500 via-blue-600 to-cyan-500'
+    },
+    {
+      id: 'medical-expert',
+      title: 'Imhotep',
+      subtitle: 'Medical Expert',
+      emoji: '⚕️',
+      description: 'Private AI health assistant with your medical history, lab results, and treatment records.',
+      href: '/bots/medical-expert',
+      status: 'soon',
+      gradient: 'from-green-500 via-emerald-500 to-teal-500'
     }
   ];
 
@@ -55,49 +55,62 @@ export default function HomePage() {
           <div className="relative inline-block mb-8">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 rounded-2xl blur-xl opacity-20 animate-pulse"></div>
             <div className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 text-white px-8 py-4 rounded-2xl shadow-2xl">
-              <span className="text-2xl">🚀</span>
-              <span className="ml-3 font-semibold">Next-Generation AI Bots</span>
+              <span className="text-2xl">🔒</span>
+              <span className="ml-3 font-semibold">Private AI Assistants</span>
             </div>
           </div>
 
           <h1 className="text-6xl md:text-8xl font-bold mb-8 leading-tight">
             <span className="bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 bg-clip-text text-transparent">
-              Intelligent
+              Your Data.
             </span>
             <br />
             <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent">
-              AI Bots
+              Your AI.
             </span>
             <br />
             <span className="text-4xl md:text-5xl font-normal text-gray-600 mt-4 block">
-              for Every Domain
+              Your Control.
             </span>
           </h1>
 
           <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-4xl mx-auto leading-relaxed">
-            Experience the future of specialized AI assistance. From legal expertise to language mastery,
-            our advanced bots adapt to your unique requirements with cutting-edge intelligence and seamless integration.
+            We help you build private AI assistants that know YOUR information—medical records, legal documents,
+            financial data, learning materials. Run locally on your computer or in the cloud. You choose.
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center gap-6 mb-16">
             <Link
-              href="/bots"
+              href="/contact"
               className="group relative bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-2xl text-lg font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <span className="relative flex items-center justify-center gap-2">
-              Explore All Bots
+                Book a Consultation
                 <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
               </span>
             </Link>
             <Link
-              href="#featured-bots"
+              href="/demo"
+              className="group relative bg-gradient-to-r from-red-500 to-pink-500 text-white px-8 py-4 rounded-2xl text-lg font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-pink-500 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <span className="relative flex items-center justify-center gap-2">
+                🇨🇭 Try the Demo
+                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </span>
+            </Link>
+            <Link
+              href="#consulting"
               className="group relative border-2 border-gray-300 hover:border-blue-400 px-8 py-4 rounded-2xl text-lg font-semibold text-gray-700 hover:text-blue-600 transition-all duration-300"
             >
               <span className="flex items-center justify-center gap-2">
-                View Featured Bots
+                See How It Works
                 <svg className="w-5 h-5 group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                 </svg>
@@ -108,19 +121,19 @@ export default function HomePage() {
           {/* Stats Section */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-100">
-              <div className="text-3xl font-bold text-blue-600 mb-2">6+</div>
-              <div className="text-gray-600 font-medium">AI Bots</div>
-              <div className="text-sm text-gray-500">Specialized assistants</div>
+              <div className="text-3xl font-bold text-blue-600 mb-2">🔒</div>
+              <div className="text-gray-600 font-medium">Private AI</div>
+              <div className="text-sm text-gray-500">Your data stays yours</div>
             </div>
             <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-100">
-              <div className="text-3xl font-bold text-purple-600 mb-2">24/7</div>
-              <div className="text-gray-600 font-medium">Availability</div>
-              <div className="text-sm text-gray-500">Always ready to help</div>
+              <div className="text-3xl font-bold text-purple-600 mb-2">🏠</div>
+              <div className="text-gray-600 font-medium">Local or Cloud</div>
+              <div className="text-sm text-gray-500">Run anywhere you choose</div>
             </div>
             <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-100">
-              <div className="text-3xl font-bold text-cyan-600 mb-2">∞</div>
-              <div className="text-gray-600 font-medium">Possibilities</div>
-              <div className="text-sm text-gray-500">Limitless potential</div>
+              <div className="text-3xl font-bold text-cyan-600 mb-2">🧠</div>
+              <div className="text-gray-600 font-medium">Your Knowledge</div>
+              <div className="text-sm text-gray-500">AI that knows your context</div>
             </div>
           </div>
         </section>
@@ -130,14 +143,14 @@ export default function HomePage() {
           <div className="text-center mb-16">
             <h2 className="text-5xl font-bold mb-6">
               <span className="bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                Featured
+                Private AI
               </span>
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                {" "}AI Bots
+                {" "}Assistants
               </span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Discover our most advanced AI assistants, each specialized for specific domains and designed to revolutionize how you work
+              Domain-specific AI that works with YOUR private data. Medical, legal, financial, learning—each assistant is trained for its field while keeping your information secure.
             </p>
           </div>
 
@@ -239,7 +252,7 @@ export default function HomePage() {
               </span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Experience seamless AI integration in just three simple steps. Our intelligent bots are designed for immediate productivity and effortless collaboration.
+              Get your private AI assistant set up in three simple steps. We handle the technical complexity so you can focus on results.
             </p>
           </div>
 
@@ -265,9 +278,9 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Choose Your Bot</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">Tell Us What You Need</h3>
                 <p className="text-gray-600 leading-relaxed">
-                  Browse our curated collection of specialized AI assistants. Each bot is expertly designed for specific domains and use cases.
+                  Book a free consultation call. We'll understand your use case—medical, legal, financial, learning—and recommend the best approach.
                 </p>
               </div>
 
@@ -282,11 +295,11 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Start Interacting</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">We Set It Up</h3>
                 <p className="text-gray-600 leading-relaxed">
-                  Engage with your chosen bot through natural conversation. Provide context, ask questions, and watch as it adapts to your specific needs.
+                  Choose local (runs on your computer, maximum privacy) or cloud (access anywhere). We configure everything and load your data.
                 </p>
-            </div>
+              </div>
 
               {/* Step 3 */}
               <div className="relative text-center group">
@@ -299,9 +312,9 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Get Results</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">You Own It Forever</h3>
                 <p className="text-gray-600 leading-relaxed">
-                  Receive intelligent insights, actionable recommendations, and expert solutions. Your AI assistant works tirelessly to deliver excellence.
+                  Your AI assistant knows your information and is ready to help. No subscriptions required for local setups—it's yours to keep.
                 </p>
               </div>
             </div>
