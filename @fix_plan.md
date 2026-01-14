@@ -51,7 +51,7 @@ Comprehensive refactoring for Botsmann - improve maintainability, performance, a
 
 ---
 
-## P2 - Large Component Breakdown (IN PROGRESS)
+## P2 - Large Component Breakdown (COMPLETED ✓)
 
 - [x] Split CitizenProfile.tsx (650→115 lines):
   - Types already in `types/governance.ts`
@@ -62,9 +62,23 @@ Comprehensive refactoring for Botsmann - improve maintainability, performance, a
   - Created `citizen/CitizenBenefitsTab.tsx`
   - Created `citizen/CitizenAdvisoryTab.tsx`
 
-- [ ] Split WorkspaceDashboard.tsx (642 lines) into smaller components
-- [ ] Split ExampleSection.tsx (515 lines) into example cards
-- [ ] Review and split other >300 line components
+- [x] Split WorkspaceDashboard.tsx (642→219 lines):
+  - Created `workspace/WorkspaceHeader.tsx`
+  - Created `workspace/WorkspaceSidebar.tsx`
+  - Created `workspace/OverviewView.tsx`
+  - Created `workspace/FilesView.tsx`
+  - Created `workspace/ChatView.tsx`
+  - Created `workspace/TimelineView.tsx`
+  - Created `workspace/SettingsView.tsx`
+  - Created `workspace/workspaceUtils.ts`
+
+- [x] Split ExampleSection.tsx (515→66 lines):
+  - Created `examples/ProjectPlanTab.tsx`
+  - Created `examples/TechnicalStrategyTab.tsx`
+  - Created `examples/SprintPlanningTab.tsx`
+  - Created `examples/ImplementationGuideTab.tsx`
+
+**Total Impact:** ~1,400 LOC reduced in main components, cleaner architecture
 
 ---
 
@@ -114,6 +128,8 @@ Comprehensive refactoring for Botsmann - improve maintainability, performance, a
 - [x] MDX build error fix - Added sanitization for `<` followed by numbers in lib/knowledge.ts (2026-01-13)
 - [x] Security: Fixed glob CLI command injection vulnerability (CVE-2025-64756) via npm override (2026-01-13)
 - [x] P2: Split CitizenProfile.tsx from 650→115 lines with 6 sub-components (2026-01-13)
+- [x] P2: Split WorkspaceDashboard.tsx from 642→219 lines with 8 sub-components (2026-01-13)
+- [x] P2: Split ExampleSection.tsx from 515→66 lines with 4 tab components (2026-01-13)
 
 ---
 

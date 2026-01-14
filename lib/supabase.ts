@@ -39,7 +39,11 @@ export interface DocumentRow {
   type: string;
   size_bytes: number | null;
   storage_path: string;
+  status: 'pending' | 'processing' | 'ready' | 'error';
+  error_message: string | null;
+  chunk_count: number;
   created_at: string;
+  updated_at: string;
 }
 
 export interface DocumentChunkRow {

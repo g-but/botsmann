@@ -11,7 +11,8 @@ const nextConfig = {
     ],
   },
   experimental: {
-    typedRoutes: true
+    typedRoutes: true,
+    serverComponentsExternalPackages: ['@xenova/transformers', 'onnxruntime-node'],
   },
   env: {
     NEXT_PUBLIC_DEPLOY_TIME: new Date().toUTCString()
