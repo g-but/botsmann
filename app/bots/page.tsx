@@ -76,7 +76,9 @@ const botDetails: Record<string, {
 };
 
 export default function BotsList() {
-  const readyBots = ['swiss-german-teacher', 'legal-expert'];
+  // Only mark bots as "ready" if they have actual working try links
+  // Currently only Heidi (swiss-german-teacher) has a GPT link
+  const readyBots = bots.filter(b => b.tryLink).map(b => b.slug);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">

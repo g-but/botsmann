@@ -62,7 +62,7 @@ const bots: Bot[] = [
       'Integration & Collaboration'
     ],
     details: 'The Research Assistant Bot transforms how academics, scientists, journalists, and industry professionals conduct research. It automatically organizes uploaded materials, keeps you updated with the latest developments in your field, generates structured content with proper citations, and challenges your thinking with insightful questions. The unique Big Discovery Mode helps identify research gaps and novel connections between concepts, potentially leading to breakthrough insights.',
-    tryLink: 'https://chatgpt.com/g/research-assistant',
+    // tryLink removed - GPT not yet created
     nav: {
       navTitle: 'Nerd',
       emoji: '🔬',
@@ -206,8 +206,8 @@ export const getBotBySlug = (slug: string): Bot | undefined => {
 };
 
 /**
- * Helper to get bot's try link with fallback
+ * Helper to get bot's try link (returns undefined if not available)
  */
-export const getBotTryLink = (bot: Bot | undefined): string => {
-  return bot?.tryLink || 'https://chat.openai.com/';
+export const getBotTryLink = (bot: Bot | undefined): string | undefined => {
+  return bot?.tryLink;
 };

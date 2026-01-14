@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone",
-  images: { 
+  images: {
     unoptimized: true,
     remotePatterns: [
       {
@@ -11,21 +10,32 @@ const nextConfig = {
       },
     ],
   },
-  experimental: { 
-    typedRoutes: true 
+  experimental: {
+    typedRoutes: true
   },
   env: {
     NEXT_PUBLIC_DEPLOY_TIME: new Date().toUTCString()
   },
-  headers: async () => [{
-    source: '/:path*',
-    headers: [
-      {
-        key: 'Cache-Control',
-        value: 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=60'
-      }
-    ]
-  }]
+  headers: async () => [
+    {
+      source: '/api/:path*',
+      headers: [
+        {
+          key: 'Cache-Control',
+          value: 'no-store, max-age=0'
+        }
+      ]
+    },
+    {
+      source: '/((?!api).*)',
+      headers: [
+        {
+          key: 'Cache-Control',
+          value: 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=60'
+        }
+      ]
+    }
+  ]
 };
 
 module.exports = nextConfig;

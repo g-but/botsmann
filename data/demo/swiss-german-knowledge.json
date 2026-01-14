@@ -1,0 +1,111 @@
+{
+  "name": "Swiss German Language & Culture",
+  "description": "Knowledge base for learning Swiss German (Schwyzerdütsch)",
+  "chunks": [
+    {
+      "id": "greetings-1",
+      "topic": "Greetings",
+      "question": "How do you say hello in Swiss German?",
+      "content": "The most common Swiss German greeting is 'Grüezi' (GREW-tsee), used in formal situations. For informal settings, use 'Hoi' or 'Sali'. In the morning, say 'Guete Morge' (good morning), and in the evening 'Guete Abig' (good evening). When leaving, 'Uf Widerluege' is the formal goodbye, while 'Tschüss' or 'Ciao' work for casual situations.",
+      "keywords": ["hello", "greetings", "grüezi", "hoi", "sali", "goodbye", "morning", "evening", "formal", "informal"]
+    },
+    {
+      "id": "greetings-2",
+      "topic": "Greetings",
+      "question": "What's the difference between Grüezi and Hoi?",
+      "content": "'Grüezi' is formal and respectful—use it with strangers, in shops, at work, or with older people. 'Hoi' is casual and friendly—use it with friends, younger people, or in relaxed settings. Using 'Hoi' with a stranger might seem too familiar, while 'Grüezi' with close friends might feel distant. In Zürich, you'll hear both constantly.",
+      "keywords": ["grüezi", "hoi", "formal", "informal", "difference", "strangers", "friends", "polite", "casual"]
+    },
+    {
+      "id": "numbers-1",
+      "topic": "Numbers",
+      "question": "How do you count in Swiss German?",
+      "content": "Swiss German numbers: eis (1), zwei (2), drü (3), vier (4), föif (5), sächs (6), sibä (7), acht (8), nüün (9), zää (10). Note the differences from High German: 'drü' instead of 'drei', 'föif' instead of 'fünf', 'sächs' instead of 'sechs'. For 20, say 'zwänzg', and for 100, say 'hundert' (same as High German).",
+      "keywords": ["numbers", "count", "counting", "one", "two", "three", "eis", "zwei", "drü", "föif"]
+    },
+    {
+      "id": "food-1",
+      "topic": "Food & Dining",
+      "question": "How do I order food in Swiss German?",
+      "content": "At a restaurant, say 'Ich hätt gern...' (I would like...) followed by your order. For drinks: 'Es Bier, bitte' (a beer, please) or 'E Kafi' (a coffee). To ask for the bill: 'Chönt ich zahle?' or simply 'Zahle, bitte'. Common food words: Rösti (potato dish), Zürigschnätzlets (Zurich-style meat), Fondue, Raclette. Tip: 'En Guete!' means 'enjoy your meal'.",
+      "keywords": ["food", "restaurant", "order", "ordering", "eat", "drink", "beer", "coffee", "bill", "pay", "rösti", "fondue"]
+    },
+    {
+      "id": "food-2",
+      "topic": "Food & Dining",
+      "question": "What are typical Swiss dishes?",
+      "content": "Classic Swiss dishes include: Rösti (crispy grated potatoes, originally from Bern), Fondue (melted cheese with bread), Raclette (melted cheese scraped onto potatoes), Zürigschnätzlets (sliced veal in cream sauce with rösti), Älplermagronen (Alpine macaroni with potatoes, cheese, and onions), and Birchermüesli (invented in Zürich, a healthy breakfast). For dessert, try Vermicelles (chestnut purée) or Zuger Kirschtorte.",
+      "keywords": ["swiss", "dishes", "food", "traditional", "rösti", "fondue", "raclette", "cheese", "typical", "cuisine"]
+    },
+    {
+      "id": "directions-1",
+      "topic": "Directions",
+      "question": "How do I ask for directions in Swiss German?",
+      "content": "To ask where something is: 'Wo isch...?' (Where is...?). For example: 'Wo isch de Bahnhof?' (Where is the train station?). Useful responses: 'links' (left), 'rechts' (right), 'gradus' (straight ahead), 'hinder' (behind), 'vor' (in front of). 'Es isch nöd wit' means 'it's not far'. To politely ask: 'Entschuldigung, chönd Sie mir säge wo...?' (Excuse me, can you tell me where...?).",
+      "keywords": ["directions", "where", "left", "right", "straight", "station", "bahnhof", "ask", "how", "find", "lost"]
+    },
+    {
+      "id": "culture-1",
+      "topic": "Culture",
+      "question": "What should I know about Swiss culture?",
+      "content": "Swiss people value punctuality—being late is considered disrespectful. Quiet hours (Ruhezeit) are strictly observed: no loud noise after 10 PM or on Sundays. Recycling is mandatory and taken seriously. The Swiss are initially reserved but warm up once you know them. Small talk often centers on weather, mountains, or local news. Tipping is appreciated but not expected (service is included). Always greet shopkeepers when entering and leaving.",
+      "keywords": ["culture", "customs", "swiss", "punctuality", "quiet", "sunday", "recycling", "etiquette", "manners", "tips"]
+    },
+    {
+      "id": "culture-2",
+      "topic": "Culture",
+      "question": "What are the Swiss quiet hours (Ruhezeit)?",
+      "content": "Ruhezeit (quiet time) is sacred in Switzerland. General rules: No loud activities from 12:00-13:00 (lunch break), after 22:00 on weekdays, after 20:00 on Saturdays, and ALL DAY on Sundays. This means no vacuuming, drilling, loud music, or even running laundry machines in apartments. Breaking Ruhezeit can result in complaints from neighbors or even fines. Plan noisy tasks for weekday afternoons.",
+      "keywords": ["quiet", "hours", "ruhezeit", "sunday", "noise", "rules", "apartment", "neighbors", "loud", "when"]
+    },
+    {
+      "id": "dialects-1",
+      "topic": "Dialects",
+      "question": "Are there different Swiss German dialects?",
+      "content": "Yes! Every canton has its own dialect. Züridütsch (Zurich) is most common in media. Bärndütsch (Bern) is slower and softer. Baseldytsch (Basel) has French influences. Walliserdütsch (Valais) is so different that other Swiss struggle to understand it. Graubünden has Romansh influences. Despite differences, Swiss people understand each other (mostly). Züridütsch is a good starting point as it's widely understood.",
+      "keywords": ["dialects", "zürich", "bern", "basel", "different", "variations", "canton", "regional", "understand", "züridütsch", "bärndütsch"]
+    },
+    {
+      "id": "work-1",
+      "topic": "Work",
+      "question": "How do I talk about work in Swiss German?",
+      "content": "Common work phrases: 'Ich schaffe bi...' (I work at...), 'Min Job isch...' (My job is...), 'Ich ha hüt frei' (I have today off). 'Büro' means office, 'Chef/Chefin' is boss, 'Kollege/Kollegin' is colleague. For meetings: 'Mir händ e Sitzig' (We have a meeting). Work-life balance is valued—overtime isn't glorified. 'Fiirabe' means end of workday/evening leisure time, a cherished concept.",
+      "keywords": ["work", "job", "office", "boss", "colleague", "meeting", "büro", "schaffe", "business", "employment"]
+    },
+    {
+      "id": "transport-1",
+      "topic": "Transportation",
+      "question": "How do I use public transport in Switzerland?",
+      "content": "Swiss public transport is excellent. Key vocabulary: 'Zug' (train), 'Tram' (tram), 'Bus' (bus), 'Bahnhof' (train station), 'Haltestelle' (stop), 'Billet' or 'Ticket' (ticket), 'Halbtax' (half-fare card), 'GA' (general subscription for unlimited travel). Buy tickets BEFORE boarding—controllers check frequently and fines are steep (100+ CHF). The SBB app is essential for schedules.",
+      "keywords": ["transport", "train", "tram", "bus", "ticket", "sbb", "public", "travel", "bahnhof", "zug", "halbtax"]
+    },
+    {
+      "id": "shopping-1",
+      "topic": "Shopping",
+      "question": "What are the shopping hours in Switzerland?",
+      "content": "Swiss shops have limited hours compared to other countries. Most stores: Monday-Friday 9:00-18:30/19:00, Saturday 9:00-17:00/18:00. Almost everything is CLOSED on Sundays (except train station shops and some tourist areas). Migros and Coop are the main supermarkets. Many shops close for lunch (12:00-14:00) in smaller towns. Plan your shopping—Sunday closures catch many newcomers off guard!",
+      "keywords": ["shopping", "hours", "stores", "sunday", "closed", "migros", "coop", "supermarket", "open", "when", "buy"]
+    },
+    {
+      "id": "expressions-1",
+      "topic": "Common Expressions",
+      "question": "What are some useful Swiss German expressions?",
+      "content": "Essential expressions: 'Merci vilmal' (thank you very much), 'Kei Problem' (no problem), 'Genau' (exactly, often used as 'yes'), 'Oder?' (right? - tag question), 'Gopfertami!' (mild swear, like 'damn'), 'Säuglatt' (super cool), 'Es isch mega guet' (it's really good), 'Ich verstah nöd' (I don't understand), 'Chönd Sie langsamer rede?' (Can you speak slower?). Swiss love adding 'oder' at the end of sentences for confirmation.",
+      "keywords": ["expressions", "phrases", "common", "useful", "thank", "merci", "understand", "cool", "slang", "everyday"]
+    },
+    {
+      "id": "expressions-2",
+      "topic": "Common Expressions",
+      "question": "How do I say 'I don't understand' in Swiss German?",
+      "content": "'Ich verstah nöd' or 'Ich ha nöd verstande' (I didn't understand). To ask someone to repeat: 'Wie bitte?' or 'Chönd Sie das wiederhole?'. To ask them to slow down: 'Chönd Sie langsamer rede, bitte?'. Don't be embarrassed to ask—Swiss people appreciate the effort to learn their dialect and are usually happy to help or switch to High German.",
+      "keywords": ["understand", "don't understand", "repeat", "slower", "help", "confused", "verstah", "speak", "language"]
+    },
+    {
+      "id": "weather-1",
+      "topic": "Weather",
+      "question": "How do I talk about weather in Swiss German?",
+      "content": "Weather small talk is universal! 'Wies Wetter isch hüt?' (How's the weather today?). Descriptions: 'Es isch schön' (it's nice), 'Es rägnet' (it's raining), 'Es schneit' (it's snowing), 'Es isch chalt' (it's cold), 'Es isch heiss' (it's hot), 'Es isch näblig' (it's foggy—very common in Swiss valleys!), 'De Föhn blaast' (the Föhn wind is blowing—causes headaches for many). Weather affects everything in Switzerland.",
+      "keywords": ["weather", "rain", "snow", "cold", "hot", "sunny", "fog", "temperature", "wetter", "forecast"]
+    }
+  ]
+}
