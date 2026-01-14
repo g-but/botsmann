@@ -1,17 +1,27 @@
 import { NextResponse } from 'next/server';
-import { connectDB } from '@/lib/mongodb';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 export async function GET() {
   try {
-    const conn = await connectDB();
-    const isConnected = conn.connection.readyState === 1;
-    
-    if (!isConnected) {
-      throw new Error('Database not connected');
+    if (!isSupabaseConfigured()) {
+      return NextResponse.json(
+        { status: 'unhealthy', error: 'Database not configured' },
+        { status: 503 }
+      );
+    }
+
+    // Simple health check - query the database
+    const { error } = await supabase
+      .from('consultations')
+      .select('id')
+      .limit(1);
+
+    if (error) {
+      throw error;
     }
 
     return NextResponse.json(
-      { status: 'healthy', mongodb: 'connected' },
+      { status: 'healthy', database: 'connected' },
       { status: 200 }
     );
   } catch (error) {
