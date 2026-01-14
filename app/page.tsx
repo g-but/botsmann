@@ -36,7 +36,7 @@ export default function HomePage() {
           <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
             Upload PDFs, notes, and research. Ask questions. Get answers with citations.
             <span className="block mt-2 text-lg text-gray-500">
-              Your data stays private. Choose free Groq, OpenAI, or run 100% locally with Ollama.
+              Your data stays private. AI included free.
             </span>
           </p>
 
@@ -74,8 +74,8 @@ export default function HomePage() {
             </div>
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-100">
               <div className="text-3xl mb-3">🤖</div>
-              <div className="font-semibold text-gray-900">Choose Your AI</div>
-              <div className="text-sm text-gray-500">Groq (free), OpenAI, or Ollama</div>
+              <div className="font-semibold text-gray-900">AI Included Free</div>
+              <div className="text-sm text-gray-500">No API keys or setup required</div>
             </div>
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-100">
               <div className="text-3xl mb-3">📚</div>
@@ -166,50 +166,50 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Model Options */}
+        {/* Privacy Section */}
         <section className="mb-24">
           <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-3xl p-8 md:p-12">
             <div className="text-center mb-10">
               <h2 className="text-3xl font-bold mb-4">
                 <span className="bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                  Choose Your AI Model
+                  Your Data. Your Control.
                 </span>
               </h2>
-              <p className="text-gray-600">No vendor lock-in. Use the model that fits your needs.</p>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Unlike other AI tools, we don't use your documents to train models.
+                Your files are processed securely and stay under your control.
+              </p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600 font-bold">G</div>
-                  <div>
-                    <div className="font-bold text-gray-900">Groq</div>
-                    <div className="text-xs text-green-600 font-medium">Free</div>
-                  </div>
+                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
+                  <svg className="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
                 </div>
-                <p className="text-sm text-gray-600">Fast inference with Llama 3.1. Great for getting started at no cost.</p>
+                <div className="font-bold text-gray-900 mb-2">Secure Processing</div>
+                <p className="text-sm text-gray-600">Documents are processed in isolated environments. Nothing is shared or stored beyond your session.</p>
               </div>
 
               <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600 font-bold">O</div>
-                  <div>
-                    <div className="font-bold text-gray-900">OpenAI</div>
-                    <div className="text-xs text-gray-500 font-medium">Bring Your Key</div>
-                  </div>
+                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
+                  <svg className="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
                 </div>
-                <p className="text-sm text-gray-600">Premium quality with GPT-4. Use your own API key for best results.</p>
+                <div className="font-bold text-gray-900 mb-2">No Training on Your Data</div>
+                <p className="text-sm text-gray-600">We never use your documents to train AI models. Your intellectual property stays yours.</p>
               </div>
 
               <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-gray-600 font-bold">L</div>
-                  <div>
-                    <div className="font-bold text-gray-900">Ollama</div>
-                    <div className="text-xs text-blue-600 font-medium">100% Local</div>
-                  </div>
+                <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <svg className="w-6 h-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
                 </div>
-                <p className="text-sm text-gray-600">Run entirely on your hardware. Maximum privacy, no data leaves your device.</p>
+                <div className="font-bold text-gray-900 mb-2">Enterprise Ready</div>
+                <p className="text-sm text-gray-600">Need on-premises deployment? We can set up Botsmann entirely on your own infrastructure.</p>
               </div>
             </div>
           </div>
