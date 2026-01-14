@@ -4,6 +4,7 @@ import { Fragment } from 'react';
 import Link from 'next/link';
 import { Dialog, Transition } from '@headlessui/react';
 import type { MobileNavProps } from '@/types/navigation';
+import { useAuth } from '@/lib/auth';
 
 /**
  * Mobile navigation drawer
@@ -11,6 +12,13 @@ import type { MobileNavProps } from '@/types/navigation';
  * Handles nested menu items with indentation
  */
 export function MobileNav({ isOpen, onClose, items, currentPath }: MobileNavProps) {
+  const { user, loading, signOut } = useAuth();
+
+  const handleSignOut = () => {
+    signOut();
+    onClose();
+  };
+
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50 lg:hidden" onClose={onClose}>
@@ -98,6 +106,63 @@ export function MobileNav({ isOpen, onClose, items, currentPath }: MobileNavProp
                           </div>
                         ))}
                       </nav>
+                    </div>
+
+                    {/* Auth Section */}
+                    <div className="border-t border-gray-200 px-4 py-6 bg-gray-50">
+                      {loading ? (
+                        <div className="h-10 bg-gray-200 rounded animate-pulse" />
+                      ) : user ? (
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold">
+                              {user.email?.[0].toUpperCase() || 'U'}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-gray-900 truncate">{user.email}</p>
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            <Link
+                              href="/documents"
+                              className="flex-1 text-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50"
+                              onClick={onClose}
+                            >
+                              My Documents
+                            </Link>
+                            <Link
+                              href="/settings"
+                              className="flex-1 text-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50"
+                              onClick={onClose}
+                            >
+                              Settings
+                            </Link>
+                          </div>
+                          <button
+                            onClick={handleSignOut}
+                            className="w-full px-3 py-2 text-sm font-medium text-red-600 bg-white border border-red-200 rounded-lg hover:bg-red-50"
+                          >
+                            Sign Out
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex gap-3">
+                          <Link
+                            href="/auth/signin"
+                            className="flex-1 text-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50"
+                            onClick={onClose}
+                          >
+                            Login
+                          </Link>
+                          <Link
+                            href="/auth/signup"
+                            className="flex-1 text-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg hover:opacity-90"
+                            onClick={onClose}
+                          >
+                            Register
+                          </Link>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </Dialog.Panel>

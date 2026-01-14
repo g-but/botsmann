@@ -4,8 +4,8 @@ import { Providers } from '@/components/Providers';
 import './globals.css';
 
 export const metadata = {
-  title: 'Botsmann - AI Bot Suite',
-  description: 'A suite of AI-powered bots for various tasks',
+  title: 'Botsmann - Private AI for Your Data',
+  description: 'AI assistants that work with your documents. Pre-built experts for legal, medical, research, or bring your own data. Your data stays private.',
 };
 
 export default function RootLayout({

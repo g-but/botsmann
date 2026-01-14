@@ -13,3 +13,6 @@ export { MobileNav } from './MobileNav';
 export { NextSection } from './NextSection';
 export { BotSwitcher } from './BotSwitcher';
 export { SiteMenuDropdown } from './SiteMenuDropdown';
+
+// Auth navigation
+export { AuthNav } from './AuthNav';
