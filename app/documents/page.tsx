@@ -262,62 +262,62 @@ export default function DocumentsPage() {
   const readyDocuments = documents.filter(d => d.status === 'ready');
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white pt-16">
-      {/* User Bar - Below main header */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-end gap-4">
-          <Link href="/settings" className="text-sm text-gray-600 hover:text-gray-800">
-            Settings
-          </Link>
-          <span className="text-sm text-gray-600">{user.email}</span>
-          <button
-            onClick={handleSignOut}
-            className="text-sm text-gray-500 hover:text-gray-700"
-          >
-            Sign Out
-          </button>
-        </div>
-      </div>
-
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       <div className="max-w-6xl mx-auto px-4 py-8">
+        {/* Page Header with User Controls */}
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">My Documents</h1>
             <p className="text-gray-600">Upload documents and chat with your knowledge base</p>
           </div>
-          <div>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".txt,.md,.pdf,text/plain,text/markdown,application/pdf"
-              onChange={handleUpload}
-              className="hidden"
-              id="file-upload"
-            />
-            <label
-              htmlFor="file-upload"
-              className={`inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 cursor-pointer transition-colors ${
-                uploading ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
+          <div className="flex items-center gap-4">
+            <Link href="/settings" className="text-sm text-gray-500 hover:text-gray-700">
+              Settings
+            </Link>
+            <span className="text-sm text-gray-400">|</span>
+            <span className="text-sm text-gray-600">{user.email}</span>
+            <button
+              onClick={handleSignOut}
+              className="text-sm text-gray-500 hover:text-red-600"
             >
-              {uploading ? (
-                <>
-                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                  </svg>
-                  Uploading...
-                </>
-              ) : (
-                <>
-                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
-                  Upload Document
-                </>
-              )}
-            </label>
+              Sign Out
+            </button>
           </div>
+        </div>
+
+        {/* Upload Button */}
+        <div className="flex justify-end mb-6">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".txt,.md,.pdf,text/plain,text/markdown,application/pdf"
+            onChange={handleUpload}
+            className="hidden"
+            id="file-upload"
+          />
+          <label
+            htmlFor="file-upload"
+            className={`inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 cursor-pointer transition-colors ${
+              uploading ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+          >
+            {uploading ? (
+              <>
+                <svg className="animate-spin -ml-1 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                Uploading...
+              </>
+            ) : (
+              <>
+                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Upload Document
+              </>
+            )}
+          </label>
         </div>
 
         {/* Status Messages */}

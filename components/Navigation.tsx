@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { NavItem, MobileNav } from './navigation';
+import { NavItem, MobileNav, AuthNav } from './navigation';
 import { menuItems, getNavItems, getButtonItems } from '@/data/menuItems';
 
 /**
@@ -34,7 +34,7 @@ export function Navigation() {
             />
           ))}
         </div>
-        <div className="flex-shrink-0 flex items-center gap-3">
+        <div className="flex-shrink-0 flex items-center gap-4">
           {buttonItems.map((item) => (
             <NavItem
               key={item.label}
@@ -42,6 +42,8 @@ export function Navigation() {
               isActive={pathname === item.path}
             />
           ))}
+          <div className="h-6 w-px bg-gray-200" />
+          <AuthNav />
         </div>
       </nav>
 
