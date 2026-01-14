@@ -4,35 +4,12 @@ import { useState, useEffect, type FormEvent } from 'react';
 import Link from 'next/link';
 import { useRequireAuth } from '@/lib/auth';
 
-type ModelProvider = 'groq' | 'openai' | 'ollama';
-
 interface UserSettings {
-  preferred_model: ModelProvider;
+  preferred_model: string;
   groq_api_key: string | null;
   openai_api_key: string | null;
   ollama_url: string | null;
 }
-
-const MODEL_OPTIONS: { id: ModelProvider; name: string; description: string; badge?: string }[] = [
-  {
-    id: 'groq',
-    name: 'Groq (Llama 3.1)',
-    description: 'Free tier with 14,400 requests/day. Fast inference, no cost.',
-    badge: 'Free'
-  },
-  {
-    id: 'openai',
-    name: 'OpenAI (GPT-4)',
-    description: 'Premium quality. Bring your own API key.',
-    badge: 'BYOK'
-  },
-  {
-    id: 'ollama',
-    name: 'Ollama (Local)',
-    description: 'Run models on your own hardware. Maximum privacy.',
-    badge: 'Local'
-  }
-];
 
 export default function SettingsPage() {
   const { user, loading: authLoading, signOut } = useRequireAuth();
@@ -42,6 +19,7 @@ export default function SettingsPage() {
     openai_api_key: null,
     ollama_url: null
   });
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState('');
@@ -57,6 +35,10 @@ export default function SettingsPage() {
           const data = await response.json();
           if (data.settings) {
             setSettings(data.settings);
+            // Show advanced if user has custom keys
+            if (data.settings.groq_api_key || data.settings.openai_api_key || data.settings.ollama_url) {
+              setShowAdvanced(true);
+            }
           }
         }
       } catch (err) {
@@ -109,155 +91,167 @@ export default function SettingsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold text-gray-900">
-            Botsmann
-          </Link>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600">{user.email}</span>
-            <button
-              onClick={handleSignOut}
-              className="text-sm text-gray-500 hover:text-gray-700"
-            >
-              Sign Out
-            </button>
+      <div className="max-w-2xl mx-auto px-4 py-8">
+        {/* Page Header */}
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Settings</h1>
+          <p className="text-gray-600">Manage your account</p>
+        </div>
+
+        {/* Account Section */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Account</h2>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-500 mb-1">Email</label>
+              <p className="text-gray-900">{user.email}</p>
+            </div>
+
+            <div className="pt-4 border-t border-gray-100">
+              <button
+                onClick={handleSignOut}
+                className="text-red-600 hover:text-red-700 text-sm font-medium"
+              >
+                Sign Out
+              </button>
+            </div>
           </div>
         </div>
-      </header>
 
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Settings</h1>
-        <p className="text-gray-600 mb-8">Configure your AI model preferences</p>
+        {/* AI Status Section */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">AI Assistant</h2>
 
-        <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Model Selection */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">AI Model Provider</h2>
-            <div className="space-y-3">
-              {MODEL_OPTIONS.map((option) => (
-                <label
-                  key={option.id}
-                  className={`flex items-start p-4 border rounded-lg cursor-pointer transition-colors ${
-                    settings.preferred_model === option.id
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="model"
-                    value={option.id}
-                    checked={settings.preferred_model === option.id}
-                    onChange={() => setSettings({ ...settings, preferred_model: option.id })}
-                    className="mt-1 mr-3"
-                  />
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-gray-900">{option.name}</span>
-                      {option.badge && (
-                        <span className={`text-xs px-2 py-0.5 rounded-full ${
-                          option.badge === 'Free' ? 'bg-green-100 text-green-700' :
-                          option.badge === 'BYOK' ? 'bg-purple-100 text-purple-700' :
-                          'bg-gray-100 text-gray-700'
-                        }`}>
-                          {option.badge}
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-sm text-gray-600 mt-1">{option.description}</p>
-                  </div>
-                </label>
-              ))}
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+              <svg className="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
             </div>
-          </div>
-
-          {/* API Keys */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">API Configuration</h2>
-
-            {/* Groq API Key */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Groq API Key
-                <span className="text-gray-400 font-normal ml-2">(optional - we provide free access)</span>
-              </label>
-              <input
-                type="password"
-                value={settings.groq_api_key || ''}
-                onChange={(e) => setSettings({ ...settings, groq_api_key: e.target.value || null })}
-                placeholder="gsk_..."
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Get a free key at{' '}
-                <a href="https://console.groq.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                  console.groq.com
-                </a>
-              </p>
-            </div>
-
-            {/* OpenAI API Key */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                OpenAI API Key
-                <span className="text-gray-400 font-normal ml-2">(required for OpenAI)</span>
-              </label>
-              <input
-                type="password"
-                value={settings.openai_api_key || ''}
-                onChange={(e) => setSettings({ ...settings, openai_api_key: e.target.value || null })}
-                placeholder="sk-..."
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            {/* Ollama URL */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Ollama Server URL
-                <span className="text-gray-400 font-normal ml-2">(required for local models)</span>
-              </label>
-              <input
-                type="url"
-                value={settings.ollama_url || ''}
-                onChange={(e) => setSettings({ ...settings, ollama_url: e.target.value || null })}
-                placeholder="http://localhost:11434"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Install Ollama from{' '}
-                <a href="https://ollama.ai" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                  ollama.ai
-                </a>
+              <p className="font-medium text-gray-900">AI is ready to use</p>
+              <p className="text-sm text-gray-600 mt-1">
+                Your documents are analyzed using AI. Upload documents and start chatting to get insights.
               </p>
             </div>
           </div>
 
-          {/* Error/Success Messages */}
-          {error && (
-            <div className="bg-red-50 text-red-600 p-4 rounded-lg">
-              {error}
-            </div>
-          )}
-          {saved && (
-            <div className="bg-green-50 text-green-600 p-4 rounded-lg">
-              Settings saved successfully!
-            </div>
-          )}
-
-          {/* Save Button */}
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              disabled={saving}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors"
+          <div className="mt-6">
+            <Link
+              href="/documents"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
             >
-              {saving ? 'Saving...' : 'Save Settings'}
-            </button>
+              Go to My Documents
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
           </div>
-        </form>
+        </div>
+
+        {/* Advanced Section (Collapsed) */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <button
+            onClick={() => setShowAdvanced(!showAdvanced)}
+            className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
+          >
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">Advanced Settings</h2>
+              <p className="text-sm text-gray-500">For developers who want to use their own AI provider</p>
+            </div>
+            <svg
+              className={`w-5 h-5 text-gray-400 transition-transform ${showAdvanced ? 'rotate-180' : ''}`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          {showAdvanced && (
+            <form onSubmit={handleSubmit} className="px-6 pb-6 border-t border-gray-100">
+              <div className="py-4 mb-4 bg-amber-50 -mx-6 px-6 border-b border-amber-100">
+                <p className="text-sm text-amber-800">
+                  <strong>Note:</strong> These settings are optional. Botsmann works out of the box without any configuration.
+                </p>
+              </div>
+
+              {/* Groq API Key */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Groq API Key
+                </label>
+                <p className="text-xs text-gray-500 mb-2">
+                  Leave empty to use Botsmann&apos;s free AI service
+                </p>
+                <input
+                  type="password"
+                  value={settings.groq_api_key || ''}
+                  onChange={(e) => setSettings({ ...settings, groq_api_key: e.target.value || null })}
+                  placeholder="gsk_..."
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              {/* OpenAI API Key */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  OpenAI API Key
+                </label>
+                <p className="text-xs text-gray-500 mb-2">
+                  For GPT-4 access (requires OpenAI account with billing)
+                </p>
+                <input
+                  type="password"
+                  value={settings.openai_api_key || ''}
+                  onChange={(e) => setSettings({ ...settings, openai_api_key: e.target.value || null })}
+                  placeholder="sk-..."
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              {/* Ollama URL */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Local AI Server (Ollama)
+                </label>
+                <p className="text-xs text-gray-500 mb-2">
+                  Run AI on your own computer for maximum privacy
+                </p>
+                <input
+                  type="url"
+                  value={settings.ollama_url || ''}
+                  onChange={(e) => setSettings({ ...settings, ollama_url: e.target.value || null })}
+                  placeholder="http://localhost:11434"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              {/* Error/Success Messages */}
+              {error && (
+                <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-4">
+                  {error}
+                </div>
+              )}
+              {saved && (
+                <div className="bg-green-50 text-green-600 p-4 rounded-lg mb-4">
+                  Settings saved!
+                </div>
+              )}
+
+              {/* Save Button */}
+              <button
+                type="submit"
+                disabled={saving}
+                className="px-6 py-3 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 disabled:opacity-50 transition-colors"
+              >
+                {saving ? 'Saving...' : 'Save Advanced Settings'}
+              </button>
+            </form>
+          )}
+        </div>
       </div>
     </div>
   );
