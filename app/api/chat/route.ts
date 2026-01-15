@@ -14,6 +14,10 @@ import { createClient } from '@supabase/supabase-js';
 import { generateEmbedding } from '@/lib/embeddings';
 import { generateLLMResponse, type ModelProvider } from '@/lib/llm-client';
 
+// Extend function timeout for model loading (Vercel)
+// Note: Free tier max is 10s, Pro tier allows up to 60s
+export const maxDuration = 30;
+
 // Server-side Supabase client with service role
 function getServiceClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -126,15 +130,32 @@ export async function POST(request: NextRequest) {
     }
     console.log('[Chat API] Found', docCount, 'documents. Time:', Date.now() - startTime, 'ms');
 
-    // Generate embedding for the query
+    // Generate embedding for the query with timeout
     console.log('[Chat API] Generating query embedding...');
     const embeddingStartTime = Date.now();
     let queryEmbedding: number[];
     try {
-      queryEmbedding = await generateEmbedding(message);
+      // 8 second timeout for embedding (leave room for LLM call)
+      const EMBEDDING_TIMEOUT = 8000;
+      const embeddingPromise = generateEmbedding(message);
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error('Embedding timeout')), EMBEDDING_TIMEOUT);
+      });
+
+      queryEmbedding = await Promise.race([embeddingPromise, timeoutPromise]);
       console.log('[Chat API] Embedding generated in', Date.now() - embeddingStartTime, 'ms');
     } catch (embeddingError) {
-      console.error('[Chat API] Embedding generation failed:', embeddingError);
+      const elapsed = Date.now() - embeddingStartTime;
+      console.error('[Chat API] Embedding generation failed after', elapsed, 'ms:', embeddingError);
+
+      // Check if it's a timeout (likely cold start model loading)
+      if (embeddingError instanceof Error && embeddingError.message === 'Embedding timeout') {
+        return NextResponse.json(
+          { success: false, error: 'Service is warming up. Please try again in a few seconds.' },
+          { status: 503 }
+        );
+      }
+
       return NextResponse.json(
         { success: false, error: 'Failed to process query. Please try again.' },
         { status: 503 }

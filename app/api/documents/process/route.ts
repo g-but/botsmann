@@ -15,6 +15,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { generateEmbedding, chunkText } from '@/lib/embeddings';
 
+// Extend function timeout for embedding generation (Vercel)
+export const maxDuration = 60; // Allow longer for document processing
+
 // Server-side Supabase client with service role
 function getServiceClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
