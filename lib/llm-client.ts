@@ -92,8 +92,8 @@ async function generateWithGroq(
 
   if (!response.ok) {
     const error = await response.text();
-    console.error('Groq API error:', error);
-    throw new Error('Groq API request failed');
+    console.error('Groq API error:', response.status, error);
+    throw new Error(`Groq API error: ${response.status}`);
   }
 
   const data = await response.json();
