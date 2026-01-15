@@ -218,7 +218,7 @@ export async function POST(request: NextRequest) {
 
           return NextResponse.json({
             success: true,
-            response: `I found relevant information in your documents, but I need an LLM API key to generate a personalized response. Here's what I found:\n\n${fallbackParts.join('\n\n---\n\n')}\n\n---\n*To enable AI-generated responses, configure a Groq API key (free at console.groq.com) in your settings or ask your administrator to configure the server.*`,
+            response: `Here's what I found in your documents:\n\n${fallbackParts.join('\n\n---\n\n')}`,
             sources,
             provider: 'none',
             model: 'context-only'
@@ -232,9 +232,11 @@ export async function POST(request: NextRequest) {
           );
         }
 
+        // User-friendly error message
+        console.error('LLM error:', llmError.message);
         return NextResponse.json(
-          { success: false, error: `${llmError.message}. Get a free API key at console.groq.com` },
-          { status: 400 }
+          { success: false, error: 'AI service temporarily unavailable. Please try again in a moment.' },
+          { status: 503 }
         );
       }
 
