@@ -10,6 +10,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { generateEmbedding } from '@/lib/embeddings';
 
+// Extend function timeout for embedding generation (Vercel)
+export const maxDuration = 30;
+
 // Server-side Supabase client with service role
 function getServiceClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
