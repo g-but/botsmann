@@ -61,17 +61,28 @@ Context from user's documents will be provided below.`;
  * Chat with documents using RAG
  */
 export async function POST(request: NextRequest) {
+  const startTime = Date.now();
+  console.log('[Chat API] Starting request');
+
   try {
+    console.log('[Chat API] Verifying user...');
     const user = await verifyUser(request);
     if (!user) {
+      console.log('[Chat API] User verification failed');
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }
       );
     }
+    console.log('[Chat API] User verified:', user.id, 'Time:', Date.now() - startTime, 'ms');
 
     const body = await request.json();
-    const { message, documentId, contextSize = 5 } = body;
+    const { message, documentId, contextSize = 3 } = body;
+    console.log('[Chat API] Request body parsed, message length:', message?.length);
+
+    // Groq free tier limit is ~6000 tokens (~4 chars per token)
+    // Limit context to ~2000 tokens (8000 chars) leaving room for system prompt + response
+    const MAX_CONTEXT_CHARS = 8000;
 
     if (!message || typeof message !== 'string') {
       return NextResponse.json(
@@ -105,6 +116,7 @@ export async function POST(request: NextRequest) {
       .eq('status', 'ready');
 
     if (!docCount || docCount === 0) {
+      console.log('[Chat API] No documents found for user');
       return NextResponse.json({
         success: true,
         response: "You don't have any processed documents yet. Please upload and process some documents first, then I can answer questions about them.",
@@ -112,24 +124,42 @@ export async function POST(request: NextRequest) {
         provider
       });
     }
+    console.log('[Chat API] Found', docCount, 'documents. Time:', Date.now() - startTime, 'ms');
 
     // Generate embedding for the query
-    const queryEmbedding = await generateEmbedding(message);
+    console.log('[Chat API] Generating query embedding...');
+    const embeddingStartTime = Date.now();
+    let queryEmbedding: number[];
+    try {
+      queryEmbedding = await generateEmbedding(message);
+      console.log('[Chat API] Embedding generated in', Date.now() - embeddingStartTime, 'ms');
+    } catch (embeddingError) {
+      console.error('[Chat API] Embedding generation failed:', embeddingError);
+      return NextResponse.json(
+        { success: false, error: 'Failed to process query. Please try again.' },
+        { status: 503 }
+      );
+    }
 
     // Search for relevant chunks
+    console.log('[Chat API] Searching for relevant chunks...');
+    const searchStartTime = Date.now();
     const { data: searchResults, error: searchError } = await supabase.rpc('match_documents', {
       query_embedding: `[${queryEmbedding.join(',')}]`,
       match_count: contextSize,
       filter_user_id: user.id
     });
 
+    console.log('[Chat API] Search completed in', Date.now() - searchStartTime, 'ms');
+
     if (searchError) {
-      console.error('Search error:', searchError);
+      console.error('[Chat API] Search error:', searchError);
       return NextResponse.json(
         { success: false, error: 'Failed to search documents' },
         { status: 500 }
       );
     }
+    console.log('[Chat API] Found', searchResults?.length || 0, 'relevant chunks');
 
     // Filter by documentId if provided
     let relevantChunks = searchResults || [];
@@ -151,12 +181,28 @@ export async function POST(request: NextRequest) {
       (documents || []).map((d: { id: string; name: string }) => [d.id, d.name])
     );
 
-    // Build context from relevant chunks
-    const contextParts = relevantChunks.map((chunk: {
-      document_id: string;
-      content: string;
-      similarity: number;
-    }, index: number) => {
+    // Build context from relevant chunks, respecting token limits
+    let totalChars = 0;
+    const truncatedChunks: Array<{ document_id: string; content: string; similarity: number }> = [];
+
+    for (const chunk of relevantChunks as Array<{ document_id: string; content: string; similarity: number }>) {
+      const chunkLength = chunk.content.length;
+      if (totalChars + chunkLength > MAX_CONTEXT_CHARS) {
+        // Truncate this chunk to fit
+        const remainingSpace = MAX_CONTEXT_CHARS - totalChars;
+        if (remainingSpace > 200) {
+          truncatedChunks.push({
+            ...chunk,
+            content: chunk.content.substring(0, remainingSpace) + '... [truncated]'
+          });
+        }
+        break;
+      }
+      truncatedChunks.push(chunk);
+      totalChars += chunkLength;
+    }
+
+    const contextParts = truncatedChunks.map((chunk, index: number) => {
       const docName = documentMap.get(chunk.document_id) || 'Unknown Document';
       return `[Source ${index + 1}: ${docName}]\n${chunk.content}`;
     });
@@ -177,6 +223,8 @@ export async function POST(request: NextRequest) {
     }));
 
     // Try to generate response using LLM
+    console.log('[Chat API] Calling LLM, provider:', provider, 'context chars:', totalChars);
+    const llmStartTime = Date.now();
     try {
       const llmResponse = await generateLLMResponse(
         [
@@ -195,6 +243,9 @@ export async function POST(request: NextRequest) {
         }
       );
 
+      console.log('[Chat API] LLM response received in', Date.now() - llmStartTime, 'ms');
+      console.log('[Chat API] Total request time:', Date.now() - startTime, 'ms');
+
       return NextResponse.json({
         success: true,
         response: llmResponse.content,
@@ -204,6 +255,7 @@ export async function POST(request: NextRequest) {
       });
 
     } catch (llmError) {
+      console.error('[Chat API] LLM call failed after', Date.now() - llmStartTime, 'ms');
       // Handle LLM-specific errors with helpful fallbacks
       if (llmError instanceof Error) {
         // For API key errors, return context-only response
@@ -233,7 +285,8 @@ export async function POST(request: NextRequest) {
         }
 
         // User-friendly error message
-        console.error('LLM error:', llmError.message);
+        console.error('[Chat API] LLM error:', llmError.message);
+        console.error('[Chat API] LLM error stack:', llmError.stack);
         return NextResponse.json(
           { success: false, error: 'AI service temporarily unavailable. Please try again in a moment.' },
           { status: 503 }
@@ -244,7 +297,8 @@ export async function POST(request: NextRequest) {
     }
 
   } catch (error) {
-    console.error('Chat error:', error);
+    console.error('[Chat API] Unhandled error:', error);
+    console.error('[Chat API] Stack:', error instanceof Error ? error.stack : 'no stack');
 
     return NextResponse.json(
       { success: false, error: 'Internal server error' },

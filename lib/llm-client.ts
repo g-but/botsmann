@@ -70,7 +70,9 @@ async function generateWithGroq(
   maxTokens: number
 ): Promise<LLMResponse> {
   // Use provided key or fallback to server-side key
-  const key = apiKey || process.env.GROQ_API_KEY;
+  // Clean the key: trim whitespace and remove any literal \n or escaped newlines
+  const rawKey = apiKey || process.env.GROQ_API_KEY;
+  const key = rawKey?.trim().replace(/\\n/g, '').replace(/\n/g, '');
 
   if (!key) {
     throw new Error('Groq API key not configured');
