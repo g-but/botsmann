@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { Dialog, Transition } from '@headlessui/react';
 import type { MobileNavProps } from '@/types/navigation';
 import { useAuth } from '@/lib/auth';
+import { Logo, UserAvatar } from '@/components/shared';
+import { CloseIcon } from '@/components/icons';
 
 /**
  * Mobile navigation drawer
@@ -52,9 +54,7 @@ export function MobileNav({ isOpen, onClose, items, currentPath }: MobileNavProp
                     {/* Header */}
                     <div className="flex items-center justify-between px-4 py-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50">
                       <div className="flex items-center gap-3">
-                        <div className="flex items-center justify-center w-9 h-9 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-sm rounded-lg">
-                          B
-                        </div>
+                        <Logo href={null} showText={false} size="sm" />
                         <Dialog.Title className="text-lg font-semibold text-gray-900">
                           Menu
                         </Dialog.Title>
@@ -65,7 +65,7 @@ export function MobileNav({ isOpen, onClose, items, currentPath }: MobileNavProp
                         onClick={onClose}
                       >
                         <span className="sr-only">Close menu</span>
-                        <CloseIcon />
+                        <CloseIcon className="h-6 w-6" />
                       </button>
                     </div>
 
@@ -115,9 +115,7 @@ export function MobileNav({ isOpen, onClose, items, currentPath }: MobileNavProp
                       ) : user ? (
                         <div className="space-y-3">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold">
-                              {user.email?.[0].toUpperCase() || 'U'}
-                            </div>
+                            <UserAvatar email={user.email} size="md" />
                             <div className="flex-1 min-w-0">
                               <p className="text-sm font-medium text-gray-900 truncate">{user.email}</p>
                             </div>
@@ -172,16 +170,5 @@ export function MobileNav({ isOpen, onClose, items, currentPath }: MobileNavProp
         </div>
       </Dialog>
     </Transition.Root>
-  );
-}
-
-/**
- * Close (X) icon for mobile menu
- */
-function CloseIcon() {
-  return (
-    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-    </svg>
   );
 }

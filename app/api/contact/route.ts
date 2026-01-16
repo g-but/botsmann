@@ -1,9 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 import { z } from 'zod';
+import {
+  jsonSuccess,
+  validateBody,
+  hasValidationError,
+  handleError,
+} from '@/lib/api';
+import { DOMAIN_ERRORS } from '@/lib/constants';
 
-// Validation schema
 const ContactSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   email: z.string().email('Invalid email address'),
@@ -11,36 +17,22 @@ const ContactSchema = z.object({
   message: z.string().min(1, 'Message is required'),
 });
 
-interface ContactEntry {
+type ContactData = z.infer<typeof ContactSchema>;
+
+interface ContactEntry extends ContactData {
   id: string;
-  name: string;
-  email: string;
-  expertise: string;
-  message: string;
   timestamp: string;
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-
     // Validate input
-    const result = ContactSchema.safeParse(body);
-    if (!result.success) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Validation failed',
-          details: result.error.errors.map(e => ({
-            field: e.path.join('.'),
-            message: e.message
-          }))
-        },
-        { status: 400 }
-      );
+    const validation = await validateBody(req, ContactSchema);
+    if (hasValidationError(validation)) {
+      return validation.error;
     }
 
-    const { name, email, expertise, message } = result.data;
+    const { name, email, expertise, message } = validation.data;
 
     // Create contact entry
     const contactEntry: ContactEntry = {
@@ -52,21 +44,17 @@ export async function POST(req: NextRequest) {
       timestamp: new Date().toISOString(),
     };
 
-    // Store to local JSON file
-    // NOTE: This works for local development only.
-    // For production, connect to Supabase or another database.
+    // Store to local JSON file (development only)
     const dataDir = path.join(process.cwd(), 'data');
     const contactsFilePath = path.join(dataDir, 'contacts.json');
 
     let contacts: ContactEntry[] = [];
 
     try {
-      // Ensure data directory exists
       if (!fs.existsSync(dataDir)) {
         fs.mkdirSync(dataDir, { recursive: true });
       }
 
-      // Read existing file if it exists
       if (fs.existsSync(contactsFilePath)) {
         const fileContent = fs.readFileSync(contactsFilePath, 'utf8');
         contacts = JSON.parse(fileContent);
@@ -76,33 +64,19 @@ export async function POST(req: NextRequest) {
       contacts = [];
     }
 
-    // Add new entry
     contacts.push(contactEntry);
 
-    // Write back to file
     try {
       fs.writeFileSync(contactsFilePath, JSON.stringify(contacts, null, 2), 'utf8');
     } catch {
       // On Vercel/serverless, file write will fail - that's expected
-      // Contact is still logged in memory for this request
     }
 
-    return NextResponse.json(
-      {
-        success: true,
-        message: 'Thank you! We\'ll be in touch soon.',
-        id: contactEntry.id
-      },
-      { status: 200 }
+    return jsonSuccess(
+      { id: contactEntry.id },
+      "Thank you! We'll be in touch soon."
     );
   } catch (error) {
-    console.error('Error processing contact submission:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to process submission. Please try again.'
-      },
-      { status: 500 }
-    );
+    return handleError(error, DOMAIN_ERRORS.FAILED_SUBMIT_CONTACT);
   }
 }

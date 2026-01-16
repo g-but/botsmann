@@ -6,41 +6,19 @@
  * DELETE /api/documents?id=xxx - Delete a document
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { type NextRequest } from 'next/server';
 import { SUPPORTED_FILE_TYPES, MAX_FILE_SIZE, type SupportedFileType } from '@/types/document';
-
-// Server-side Supabase client with service role
-function getServiceClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!supabaseUrl || !serviceRoleKey) {
-    throw new Error('Supabase not configured');
-  }
-
-  return createClient(supabaseUrl, serviceRoleKey, {
-    auth: { autoRefreshToken: false, persistSession: false }
-  });
-}
-
-// Verify user from JWT token
-async function verifyUser(request: NextRequest) {
-  const authHeader = request.headers.get('authorization');
-  if (!authHeader?.startsWith('Bearer ')) {
-    return null;
-  }
-
-  const token = authHeader.substring(7);
-  const supabase = getServiceClient();
-
-  const { data: { user }, error } = await supabase.auth.getUser(token);
-  if (error || !user) {
-    return null;
-  }
-
-  return user;
-}
+import { getServiceClient } from '@/lib/supabase';
+import { verifyUser } from '@/lib/api-utils';
+import {
+  jsonSuccess,
+  jsonError,
+  jsonUnauthorized,
+  jsonNotFound,
+  handleError,
+  HTTP_STATUS,
+} from '@/lib/api';
+import { DOMAIN_ERRORS } from '@/lib/constants';
 
 /**
  * Upload a new document
@@ -49,35 +27,31 @@ export async function POST(request: NextRequest) {
   try {
     const user = await verifyUser(request);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return jsonUnauthorized();
     }
 
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
 
     if (!file) {
-      return NextResponse.json(
-        { success: false, error: 'No file provided' },
-        { status: 400 }
-      );
+      return jsonError('No file provided', 'VALIDATION_ERROR', HTTP_STATUS.BAD_REQUEST);
     }
 
     // Validate file type
     if (!SUPPORTED_FILE_TYPES.includes(file.type as SupportedFileType)) {
-      return NextResponse.json(
-        { success: false, error: `Unsupported file type: ${file.type}. Supported: PDF, TXT, MD` },
-        { status: 400 }
+      return jsonError(
+        `Unsupported file type: ${file.type}. Supported: PDF, TXT, MD`,
+        'VALIDATION_ERROR',
+        HTTP_STATUS.BAD_REQUEST
       );
     }
 
     // Validate file size
     if (file.size > MAX_FILE_SIZE) {
-      return NextResponse.json(
-        { success: false, error: `File too large. Maximum size: ${MAX_FILE_SIZE / 1024 / 1024}MB` },
-        { status: 400 }
+      return jsonError(
+        `File too large. Maximum size: ${MAX_FILE_SIZE / 1024 / 1024}MB`,
+        'VALIDATION_ERROR',
+        HTTP_STATUS.BAD_REQUEST
       );
     }
 
@@ -94,15 +68,12 @@ export async function POST(request: NextRequest) {
       .from('documents')
       .upload(storagePath, fileBuffer, {
         contentType: file.type,
-        upsert: false
+        upsert: false,
       });
 
     if (uploadError) {
       console.error('Storage upload error:', uploadError);
-      return NextResponse.json(
-        { success: false, error: 'Failed to upload file' },
-        { status: 500 }
-      );
+      return jsonError('Failed to upload file', 'INTERNAL_ERROR', HTTP_STATUS.INTERNAL_ERROR);
     }
 
     // Create document record
@@ -114,7 +85,7 @@ export async function POST(request: NextRequest) {
         type: file.type,
         size_bytes: file.size,
         storage_path: storagePath,
-        status: 'pending'
+        status: 'pending',
       })
       .select()
       .single();
@@ -123,26 +94,15 @@ export async function POST(request: NextRequest) {
       console.error('Database insert error:', dbError);
       // Clean up uploaded file
       await supabase.storage.from('documents').remove([storagePath]);
-      return NextResponse.json(
-        { success: false, error: 'Failed to create document record' },
-        { status: 500 }
-      );
+      return jsonError('Failed to create document record', 'DATABASE_ERROR', HTTP_STATUS.INTERNAL_ERROR);
     }
 
     // Trigger async processing (will be handled separately)
     // For now, the document is created with status 'pending'
 
-    return NextResponse.json({
-      success: true,
-      document
-    });
-
+    return jsonSuccess({ document });
   } catch (error) {
-    console.error('Document upload error:', error);
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    );
+    return handleError(error, DOMAIN_ERRORS.FAILED_UPLOAD_DOCUMENT);
   }
 }
 
@@ -153,10 +113,7 @@ export async function GET(request: NextRequest) {
   try {
     const user = await verifyUser(request);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return jsonUnauthorized();
     }
 
     const supabase = getServiceClient();
@@ -169,23 +126,12 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       console.error('Database query error:', error);
-      return NextResponse.json(
-        { success: false, error: 'Failed to fetch documents' },
-        { status: 500 }
-      );
+      return jsonError('Failed to fetch documents', 'DATABASE_ERROR', HTTP_STATUS.INTERNAL_ERROR);
     }
 
-    return NextResponse.json({
-      success: true,
-      documents
-    });
-
+    return jsonSuccess({ documents });
   } catch (error) {
-    console.error('Document list error:', error);
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    );
+    return handleError(error, DOMAIN_ERRORS.FAILED_GET_DOCUMENTS);
   }
 }
 
@@ -196,20 +142,14 @@ export async function DELETE(request: NextRequest) {
   try {
     const user = await verifyUser(request);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return jsonUnauthorized();
     }
 
     const { searchParams } = new URL(request.url);
     const documentId = searchParams.get('id');
 
     if (!documentId) {
-      return NextResponse.json(
-        { success: false, error: 'Document ID required' },
-        { status: 400 }
-      );
+      return jsonError('Document ID required', 'VALIDATION_ERROR', HTTP_STATUS.BAD_REQUEST);
     }
 
     const supabase = getServiceClient();
@@ -223,10 +163,7 @@ export async function DELETE(request: NextRequest) {
       .single();
 
     if (fetchError || !document) {
-      return NextResponse.json(
-        { success: false, error: 'Document not found' },
-        { status: 404 }
-      );
+      return jsonNotFound('Document not found');
     }
 
     // Delete from storage
@@ -240,21 +177,11 @@ export async function DELETE(request: NextRequest) {
 
     if (deleteError) {
       console.error('Database delete error:', deleteError);
-      return NextResponse.json(
-        { success: false, error: 'Failed to delete document' },
-        { status: 500 }
-      );
+      return jsonError('Failed to delete document', 'DATABASE_ERROR', HTTP_STATUS.INTERNAL_ERROR);
     }
 
-    return NextResponse.json({
-      success: true
-    });
-
+    return jsonSuccess({ deleted: true });
   } catch (error) {
-    console.error('Document delete error:', error);
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    );
+    return handleError(error, DOMAIN_ERRORS.FAILED_DELETE_DOCUMENT);
   }
 }

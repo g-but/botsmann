@@ -1,5 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { jsonError, jsonValidationError, formatZodErrors, HTTP_STATUS } from '@/lib/api';
+import { API_CONFIG } from '@/lib/constants';
 
 // ============================================================================
 // Types
@@ -23,8 +25,8 @@ interface SearchResult {
 // Groq Integration (Free LLM)
 // ============================================================================
 
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const GROQ_MODEL = 'llama-3.1-8b-instant';
+const GROQ_API_URL = API_CONFIG.GROQ_API_URL;
+const GROQ_MODEL = API_CONFIG.GROQ_MODEL;
 
 const SYSTEM_PROMPT = `You are a helpful assistant for Botsmann, a platform that builds private AI assistants.
 
@@ -405,16 +407,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(responseData);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { success: false, error: 'Validation failed', details: error.errors },
-        { status: 400 }
-      );
+      return jsonValidationError('Validation failed', formatZodErrors(error));
     }
     console.error('Chat API error:', error);
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    );
+    return jsonError('Internal server error', 'INTERNAL_ERROR', HTTP_STATUS.INTERNAL_ERROR);
   }
 }
 

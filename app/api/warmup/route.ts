@@ -6,6 +6,8 @@
  * Called periodically by Vercel cron to keep the function warm
  */
 
+/* eslint-disable no-console */
+
 import { NextResponse } from 'next/server';
 import { generateEmbedding } from '@/lib/embeddings';
 

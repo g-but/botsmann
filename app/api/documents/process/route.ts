@@ -11,44 +11,22 @@
  * 5. Stores chunks in the database
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { type NextRequest } from 'next/server';
 import { generateEmbedding, chunkText } from '@/lib/embeddings';
+import { getServiceClient } from '@/lib/supabase';
+import { verifyUser } from '@/lib/api-utils';
+import {
+  jsonSuccess,
+  jsonError,
+  jsonUnauthorized,
+  jsonNotFound,
+  handleError,
+  HTTP_STATUS,
+} from '@/lib/api';
+import { DOMAIN_ERRORS } from '@/lib/constants';
 
 // Extend function timeout for embedding generation (Vercel)
 export const maxDuration = 60; // Allow longer for document processing
-
-// Server-side Supabase client with service role
-function getServiceClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!supabaseUrl || !serviceRoleKey) {
-    throw new Error('Supabase not configured');
-  }
-
-  return createClient(supabaseUrl, serviceRoleKey, {
-    auth: { autoRefreshToken: false, persistSession: false }
-  });
-}
-
-// Verify user from JWT token
-async function verifyUser(request: NextRequest) {
-  const authHeader = request.headers.get('authorization');
-  if (!authHeader?.startsWith('Bearer ')) {
-    return null;
-  }
-
-  const token = authHeader.substring(7);
-  const supabase = getServiceClient();
-
-  const { data: { user }, error } = await supabase.auth.getUser(token);
-  if (error || !user) {
-    return null;
-  }
-
-  return user;
-}
 
 /**
  * Parse text content from file based on type
@@ -138,20 +116,14 @@ export async function POST(request: NextRequest) {
   try {
     const user = await verifyUser(request);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return jsonUnauthorized();
     }
 
     const body = await request.json();
     const { documentId } = body;
 
     if (!documentId) {
-      return NextResponse.json(
-        { success: false, error: 'Document ID required' },
-        { status: 400 }
-      );
+      return jsonError('Document ID required', 'VALIDATION_ERROR', HTTP_STATUS.BAD_REQUEST);
     }
 
     const supabase = getServiceClient();
@@ -165,19 +137,12 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (fetchError || !document) {
-      return NextResponse.json(
-        { success: false, error: 'Document not found' },
-        { status: 404 }
-      );
+      return jsonNotFound('Document not found');
     }
 
     // Check if already processed
     if (document.status === 'ready') {
-      return NextResponse.json({
-        success: true,
-        message: 'Document already processed',
-        document
-      });
+      return jsonSuccess({ document }, 'Document already processed');
     }
 
     // Update status to processing
@@ -223,7 +188,7 @@ export async function POST(request: NextRequest) {
           user_id: user.id,
           content: chunk,
           embedding: `[${embedding.join(',')}]`, // Format for pgvector
-          metadata: { chunk_index: i }
+          metadata: { chunk_index: i },
         });
       }
 
@@ -247,43 +212,29 @@ export async function POST(request: NextRequest) {
         .update({
           status: 'ready',
           chunk_count: chunks.length,
-          error_message: null
+          error_message: null,
         })
         .eq('id', documentId)
         .select()
         .single();
 
-      return NextResponse.json({
-        success: true,
-        document: updatedDocument,
-        chunks_created: chunks.length
-      });
-
+      return jsonSuccess({ document: updatedDocument, chunks_created: chunks.length });
     } catch (processingError) {
       // Update document with error
-      const errorMessage = processingError instanceof Error
-        ? processingError.message
-        : 'Unknown processing error';
+      const errorMessage =
+        processingError instanceof Error ? processingError.message : 'Unknown processing error';
 
       await supabase
         .from('documents')
         .update({
           status: 'error',
-          error_message: errorMessage
+          error_message: errorMessage,
         })
         .eq('id', documentId);
 
-      return NextResponse.json(
-        { success: false, error: errorMessage },
-        { status: 500 }
-      );
+      return jsonError(errorMessage, 'INTERNAL_ERROR', HTTP_STATUS.INTERNAL_ERROR);
     }
-
   } catch (error) {
-    console.error('Document processing error:', error);
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    );
+    return handleError(error, DOMAIN_ERRORS.FAILED_PROCESS_DOCUMENT);
   }
 }

@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth';
+import { UserAvatar } from '@/components/shared';
+import { ChevronIcon } from '@/components/icons';
 
 /**
  * Authentication navigation component
@@ -60,17 +62,8 @@ export function AuthNav() {
         onClick={() => setDropdownOpen(!dropdownOpen)}
         className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
       >
-        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white text-sm font-bold">
-          {user.email?.[0].toUpperCase() || 'U'}
-        </div>
-        <svg
-          className={`w-4 h-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`}
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
+        <UserAvatar email={user.email} size="sm" />
+        <ChevronIcon open={dropdownOpen} className="w-4 h-4" />
       </button>
 
       {/* Dropdown Menu */}

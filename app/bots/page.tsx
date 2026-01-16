@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import bots from '@/data/bots';
+import { getBotPath } from '@/lib/routes';
 
 // Bot display data with detailed explanations
 const botDetails: Record<string, {
@@ -147,7 +148,7 @@ export default function BotsList() {
             return (
               <Link
                 key={bot.slug}
-                href={`/bots/${bot.slug}`}
+                href={getBotPath(bot.slug)}
                 className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-gray-100 hover:border-blue-200"
               >
                 {!isReady && (

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Popover, Transition, Portal } from '@headlessui/react';
 import type { NavItemProps } from '@/types/navigation';
 import { MegaMenuPanel } from './MegaMenuPanel';
+import { ChevronIcon } from '@/components/icons';
 
 /**
  * Navigation item that renders as either:
@@ -67,7 +68,7 @@ export function NavItem({ item, isActive, onNavigate }: NavItemProps) {
             } hover:text-blue-600`}
           >
             {item.label}
-            <ChevronIcon open={open} />
+            <ChevronIcon open={open} className="h-4 w-4" />
           </Popover.Button>
 
           <Portal>
@@ -99,22 +100,5 @@ export function NavItem({ item, isActive, onNavigate }: NavItemProps) {
         </>
       )}
     </Popover>
-  );
-}
-
-/**
- * Chevron icon for dropdown indicator
- */
-function ChevronIcon({ open }: { open: boolean }) {
-  return (
-    <svg
-      className={`h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`}
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      aria-hidden="true"
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-    </svg>
   );
 }
