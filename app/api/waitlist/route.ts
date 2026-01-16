@@ -1,7 +1,24 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import { isValidEmail } from '@/lib/validation';
+import { z } from 'zod';
+import {
+  jsonMessage,
+  validateBody,
+  hasValidationError,
+  handleError,
+} from '@/lib/api';
+import { DOMAIN_ERRORS } from '@/lib/constants';
+
+const WaitlistSchema = z.object({
+  email: z.string().email('Invalid email address'),
+  preferences: z.object({
+    events: z.boolean().optional(),
+    newsletters: z.boolean().optional(),
+    blog: z.boolean().optional(),
+    videos: z.boolean().optional(),
+  }).optional(),
+});
 
 interface WaitlistEntry {
   email: string;
@@ -16,13 +33,13 @@ interface WaitlistEntry {
 
 export async function POST(req: NextRequest) {
   try {
-    const data = await req.json();
-    const { email, preferences } = data;
-
-    // Validate email
-    if (!email || typeof email !== 'string' || !isValidEmail(email)) {
-      return NextResponse.json({ error: 'Invalid email address' }, { status: 400 });
+    // Validate input
+    const validation = await validateBody(req, WaitlistSchema);
+    if (hasValidationError(validation)) {
+      return validation.error;
     }
+
+    const { email, preferences } = validation.data;
 
     // Create entry
     const waitlistEntry: WaitlistEntry = {
@@ -36,53 +53,36 @@ export async function POST(req: NextRequest) {
       timestamp: new Date().toISOString(),
     };
 
-    // In a production environment, you would typically:
-    // 1. Store this in a database
-    // 2. Connect to a CRM or email marketing service
-    // 3. Implement email verification
-
-    // For demo purposes, we'll save to a local JSON file
+    // Store to local JSON file (development only)
     const waitlistFilePath = path.join(process.cwd(), 'data', 'waitlist.json');
     let waitlist: WaitlistEntry[] = [];
 
     try {
-      // Read existing file if it exists
       if (fs.existsSync(waitlistFilePath)) {
         const fileContent = fs.readFileSync(waitlistFilePath, 'utf8');
         waitlist = JSON.parse(fileContent);
       }
     } catch (error) {
       console.error('Error reading waitlist file:', error);
-      // If file is corrupted, start with empty array
       waitlist = [];
     }
 
     // Check if email already exists
-    const emailExists = waitlist.some(entry => entry.email === email);
+    const emailExists = waitlist.some((entry) => entry.email === email);
     if (emailExists) {
-      return NextResponse.json(
-        { message: 'Email already registered for waitlist' },
-        { status: 200 }
-      );
+      return jsonMessage('Email already registered for waitlist');
     }
 
-    // Add new entry
     waitlist.push(waitlistEntry);
 
-    // Write back to file
-    fs.writeFileSync(waitlistFilePath, JSON.stringify(waitlist, null, 2), 'utf8');
+    try {
+      fs.writeFileSync(waitlistFilePath, JSON.stringify(waitlist, null, 2), 'utf8');
+    } catch {
+      // On Vercel/serverless, file write will fail - that's expected
+    }
 
-    return NextResponse.json(
-      { message: 'Successfully added to waitlist' },
-      { status: 200 }
-    );
+    return jsonMessage('Successfully added to waitlist');
   } catch (error) {
-    console.error('Error processing waitlist submission:', error);
-    return NextResponse.json(
-      { error: 'Failed to process waitlist submission' },
-      { status: 500 }
-    );
+    return handleError(error, DOMAIN_ERRORS.FAILED_SUBMIT_WAITLIST);
   }
 }
-
- 

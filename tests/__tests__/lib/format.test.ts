@@ -8,19 +8,28 @@ import {
 
 describe('Format Utilities', () => {
   describe('formatCurrency', () => {
-    it('formats numbers as USD currency', () => {
-      expect(formatCurrency(1000)).toBe('$1,000');
-      expect(formatCurrency(1234567)).toBe('$1,234,567');
-      expect(formatCurrency(0)).toBe('$0');
+    it('formats numbers as CHF currency by default (Swiss context)', () => {
+      // Swiss German locale uses RIGHT SINGLE QUOTATION MARK (U+2019) as thousands separator
+      expect(formatCurrency(1000)).toMatch(/CHF\s*1[''\u2019]000/);
+      expect(formatCurrency(1234567)).toMatch(/CHF\s*1[''\u2019]234[''\u2019]567/);
+      expect(formatCurrency(0)).toMatch(/CHF\s*0/);
+    });
+
+    it('supports USD currency option', () => {
+      expect(formatCurrency(1000, { currency: 'USD' })).toBe('$1,000');
+      expect(formatCurrency(1234567, { currency: 'USD' })).toBe('$1,234,567');
     });
 
     it('supports compact notation', () => {
       const result = formatCurrency(1234567, { compact: true });
-      expect(result).toMatch(/\$1\.2M|\$1M/); // Different locales may vary
+      // Swiss German locale uses "Mio." for million
+      expect(result).toMatch(/1[\.,]?2?\s*M|Mio/i);
     });
 
     it('supports decimal places', () => {
-      expect(formatCurrency(1234.56, { decimals: 2 })).toBe('$1,234.56');
+      const result = formatCurrency(1234.56, { decimals: 2 });
+      // Swiss German locale uses RIGHT SINGLE QUOTATION MARK as thousands separator
+      expect(result).toMatch(/CHF\s*1[''\u2019]234[\.,]56/);
     });
   });
 

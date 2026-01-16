@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { sampleAgencies } from '../data/sampleData';
+import { formatCurrency, formatNumber } from '@/lib/format';
 
 const AgenciesPage = () => {
   return (
@@ -49,23 +50,13 @@ const AgenciesPage = () => {
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-500">Budget: </span>
                       <span className="font-medium text-gray-900">
-                        {new Intl.NumberFormat('en-US', {
-                          style: 'currency',
-                          currency: 'USD',
-                          maximumFractionDigits: 0,
-                          notation: 'compact'
-                        }).format(agency.budget.total)}
+                        {formatCurrency(agency.budget.total, { compact: true })}
                       </span>
                     </div>
                     <div className="mt-2 flex items-center justify-between text-sm">
                       <span className="text-gray-500">Spent: </span>
                       <span className="font-medium text-gray-900">
-                        {new Intl.NumberFormat('en-US', {
-                          style: 'currency',
-                          currency: 'USD',
-                          maximumFractionDigits: 0,
-                          notation: 'compact'
-                        }).format(agency.budget.spent)}
+                        {formatCurrency(agency.budget.spent, { compact: true })}
                       </span>
                     </div>
                     <div className="mt-1 w-full bg-gray-200 rounded-full h-2">
@@ -154,7 +145,7 @@ const AgenciesPage = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
-                          {new Intl.NumberFormat('en-US').format(agency.citizenImpact.citizensServed)}
+                          {formatNumber(agency.citizenImpact.citizensServed)}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">

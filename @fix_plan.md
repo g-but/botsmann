@@ -82,12 +82,30 @@ Comprehensive refactoring for Botsmann - improve maintainability, performance, a
 
 ---
 
-## P3 - Code Deduplication (DRY)
+## P3 - Code Deduplication (DRY) (COMPLETED ✓)
 
-- [ ] Consolidate repeated utility functions into `lib/`
-- [ ] Create shared hooks for common patterns (`hooks/`)
-- [ ] Centralize API call patterns
-- [ ] Extract constants to `lib/constants.ts`
+- [x] Created `lib/api-utils.ts` with shared utilities:
+  - `verifyUser()` - JWT token verification (was duplicated in 4 routes)
+  - `apiError()` / `apiSuccess()` - Standard response helpers
+  - `HTTP_STATUS` constants
+  - `ERROR_MESSAGES` constants
+- [x] Refactored 5 API routes to use centralized utilities:
+  - `app/api/chat/route.ts`
+  - `app/api/documents/route.ts`
+  - `app/api/documents/process/route.ts`
+  - `app/api/documents/search/route.ts`
+  - `app/api/settings/route.ts`
+- [x] Extended `lib/constants.ts` with:
+  - `MODEL_PROVIDERS` - LLM provider types
+  - `DEFAULT_USER_SETTINGS` - Default settings object
+  - `DB_ERROR_CODES` - Database error codes
+  - `CHUNK_SETTINGS` - Document processing settings
+- [x] Updated routes to use `SYSTEM_PROMPTS`, `DOMAIN_ERRORS`, `API_CONFIG` constants
+- [x] Created `lib/hooks/useFormSubmit.ts` - reusable form submission hook
+- [x] Extended refactoring to include `waitlist`, `products/search`, `demo/chat` routes
+- [x] Verified: Lint passes, Build passes
+
+**Impact:** Removed ~200+ LOC of duplicated code, centralized error handling, reusable form hook, improved maintainability
 
 ---
 
@@ -130,6 +148,7 @@ Comprehensive refactoring for Botsmann - improve maintainability, performance, a
 - [x] P2: Split CitizenProfile.tsx from 650→115 lines with 6 sub-components (2026-01-13)
 - [x] P2: Split WorkspaceDashboard.tsx from 642→219 lines with 8 sub-components (2026-01-13)
 - [x] P2: Split ExampleSection.tsx from 515→66 lines with 4 tab components (2026-01-13)
+- [x] P3: Code deduplication - Created lib/api-utils.ts, refactored 5 API routes, extended lib/constants.ts (2026-01-15)
 
 ---
 

@@ -1,16 +1,12 @@
-import { NextResponse } from 'next/server';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { jsonSuccess, jsonServiceUnavailable } from '@/lib/api';
 
 export async function GET() {
   try {
     if (!isSupabaseConfigured()) {
-      return NextResponse.json(
-        { status: 'unhealthy', error: 'Database not configured' },
-        { status: 503 }
-      );
+      return jsonServiceUnavailable('Database not configured');
     }
 
-    // Simple health check - query the database
     const { error } = await supabase
       .from('consultations')
       .select('id')
@@ -20,15 +16,9 @@ export async function GET() {
       throw error;
     }
 
-    return NextResponse.json(
-      { status: 'healthy', database: 'connected' },
-      { status: 200 }
-    );
+    return jsonSuccess({ status: 'healthy', database: 'connected' });
   } catch (error) {
     console.error('Health check failed:', error);
-    return NextResponse.json(
-      { status: 'unhealthy', error: 'Database connection failed' },
-      { status: 503 }
-    );
+    return jsonServiceUnavailable('Database connection failed');
   }
 }

@@ -9,57 +9,19 @@
  * 3. Generate response using user's preferred LLM
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+/* eslint-disable no-console */
+
+import { type NextRequest } from 'next/server';
 import { generateEmbedding } from '@/lib/embeddings';
 import { generateLLMResponse, type ModelProvider } from '@/lib/llm-client';
+import { getServiceClient } from '@/lib/supabase';
+import { verifyUser } from '@/lib/api-utils';
+import { jsonSuccess, jsonError, jsonUnauthorized, HTTP_STATUS } from '@/lib/api';
+import { SYSTEM_PROMPTS, API_CONFIG, DOMAIN_ERRORS } from '@/lib/constants';
 
 // Extend function timeout for model loading (Vercel)
 // Note: Free tier max is 10s, Pro tier allows up to 60s
 export const maxDuration = 30;
-
-// Server-side Supabase client with service role
-function getServiceClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!supabaseUrl || !serviceRoleKey) {
-    throw new Error('Supabase not configured');
-  }
-
-  return createClient(supabaseUrl, serviceRoleKey, {
-    auth: { autoRefreshToken: false, persistSession: false }
-  });
-}
-
-// Verify user from JWT token
-async function verifyUser(request: NextRequest) {
-  const authHeader = request.headers.get('authorization');
-  if (!authHeader?.startsWith('Bearer ')) {
-    return null;
-  }
-
-  const token = authHeader.substring(7);
-  const supabase = getServiceClient();
-
-  const { data: { user }, error } = await supabase.auth.getUser(token);
-  if (error || !user) {
-    return null;
-  }
-
-  return user;
-}
-
-const SYSTEM_PROMPT = `You are a helpful assistant that answers questions based on the provided document context.
-
-Instructions:
-- Only use information from the provided context to answer questions
-- If the context doesn't contain relevant information, say so clearly
-- Cite which document the information comes from when possible
-- Be concise but thorough
-- If asked about something not in the documents, acknowledge the limitation
-
-Context from user's documents will be provided below.`;
 
 /**
  * Chat with documents using RAG
@@ -73,10 +35,7 @@ export async function POST(request: NextRequest) {
     const user = await verifyUser(request);
     if (!user) {
       console.log('[Chat API] User verification failed');
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return jsonUnauthorized();
     }
     console.log('[Chat API] User verified:', user.id, 'Time:', Date.now() - startTime, 'ms');
 
@@ -85,14 +44,11 @@ export async function POST(request: NextRequest) {
     console.log('[Chat API] Request body parsed, message length:', message?.length);
 
     // Groq free tier limit is ~6000 tokens (~4 chars per token)
-    // Limit context to ~2000 tokens (8000 chars) leaving room for system prompt + response
-    const MAX_CONTEXT_CHARS = 8000;
+    // Limit context to ~2000 tokens leaving room for system prompt + response
+    const MAX_CONTEXT_CHARS = API_CONFIG.MAX_CONTEXT_CHARS;
 
     if (!message || typeof message !== 'string') {
-      return NextResponse.json(
-        { success: false, error: 'Message required' },
-        { status: 400 }
-      );
+      return jsonError('Message required', 'VALIDATION_ERROR', HTTP_STATUS.BAD_REQUEST);
     }
 
     const supabase = getServiceClient();
@@ -121,11 +77,11 @@ export async function POST(request: NextRequest) {
 
     if (!docCount || docCount === 0) {
       console.log('[Chat API] No documents found for user');
-      return NextResponse.json({
-        success: true,
-        response: "You don't have any processed documents yet. Please upload and process some documents first, then I can answer questions about them.",
+      return jsonSuccess({
+        response:
+          "You don't have any processed documents yet. Please upload and process some documents first, then I can answer questions about them.",
         sources: [],
-        provider
+        provider,
       });
     }
     console.log('[Chat API] Found', docCount, 'documents. Time:', Date.now() - startTime, 'ms');
@@ -135,8 +91,8 @@ export async function POST(request: NextRequest) {
     const embeddingStartTime = Date.now();
     let queryEmbedding: number[];
     try {
-      // 8 second timeout for embedding (leave room for LLM call)
-      const EMBEDDING_TIMEOUT = 8000;
+      // Timeout for embedding (leave room for LLM call)
+      const EMBEDDING_TIMEOUT = API_CONFIG.EMBEDDING_TIMEOUT;
       const embeddingPromise = generateEmbedding(message);
       const timeoutPromise = new Promise<never>((_, reject) => {
         setTimeout(() => reject(new Error('Embedding timeout')), EMBEDDING_TIMEOUT);
@@ -149,16 +105,21 @@ export async function POST(request: NextRequest) {
       console.error('[Chat API] Embedding generation failed after', elapsed, 'ms:', embeddingError);
 
       // Check if it's a timeout (likely cold start model loading)
-      if (embeddingError instanceof Error && embeddingError.message === 'Embedding timeout') {
-        return NextResponse.json(
-          { success: false, error: 'Service is warming up. Please try again in a few seconds.' },
-          { status: 503 }
+      if (
+        embeddingError instanceof Error &&
+        embeddingError.message === DOMAIN_ERRORS.EMBEDDING_TIMEOUT
+      ) {
+        return jsonError(
+          DOMAIN_ERRORS.SERVICE_WARMING_UP,
+          'SERVICE_UNAVAILABLE',
+          HTTP_STATUS.SERVICE_UNAVAILABLE
         );
       }
 
-      return NextResponse.json(
-        { success: false, error: 'Failed to process query. Please try again.' },
-        { status: 503 }
+      return jsonError(
+        DOMAIN_ERRORS.FAILED_PROCESS_QUERY,
+        'SERVICE_UNAVAILABLE',
+        HTTP_STATUS.SERVICE_UNAVAILABLE
       );
     }
 
@@ -175,10 +136,7 @@ export async function POST(request: NextRequest) {
 
     if (searchError) {
       console.error('[Chat API] Search error:', searchError);
-      return NextResponse.json(
-        { success: false, error: 'Failed to search documents' },
-        { status: 500 }
-      );
+      return jsonError('Failed to search documents', 'DATABASE_ERROR', HTTP_STATUS.INTERNAL_ERROR);
     }
     console.log('[Chat API] Found', searchResults?.length || 0, 'relevant chunks');
 
@@ -249,7 +207,7 @@ export async function POST(request: NextRequest) {
     try {
       const llmResponse = await generateLLMResponse(
         [
-          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'system', content: SYSTEM_PROMPTS.RAG_ASSISTANT },
           {
             role: 'user',
             content: `Context from documents:\n\n${context}\n\n---\n\nUser question: ${message}`
@@ -267,12 +225,11 @@ export async function POST(request: NextRequest) {
       console.log('[Chat API] LLM response received in', Date.now() - llmStartTime, 'ms');
       console.log('[Chat API] Total request time:', Date.now() - startTime, 'ms');
 
-      return NextResponse.json({
-        success: true,
+      return jsonSuccess({
         response: llmResponse.content,
         sources,
         provider: llmResponse.provider,
-        model: llmResponse.model
+        model: llmResponse.model,
       });
 
     } catch (llmError) {
@@ -281,49 +238,51 @@ export async function POST(request: NextRequest) {
       if (llmError instanceof Error) {
         // For API key errors, return context-only response
         if (llmError.message.includes('API key') && relevantChunks.length > 0) {
-          const fallbackParts = relevantChunks.map((chunk: {
-            document_id: string;
-            content: string;
-          }, index: number) => {
-            const docName = documentMap.get(chunk.document_id) || 'Unknown Document';
-            return `**[Source ${index + 1}: ${docName}]**\n${chunk.content}`;
-          });
+          const fallbackParts = relevantChunks.map(
+            (
+              chunk: {
+                document_id: string;
+                content: string;
+              },
+              index: number
+            ) => {
+              const docName = documentMap.get(chunk.document_id) || 'Unknown Document';
+              return `**[Source ${index + 1}: ${docName}]**\n${chunk.content}`;
+            }
+          );
 
-          return NextResponse.json({
-            success: true,
+          return jsonSuccess({
             response: `Here's what I found in your documents:\n\n${fallbackParts.join('\n\n---\n\n')}`,
             sources,
             provider: 'none',
-            model: 'context-only'
+            model: 'context-only',
           });
         }
 
         if (llmError.message.includes('Cannot connect to Ollama')) {
-          return NextResponse.json(
-            { success: false, error: 'Cannot connect to Ollama. Make sure it is running.' },
-            { status: 503 }
+          return jsonError(
+            DOMAIN_ERRORS.OLLAMA_NOT_RUNNING,
+            'SERVICE_UNAVAILABLE',
+            HTTP_STATUS.SERVICE_UNAVAILABLE
           );
         }
 
         // User-friendly error message
         console.error('[Chat API] LLM error:', llmError.message);
         console.error('[Chat API] LLM error stack:', llmError.stack);
-        return NextResponse.json(
-          { success: false, error: 'AI service temporarily unavailable. Please try again in a moment.' },
-          { status: 503 }
+        return jsonError(
+          DOMAIN_ERRORS.AI_UNAVAILABLE,
+          'SERVICE_UNAVAILABLE',
+          HTTP_STATUS.SERVICE_UNAVAILABLE
         );
       }
 
       throw llmError;
     }
-
   } catch (error) {
     console.error('[Chat API] Unhandled error:', error);
     console.error('[Chat API] Stack:', error instanceof Error ? error.stack : 'no stack');
 
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    );
+    return jsonError('Internal server error', 'INTERNAL_ERROR', HTTP_STATUS.INTERNAL_ERROR);
   }
 }

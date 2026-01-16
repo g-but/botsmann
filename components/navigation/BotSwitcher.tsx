@@ -4,6 +4,7 @@ import { Fragment, useRef } from 'react';
 import { Popover, Transition, Portal } from '@headlessui/react';
 import Link from 'next/link';
 import bots from '@/data/bots';
+import { getBotPath } from '@/lib/routes';
 
 interface BotSwitcherProps {
   currentBotSlug: string;
@@ -102,7 +103,7 @@ export function BotSwitcher({
                     {otherBots.map((bot) => (
                       <Link
                         key={bot.slug}
-                        href={`/bots/${bot.slug}`}
+                        href={getBotPath(bot.slug)}
                         onClick={() => close()}
                         className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors"
                       >

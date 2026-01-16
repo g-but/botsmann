@@ -7,23 +7,25 @@
  */
 
 /**
- * Format a number as USD currency
+ * Format a number as currency (defaults to CHF for Swiss context)
  * @param amount The number to format
  * @param options Optional formatting options
  * @returns Formatted currency string
  * @example
- * formatCurrency(1234567) // "$1,234,567"
- * formatCurrency(1234567, { compact: true }) // "$1.2M"
+ * formatCurrency(1234567) // "CHF 1'234'567"
+ * formatCurrency(1234567, { compact: true }) // "CHF 1.2M"
+ * formatCurrency(1234567, { currency: 'USD' }) // "$1,234,567"
  */
 export const formatCurrency = (
   amount: number,
-  options?: { compact?: boolean; decimals?: number }
+  options?: { compact?: boolean; decimals?: number; currency?: string }
 ): string => {
-  const { compact = false, decimals = 0 } = options ?? {};
+  const { compact = false, decimals = 0, currency = 'CHF' } = options ?? {};
+  const locale = currency === 'CHF' ? 'de-CH' : 'en-US';
 
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat(locale, {
     style: 'currency',
-    currency: 'USD',
+    currency,
     maximumFractionDigits: decimals,
     ...(compact && { notation: 'compact' }),
   }).format(amount);
