@@ -6,10 +6,6 @@
     {
       "path": "/api/rebuild",
       "schedule": "0 9 * * *"
-    },
-    {
-      "path": "/api/warmup",
-      "schedule": "*/5 * * * *"
     }
   ]
 }
