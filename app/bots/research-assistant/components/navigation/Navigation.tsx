@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import Link from 'next/link';
 
 /**
  * Navigation component for Nerd - AI Research Assistant
@@ -12,14 +11,17 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Menu items organized by value proposition
-  const menuItems = useMemo(() => [
-    { id: 'organize', label: 'Organize Research', icon: '📚', section: 'research-system' },
-    { id: 'updates', label: 'Stay Updated', icon: '🔄', section: 'web-scraping' },
-    { id: 'create', label: 'Create Content', icon: '✍️', section: 'draft-generation' },
-    { id: 'engage', label: 'Stay Engaged', icon: '🔍', section: 'daily-questions' },
-    { id: 'collaborate', label: 'Collaborate', icon: '👥', section: 'integration' },
-    { id: 'roadmap', label: '2026 Launch', icon: '🚀', section: 'roadmap' }
-  ], []);
+  const menuItems = useMemo(
+    () => [
+      { id: 'organize', label: 'Organize Research', icon: '📚', section: 'research-system' },
+      { id: 'updates', label: 'Stay Updated', icon: '🔄', section: 'web-scraping' },
+      { id: 'create', label: 'Create Content', icon: '✍️', section: 'draft-generation' },
+      { id: 'engage', label: 'Stay Engaged', icon: '🔍', section: 'daily-questions' },
+      { id: 'collaborate', label: 'Collaborate', icon: '👥', section: 'integration' },
+      { id: 'roadmap', label: '2026 Launch', icon: '🚀', section: 'roadmap' },
+    ],
+    [],
+  );
 
   // Handle scroll events to show/hide navigation and highlight active section
   useEffect(() => {
@@ -35,14 +37,14 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
 
       // Determine active section
       if (currentScrollY > 100) {
-        const sectionIds = menuItems.map(item => item.section);
+        const sectionIds = menuItems.map((item) => item.section);
         // Find which section is currently in view
-        const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+        const sections = sectionIds.map((id) => document.getElementById(id)).filter(Boolean);
 
         for (let i = sections.length - 1; i >= 0; i--) {
           const section = sections[i];
           if (section && section.offsetTop <= currentScrollY + 300) {
-            const menuItem = menuItems.find(item => item.section === section.id);
+            const menuItem = menuItems.find((item) => item.section === section.id);
             if (menuItem) {
               setActiveSection(menuItem.id);
             }
@@ -65,10 +67,10 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
     const element = document.getElementById(sectionId);
     if (element) {
       window.scrollTo({
-        top: element.offsetTop - 100, 
+        top: element.offsetTop - 100,
         behavior: 'smooth',
       });
-      const menuItem = menuItems.find(item => item.section === sectionId);
+      const menuItem = menuItems.find((item) => item.section === sectionId);
       if (menuItem) {
         setActiveSection(menuItem.id);
       }
@@ -81,13 +83,13 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
     setIsMobileMenuOpen(false);
   };
 
   return (
-    <nav 
+    <nav
       className={`transition-all duration-300 w-full py-3 bg-white border-b border-gray-200 fixed top-0 ${
         isVisible ? 'transform-none shadow-md' : 'transform -translate-y-full'
       } ${className} research-navigation z-50`}
@@ -95,8 +97,8 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6">
         <div className="flex justify-between items-center">
           {/* Clickable logo that scrolls to top */}
-          <button 
-            onClick={scrollToTop} 
+          <button
+            onClick={scrollToTop}
             className="flex items-center focus:outline-none hover:opacity-90 transition-opacity"
             aria-label="Back to top"
           >
@@ -104,27 +106,45 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
               <span className="text-xl">🧠</span>
             </div>
             <h2 className="text-xl font-bold text-indigo-900 logo-text">Nerd</h2>
-            <span className="text-sm text-gray-500 ml-2 hidden sm:inline-block">AI Research Assistant</span>
+            <span className="text-sm text-gray-500 ml-2 hidden sm:inline-block">
+              AI Research Assistant
+            </span>
           </button>
-          
+
           {/* Mobile menu button */}
-          <button 
+          <button
             className="md:hidden p-2 rounded-md text-gray-600 hover:text-indigo-700 hover:bg-indigo-50 focus:outline-none"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="h-6 w-6"
+            >
               {isMobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               )}
             </svg>
           </button>
-          
+
           {/* Desktop navigation */}
           <div className="hidden md:flex space-x-1 overflow-x-auto no-scrollbar">
-            {menuItems.map(item => (
+            {menuItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.section)}
@@ -139,21 +159,20 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
               </button>
             ))}
           </div>
-          
+
           {/* Call-to-action button */}
-          <Link
-            href="https://chatgpt.com/g/research-assistant"
-            target="_blank"
+          <button
+            onClick={() => scrollToSection('roadmap')}
             className="call-to-action px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 transition-colors shadow-sm whitespace-nowrap ml-2"
           >
             Join Waitlist
-          </Link>
+          </button>
         </div>
-        
+
         {/* Mobile menu dropdown */}
         {isMobileMenuOpen && (
           <div className="md:hidden mt-4 py-2 bg-white border-t border-gray-100 space-y-1">
-            {menuItems.map(item => (
+            {menuItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.section)}
@@ -174,4 +193,4 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
   );
 };
 
-export default Navigation; 
+export default Navigation;
