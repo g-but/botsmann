@@ -3,14 +3,12 @@
 import { useState, useEffect, type FormEvent } from 'react';
 import Link from 'next/link';
 import { useAuth, isRateLimitError, getRateLimitRetryAfter } from '@/lib/auth';
-import { SignUpSchema, PASSWORD_MIN_LENGTH } from '@/lib/schemas/auth';
+import { ForgotPasswordSchema } from '@/lib/schemas/auth';
 import { ROUTES } from '@/lib/routes';
 
-export default function SignUpPage() {
-  const { signUp, loading: authLoading, user } = useAuth();
+export default function ForgotPasswordPage() {
+  const { resetPassword, loading: authLoading, user } = useAuth();
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -46,17 +44,17 @@ export default function SignUpPage() {
     if (rateLimitSeconds > 0) return;
 
     setError('');
+    setLoading(true);
 
     // Validate with Zod
-    const result = SignUpSchema.safeParse({ email, password, confirmPassword });
+    const result = ForgotPasswordSchema.safeParse({ email });
     if (!result.success) {
       setError(result.error.errors[0].message);
+      setLoading(false);
       return;
     }
 
-    setLoading(true);
-
-    const { error } = await signUp(email, password);
+    const { error } = await resetPassword(email);
 
     if (error) {
       if (isRateLimitError(error)) {
@@ -90,7 +88,7 @@ export default function SignUpPage() {
           <Link href="/" className="text-3xl font-bold text-gray-900">
             Botsmann
           </Link>
-          <p className="text-gray-600 mt-2">Create your account</p>
+          <p className="text-gray-600 mt-2">Reset your password</p>
         </div>
 
         <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
@@ -99,8 +97,11 @@ export default function SignUpPage() {
               <div className="text-green-600 text-5xl mb-4">✓</div>
               <h2 className="text-xl font-semibold text-gray-900 mb-2">Check your email</h2>
               <p className="text-gray-600 mb-6">
-                We sent a confirmation link to <strong>{email}</strong>. Click the link to activate
-                your account.
+                We sent a password reset link to <strong>{email}</strong>. Click the link in the
+                email to reset your password.
+              </p>
+              <p className="text-sm text-gray-500 mb-6">
+                Didn&apos;t receive the email? Check your spam folder or try again.
               </p>
               <Link href={ROUTES.AUTH.SIGNIN} className="text-blue-600 hover:underline">
                 Back to Sign In
@@ -108,6 +109,10 @@ export default function SignUpPage() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
+              <p className="text-sm text-gray-600 mb-4">
+                Enter your email address and we&apos;ll send you a link to reset your password.
+              </p>
+
               {error && (
                 <div
                   className={`p-3 rounded-lg text-sm ${isRateLimited ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-600'}`}
@@ -151,60 +156,23 @@ export default function SignUpPage() {
                 />
               </div>
 
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                  Password
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  disabled={isRateLimited}
-                  minLength={PASSWORD_MIN_LENGTH}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
-                  placeholder={`At least ${PASSWORD_MIN_LENGTH} characters`}
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="confirmPassword"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Confirm Password
-                </label>
-                <input
-                  id="confirmPassword"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                  disabled={isRateLimited}
-                  minLength={PASSWORD_MIN_LENGTH}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
-                  placeholder="Confirm your password"
-                />
-              </div>
-
               <button
                 type="submit"
                 disabled={loading || isRateLimited}
                 className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors"
               >
                 {loading
-                  ? 'Creating account...'
+                  ? 'Sending...'
                   : isRateLimited
                     ? `Wait ${rateLimitSeconds}s`
-                    : 'Sign Up'}
+                    : 'Send Reset Link'}
               </button>
             </form>
           )}
 
           {!success && (
             <div className="mt-6 text-center text-sm text-gray-600">
-              Already have an account?{' '}
+              Remember your password?{' '}
               <Link href={ROUTES.AUTH.SIGNIN} className="text-blue-600 hover:underline">
                 Sign in
               </Link>

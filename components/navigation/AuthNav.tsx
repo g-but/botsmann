@@ -11,7 +11,7 @@ import { ChevronIcon } from '@/components/icons';
  * Shows login/register for guests, profile dropdown for authenticated users
  */
 export function AuthNav() {
-  const { user, loading, signOut } = useAuth();
+  const { user, loading, signOut, displayName, avatarUrl } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -62,7 +62,7 @@ export function AuthNav() {
         onClick={() => setDropdownOpen(!dropdownOpen)}
         className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
       >
-        <UserAvatar email={user.email} size="sm" />
+        <UserAvatar email={user.email} initial={displayName?.[0]} avatarUrl={avatarUrl} size="sm" />
         <ChevronIcon open={dropdownOpen} className="w-4 h-4" />
       </button>
 
@@ -70,7 +70,10 @@ export function AuthNav() {
       {dropdownOpen && (
         <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50">
           <div className="px-4 py-2 border-b border-gray-100">
-            <p className="text-sm font-medium text-gray-900 truncate">{user.email}</p>
+            <p className="text-sm font-medium text-gray-900 truncate">
+              {displayName || user.email}
+            </p>
+            {displayName && <p className="text-xs text-gray-500 truncate">{user.email}</p>}
           </div>
           <Link
             href="/documents"

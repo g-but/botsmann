@@ -1,8 +1,10 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
+import { useState, useEffect, type FormEvent } from 'react';
 import Link from 'next/link';
-import { useAuth } from '@/lib/auth';
+import { useAuth, isRateLimitError, getRateLimitRetryAfter } from '@/lib/auth';
+import { SignInSchema } from '@/lib/schemas/auth';
+import { ROUTES } from '@/lib/routes';
 
 export default function SignInPage() {
   const { signIn, loading: authLoading, user } = useAuth();
@@ -10,25 +12,61 @@ export default function SignInPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [rateLimitSeconds, setRateLimitSeconds] = useState(0);
+
+  // Countdown timer for rate limit
+  useEffect(() => {
+    if (rateLimitSeconds <= 0) return;
+
+    const timer = setInterval(() => {
+      setRateLimitSeconds((prev) => {
+        if (prev <= 1) {
+          setError('');
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [rateLimitSeconds]);
 
   // Redirect if already logged in
   if (user) {
-    window.location.href = '/settings';
+    window.location.href = ROUTES.SETTINGS;
     return null;
   }
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    // Don't allow submit while rate limited
+    if (rateLimitSeconds > 0) return;
+
     setError('');
     setLoading(true);
+
+    // Validate with Zod
+    const result = SignInSchema.safeParse({ email, password });
+    if (!result.success) {
+      setError(result.error.errors[0].message);
+      setLoading(false);
+      return;
+    }
 
     const { error } = await signIn(email, password);
 
     if (error) {
-      setError(error.message);
+      if (isRateLimitError(error)) {
+        const retryAfter = getRateLimitRetryAfter(error);
+        setRateLimitSeconds(retryAfter);
+        setError(`Too many attempts. Please wait ${retryAfter} seconds.`);
+      } else {
+        setError(error.message);
+      }
       setLoading(false);
     } else {
-      window.location.href = '/settings';
+      window.location.href = ROUTES.SETTINGS;
     }
   };
 
@@ -39,6 +77,8 @@ export default function SignInPage() {
       </div>
     );
   }
+
+  const isRateLimited = rateLimitSeconds > 0;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center px-4">
@@ -53,8 +93,29 @@ export default function SignInPage() {
         <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm">
-                {error}
+              <div
+                className={`p-3 rounded-lg text-sm ${isRateLimited ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-600'}`}
+              >
+                {isRateLimited ? (
+                  <div className="flex items-center gap-2">
+                    <svg
+                      className="w-5 h-5 flex-shrink-0"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    <span>Too many attempts. Try again in {rateLimitSeconds}s</span>
+                  </div>
+                ) : (
+                  error
+                )}
               </div>
             )}
 
@@ -68,39 +129,49 @@ export default function SignInPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                disabled={isRateLimited}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
                 placeholder="you@example.com"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                Password
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                  Password
+                </label>
+                <Link
+                  href={ROUTES.AUTH.FORGOT_PASSWORD}
+                  className="text-sm text-blue-600 hover:underline"
+                >
+                  Forgot password?
+                </Link>
+              </div>
               <input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                disabled={isRateLimited}
                 minLength={6}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
                 placeholder="Enter your password"
               />
             </div>
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || isRateLimited}
               className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? 'Signing in...' : isRateLimited ? `Wait ${rateLimitSeconds}s` : 'Sign In'}
             </button>
           </form>
 
           <div className="mt-6 text-center text-sm text-gray-600">
             Don&apos;t have an account?{' '}
-            <Link href="/auth/signup" className="text-blue-600 hover:underline">
+            <Link href={ROUTES.AUTH.SIGNUP} className="text-blue-600 hover:underline">
               Sign up
             </Link>
           </div>

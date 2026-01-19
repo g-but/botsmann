@@ -15,11 +15,17 @@ export const ROUTES = {
   BOTS: '/bots',
   BLOG: '/blog',
   CONTACT: '/contact',
+  DOCUMENTS: '/documents',
   PROJECTS: '/projects',
+  SETTINGS: '/settings',
   SOLUTIONS: '/solutions',
   AUTH: {
-    LOGIN: '/auth/login',
-    REGISTER: '/auth/register',
+    SIGNIN: '/auth/signin',
+    SIGNUP: '/auth/signup',
+    FORGOT_PASSWORD: '/auth/forgot-password',
+    RESET_PASSWORD: '/auth/reset-password',
+    CALLBACK: '/auth/callback',
+    VERIFY_EMAIL: '/auth/verify-email',
   },
 } as const;
 

@@ -1,9 +1,9 @@
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
+import nextDynamic from 'next/dynamic';
 
-const ConsultationForm = dynamic(() => import('@/components/ConsultationForm'), {
+const ConsultationForm = nextDynamic(() => import('@/components/ConsultationForm'), {
   loading: () => <div className="min-h-[200px] flex items-center justify-center">Loading...</div>,
-  ssr: false
+  ssr: false,
 });
 
 export default function HomePage() {
@@ -47,8 +47,18 @@ export default function HomePage() {
             >
               <span className="flex items-center justify-center gap-2">
                 Try It Free
-                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                <svg
+                  className="w-5 h-5 group-hover:translate-x-1 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
                 </svg>
               </span>
             </Link>
@@ -58,8 +68,18 @@ export default function HomePage() {
             >
               <span className="flex items-center justify-center gap-2">
                 Get Consulting
-                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                <svg
+                  className="w-5 h-5 group-hover:translate-x-1 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
                 </svg>
               </span>
             </Link>
@@ -103,7 +123,8 @@ export default function HomePage() {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Upload Documents</h3>
               <p className="text-gray-600">
-                Drag and drop your PDFs, text files, or markdown documents. We support most common formats.
+                Drag and drop your PDFs, text files, or markdown documents. We support most common
+                formats.
               </p>
             </div>
 
@@ -113,7 +134,8 @@ export default function HomePage() {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Process & Index</h3>
               <p className="text-gray-600">
-                Click "Process" and we'll extract text, create searchable chunks, and build your knowledge base.
+                Click "Process" and we'll extract text, create searchable chunks, and build your
+                knowledge base.
               </p>
             </div>
 
@@ -123,7 +145,8 @@ export default function HomePage() {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Ask Questions</h3>
               <p className="text-gray-600">
-                Chat naturally with your documents. Get answers with citations pointing to the exact source.
+                Chat naturally with your documents. Get answers with citations pointing to the exact
+                source.
               </p>
             </div>
           </div>
@@ -140,28 +163,56 @@ export default function HomePage() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            <Link href="/solutions/individuals" className="group bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl hover:border-blue-200 transition-all">
+            <Link
+              href="/solutions/individuals"
+              className="group bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl hover:border-blue-200 transition-all"
+            >
               <div className="text-4xl mb-4">📖</div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600">Researchers</h3>
-              <p className="text-sm text-gray-600">Chat with papers, organize notes, find connections across your research.</p>
+              <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600">
+                Researchers
+              </h3>
+              <p className="text-sm text-gray-600">
+                Chat with papers, organize notes, find connections across your research.
+              </p>
             </Link>
 
-            <Link href="/solutions/individuals" className="group bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl hover:border-blue-200 transition-all">
+            <Link
+              href="/solutions/individuals"
+              className="group bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl hover:border-blue-200 transition-all"
+            >
               <div className="text-4xl mb-4">⚕️</div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600">Healthcare</h3>
-              <p className="text-sm text-gray-600">Understand medical records privately. Track health data securely on your device.</p>
+              <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600">
+                Healthcare
+              </h3>
+              <p className="text-sm text-gray-600">
+                Understand medical records privately. Track health data securely on your device.
+              </p>
             </Link>
 
-            <Link href="/solutions/businesses" className="group bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl hover:border-blue-200 transition-all">
+            <Link
+              href="/solutions/businesses"
+              className="group bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl hover:border-blue-200 transition-all"
+            >
               <div className="text-4xl mb-4">⚖️</div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600">Legal Teams</h3>
-              <p className="text-sm text-gray-600">Analyze contracts, search case files, and review documents with AI assistance.</p>
+              <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600">
+                Legal Teams
+              </h3>
+              <p className="text-sm text-gray-600">
+                Analyze contracts, search case files, and review documents with AI assistance.
+              </p>
             </Link>
 
-            <Link href="/solutions/businesses" className="group bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl hover:border-blue-200 transition-all">
+            <Link
+              href="/solutions/businesses"
+              className="group bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl hover:border-blue-200 transition-all"
+            >
               <div className="text-4xl mb-4">🏢</div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600">Enterprises</h3>
-              <p className="text-sm text-gray-600">Deploy on your infrastructure. Keep proprietary knowledge secure and searchable.</p>
+              <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600">
+                Enterprises
+              </h3>
+              <p className="text-sm text-gray-600">
+                Deploy on your infrastructure. Keep proprietary knowledge secure and searchable.
+              </p>
             </Link>
           </div>
         </section>
@@ -176,40 +227,79 @@ export default function HomePage() {
                 </span>
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
-                Unlike other AI tools, we don't use your documents to train models.
-                Your files are processed securely and stay under your control.
+                Unlike other AI tools, we don't use your documents to train models. Your files are
+                processed securely and stay under your control.
               </p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100">
                 <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  <svg
+                    className="w-6 h-6 text-green-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                    />
                   </svg>
                 </div>
                 <div className="font-bold text-gray-900 mb-2">Secure Processing</div>
-                <p className="text-sm text-gray-600">Documents are processed in isolated environments. Nothing is shared or stored beyond your session.</p>
+                <p className="text-sm text-gray-600">
+                  Documents are processed in isolated environments. Nothing is shared or stored
+                  beyond your session.
+                </p>
               </div>
 
               <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100">
                 <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  <svg
+                    className="w-6 h-6 text-blue-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                    />
                   </svg>
                 </div>
                 <div className="font-bold text-gray-900 mb-2">No Training on Your Data</div>
-                <p className="text-sm text-gray-600">We never use your documents to train AI models. Your intellectual property stays yours.</p>
+                <p className="text-sm text-gray-600">
+                  We never use your documents to train AI models. Your intellectual property stays
+                  yours.
+                </p>
               </div>
 
               <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100">
                 <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  <svg
+                    className="w-6 h-6 text-purple-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                    />
                   </svg>
                 </div>
                 <div className="font-bold text-gray-900 mb-2">Enterprise Ready</div>
-                <p className="text-sm text-gray-600">Need on-premises deployment? We can set up Botsmann entirely on your own infrastructure.</p>
+                <p className="text-sm text-gray-600">
+                  Need on-premises deployment? We can set up Botsmann entirely on your own
+                  infrastructure.
+                </p>
               </div>
             </div>
           </div>
@@ -220,8 +310,8 @@ export default function HomePage() {
           <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-8 md:p-12 text-white text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Need Enterprise Deployment?</h2>
             <p className="text-lg text-blue-100 mb-8 max-w-2xl mx-auto">
-              We help organizations deploy private AI on their own infrastructure.
-              Full data sovereignty, custom integrations, and ongoing support.
+              We help organizations deploy private AI on their own infrastructure. Full data
+              sovereignty, custom integrations, and ongoing support.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link
@@ -248,7 +338,9 @@ export default function HomePage() {
                 Get in Touch
               </span>
             </h2>
-            <p className="text-gray-600">Questions about deployment? Want a demo? We'd love to hear from you.</p>
+            <p className="text-gray-600">
+              Questions about deployment? Want a demo? We'd love to hear from you.
+            </p>
           </div>
 
           <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 max-w-xl mx-auto">
@@ -259,3 +351,7 @@ export default function HomePage() {
     </div>
   );
 }
+
+// Static marketing page; generate at build and revalidate periodically.
+export const dynamic = 'force-static';
+export const revalidate = 3600; // seconds
