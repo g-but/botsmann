@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import Link from 'next/link';
 
 /**
  * Navigation component for Dr. Imhotep with restructured sections
@@ -10,13 +9,16 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
   const [lastScrollY, setLastScrollY] = useState(0);
 
   // Restructured menu items following the requested flow
-  const menuItems = useMemo(() => [
-    { id: 'patient-features', label: 'For Patients' },
-    { id: 'for-professionals', label: 'For Professionals' },
-    { id: 'health-education', label: 'Health Education' },
-    { id: 'coming-soon', label: 'Future Products' },
-    { id: 'vision-and-join', label: 'Vision & Join Us' }
-  ], []);
+  const menuItems = useMemo(
+    () => [
+      { id: 'patient-features', label: 'For Patients' },
+      { id: 'for-professionals', label: 'For Professionals' },
+      { id: 'health-education', label: 'Health Education' },
+      { id: 'coming-soon', label: 'Future Products' },
+      { id: 'vision-and-join', label: 'Vision & Join Us' },
+    ],
+    [],
+  );
 
   // Handle scroll events to show/hide navigation and highlight active section
   useEffect(() => {
@@ -57,7 +59,7 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
     const element = document.getElementById(id);
     if (element) {
       window.scrollTo({
-        top: element.offsetTop - 100, 
+        top: element.offsetTop - 100,
         behavior: 'smooth',
       });
       setActiveSection(id);
@@ -68,12 +70,12 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
   };
 
   return (
-    <nav 
+    <nav
       className={`transition-all duration-300 w-full py-3 bg-white border-b border-gray-200 fixed top-0 ${
         isVisible ? 'transform-none shadow-md' : 'transform -translate-y-full'
       } ${className} imhotep-navigation z-50`}
@@ -81,8 +83,8 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
       <div className="max-w-screen-xl mx-auto px-6">
         <div className="flex justify-between items-center">
           {/* Clickable logo that scrolls to top */}
-          <button 
-            onClick={scrollToTop} 
+          <button
+            onClick={scrollToTop}
             className="flex items-center focus:outline-none hover:opacity-90 transition-opacity"
             aria-label="Back to top"
           >
@@ -91,9 +93,9 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
             </div>
             <h2 className="text-xl font-bold text-gray-900 logo-text">Imhotep</h2>
           </button>
-          
+
           <div className="hidden md:flex space-x-3 overflow-x-auto no-scrollbar">
-            {menuItems.map(item => (
+            {menuItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
@@ -107,19 +109,18 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
               </button>
             ))}
           </div>
-          
-          {/* Improved call-to-action button */}
-          <Link
-            href="https://chatgpt.com/g/g-oAUMruOWt-dr-imhotep"
-            target="_blank"
+
+          {/* Call-to-action button - scrolls to join section */}
+          <button
+            onClick={() => scrollToSection('vision-and-join')}
             className="call-to-action px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition-colors shadow-sm whitespace-nowrap"
           >
-            Chat Now
-          </Link>
+            Join Waitlist
+          </button>
         </div>
       </div>
     </nav>
   );
 };
 
-export default Navigation; 
+export default Navigation;
