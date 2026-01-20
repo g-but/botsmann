@@ -14,7 +14,52 @@ export function Footer() {
           <div className="mb-4">
             <Logo size="sm" />
           </div>
-          <p className="text-gray-500 text-sm leading-relaxed">{site.description.split('.')[0]}.</p>
+          <p className="text-gray-500 text-sm leading-relaxed">
+            Your Private AI Professionals. Expert guidance 24/7.
+          </p>
+        </div>
+
+        {/* AI Assistants */}
+        <div>
+          <h2 className="mb-4 font-semibold text-gray-800">AI Assistants</h2>
+          <ul className="space-y-2 text-gray-600">
+            <li>
+              <Link href="/bots/legal-expert" className="hover:text-blue-600 transition-colors">
+                Lex (Legal)
+              </Link>
+            </li>
+            <li>
+              <Link href="/bots/medical-expert" className="hover:text-blue-600 transition-colors">
+                Imhotep (Health)
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/bots/research-assistant"
+                className="hover:text-blue-600 transition-colors"
+              >
+                Nerd (Research)
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/bots/swiss-german-teacher"
+                className="hover:text-blue-600 transition-colors"
+              >
+                Heidi (Language)
+              </Link>
+            </li>
+            <li>
+              <Link href="/bots/artistic-advisor" className="hover:text-blue-600 transition-colors">
+                Muse (Creative)
+              </Link>
+            </li>
+            <li>
+              <Link href="/bots/product-manager" className="hover:text-blue-600 transition-colors">
+                Trident (Business)
+              </Link>
+            </li>
+          </ul>
         </div>
 
         {/* Product */}
@@ -22,49 +67,23 @@ export function Footer() {
           <h2 className="mb-4 font-semibold text-gray-800">Product</h2>
           <ul className="space-y-2 text-gray-600">
             <li>
-              <Link href={ROUTES.BOTS} className="hover:text-blue-600 transition-colors">
-                AI Assistants
+              <Link href={ROUTES.PROFESSIONALS} className="hover:text-blue-600 transition-colors">
+                All Professionals
               </Link>
             </li>
             <li>
-              <Link href={ROUTES.DOCUMENTS} className="hover:text-blue-600 transition-colors">
-                Your Documents
+              <Link href={ROUTES.MY_DATA} className="hover:text-blue-600 transition-colors">
+                My Data
               </Link>
             </li>
             <li>
-              <Link href={ROUTES.SOLUTIONS} className="hover:text-blue-600 transition-colors">
-                Solutions
-              </Link>
-            </li>
-          </ul>
-        </div>
-
-        {/* Projects */}
-        <div>
-          <h2 className="mb-4 font-semibold text-gray-800">Projects</h2>
-          <ul className="space-y-2 text-gray-600">
-            <li>
-              <Link
-                href={`${ROUTES.PROJECTS}/governance`}
-                className="hover:text-blue-600 transition-colors"
-              >
-                Governance
+              <Link href={ROUTES.ENTERPRISE} className="hover:text-blue-600 transition-colors">
+                Enterprise
               </Link>
             </li>
             <li>
-              <Link
-                href={`${ROUTES.PROJECTS}/finance`}
-                className="hover:text-blue-600 transition-colors"
-              >
-                Finance
-              </Link>
-            </li>
-            <li>
-              <Link
-                href={`${ROUTES.PROJECTS}/techno-capital`}
-                className="hover:text-blue-600 transition-colors"
-              >
-                Techno-Capital
+              <Link href="/personal" className="hover:text-blue-600 transition-colors">
+                Personal AI
               </Link>
             </li>
           </ul>
@@ -127,9 +146,9 @@ export function Footer() {
 
       <div className="border-t border-gray-100 py-6 text-center text-gray-500">
         <p>
-          © {new Date().getFullYear()} {site.name}. All rights reserved.
+          &copy; {new Date().getFullYear()} {site.name}. All rights reserved.
         </p>
-        <p className="text-xs mt-2 text-gray-400">{site.tagline}</p>
+        <p className="text-xs mt-2 text-gray-400">Your Private AI Professionals</p>
       </div>
     </footer>
   );
