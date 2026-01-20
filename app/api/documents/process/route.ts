@@ -12,6 +12,7 @@
  */
 
 import { type NextRequest } from 'next/server';
+import { PDFParse } from 'pdf-parse';
 import { generateEmbedding, chunkText } from '@/lib/embeddings';
 import { getServiceClient } from '@/lib/supabase';
 import { verifyUser } from '@/lib/api-utils';
@@ -34,7 +35,7 @@ export const maxDuration = 60; // Allow longer for document processing
 async function parseFileContent(
   fileBuffer: ArrayBuffer,
   fileType: string,
-  _fileName: string
+  _fileName: string,
 ): Promise<string> {
   const decoder = new TextDecoder('utf-8');
 
@@ -55,57 +56,50 @@ async function parseFileContent(
 }
 
 /**
- * Simple PDF text extraction
- * Note: This is a basic implementation. For production, use pdf-parse library.
+ * Extract text from PDF using pdf-parse library
+ * Handles most PDF formats including those with complex encodings
  */
 async function extractPdfText(buffer: ArrayBuffer): Promise<string> {
-  // Convert ArrayBuffer to string and look for text streams
-  const bytes = new Uint8Array(buffer);
-  let text = '';
-
-  // PDF files contain text in various encodings
-  // This is a simplified extraction that won't work for all PDFs
-  // For production, install and use pdf-parse: npm install pdf-parse
-
   try {
-    // Try to find text between BT (begin text) and ET (end text) markers
-    const content = new TextDecoder('latin1').decode(bytes);
+    // Convert ArrayBuffer to Uint8Array for pdf-parse v2
+    const pdfData = new Uint8Array(buffer);
 
-    // Extract text from text objects
-    const textMatches = content.match(/\(([^)]*)\)/g);
-    if (textMatches) {
-      text = textMatches
-        .map(m => m.slice(1, -1))
-        .filter(t => t.length > 0 && /[a-zA-Z]/.test(t))
-        .join(' ');
-    }
+    // Create parser and extract text
+    const parser = new PDFParse({ data: pdfData });
+    const textResult = await parser.getText({
+      last: 100, // Limit pages to prevent timeout on very large PDFs
+    });
 
-    // Also try to extract from stream objects
-    const streamMatches = content.match(/stream\s*([\s\S]*?)\s*endstream/g);
-    if (streamMatches) {
-      for (const stream of streamMatches) {
-        const streamContent = stream.replace(/stream\s*/, '').replace(/\s*endstream/, '');
-        // Look for readable text in streams
-        const readableText = streamContent.match(/[a-zA-Z\s.,!?;:'"()-]{10,}/g);
-        if (readableText) {
-          text += ' ' + readableText.join(' ');
-        }
-      }
-    }
+    // Clean up
+    await parser.destroy();
 
-    if (!text.trim()) {
+    if (!textResult.text || !textResult.text.trim()) {
       throw new Error('Could not extract text from PDF. The PDF may be image-based or encrypted.');
     }
 
-    // Clean up the text
-    return text
-      .replace(/\s+/g, ' ')
-      .replace(/[^\x20-\x7E\n]/g, '')
+    // Clean up the extracted text
+    const cleanedText = textResult.text
+      .replace(/\s+/g, ' ') // Normalize whitespace
+      .replace(/\n\s*\n/g, '\n\n') // Preserve paragraph breaks
       .trim();
 
+    return cleanedText;
   } catch (error) {
-    console.error('PDF extraction error:', error);
-    throw new Error('Failed to extract text from PDF. Try uploading a text or markdown file.');
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+
+    // Check for common PDF issues
+    if (errorMessage.includes('encrypted')) {
+      throw new Error(
+        'This PDF is encrypted and cannot be processed. Please provide an unencrypted version.',
+      );
+    }
+    if (errorMessage.includes('password')) {
+      throw new Error('This PDF is password-protected. Please remove the password and try again.');
+    }
+
+    throw new Error(
+      `Failed to extract text from PDF: ${errorMessage}. Try uploading a text or markdown file.`,
+    );
   }
 }
 
@@ -146,10 +140,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Update status to processing
-    await supabase
-      .from('documents')
-      .update({ status: 'processing' })
-      .eq('id', documentId);
+    await supabase.from('documents').update({ status: 'processing' }).eq('id', documentId);
 
     try {
       // Download file from storage
@@ -196,9 +187,7 @@ export async function POST(request: NextRequest) {
       const batchSize = 50;
       for (let i = 0; i < chunkRecords.length; i += batchSize) {
         const batch = chunkRecords.slice(i, i + batchSize);
-        const { error: insertError } = await supabase
-          .from('document_chunks')
-          .insert(batch);
+        const { error: insertError } = await supabase.from('document_chunks').insert(batch);
 
         if (insertError) {
           console.error('Chunk insert error:', insertError);
