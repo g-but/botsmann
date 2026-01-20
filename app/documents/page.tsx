@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, type FormEvent, type ChangeEvent } from 'react';
 import Link from 'next/link';
-import { useRequireAuth } from '@/lib/auth';
+import { useAuth } from '@/lib/auth';
 import type { Document } from '@/types/document';
 
 interface ChatMessage {
@@ -15,7 +15,7 @@ interface ChatMessage {
 }
 
 export default function DocumentsPage() {
-  const { user, loading: authLoading, signOut } = useRequireAuth();
+  const { user, loading: authLoading, signOut } = useAuth();
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -32,17 +32,8 @@ export default function DocumentsPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
-  // Get auth token for API calls
-  const getAuthToken = async () => {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    if (!supabaseUrl || !supabaseKey) return null;
-
-    const { createClient } = await import('@supabase/supabase-js');
-    const supabase = createClient(supabaseUrl, supabaseKey);
-    const { data: { session } } = await supabase.auth.getSession();
-    return session?.access_token;
-  };
+  // With Supabase Auth Helpers + middleware, API routes read session from cookies.
+  // No need to forward Authorization headers from the client.
 
   // Load documents
   useEffect(() => {
@@ -50,10 +41,7 @@ export default function DocumentsPage() {
 
     const loadDocuments = async () => {
       try {
-        const token = await getAuthToken();
-        const response = await fetch('/api/documents', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const response = await fetch('/api/documents');
         const data = await response.json();
         if (data.success) {
           setDocuments(data.documents);
@@ -82,20 +70,18 @@ export default function DocumentsPage() {
     setSuccess('');
 
     try {
-      const token = await getAuthToken();
-      const formData = new FormData();
+            const formData = new FormData();
       formData.append('file', file);
 
       const response = await fetch('/api/documents', {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData
+        body: formData,
       });
 
       const data = await response.json();
 
       if (data.success) {
-        setDocuments(prev => [data.document, ...prev]);
+        setDocuments((prev) => [data.document, ...prev]);
         setSuccess(`Uploaded "${file.name}". Click "Process" to enable search.`);
       } else {
         setError(data.error || 'Upload failed');
@@ -115,31 +101,23 @@ export default function DocumentsPage() {
     setError('');
 
     try {
-      const token = await getAuthToken();
-      const response = await fetch('/api/documents/process', {
+            const response = await fetch('/api/documents/process', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ documentId })
+        body: JSON.stringify({ documentId }),
       });
 
       const data = await response.json();
 
       if (data.success) {
-        setDocuments(prev =>
-          prev.map(doc =>
-            doc.id === documentId ? data.document : doc
-          )
-        );
+        setDocuments((prev) => prev.map((doc) => (doc.id === documentId ? data.document : doc)));
         setSuccess(`Processed successfully! ${data.chunks_created} chunks created.`);
       } else {
         setError(data.error || 'Processing failed');
         // Reload documents to get error state
-        const listResponse = await fetch('/api/documents', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const listResponse = await fetch('/api/documents');
         const listData = await listResponse.json();
         if (listData.success) {
           setDocuments(listData.documents);
@@ -156,16 +134,14 @@ export default function DocumentsPage() {
     if (!confirm('Are you sure you want to delete this document?')) return;
 
     try {
-      const token = await getAuthToken();
-      const response = await fetch(`/api/documents?id=${documentId}`, {
+            const response = await fetch(`/api/documents?id=${documentId}`, {
         method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` }
       });
 
       const data = await response.json();
 
       if (data.success) {
-        setDocuments(prev => prev.filter(doc => doc.id !== documentId));
+        setDocuments((prev) => prev.filter((doc) => doc.id !== documentId));
         setSuccess('Document deleted');
       } else {
         setError(data.error || 'Delete failed');
@@ -181,44 +157,42 @@ export default function DocumentsPage() {
 
     const message = chatInput.trim();
     setChatInput('');
-    setChatMessages(prev => [...prev, { role: 'user', content: message }]);
+    setChatMessages((prev) => [...prev, { role: 'user', content: message }]);
     setChatLoading(true);
 
     try {
-      const token = await getAuthToken();
-      const response = await fetch('/api/chat', {
+            const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           message,
-          documentId: selectedDocId
-        })
+          documentId: selectedDocId,
+        }),
       });
 
       const data = await response.json();
 
       if (data.success) {
-        setChatMessages(prev => [
+        setChatMessages((prev) => [
           ...prev,
           {
             role: 'assistant',
             content: data.response,
-            sources: data.sources
-          }
+            sources: data.sources,
+          },
         ]);
       } else {
-        setChatMessages(prev => [
+        setChatMessages((prev) => [
           ...prev,
-          { role: 'assistant', content: `Error: ${data.error}` }
+          { role: 'assistant', content: `Error: ${data.error}` },
         ]);
       }
     } catch (err) {
-      setChatMessages(prev => [
+      setChatMessages((prev) => [
         ...prev,
-        { role: 'assistant', content: 'Failed to get response. Please try again.' }
+        { role: 'assistant', content: 'Failed to get response. Please try again.' },
       ]);
     } finally {
       setChatLoading(false);
@@ -233,13 +207,25 @@ export default function DocumentsPage() {
   const getStatusBadge = (status: Document['status']) => {
     switch (status) {
       case 'pending':
-        return <span className="px-2 py-1 text-xs bg-yellow-100 text-yellow-700 rounded-full">Pending</span>;
+        return (
+          <span className="px-2 py-1 text-xs bg-yellow-100 text-yellow-700 rounded-full">
+            Pending
+          </span>
+        );
       case 'processing':
-        return <span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">Processing...</span>;
+        return (
+          <span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">
+            Processing...
+          </span>
+        );
       case 'ready':
-        return <span className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded-full">Ready</span>;
+        return (
+          <span className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded-full">Ready</span>
+        );
       case 'error':
-        return <span className="px-2 py-1 text-xs bg-red-100 text-red-700 rounded-full">Error</span>;
+        return (
+          <span className="px-2 py-1 text-xs bg-red-100 text-red-700 rounded-full">Error</span>
+        );
       default:
         return null;
     }
@@ -251,7 +237,7 @@ export default function DocumentsPage() {
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
 
-  if (authLoading || !user) {
+  if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
@@ -259,7 +245,37 @@ export default function DocumentsPage() {
     );
   }
 
-  const readyDocuments = documents.filter(d => d.status === 'ready');
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center">
+        <div className="max-w-md mx-auto text-center px-6">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Sign in required</h1>
+          <p className="text-gray-600 mb-6">
+            To save and manage your documents, please sign in or create an account.
+          </p>
+          <div className="space-y-3">
+            <Link
+              href="/auth/signin"
+              className="block w-full py-3 px-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+            >
+              Sign In
+            </Link>
+            <Link
+              href="/try"
+              className="block w-full py-3 px-4 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+            >
+              Try without signing up
+            </Link>
+          </div>
+          <p className="text-sm text-gray-500 mt-4">
+            The free demo lets you upload documents and chat without creating an account.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const readyDocuments = documents.filter((d) => d.status === 'ready');
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
@@ -276,10 +292,7 @@ export default function DocumentsPage() {
             </Link>
             <span className="text-sm text-gray-400">|</span>
             <span className="text-sm text-gray-600">{user.email}</span>
-            <button
-              onClick={handleSignOut}
-              className="text-sm text-gray-500 hover:text-red-600"
-            >
+            <button onClick={handleSignOut} className="text-sm text-gray-500 hover:text-red-600">
               Sign Out
             </button>
           </div>
@@ -304,15 +317,31 @@ export default function DocumentsPage() {
             {uploading ? (
               <>
                 <svg className="animate-spin -ml-1 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  />
                 </svg>
                 Uploading...
               </>
             ) : (
               <>
                 <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
                 </svg>
                 Upload Document
               </>
@@ -321,12 +350,8 @@ export default function DocumentsPage() {
         </div>
 
         {/* Status Messages */}
-        {error && (
-          <div className="mb-4 p-4 bg-red-50 text-red-600 rounded-lg">{error}</div>
-        )}
-        {success && (
-          <div className="mb-4 p-4 bg-green-50 text-green-600 rounded-lg">{success}</div>
-        )}
+        {error && <div className="mb-4 p-4 bg-red-50 text-red-600 rounded-lg">{error}</div>}
+        {success && <div className="mb-4 p-4 bg-green-50 text-green-600 rounded-lg">{success}</div>}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Documents List */}
@@ -339,15 +364,25 @@ export default function DocumentsPage() {
               </div>
             ) : documents.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
-                <svg className="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                <svg
+                  className="w-12 h-12 mx-auto mb-4 text-gray-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
                 </svg>
                 <p>No documents yet</p>
                 <p className="text-sm mt-1">Upload a PDF, TXT, or MD file to get started</p>
               </div>
             ) : (
               <div className="space-y-3 max-h-96 overflow-y-auto">
-                {documents.map(doc => (
+                {documents.map((doc) => (
                   <div
                     key={doc.id}
                     className={`p-4 border rounded-lg ${
@@ -380,7 +415,9 @@ export default function DocumentsPage() {
                         )}
                         {doc.status === 'ready' && (
                           <button
-                            onClick={() => setSelectedDocId(selectedDocId === doc.id ? null : doc.id)}
+                            onClick={() =>
+                              setSelectedDocId(selectedDocId === doc.id ? null : doc.id)
+                            }
                             className={`px-3 py-1 text-sm rounded ${
                               selectedDocId === doc.id
                                 ? 'bg-blue-600 text-white'
@@ -395,8 +432,18 @@ export default function DocumentsPage() {
                           className="p-1 text-gray-400 hover:text-red-500"
                           title="Delete"
                         >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            />
                           </svg>
                         </button>
                       </div>
@@ -413,7 +460,7 @@ export default function DocumentsPage() {
               <h2 className="text-lg font-semibold text-gray-900">Chat with Documents</h2>
               {selectedDocId && (
                 <span className="text-sm text-blue-600">
-                  Filtering: {documents.find(d => d.id === selectedDocId)?.name}
+                  Filtering: {documents.find((d) => d.id === selectedDocId)?.name}
                 </span>
               )}
             </div>
@@ -421,8 +468,18 @@ export default function DocumentsPage() {
             {readyDocuments.length === 0 ? (
               <div className="flex-1 flex items-center justify-center text-gray-500 text-center">
                 <div>
-                  <svg className="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                  <svg
+                    className="w-12 h-12 mx-auto mb-4 text-gray-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                    />
                   </svg>
                   <p>Upload and process documents to start chatting</p>
                 </div>
@@ -445,9 +502,7 @@ export default function DocumentsPage() {
                       <div
                         key={i}
                         className={`p-4 rounded-lg ${
-                          msg.role === 'user'
-                            ? 'bg-blue-100 ml-8'
-                            : 'bg-gray-100 mr-8'
+                          msg.role === 'user' ? 'bg-blue-100 ml-8' : 'bg-gray-100 mr-8'
                         }`}
                       >
                         <p className="text-gray-900 whitespace-pre-wrap">{msg.content}</p>
@@ -507,10 +562,13 @@ export default function DocumentsPage() {
           <ol className="list-decimal list-inside space-y-2 text-blue-800">
             <li>Upload a document (PDF, TXT, or Markdown)</li>
             <li>Click "Process" to extract and index the content</li>
-            <li>Ask questions in the chat - the AI will search your documents and provide answers</li>
+            <li>
+              Ask questions in the chat - the AI will search your documents and provide answers
+            </li>
           </ol>
           <p className="mt-4 text-sm text-blue-600">
-            Your documents are private and only accessible to you. Processing happens locally using free AI models.
+            Your documents are private and only accessible to you. Processing happens locally using
+            free AI models.
           </p>
         </div>
       </div>
