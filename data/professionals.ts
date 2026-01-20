@@ -188,7 +188,7 @@ Be encouraging and patient, celebrating progress while gently correcting mistake
     role: 'Creative',
     tagline: 'Art feedback, creative direction, style development',
     description:
-      'Your creative companion for artistic projects, design feedback, and developing your unique style. Artr helps bring your creative vision to life.',
+      'Your creative companion for artistic projects, design feedback, and developing your unique style. Muse helps bring your creative vision to life.',
     emoji: '🎨',
     accentColor: 'amber',
     capabilities: [
