@@ -226,7 +226,7 @@ export const DemoIntake: FC<DemoIntakeProps> = ({
       )}
 
       {/* Submit Button */}
-      <div className="mt-8">
+      <div className="mt-8 space-y-3">
         <button
           type="submit"
           disabled={!allRequiredAnswered}
@@ -234,7 +234,14 @@ export const DemoIntake: FC<DemoIntakeProps> = ({
         >
           Start Conversation
         </button>
-        <p className="mt-3 text-center text-xs text-gray-500">
+        <button
+          type="button"
+          onClick={onStart}
+          className="w-full rounded-lg px-6 py-2.5 text-gray-600 font-medium transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 text-sm"
+        >
+          Skip and chat directly →
+        </button>
+        <p className="text-center text-xs text-gray-500">
           You can upload documents and continue the conversation in the next step
         </p>
       </div>

@@ -48,7 +48,9 @@ export default function TryPage() {
         // Check file type
         const validTypes = ['text/plain', 'text/markdown', 'application/pdf'];
         const validExtensions = ['.txt', '.md', '.pdf'];
-        const hasValidExtension = validExtensions.some(ext => file.name.toLowerCase().endsWith(ext));
+        const hasValidExtension = validExtensions.some((ext) =>
+          file.name.toLowerCase().endsWith(ext),
+        );
 
         if (!validTypes.includes(file.type) && !hasValidExtension) {
           setError(`Invalid file type: ${file.name}. Please upload TXT, MD, or PDF files.`);
@@ -64,9 +66,23 @@ export default function TryPage() {
         let content = '';
 
         if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
-          // For PDFs, we'd need a PDF parser - for now, show a message
-          setError('PDF support coming soon. Please upload TXT or MD files for now.');
-          continue;
+          // Parse PDF using our API endpoint
+          const formData = new FormData();
+          formData.append('file', file);
+
+          const response = await fetch('/api/demo/parse-pdf', {
+            method: 'POST',
+            body: formData,
+          });
+
+          const data = await response.json();
+
+          if (!data.success) {
+            setError(data.error || `Failed to parse PDF: ${file.name}`);
+            continue;
+          }
+
+          content = data.data.text;
         } else {
           // Read text content
           content = await file.text();
@@ -90,8 +106,10 @@ export default function TryPage() {
     }
 
     if (newDocs.length > 0) {
-      setDocuments(prev => [...prev, ...newDocs]);
-      setSuccess(`Uploaded ${newDocs.length} document${newDocs.length > 1 ? 's' : ''}. You can now ask questions!`);
+      setDocuments((prev) => [...prev, ...newDocs]);
+      setSuccess(
+        `Uploaded ${newDocs.length} document${newDocs.length > 1 ? 's' : ''}. You can now ask questions!`,
+      );
     }
 
     setUploading(false);
@@ -101,7 +119,7 @@ export default function TryPage() {
   };
 
   const handleRemoveDocument = (id: string) => {
-    setDocuments(prev => prev.filter(doc => doc.id !== id));
+    setDocuments((prev) => prev.filter((doc) => doc.id !== id));
   };
 
   const handleChat = async (e: FormEvent) => {
@@ -110,7 +128,7 @@ export default function TryPage() {
 
     const message = input.trim();
     setInput('');
-    setMessages(prev => [...prev, { role: 'user', content: message }]);
+    setMessages((prev) => [...prev, { role: 'user', content: message }]);
     setIsLoading(true);
     setError('');
 
@@ -120,7 +138,7 @@ export default function TryPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message,
-          documents: documents.map(doc => ({
+          documents: documents.map((doc) => ({
             name: doc.name,
             content: doc.content,
           })),
@@ -130,7 +148,7 @@ export default function TryPage() {
       const data = await response.json();
 
       if (data.success) {
-        setMessages(prev => [
+        setMessages((prev) => [
           ...prev,
           {
             role: 'assistant',
@@ -139,14 +157,14 @@ export default function TryPage() {
           },
         ]);
       } else {
-        setMessages(prev => [
+        setMessages((prev) => [
           ...prev,
           { role: 'assistant', content: `Error: ${data.error || 'Something went wrong'}` },
         ]);
       }
     } catch (err) {
       console.error('Chat error:', err);
-      setMessages(prev => [
+      setMessages((prev) => [
         ...prev,
         { role: 'assistant', content: 'Failed to get response. Please try again.' },
       ]);
@@ -169,11 +187,17 @@ export default function TryPage() {
       {/* Header */}
       <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <Link
+            href="/"
+            className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
+          >
             Botsmann
           </Link>
           <div className="flex items-center gap-4">
-            <Link href="/auth/signin" className="text-gray-600 hover:text-gray-900 text-sm font-medium">
+            <Link
+              href="/auth/signin"
+              className="text-gray-600 hover:text-gray-900 text-sm font-medium"
+            >
               Sign In
             </Link>
             <Link
@@ -195,8 +219,8 @@ export default function TryPage() {
             </span>
           </h1>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Upload any text document and ask questions about it. No account required.
-            Your documents stay in your browser - nothing is stored on our servers.
+            Upload any text document and ask questions about it. No account required. Your documents
+            stay in your browser - nothing is stored on our servers.
           </p>
         </div>
 
@@ -223,7 +247,7 @@ export default function TryPage() {
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept=".txt,.md,text/plain,text/markdown"
+                  accept=".txt,.md,.pdf,text/plain,text/markdown,application/pdf"
                   onChange={handleFileUpload}
                   multiple
                   className="hidden"
@@ -240,18 +264,39 @@ export default function TryPage() {
                   {uploading ? (
                     <div className="flex items-center gap-2 text-blue-600">
                       <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        />
                       </svg>
                       <span>Uploading...</span>
                     </div>
                   ) : (
                     <>
-                      <svg className="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                      <svg
+                        className="w-8 h-8 text-gray-400 mb-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                        />
                       </svg>
                       <span className="text-sm text-gray-600">Drop files or click to upload</span>
-                      <span className="text-xs text-gray-400 mt-1">TXT, MD (max 5MB)</span>
+                      <span className="text-xs text-gray-400 mt-1">PDF, TXT, MD (max 5MB)</span>
                     </>
                   )}
                 </label>
@@ -260,15 +305,28 @@ export default function TryPage() {
               {/* Document List */}
               {documents.length === 0 ? (
                 <div className="text-center py-6 text-gray-500">
-                  <svg className="w-10 h-10 mx-auto mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  <svg
+                    className="w-10 h-10 mx-auto mb-2 text-gray-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
                   </svg>
                   <p className="text-sm">No documents yet</p>
                 </div>
               ) : (
                 <div className="space-y-2 max-h-64 overflow-y-auto">
-                  {documents.map(doc => (
-                    <div key={doc.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  {documents.map((doc) => (
+                    <div
+                      key={doc.id}
+                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                    >
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 truncate">{doc.name}</p>
                         <p className="text-xs text-gray-500">{formatFileSize(doc.size)}</p>
@@ -278,8 +336,18 @@ export default function TryPage() {
                         className="ml-2 p-1 text-gray-400 hover:text-red-500 transition-colors"
                         title="Remove"
                       >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
                         </svg>
                       </button>
                     </div>
@@ -308,23 +376,62 @@ export default function TryPage() {
               <div className="flex-1 overflow-y-auto p-6 space-y-4">
                 {documents.length === 0 ? (
                   <div className="flex items-center justify-center h-full text-gray-500 text-center">
-                    <div>
-                      <svg className="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                      </svg>
-                      <p className="text-lg font-medium mb-2">Upload a document to get started</p>
-                      <p className="text-sm">Once you upload a document, you can ask questions about its content.</p>
+                    <div className="max-w-sm">
+                      <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl flex items-center justify-center">
+                        <svg
+                          className="w-10 h-10 text-blue-500"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={1.5}
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
+                        </svg>
+                      </div>
+                      <p className="text-lg font-semibold text-gray-900 mb-2">
+                        Drop your document here
+                      </p>
+                      <p className="text-sm text-gray-500 mb-4">
+                        Upload a PDF, text file, or markdown document to start chatting with its
+                        content.
+                      </p>
+                      <div className="flex flex-wrap justify-center gap-2 text-xs text-gray-400">
+                        <span className="px-2 py-1 bg-gray-100 rounded">Contracts</span>
+                        <span className="px-2 py-1 bg-gray-100 rounded">Research papers</span>
+                        <span className="px-2 py-1 bg-gray-100 rounded">Reports</span>
+                        <span className="px-2 py-1 bg-gray-100 rounded">Legal docs</span>
+                      </div>
                     </div>
                   </div>
                 ) : messages.length === 0 ? (
                   <div className="flex items-center justify-center h-full text-gray-500 text-center">
-                    <div>
-                      <svg className="w-16 h-16 mx-auto mb-4 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                      </svg>
-                      <p className="text-lg font-medium mb-2">Ready to answer your questions!</p>
-                      <p className="text-sm">Ask anything about your uploaded documents.</p>
-                      <div className="mt-4 flex flex-wrap justify-center gap-2">
+                    <div className="max-w-md">
+                      <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-green-100 to-blue-100 rounded-full flex items-center justify-center">
+                        <svg
+                          className="w-8 h-8 text-green-500"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      </div>
+                      <p className="text-lg font-semibold text-gray-900 mb-2">
+                        Your documents are ready!
+                      </p>
+                      <p className="text-sm text-gray-500 mb-4">
+                        Ask any question about your documents. Try one of these:
+                      </p>
+                      <div className="flex flex-wrap justify-center gap-2">
                         <button
                           onClick={() => setInput('What is this document about?')}
                           className="px-3 py-1.5 text-sm bg-blue-50 text-blue-700 rounded-full hover:bg-blue-100 transition-colors"
@@ -336,6 +443,18 @@ export default function TryPage() {
                           className="px-3 py-1.5 text-sm bg-blue-50 text-blue-700 rounded-full hover:bg-blue-100 transition-colors"
                         >
                           Summarize the key points
+                        </button>
+                        <button
+                          onClick={() => setInput('What are the main conclusions?')}
+                          className="px-3 py-1.5 text-sm bg-blue-50 text-blue-700 rounded-full hover:bg-blue-100 transition-colors"
+                        >
+                          What are the main conclusions?
+                        </button>
+                        <button
+                          onClick={() => setInput('List any action items or recommendations')}
+                          className="px-3 py-1.5 text-sm bg-blue-50 text-blue-700 rounded-full hover:bg-blue-100 transition-colors"
+                        >
+                          List action items
                         </button>
                       </div>
                     </div>
@@ -371,12 +490,24 @@ export default function TryPage() {
 
                 {isLoading && (
                   <div className="flex justify-start">
-                    <div className="bg-gray-100 rounded-2xl px-4 py-3 flex items-center gap-2 text-gray-500">
-                      <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                      </svg>
-                      Thinking...
+                    <div className="bg-gray-100 rounded-2xl rounded-tl-md px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <div className="flex gap-1">
+                          <span
+                            className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                            style={{ animationDelay: '0ms' }}
+                          />
+                          <span
+                            className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                            style={{ animationDelay: '150ms' }}
+                          />
+                          <span
+                            className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                            style={{ animationDelay: '300ms' }}
+                          />
+                        </div>
+                        <span className="text-sm text-gray-500">Analyzing your documents...</span>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -390,18 +521,44 @@ export default function TryPage() {
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    placeholder={documents.length === 0 ? "Upload a document first..." : "Ask a question about your documents..."}
+                    onKeyDown={(e) => {
+                      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+                        e.preventDefault();
+                        if (input.trim() && documents.length > 0 && !isLoading) {
+                          handleChat(e as unknown as FormEvent);
+                        }
+                      }
+                    }}
+                    placeholder={
+                      documents.length === 0
+                        ? 'Upload a document first...'
+                        : 'Ask a question about your documents...'
+                    }
                     disabled={isLoading || documents.length === 0}
                     className="flex-1 px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all disabled:opacity-50 disabled:bg-gray-50"
                   />
                   <button
                     type="submit"
                     disabled={isLoading || !input.trim() || documents.length === 0}
-                    className="px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+                    title="Send (Cmd+Enter)"
                   >
                     Send
                   </button>
                 </div>
+                {documents.length > 0 && (
+                  <p className="text-xs text-gray-400 mt-2 text-right">
+                    Press{' '}
+                    <kbd className="px-1.5 py-0.5 bg-gray-100 rounded text-gray-500 font-mono text-[10px]">
+                      ⌘
+                    </kbd>{' '}
+                    +{' '}
+                    <kbd className="px-1.5 py-0.5 bg-gray-100 rounded text-gray-500 font-mono text-[10px]">
+                      Enter
+                    </kbd>{' '}
+                    to send
+                  </p>
+                )}
               </form>
             </div>
           </div>
@@ -412,14 +569,15 @@ export default function TryPage() {
           <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 border border-blue-100">
             <h3 className="font-bold text-gray-900 mb-4">How it works</h3>
             <ol className="list-decimal list-inside space-y-2 text-gray-700">
-              <li>Upload one or more text documents (TXT or Markdown)</li>
+              <li>Upload one or more documents (PDF, TXT, or Markdown)</li>
               <li>Ask questions about the content in natural language</li>
               <li>Get AI-powered answers based on your documents</li>
             </ol>
             <div className="mt-4 pt-4 border-t border-blue-200">
               <p className="text-sm text-gray-600">
-                <strong>Privacy:</strong> Your documents are processed in your browser and sent directly to the AI.
-                Nothing is stored on our servers. For persistent storage and advanced features,{' '}
+                <strong>Privacy:</strong> Your documents are processed in your browser and sent
+                directly to the AI. Nothing is stored on our servers. For persistent storage and
+                advanced features,{' '}
                 <Link href="/auth/signup" className="text-blue-600 hover:underline">
                   create a free account
                 </Link>

@@ -46,6 +46,31 @@ const accentColorClasses: Record<
   },
 };
 
+// Typing indicator with animated dots
+const TypingIndicator: FC<{ botIcon: string }> = ({ botIcon }) => (
+  <div className="flex items-start gap-3">
+    <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-lg flex-shrink-0">
+      {botIcon}
+    </div>
+    <div className="bg-gray-100 rounded-2xl rounded-tl-md px-4 py-3">
+      <div className="flex gap-1.5">
+        <span
+          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+          style={{ animationDelay: '0ms' }}
+        />
+        <span
+          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+          style={{ animationDelay: '150ms' }}
+        />
+        <span
+          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+          style={{ animationDelay: '300ms' }}
+        />
+      </div>
+    </div>
+  </div>
+);
+
 export const DemoChat: FC<DemoChatProps> = ({
   messages,
   onSendMessage,
@@ -140,6 +165,9 @@ export const DemoChat: FC<DemoChatProps> = ({
             </div>
           </div>
         )}
+
+        {/* Typing indicator when loading */}
+        {isLoading && <TypingIndicator botIcon={botIcon} />}
 
         <div ref={messagesEndRef} />
       </div>
