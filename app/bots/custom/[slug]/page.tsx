@@ -131,7 +131,7 @@ export default function CustomBotPage() {
       setSending(false);
       inputRef.current?.focus();
     }
-  }, [input, bot, sending, messages]);
+  }, [input, bot, sending]);
 
   // Handle keyboard submit
   const handleKeyDown = (e: React.KeyboardEvent) => {
