@@ -29,7 +29,6 @@ export const DOMAIN_ERRORS = {
   FAILED_SUBMIT_FORM: 'Failed to submit form. Please try again.',
   FAILED_SUBMIT_CONSULTATION: 'Failed to submit consultation',
   FAILED_SUBMIT_CONTACT: 'Failed to process submission. Please try again.',
-  FAILED_SUBMIT_WAITLIST: 'Failed to process waitlist submission',
 
   // Settings errors
   FAILED_GET_SETTINGS: 'Failed to get settings',
