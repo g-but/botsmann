@@ -127,3 +127,41 @@ export const CHUNK_SETTINGS = {
   DEFAULT_OVERLAP: 50,
   BATCH_SIZE: 50,
 } as const;
+
+/**
+ * Document status values (SSOT)
+ */
+export const DOCUMENT_STATUS = {
+  PENDING: 'pending',
+  PROCESSING: 'processing',
+  READY: 'ready',
+  ERROR: 'error',
+} as const;
+
+export type DocumentStatusType = (typeof DOCUMENT_STATUS)[keyof typeof DOCUMENT_STATUS];
+
+/**
+ * Document status display config
+ */
+export const DOCUMENT_STATUS_CONFIG = {
+  [DOCUMENT_STATUS.PENDING]: {
+    label: 'Pending',
+    color: 'text-yellow-700',
+    bgColor: 'bg-yellow-100',
+  },
+  [DOCUMENT_STATUS.PROCESSING]: {
+    label: 'Processing...',
+    color: 'text-blue-700',
+    bgColor: 'bg-blue-100',
+  },
+  [DOCUMENT_STATUS.READY]: {
+    label: 'Ready',
+    color: 'text-green-700',
+    bgColor: 'bg-green-100',
+  },
+  [DOCUMENT_STATUS.ERROR]: {
+    label: 'Error',
+    color: 'text-red-700',
+    bgColor: 'bg-red-100',
+  },
+} as const;
