@@ -71,6 +71,7 @@ botsmann/
 ### Documentation (Start Here)
 
 #### 1. **README_LEX.md** (Main Entry)
+
 - Project overview
 - Quick start guide
 - Tech stack
@@ -78,6 +79,7 @@ botsmann/
 - **Read this first!**
 
 #### 2. **LEX_PROJECT_OVERVIEW.md** (Business Context)
+
 - Vision and mission
 - Core features detailed
 - User flows
@@ -86,6 +88,7 @@ botsmann/
 - **For understanding "why"**
 
 #### 3. **LEX_TECHNICAL_ARCHITECTURE.md** (Engineering)
+
 - System architecture diagrams
 - Data models
 - Security design
@@ -94,6 +97,7 @@ botsmann/
 - **For understanding "how"**
 
 #### 4. **MOBILE_FIRST_IMPROVEMENTS.md** (UX/Design)
+
 - Responsive principles
 - Touch optimization
 - Design system
@@ -101,6 +105,7 @@ botsmann/
 - **For designers/frontend**
 
 #### 5. **DATA_ROOM_GUIDE.md** (User Manual)
+
 - How data room works
 - Chat usage
 - File management
@@ -108,6 +113,7 @@ botsmann/
 - **For end users**
 
 #### 6. **IMPLEMENTATION_SUMMARY.md** (Sprint Summary)
+
 - What we built
 - How it fits together
 - Next steps
@@ -120,6 +126,7 @@ botsmann/
 #### Demo Components (⭐ Most Important)
 
 **DemoSection.tsx**
+
 - Main 4-step wizard
 - Orchestrates entire demo flow
 - State management
@@ -127,6 +134,7 @@ botsmann/
 - Opens WorkspaceDashboard on step 3
 
 **WorkspaceDashboard.tsx** (⭐ FLAGSHIP)
+
 - Full-screen immersive workspace portal
 - 5 views: Overview, Files, Chat, Timeline, Settings
 - Multi-level file visibility controls
@@ -136,6 +144,7 @@ botsmann/
 - **This is the WOW factor!**
 
 **DataRoomDemo.tsx**
+
 - Live chat interface (AI + lawyer)
 - File management tabs
 - Activity timeline
@@ -143,24 +152,28 @@ botsmann/
 - Used in old Step 4 (now integrated in WorkspaceDashboard)
 
 **JurisdictionSelector.tsx**
+
 - 130+ hierarchical jurisdictions
 - Search functionality
 - Breadcrumb navigation
 - Progressive disclosure
 
 **FileUploader.tsx**
+
 - Drag-and-drop upload
 - File validation
 - AI auto-categorization
 - Status indicators
 
 **LawyerMatcher.tsx**
+
 - AI-powered matching
 - Rich lawyer profiles
 - Real-time availability
 - One-tap selection
 
 **AIWorkspace.tsx**
+
 - File organization display
 - Category-based view
 - AI insights
@@ -169,6 +182,7 @@ botsmann/
 #### Data & Types
 
 **jurisdictions.ts**
+
 - 130+ jurisdictions
 - Hierarchical structure
 - US (50 states)
@@ -177,12 +191,14 @@ botsmann/
 - UAE, Singapore, Hong Kong, etc.
 
 **constants.ts**
+
 - 12 legal areas
 - Mock lawyer profiles
 - File categories
 - Demo data
 
 **types.ts**
+
 - TypeScript interfaces
 - Data models
 - Type safety
@@ -228,6 +244,7 @@ App
 ## 🔄 Data Flow
 
 ### User Journey
+
 ```
 1. User lands on page
    └── Views hero + features
@@ -256,6 +273,7 @@ App
 ```
 
 ### State Management
+
 ```
 DemoSection (Parent)
 ├── caseContext: CaseContext
@@ -288,7 +306,7 @@ Wide:     xl: 1280px+
   @apply grid grid-cols-1      /* Mobile: 1 column */
          sm:grid-cols-2         /* Tablet: 2 columns */
          lg:grid-cols-3         /* Desktop: 3 columns */
-         xl:grid-cols-4;        /* Wide: 4 columns */
+         xl:grid-cols-4; /* Wide: 4 columns */
 }
 ```
 
@@ -297,6 +315,7 @@ Wide:     xl: 1280px+
 ## 🎨 Design System
 
 ### Colors
+
 ```css
 Primary:   Blue-to-Cyan gradient (#3B82F6 → #06B6D4)
 Success:   Green (#10B981)
@@ -306,6 +325,7 @@ Neutral:   Gray scale (#F3F4F6 → #111827)
 ```
 
 ### Typography Scale
+
 ```css
 Mobile:   text-sm (14px) → text-lg (18px)
 Tablet:   text-base (16px) → text-xl (20px)
@@ -313,6 +333,7 @@ Desktop:  text-lg (18px) → text-2xl (24px)
 ```
 
 ### Spacing
+
 ```css
 Tight:    gap-2  (8px)
 Normal:   gap-4  (16px)
@@ -361,12 +382,14 @@ Loose:    gap-8  (32px)
 ## 📦 Dependencies
 
 ### Core
+
 - Next.js 14+
 - React 18
 - TypeScript 5+
 - Tailwind CSS 3+
 
 ### Dev Tools
+
 - ESLint
 - Prettier (recommended)
 - TypeScript strict mode
@@ -413,28 +436,29 @@ Production Ready:        ✅ Yes
 
 ## 🎯 What Each File Does (One-Liner)
 
-| File | Purpose |
-|------|---------|
-| `README_LEX.md` | Main project documentation and quick start |
-| `LEX_PROJECT_OVERVIEW.md` | Business vision, features, roadmap |
-| `LEX_TECHNICAL_ARCHITECTURE.md` | System design, data models, API |
-| `MOBILE_FIRST_IMPROVEMENTS.md` | UX decisions, responsive design |
-| `DATA_ROOM_GUIDE.md` | User manual for data room feature |
-| `DEMO_IMPROVEMENTS.md` | Feature changelog and evolution |
-| `IMPLEMENTATION_SUMMARY.md` | Sprint summary and deliverables |
-| `DemoSection.tsx` | Main demo wizard orchestrator |
-| `DataRoomDemo.tsx` | Live chat + file interface |
-| `JurisdictionSelector.tsx` | 130+ hierarchical jurisdictions |
-| `FileUploader.tsx` | Drag-and-drop file upload |
-| `LawyerMatcher.tsx` | AI-powered lawyer matching |
-| `AIWorkspace.tsx` | File organization display |
-| `jurisdictions.ts` | Jurisdiction data (130+ items) |
-| `constants.ts` | Legal areas, mock data |
-| `types.ts` | TypeScript type definitions |
+| File                            | Purpose                                    |
+| ------------------------------- | ------------------------------------------ |
+| `README_LEX.md`                 | Main project documentation and quick start |
+| `LEX_PROJECT_OVERVIEW.md`       | Business vision, features, roadmap         |
+| `LEX_TECHNICAL_ARCHITECTURE.md` | System design, data models, API            |
+| `MOBILE_FIRST_IMPROVEMENTS.md`  | UX decisions, responsive design            |
+| `DATA_ROOM_GUIDE.md`            | User manual for data room feature          |
+| `DEMO_IMPROVEMENTS.md`          | Feature changelog and evolution            |
+| `IMPLEMENTATION_SUMMARY.md`     | Sprint summary and deliverables            |
+| `DemoSection.tsx`               | Main demo wizard orchestrator              |
+| `DataRoomDemo.tsx`              | Live chat + file interface                 |
+| `JurisdictionSelector.tsx`      | 130+ hierarchical jurisdictions            |
+| `FileUploader.tsx`              | Drag-and-drop file upload                  |
+| `LawyerMatcher.tsx`             | AI-powered lawyer matching                 |
+| `AIWorkspace.tsx`               | File organization display                  |
+| `jurisdictions.ts`              | Jurisdiction data (130+ items)             |
+| `constants.ts`                  | Legal areas, mock data                     |
+| `types.ts`                      | TypeScript type definitions                |
 
 ---
 
 **This structure is designed for:**
+
 - ✅ Easy onboarding (new engineers)
 - ✅ Quick navigation (find files fast)
 - ✅ Clear organization (logical grouping)
@@ -443,4 +467,4 @@ Production Ready:        ✅ Yes
 
 ---
 
-*Last Updated: January 2025*
+_Last Updated: January 2025_

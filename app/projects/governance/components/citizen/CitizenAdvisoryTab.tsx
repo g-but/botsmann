@@ -97,7 +97,9 @@ export const CitizenAdvisoryTab: FC<CitizenAdvisoryTabProps> = ({
                       min="0"
                       max="100"
                       value={item.advisoryPercentage}
-                      onChange={(e) => onDistributionChange(item.agencyId, parseInt(e.target.value))}
+                      onChange={(e) =>
+                        onDistributionChange(item.agencyId, parseInt(e.target.value))
+                      }
                       className={`w-full h-2 rounded-lg appearance-none cursor-pointer ${
                         sliderTotal > 100 ? 'bg-red-200' : 'bg-blue-200'
                       }`}

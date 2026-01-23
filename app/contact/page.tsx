@@ -9,27 +9,27 @@ export default function ContactPage() {
     company: '',
     message: '',
   });
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState('');
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormState({
       ...formState,
       [e.target.name]: e.target.value,
     });
   };
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError('');
-    
+
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       // Reset form and show success message
       setFormState({
         name: '',
@@ -44,20 +44,21 @@ export default function ContactPage() {
       setIsSubmitting(false);
     }
   };
-  
+
   return (
     <div className="mx-auto max-w-screen-xl px-6 py-12">
       <div className="mb-12 text-center">
         <h1 className="mb-4 text-4xl font-semibold tracking-tight">Contact Us</h1>
         <p className="mx-auto max-w-2xl text-lg text-gray-600">
-          Have questions about our AI solutions? We're here to help. Reach out to our team using the form below.
+          Have questions about our AI solutions? We're here to help. Reach out to our team using the
+          form below.
         </p>
       </div>
 
       <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-2">
         <div>
           <h2 className="mb-6 text-2xl font-semibold text-gray-900">Get in Touch</h2>
-          
+
           <div className="mb-8 space-y-6">
             <div>
               <h3 className="mb-2 text-lg font-medium text-gray-900">Email</h3>
@@ -67,24 +68,25 @@ export default function ContactPage() {
                 </a>
               </p>
             </div>
-            
+
             <div>
               <h3 className="mb-2 text-lg font-medium text-gray-900">Office Hours</h3>
               <p className="text-gray-600">Monday – Friday: 9am – 5pm CET</p>
             </div>
-            
+
             <div>
               <h3 className="mb-2 text-lg font-medium text-gray-900">Location</h3>
               <p className="text-gray-600">Zurich, Switzerland</p>
             </div>
           </div>
-          
+
           <div className="rounded-xl bg-gray-50 p-6">
             <h3 className="mb-3 text-lg font-medium text-gray-900">Looking for a demo?</h3>
             <p className="text-gray-600 mb-4">
-              Schedule a personalized demo with one of our product specialists to see our AI solutions in action.
+              Schedule a personalized demo with one of our product specialists to see our AI
+              solutions in action.
             </p>
-            <button 
+            <button
               className="rounded-md bg-white px-4 py-2 text-sm font-medium text-openai-green border border-openai-green hover:bg-openai-green hover:text-white transition-colors"
               onClick={() => window.open('https://calendly.com/botsmann/demo', '_blank')}
             >
@@ -92,22 +94,22 @@ export default function ContactPage() {
             </button>
           </div>
         </div>
-        
+
         <div>
           <h2 className="mb-6 text-2xl font-semibold text-gray-900">Request a Consultation</h2>
           <div className="rounded-xl bg-white p-6 shadow-sm border border-gray-200">
             {isSubmitted ? (
               <div className="text-center py-8">
-                <svg 
-                  className="mx-auto h-12 w-12 text-openai-green" 
+                <svg
+                  className="mx-auto h-12 w-12 text-openai-green"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
@@ -125,11 +127,9 @@ export default function ContactPage() {
             ) : (
               <form onSubmit={handleSubmit}>
                 {error && (
-                  <div className="mb-4 rounded-md bg-red-50 p-4 text-sm text-red-700">
-                    {error}
-                  </div>
+                  <div className="mb-4 rounded-md bg-red-50 p-4 text-sm text-red-700">{error}</div>
                 )}
-                
+
                 <div className="mb-4">
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
                     Name
@@ -144,7 +144,7 @@ export default function ContactPage() {
                     className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-openai-green focus:outline-none focus:ring-1 focus:ring-openai-green"
                   />
                 </div>
-                
+
                 <div className="mb-4">
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                     Email
@@ -159,7 +159,7 @@ export default function ContactPage() {
                     className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-openai-green focus:outline-none focus:ring-1 focus:ring-openai-green"
                   />
                 </div>
-                
+
                 <div className="mb-4">
                   <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1">
                     Company
@@ -173,7 +173,7 @@ export default function ContactPage() {
                     className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-openai-green focus:outline-none focus:ring-1 focus:ring-openai-green"
                   />
                 </div>
-                
+
                 <div className="mb-4">
                   <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
                     Message
@@ -188,7 +188,7 @@ export default function ContactPage() {
                     className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-openai-green focus:outline-none focus:ring-1 focus:ring-openai-green"
                   />
                 </div>
-                
+
                 <button
                   type="submit"
                   disabled={isSubmitting}

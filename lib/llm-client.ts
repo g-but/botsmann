@@ -3,11 +3,11 @@
  *
  * Supports:
  * - Groq (free, default)
- * - OpenAI (BYOK)
+ * - OpenRouter (100+ models: Claude, GPT, Gemini, Grok, etc.)
  * - Ollama (local)
  */
 
-export type ModelProvider = 'groq' | 'openai' | 'ollama';
+export type ModelProvider = 'groq' | 'openrouter' | 'ollama';
 
 interface LLMMessage {
   role: 'system' | 'user' | 'assistant';
@@ -18,6 +18,7 @@ interface LLMOptions {
   provider: ModelProvider;
   apiKey?: string | null;
   ollamaUrl?: string | null;
+  model?: string; // Optional model override for OpenRouter
   temperature?: number;
   maxTokens?: number;
 }
@@ -32,9 +33,9 @@ interface LLMResponse {
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_MODEL = 'llama-3.1-8b-instant';
 
-// OpenAI configuration
-const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
-const OPENAI_MODEL = 'gpt-4o-mini'; // Cost-effective option
+// OpenRouter configuration
+const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
+const OPENROUTER_DEFAULT_MODEL = 'anthropic/claude-3.5-sonnet'; // Default to Claude
 
 // Ollama configuration
 const OLLAMA_MODEL = 'llama3.1:8b';
@@ -44,15 +45,15 @@ const OLLAMA_MODEL = 'llama3.1:8b';
  */
 export async function generateLLMResponse(
   messages: LLMMessage[],
-  options: LLMOptions
+  options: LLMOptions,
 ): Promise<LLMResponse> {
-  const { provider, apiKey, ollamaUrl, temperature = 0.7, maxTokens = 1024 } = options;
+  const { provider, apiKey, ollamaUrl, model, temperature = 0.7, maxTokens = 1024 } = options;
 
   switch (provider) {
     case 'groq':
       return generateWithGroq(messages, apiKey, temperature, maxTokens);
-    case 'openai':
-      return generateWithOpenAI(messages, apiKey, temperature, maxTokens);
+    case 'openrouter':
+      return generateWithOpenRouter(messages, apiKey, model, temperature, maxTokens);
     case 'ollama':
       return generateWithOllama(messages, ollamaUrl, temperature, maxTokens);
     default:
@@ -67,7 +68,7 @@ async function generateWithGroq(
   messages: LLMMessage[],
   apiKey: string | null | undefined,
   temperature: number,
-  maxTokens: number
+  maxTokens: number,
 ): Promise<LLMResponse> {
   // Use provided key or fallback to server-side key
   // Clean the key: trim whitespace and remove any literal \n or escaped newlines
@@ -81,7 +82,7 @@ async function generateWithGroq(
   const response = await fetch(GROQ_API_URL, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${key}`,
+      Authorization: `Bearer ${key}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -107,26 +108,32 @@ async function generateWithGroq(
 }
 
 /**
- * Generate with OpenAI (BYOK)
+ * Generate with OpenRouter (100+ models)
+ * Supports Claude, GPT-4, Gemini, Grok, Llama, Mistral, and more
  */
-async function generateWithOpenAI(
+async function generateWithOpenRouter(
   messages: LLMMessage[],
   apiKey: string | null | undefined,
+  model: string | undefined,
   temperature: number,
-  maxTokens: number
+  maxTokens: number,
 ): Promise<LLMResponse> {
   if (!apiKey) {
-    throw new Error('OpenAI API key required');
+    throw new Error('OpenRouter API key required');
   }
 
-  const response = await fetch(OPENAI_API_URL, {
+  const selectedModel = model || OPENROUTER_DEFAULT_MODEL;
+
+  const response = await fetch(OPENROUTER_API_URL, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${apiKey}`,
+      Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
+      'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://botsmann.com',
+      'X-Title': 'Botsmann',
     },
     body: JSON.stringify({
-      model: OPENAI_MODEL,
+      model: selectedModel,
       messages,
       temperature,
       max_tokens: maxTokens,
@@ -135,15 +142,15 @@ async function generateWithOpenAI(
 
   if (!response.ok) {
     const error = await response.text();
-    console.error('OpenAI API error:', error);
-    throw new Error('OpenAI API request failed');
+    console.error('OpenRouter API error:', error);
+    throw new Error('OpenRouter API request failed');
   }
 
   const data = await response.json();
   return {
     content: data.choices[0]?.message?.content || '',
-    provider: 'openai',
-    model: OPENAI_MODEL,
+    provider: 'openrouter',
+    model: selectedModel,
   };
 }
 
@@ -154,7 +161,7 @@ async function generateWithOllama(
   messages: LLMMessage[],
   ollamaUrl: string | null | undefined,
   temperature: number,
-  maxTokens: number
+  maxTokens: number,
 ): Promise<LLMResponse> {
   const baseUrl = ollamaUrl || 'http://localhost:11434';
   const url = `${baseUrl}/api/chat`;
@@ -203,11 +210,11 @@ export async function chat(
   systemPrompt: string,
   userMessage: string,
   context: string,
-  options: LLMOptions
+  options: LLMOptions,
 ): Promise<string> {
   const messages: LLMMessage[] = [
     { role: 'system', content: systemPrompt },
-    { role: 'user', content: `Context:\n${context}\n\n---\nUser question: ${userMessage}` }
+    { role: 'user', content: `Context:\n${context}\n\n---\nUser question: ${userMessage}` },
   ];
 
   const response = await generateLLMResponse(messages, options);

@@ -6,9 +6,9 @@ describe('Platform Integrations', () => {
     it('returns products for valid search', async () => {
       const results = await searchAmazon('electronics/computers', {
         type: 'laptop',
-        minRam: '8GB'
+        minRam: '8GB',
       });
-      
+
       expect(results).toHaveLength(2);
       expect(results[0]).toHaveProperty('platform', 'Amazon');
       expect(results[0]).toHaveProperty('price');
@@ -28,9 +28,9 @@ describe('Platform Integrations', () => {
     it('returns products for valid search', async () => {
       const results = await searchRicardo('electronics/computers', {
         type: 'laptop',
-        minRam: '8GB'
+        minRam: '8GB',
       });
-      
+
       expect(results).toHaveLength(2);
       expect(results[0]).toHaveProperty('platform', 'Ricardo');
       expect(results[0]).toHaveProperty('price');
@@ -48,13 +48,12 @@ describe('Platform Integrations', () => {
 
   describe('Concurrent Search Performance', () => {
     it('handles multiple concurrent searches', async () => {
-      const searches = Array(5).fill(null).map(() =>
-        Promise.all([
-          searchAmazon('electronics', {}),
-          searchRicardo('electronics', {})
-        ])
-      );
-      
+      const searches = Array(5)
+        .fill(null)
+        .map(() =>
+          Promise.all([searchAmazon('electronics', {}), searchRicardo('electronics', {})]),
+        );
+
       const results = await Promise.all(searches);
       results.forEach(([amazonResults, ricardoResults]) => {
         expect(amazonResults).toHaveLength(2);

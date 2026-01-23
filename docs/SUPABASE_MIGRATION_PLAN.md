@@ -3,12 +3,14 @@
 ## 🎯 Why Migrate to Supabase?
 
 ### Current Issues with MongoDB
+
 - ❌ **Costs money** - MongoDB Atlas paid tier
 - ❌ **Overkill** - Only storing simple contact forms
 - ❌ **Exposed credentials** - Security risk
 - ❌ **Extra complexity** - Mongoose, connection pooling, etc.
 
 ### Benefits of Supabase
+
 - ✅ **FREE** - 500MB database, 1GB file storage, 2GB bandwidth
 - ✅ **Already have account** - You have 2 projects already
 - ✅ **PostgreSQL** - More powerful than needed, but free
@@ -23,7 +25,9 @@
 ## 📊 Current MongoDB Usage Analysis
 
 ### What You're Storing
+
 **Only one model**: `Consultation`
+
 ```typescript
 {
   name: string,
@@ -36,6 +40,7 @@
 ```
 
 **Usage**:
+
 - Contact form submissions
 - Email notifications
 - Simple status tracking
@@ -49,6 +54,7 @@
 ### Step 1: Set Up Supabase (30 minutes)
 
 #### 1.1 Create Project
+
 ```bash
 # Option A: Use existing project (recommended)
 # - Go to https://supabase.com/dashboard
@@ -61,6 +67,7 @@ supabase login
 ```
 
 #### 1.2 Create Table
+
 ```sql
 -- Run this in Supabase SQL Editor
 -- Dashboard → SQL Editor → New Query
@@ -126,10 +133,11 @@ npm uninstall mongodb mongoose
 ```
 
 **Update package.json**:
+
 ```json
 {
   "dependencies": {
-    "@supabase/supabase-js": "^2.39.0",
+    "@supabase/supabase-js": "^2.39.0"
     // Remove: "mongodb": "^6.13.0",
     // Remove: "mongoose": "^8.10.0",
   }
@@ -141,10 +149,12 @@ npm uninstall mongodb mongoose
 ### Step 3: Update Environment Variables (5 minutes)
 
 **Get Supabase credentials**:
+
 1. Go to Supabase Dashboard → Project Settings → API
 2. Copy: `Project URL` and `anon public` key
 
 **Update `.env.example`**:
+
 ```bash
 # Replace MongoDB with Supabase
 # MONGODB_URI=  ← DELETE THIS
@@ -161,6 +171,7 @@ EMAIL_TO=butaeff@gmail.com
 ```
 
 **Update Vercel Environment Variables**:
+
 ```bash
 # Remove
 MONGODB_URI
@@ -178,13 +189,14 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 #### 4.1 Create Supabase Client
 
 **Create `src/lib/supabase.ts`**:
+
 ```typescript
 import { createClient } from '@supabase/supabase-js';
 
 // Client-side (browser)
 export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 );
 
 // Server-side (API routes) - has admin privileges
@@ -194,9 +206,9 @@ export const supabaseAdmin = createClient(
   {
     auth: {
       autoRefreshToken: false,
-      persistSession: false
-    }
-  }
+      persistSession: false,
+    },
+  },
 );
 
 // Type definitions
@@ -214,6 +226,7 @@ export interface Consultation {
 #### 4.2 Update API Route
 
 **Replace `app/api/consultations/route.ts`**:
+
 ```typescript
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/src/lib/supabase';
@@ -225,10 +238,7 @@ export async function POST(request: NextRequest) {
     // Rate limiting
     const rateLimitResult = await rateLimit(request);
     if (!rateLimitResult.success) {
-      return NextResponse.json(
-        { error: 'Too many requests' },
-        { status: 429 }
-      );
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
     }
 
     // Parse and validate
@@ -238,21 +248,20 @@ export async function POST(request: NextRequest) {
     // Insert into Supabase
     const { data: consultation, error } = await supabaseAdmin
       .from('consultations')
-      .insert([{
-        name: validatedData.name,
-        email: validatedData.email,
-        message: validatedData.message,
-        status: 'new'
-      }])
+      .insert([
+        {
+          name: validatedData.name,
+          email: validatedData.email,
+          message: validatedData.message,
+          status: 'new',
+        },
+      ])
       .select()
       .single();
 
     if (error) {
       console.error('Supabase error:', error);
-      return NextResponse.json(
-        { error: 'Failed to submit consultation' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'Failed to submit consultation' }, { status: 500 });
     }
 
     // Send emails asynchronously (existing code - keep it)
@@ -262,25 +271,21 @@ export async function POST(request: NextRequest) {
       {
         success: true,
         id: consultation.id,
-        message: 'Consultation submitted successfully'
+        message: 'Consultation submitted successfully',
       },
-      { status: 201 }
+      { status: 201 },
     );
-
   } catch (error: any) {
     console.error('Consultation submission error:', error);
 
     if (error.code === 'RATE_LIMIT') {
       return NextResponse.json(
         { error: 'Too many requests. Please try again later.' },
-        { status: 429 }
+        { status: 429 },
       );
     }
 
-    return NextResponse.json(
-      { error: 'Failed to submit consultation' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to submit consultation' }, { status: 500 });
   }
 }
 
@@ -300,10 +305,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ consultations });
   } catch (error) {
     console.error('Error fetching consultations:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch consultations' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to fetch consultations' }, { status: 500 });
   }
 }
 ```
@@ -311,6 +313,7 @@ export async function GET(request: NextRequest) {
 #### 4.3 Update Health Check
 
 **Replace `app/api/health/route.ts`**:
+
 ```typescript
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/src/lib/supabase';
@@ -318,22 +321,19 @@ import { supabaseAdmin } from '@/src/lib/supabase';
 export async function GET() {
   try {
     // Test Supabase connection
-    const { error } = await supabaseAdmin
-      .from('consultations')
-      .select('count')
-      .limit(1);
+    const { error } = await supabaseAdmin.from('consultations').select('count').limit(1);
 
     if (error) throw error;
 
     return NextResponse.json(
       { status: 'healthy', database: 'supabase-connected' },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error('Health check failed:', error);
     return NextResponse.json(
       { status: 'unhealthy', database: 'connection-failed' },
-      { status: 503 }
+      { status: 503 },
     );
   }
 }
@@ -344,6 +344,7 @@ export async function GET() {
 ### Step 5: Clean Up Old Code (15 minutes)
 
 **Delete MongoDB files**:
+
 ```bash
 # Remove MongoDB connection file
 rm src/lib/mongodb.ts
@@ -357,6 +358,7 @@ rm api/consultations.js 2>/dev/null || true
 ```
 
 **Update imports** (search for these and remove):
+
 ```typescript
 // Remove these imports from all files
 import { connectDB } from '@/src/lib/mongodb';
@@ -393,11 +395,13 @@ curl http://localhost:3000/api/health
 ## 📋 Migration Checklist
 
 ### Pre-Migration
+
 - [ ] Create Supabase table (SQL above)
 - [ ] Get Supabase credentials (URL + keys)
 - [ ] Update `.env.example`
 
 ### Code Changes
+
 - [ ] Install `@supabase/supabase-js`
 - [ ] Uninstall `mongodb` and `mongoose`
 - [ ] Create `src/lib/supabase.ts`
@@ -407,17 +411,20 @@ curl http://localhost:3000/api/health
 - [ ] Delete `src/lib/models/`
 
 ### Environment Variables
+
 - [ ] Update local `.env` with Supabase vars
 - [ ] Update Vercel env vars (remove MongoDB, add Supabase)
 - [ ] Remove `MONGODB_URI` everywhere
 
 ### Testing
+
 - [ ] Test contact form submission
 - [ ] Test health check endpoint
 - [ ] Verify data in Supabase dashboard
 - [ ] Test email notifications still work
 
 ### Deployment
+
 - [ ] Commit changes
 - [ ] Push to GitHub
 - [ ] Verify Vercel deployment
@@ -430,6 +437,7 @@ curl http://localhost:3000/api/health
 Since you're using Supabase, here's what you get **for free** for the Lex platform:
 
 ### 1. **File Storage** (1GB free)
+
 ```typescript
 // Upload legal documents
 const { data, error } = await supabase.storage
@@ -438,33 +446,36 @@ const { data, error } = await supabase.storage
 ```
 
 ### 2. **Authentication** (Built-in)
+
 ```typescript
 // User signup/login for Lex platform
 const { data, error } = await supabase.auth.signUp({
   email: 'user@example.com',
-  password: 'secure-password'
+  password: 'secure-password',
 });
 ```
 
 ### 3. **Real-time Chat** (WebSocket included)
+
 ```typescript
 // Live chat for data room
 supabase
   .channel('room:123')
-  .on('postgres_changes',
-    { event: 'INSERT', schema: 'public', table: 'messages' },
-    (payload) => console.log('New message:', payload)
+  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) =>
+    console.log('New message:', payload),
   )
   .subscribe();
 ```
 
 ### 4. **Edge Functions** (Serverless)
+
 ```typescript
 // Process documents, send emails, etc.
 // Alternative to Vercel API routes
 ```
 
 ### 5. **Row Level Security**
+
 ```sql
 -- Users can only see their own cases
 CREATE POLICY "Users see own cases"
@@ -479,11 +490,13 @@ CREATE POLICY "Users see own cases"
 ## 💰 Cost Comparison
 
 ### MongoDB Atlas
+
 - **Free Tier**: 512MB (very limited)
 - **Shared Tier**: $9/month (what you likely need)
 - **Dedicated**: $57+/month
 
 ### Supabase
+
 - **Free Tier**:
   - 500MB database ✅
   - 1GB file storage ✅
@@ -499,6 +512,7 @@ CREATE POLICY "Users see own cases"
 ## 🚨 Important Notes
 
 ### Data Migration (if you have existing data)
+
 If you already have consultations in MongoDB:
 
 ```typescript
@@ -516,16 +530,16 @@ async function migrate() {
 
   // Insert into Supabase
   for (const consultation of consultations) {
-    const { error } = await supabaseAdmin
-      .from('consultations')
-      .insert([{
+    const { error } = await supabaseAdmin.from('consultations').insert([
+      {
         name: consultation.name,
         email: consultation.email,
         message: consultation.message,
         status: consultation.status,
         created_at: consultation.createdAt,
-        updated_at: consultation.updatedAt
-      }]);
+        updated_at: consultation.updatedAt,
+      },
+    ]);
 
     if (error) console.error('Migration error:', error);
   }
@@ -537,16 +551,17 @@ migrate();
 ```
 
 ### Security
+
 ```typescript
 // Add email validation
-const { data, error } = await supabaseAdmin
-  .from('consultations')
-  .insert([{
+const { data, error } = await supabaseAdmin.from('consultations').insert([
+  {
     name: validatedData.name,
     email: validatedData.email.toLowerCase(), // Normalize
     message: validatedData.message.trim(),
-    status: 'new'
-  }]);
+    status: 'new',
+  },
+]);
 ```
 
 ---
@@ -554,12 +569,14 @@ const { data, error } = await supabaseAdmin
 ## ✅ Final Result
 
 **Before (MongoDB)**:
+
 - Costs: $9/month
 - Setup: Complex (Mongoose, connection pooling)
 - Security: Exposed credentials
 - Features: Just database
 
 **After (Supabase)**:
+
 - Costs: $0/month ✅
 - Setup: Simple (one client)
 - Security: Row Level Security built-in ✅
@@ -593,6 +610,6 @@ npm run dev
 
 ---
 
-*Migration Guide Version: 1.0*
-*Last Updated: January 2025*
-*Recommended: ✅ YES - Migrate to Supabase immediately*
+_Migration Guide Version: 1.0_
+_Last Updated: January 2025_
+_Recommended: ✅ YES - Migrate to Supabase immediately_

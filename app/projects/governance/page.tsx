@@ -12,10 +12,10 @@ import CTASection from './components/CTASection';
 
 /**
  * Solon - Decentralized Direct Democracy Governance Platform Page
- * 
+ *
  * This is the main page component for the Solon governance platform.
  * It follows the bot page structure for consistency with other Botsmann offerings.
- * 
+ *
  * @module SolonGovernancePage
  */
 export default function GovernancePage() {
@@ -24,19 +24,19 @@ export default function GovernancePage() {
       <main>
         {/* Hero Section */}
         <HeroSection />
-        
+
         {/* Core Components Section */}
         <CoreComponentsSection />
-        
+
         {/* Application Areas Section */}
         <ApplicationsSection />
-        
+
         {/* Whitepaper Section */}
         <WhitepaperSection />
-        
+
         {/* FAQ Section */}
         <FAQSection />
-        
+
         {/* Call-to-Action Section */}
         <CTASection />
       </main>

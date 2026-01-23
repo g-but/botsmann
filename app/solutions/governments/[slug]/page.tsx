@@ -7,10 +7,10 @@ import SolutionLayout, { SolutionData } from '@/components/SolutionLayout';
 
 export default function SolutionPage() {
   const { slug } = useParams();
-  const category = "governments";  // Hard-coded since this file is under governments
+  const category = 'governments'; // Hard-coded since this file is under governments
 
   const solutionData: SolutionData | undefined = solutionsData[category]?.find(
-    (s: SolutionData) => s.slug === slug
+    (s: SolutionData) => s.slug === slug,
   );
 
   if (!solutionData) {

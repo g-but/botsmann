@@ -3,18 +3,18 @@
 import { usePathname } from 'next/navigation';
 import { Navigation } from './Navigation';
 import { Logo } from './shared';
-import { isBotDetailPage } from '@/lib/routes';
+import { isImmersivePage } from '@/lib/routes';
 
 /**
  * Main site header component
  * Contains logo and navigation
  *
- * Note: Header is hidden on bot detail pages for immersive experience
+ * Note: Header is hidden on professional and bot detail pages for immersive experience
  */
 export function Header() {
   const pathname = usePathname();
 
-  if (isBotDetailPage(pathname)) return null;
+  if (isImmersivePage(pathname)) return null;
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-2xl border-b border-gray-100/50 shadow-sm">

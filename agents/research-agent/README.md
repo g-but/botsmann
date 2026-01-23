@@ -4,11 +4,11 @@ Multi-provider research assistant - backend for the Nerd bot.
 
 ## Providers
 
-| Provider | Cost | Setup |
-|----------|------|-------|
-| **Ollama** | FREE | Local, runs on your machine |
-| **Groq** | FREE tier | Cloud, fast inference |
-| **Anthropic** | Paid | Claude API |
+| Provider      | Cost      | Setup                       |
+| ------------- | --------- | --------------------------- |
+| **Ollama**    | FREE      | Local, runs on your machine |
+| **Groq**      | FREE tier | Cloud, fast inference       |
+| **Anthropic** | Paid      | Claude API                  |
 
 ## Quick Start
 
@@ -30,12 +30,14 @@ python -m src.agent "your research topic"
 ## Usage
 
 ### CLI
+
 ```bash
 python -m src.agent "Latest advances in RAG"
 python -m src.agent "Knowledge graphs" --deep  # Big Discovery Mode
 ```
 
 ### Python
+
 ```python
 from src import research
 import anyio
@@ -48,6 +50,7 @@ anyio.run(research("Your topic", depth="deep"))
 ```
 
 ### Interactive Session
+
 ```python
 from src import ResearchAgent
 import anyio

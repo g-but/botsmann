@@ -7,85 +7,85 @@ export const LEGAL_AREAS: LegalArea[] = [
     name: 'Immigration Law',
     icon: '✈️',
     description: 'Visas, citizenship, asylum, deportation defense',
-    demandLevel: 'high'
+    demandLevel: 'high',
   },
   {
     id: 'family',
     name: 'Family Law',
     icon: '👨‍👩‍👧',
     description: 'Divorce, custody, adoption, domestic issues',
-    demandLevel: 'high'
+    demandLevel: 'high',
   },
   {
     id: 'criminal',
     name: 'Criminal Defense',
     icon: '⚖️',
     description: 'Criminal charges, DUI, white-collar crime',
-    demandLevel: 'high'
+    demandLevel: 'high',
   },
   {
     id: 'employment',
     name: 'Employment Law',
     icon: '💼',
     description: 'Wrongful termination, discrimination, wages',
-    demandLevel: 'high'
+    demandLevel: 'high',
   },
   {
     id: 'personal-injury',
     name: 'Personal Injury',
     icon: '🏥',
     description: 'Accidents, medical malpractice, compensation',
-    demandLevel: 'high'
+    demandLevel: 'high',
   },
   {
     id: 'real-estate',
     name: 'Real Estate',
     icon: '🏠',
     description: 'Property disputes, landlord-tenant, transactions',
-    demandLevel: 'medium'
+    demandLevel: 'medium',
   },
   {
     id: 'business',
     name: 'Business & Corporate',
     icon: '🏢',
     description: 'Formation, contracts, compliance, M&A',
-    demandLevel: 'medium'
+    demandLevel: 'medium',
   },
   {
     id: 'intellectual-property',
     name: 'Intellectual Property',
     icon: '💡',
     description: 'Patents, trademarks, copyright, trade secrets',
-    demandLevel: 'medium'
+    demandLevel: 'medium',
   },
   {
     id: 'estate-planning',
     name: 'Estate Planning',
     icon: '📜',
     description: 'Wills, trusts, probate, inheritance',
-    demandLevel: 'medium'
+    demandLevel: 'medium',
   },
   {
     id: 'bankruptcy',
     name: 'Bankruptcy',
     icon: '💸',
     description: 'Debt relief, Chapter 7, Chapter 13, foreclosure',
-    demandLevel: 'medium'
+    demandLevel: 'medium',
   },
   {
     id: 'tax',
     name: 'Tax Law',
     icon: '🧾',
     description: 'Tax disputes, IRS audits, tax planning',
-    demandLevel: 'low'
+    demandLevel: 'low',
   },
   {
     id: 'civil-rights',
     name: 'Civil Rights',
     icon: '✊',
     description: 'Discrimination, police misconduct, constitutional',
-    demandLevel: 'medium'
-  }
+    demandLevel: 'medium',
+  },
 ];
 
 // Mock lawyer profiles for demo
@@ -100,7 +100,7 @@ export const MOCK_LAWYERS: LawyerProfile[] = [
     responseTime: '< 2 hours',
     availability: 'available',
     hourlyRate: 250,
-    languages: ['English', 'Spanish']
+    languages: ['English', 'Spanish'],
   },
   {
     id: '2',
@@ -112,7 +112,7 @@ export const MOCK_LAWYERS: LawyerProfile[] = [
     responseTime: '< 4 hours',
     availability: 'available',
     hourlyRate: 300,
-    languages: ['English', 'French']
+    languages: ['English', 'French'],
   },
   {
     id: '3',
@@ -124,7 +124,7 @@ export const MOCK_LAWYERS: LawyerProfile[] = [
     responseTime: '< 1 hour',
     availability: 'busy',
     hourlyRate: 400,
-    languages: ['English']
+    languages: ['English'],
   },
   {
     id: '4',
@@ -135,7 +135,7 @@ export const MOCK_LAWYERS: LawyerProfile[] = [
     casesHandled: 412,
     responseTime: '< 3 hours',
     availability: 'available',
-    languages: ['English', 'German']
+    languages: ['English', 'German'],
   },
   {
     id: '5',
@@ -147,8 +147,8 @@ export const MOCK_LAWYERS: LawyerProfile[] = [
     responseTime: '< 2 hours',
     availability: 'available',
     hourlyRate: 350,
-    languages: ['English', 'Spanish', 'Mandarin']
-  }
+    languages: ['English', 'Spanish', 'Mandarin'],
+  },
 ];
 
 // File categories for AI organization
@@ -160,5 +160,5 @@ export const FILE_CATEGORIES = [
   { id: 'identification', title: 'ID & Credentials', icon: '🪪' },
   { id: 'financial', title: 'Financial Records', icon: '💰' },
   { id: 'medical', title: 'Medical Records', icon: '🏥' },
-  { id: 'other', title: 'Other Documents', icon: '📁' }
+  { id: 'other', title: 'Other Documents', icon: '📁' },
 ];

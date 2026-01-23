@@ -40,7 +40,7 @@ export async function GET() {
         error: 'Warmup failed',
         elapsed,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

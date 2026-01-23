@@ -14,14 +14,15 @@ const LawyerMatcher: React.FC<LawyerMatcherProps> = ({
   lawyers,
   selectedLawyer,
   onSelectLawyer,
-  legalArea
+  legalArea,
 }) => {
   // Filter lawyers by expertise matching the legal area
-  const matchedLawyers = lawyers.filter(lawyer =>
-    lawyer.expertise.some(exp =>
-      exp.toLowerCase().includes(legalArea.toLowerCase()) ||
-      legalArea.toLowerCase().includes(exp.toLowerCase().split(' ')[0])
-    )
+  const matchedLawyers = lawyers.filter((lawyer) =>
+    lawyer.expertise.some(
+      (exp) =>
+        exp.toLowerCase().includes(legalArea.toLowerCase()) ||
+        legalArea.toLowerCase().includes(exp.toLowerCase().split(' ')[0]),
+    ),
   );
 
   const displayLawyers = matchedLawyers.length > 0 ? matchedLawyers : lawyers.slice(0, 3);
@@ -43,9 +44,10 @@ const LawyerMatcher: React.FC<LawyerMatcherProps> = ({
           onClick={() => onSelectLawyer(lawyer.id)}
           className={`
             p-3 sm:p-4 rounded-xl border-2 cursor-pointer transition-all active:scale-98
-            ${selectedLawyer === lawyer.id
-              ? 'border-blue-500 bg-blue-50 shadow-md'
-              : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50 active:border-blue-400'
+            ${
+              selectedLawyer === lawyer.id
+                ? 'border-blue-500 bg-blue-50 shadow-md'
+                : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50 active:border-blue-400'
             }
           `}
         >
@@ -92,8 +94,8 @@ const LawyerMatcher: React.FC<LawyerMatcherProps> = ({
                       lawyer.availability === 'available'
                         ? 'bg-green-500 animate-pulse'
                         : lawyer.availability === 'busy'
-                        ? 'bg-yellow-500'
-                        : 'bg-gray-400'
+                          ? 'bg-yellow-500'
+                          : 'bg-gray-400'
                     }`}
                   />
                   <span className="text-xs text-gray-600 capitalize">{lawyer.availability}</span>
@@ -103,9 +105,7 @@ const LawyerMatcher: React.FC<LawyerMatcherProps> = ({
                   </span>
                 </div>
                 {lawyer.hourlyRate && (
-                  <span className="text-sm font-bold text-gray-900">
-                    ${lawyer.hourlyRate}/hr
-                  </span>
+                  <span className="text-sm font-bold text-gray-900">${lawyer.hourlyRate}/hr</span>
                 )}
               </div>
             </div>
@@ -115,8 +115,8 @@ const LawyerMatcher: React.FC<LawyerMatcherProps> = ({
 
       <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
         <p className="text-xs text-blue-700">
-          <strong>💡 Smart Matching:</strong> Our AI analyzes your case and recommends the best lawyers
-          based on expertise, success rate, and availability.
+          <strong>💡 Smart Matching:</strong> Our AI analyzes your case and recommends the best
+          lawyers based on expertise, success rate, and availability.
         </p>
       </div>
     </div>

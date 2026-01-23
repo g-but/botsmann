@@ -101,12 +101,15 @@ export interface GuideFilters {
 /**
  * Difficulty level styling
  */
-export const difficultyConfig: Record<DifficultyLevel, {
-  color: string;
-  bgColor: string;
-  borderColor: string;
-  label: string;
-}> = {
+export const difficultyConfig: Record<
+  DifficultyLevel,
+  {
+    color: string;
+    bgColor: string;
+    borderColor: string;
+    label: string;
+  }
+> = {
   Beginner: {
     color: 'text-green-700',
     bgColor: 'bg-green-50',
@@ -130,11 +133,14 @@ export const difficultyConfig: Record<DifficultyLevel, {
 /**
  * Category configuration
  */
-export const categoryConfig: Record<GuideCategory, {
-  label: string;
-  icon: string;
-  description: string;
-}> = {
+export const categoryConfig: Record<
+  GuideCategory,
+  {
+    label: string;
+    icon: string;
+    description: string;
+  }
+> = {
   'getting-started': {
     label: 'Getting Started',
     icon: '🚀',

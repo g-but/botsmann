@@ -6,21 +6,24 @@ describe('NLP Processing', () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: true,
-        json: () => Promise.resolve({
-          choices: [{
-            message: {
-              content: JSON.stringify({
-                category: 'electronics/computers',
-                attributes: {
-                  type: 'laptop',
-                  minRam: '8GB',
-                  minStorage: '256GB'
-                }
-              })
-            }
-          }]
-        })
-      })
+        json: () =>
+          Promise.resolve({
+            choices: [
+              {
+                message: {
+                  content: JSON.stringify({
+                    category: 'electronics/computers',
+                    attributes: {
+                      type: 'laptop',
+                      minRam: '8GB',
+                      minStorage: '256GB',
+                    },
+                  }),
+                },
+              },
+            ],
+          }),
+      }),
     ) as jest.Mock;
   });
 
@@ -31,8 +34,8 @@ describe('NLP Processing', () => {
       attributes: {
         type: 'laptop',
         minRam: '8GB',
-        minStorage: '256GB'
-      }
+        minStorage: '256GB',
+      },
     });
   });
 
@@ -41,7 +44,7 @@ describe('NLP Processing', () => {
     const result = await processQuery('laptop');
     expect(result).toEqual({
       category: 'general',
-      attributes: { query: 'laptop' }
+      attributes: { query: 'laptop' },
     });
   });
 
@@ -49,19 +52,22 @@ describe('NLP Processing', () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: true,
-        json: () => Promise.resolve({
-          choices: [{
-            message: {
-              content: 'invalid json'
-            }
-          }]
-        })
-      })
+        json: () =>
+          Promise.resolve({
+            choices: [
+              {
+                message: {
+                  content: 'invalid json',
+                },
+              },
+            ],
+          }),
+      }),
     ) as jest.Mock;
     const result = await processQuery('laptop');
     expect(result).toEqual({
       category: 'general',
-      attributes: { query: 'laptop' }
+      attributes: { query: 'laptop' },
     });
   });
 });

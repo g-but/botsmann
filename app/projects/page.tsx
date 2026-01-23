@@ -6,34 +6,39 @@ import Link from 'next/link';
 const projects = [
   {
     title: 'Techno-Capital',
-    description: 'Investing in technology to drive humanity toward technological singularity through commodities, public companies, startups, research, and SubSpace Capital.',
+    description:
+      'Investing in technology to drive humanity toward technological singularity through commodities, public companies, startups, research, and SubSpace Capital.',
     href: '/projects/techno-capital',
-    image: '/images/techno-capital.jpg'
+    image: '/images/techno-capital.jpg',
   },
   {
     title: 'Governance',
-    description: 'Technologies dedicated to maximizing transparency and accountability in government spending, featuring innovative solutions like the Venmo-style spending tracker.',
+    description:
+      'Technologies dedicated to maximizing transparency and accountability in government spending, featuring innovative solutions like the Venmo-style spending tracker.',
     href: '/projects/governance',
-    image: '/governance.png'
+    image: '/governance.png',
   },
   {
     title: 'Credit',
-    description: 'Enterprise-grade automation for venture credit operations. Automatically ingest and analyze portfolio company reports, monitor debt metrics, and make data-driven decisions.',
+    description:
+      'Enterprise-grade automation for venture credit operations. Automatically ingest and analyze portfolio company reports, monitor debt metrics, and make data-driven decisions.',
     href: '/projects/credit',
-    image: '/credit.png'
+    image: '/credit.png',
   },
   {
     title: 'Recurring Fulfillment',
-    description: 'AI-powered platform for managing recurring purchases, subscriptions, and services. Automate your replenishment process and inventory management with predictive analytics.',
+    description:
+      'AI-powered platform for managing recurring purchases, subscriptions, and services. Automate your replenishment process and inventory management with predictive analytics.',
     href: '/projects/shopping',
-    image: '/shopping.png'
+    image: '/shopping.png',
   },
   {
     title: 'Project Finance',
-    description: 'Full transparency project finance and management tool. Start projects, manage funding through donations/credit/investments, track tasks and costs, with complete public visibility.',
+    description:
+      'Full transparency project finance and management tool. Start projects, manage funding through donations/credit/investments, track tasks and costs, with complete public visibility.',
     href: '/projects/finance',
-    image: '/finance.png'
-  }
+    image: '/finance.png',
+  },
 ];
 
 export default function Projects() {
@@ -43,8 +48,9 @@ export default function Projects() {
         <div className="mb-16 text-center">
           <h1 className="mb-4 text-4xl font-semibold tracking-tight text-gray-900">Projects</h1>
           <p className="mx-auto max-w-2xl text-lg text-gray-600">
-            Explore our transformative projects focused on governance, finance, and automation. 
-            Each project represents our commitment to transparency, efficiency, and technological innovation.
+            Explore our transformative projects focused on governance, finance, and automation. Each
+            project represents our commitment to transparency, efficiency, and technological
+            innovation.
           </p>
         </div>
 

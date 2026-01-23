@@ -1,7 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import { JurisdictionHierarchy, getPopularJurisdictions, getJurisdictionPath } from './jurisdictions';
+import {
+  JurisdictionHierarchy,
+  getPopularJurisdictions,
+  getJurisdictionPath,
+} from './jurisdictions';
 
 interface JurisdictionSelectorProps {
   jurisdictions: JurisdictionHierarchy[];
@@ -12,7 +16,7 @@ interface JurisdictionSelectorProps {
 const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({
   jurisdictions,
   selectedCode,
-  onSelect
+  onSelect,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentLevel, setCurrentLevel] = useState<JurisdictionHierarchy[]>(jurisdictions);
@@ -56,9 +60,10 @@ const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({
 
   // Filter jurisdictions based on search
   const filteredJurisdictions = searchQuery
-    ? currentLevel.filter(j =>
-        j.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        j.code.toLowerCase().includes(searchQuery.toLowerCase())
+    ? currentLevel.filter(
+        (j) =>
+          j.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          j.code.toLowerCase().includes(searchQuery.toLowerCase()),
       )
     : currentLevel;
 
@@ -116,7 +121,9 @@ const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({
       {showPopular && !searchQuery && (
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Popular</span>
+            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+              Popular
+            </span>
             <div className="flex-1 h-px bg-gray-200" />
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
@@ -126,9 +133,10 @@ const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({
                 onClick={() => handleSelect(jurisdiction)}
                 className={`
                   p-3 rounded-lg border-2 transition-all text-left
-                  ${selectedCode === jurisdiction.code
-                    ? 'border-blue-500 bg-blue-50 shadow-md'
-                    : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50 active:scale-95'
+                  ${
+                    selectedCode === jurisdiction.code
+                      ? 'border-blue-500 bg-blue-50 shadow-md'
+                      : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50 active:scale-95'
                   }
                 `}
               >
@@ -175,9 +183,10 @@ const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({
                 onClick={() => handleSelect(jurisdiction)}
                 className={`
                   p-3 rounded-lg border-2 transition-all text-left
-                  ${selectedCode === jurisdiction.code
-                    ? 'border-blue-500 bg-blue-50 shadow-md'
-                    : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50 active:scale-95'
+                  ${
+                    selectedCode === jurisdiction.code
+                      ? 'border-blue-500 bg-blue-50 shadow-md'
+                      : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50 active:scale-95'
                   }
                 `}
               >
@@ -192,9 +201,7 @@ const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({
                       {jurisdiction.children && ` · ${jurisdiction.children.length} sub-regions`}
                     </div>
                   </div>
-                  {jurisdiction.children && (
-                    <span className="text-blue-500">›</span>
-                  )}
+                  {jurisdiction.children && <span className="text-blue-500">›</span>}
                 </div>
               </button>
             ))}

@@ -1,18 +1,22 @@
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Providers } from '@/components/Providers';
+import { site } from '@/lib/site';
 import './globals.css';
+import dynamic from 'next/dynamic';
+import { Toaster } from 'sonner';
+
+const Analytics = dynamic(
+  () => import('@vercel/analytics/react').then((m) => m.Analytics).catch(() => () => null),
+  { ssr: false },
+);
 
 export const metadata = {
-  title: 'Botsmann - Private AI for Your Data',
-  description: 'AI assistants that work with your documents. Pre-built experts for legal, medical, research, or bring your own data. Your data stays private.',
+  title: `${site.name} - ${site.tagline}`,
+  description: site.description,
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className="font-sans">
@@ -20,6 +24,15 @@ export default function RootLayout({
           <Header />
           <main className="pt-16">{children}</main>
           <Footer />
+          <Toaster
+            position="top-right"
+            richColors
+            closeButton
+            toastOptions={{
+              duration: 4000,
+            }}
+          />
+          <Analytics />
         </Providers>
       </body>
     </html>

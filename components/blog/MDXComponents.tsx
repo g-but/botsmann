@@ -55,7 +55,11 @@ const _useAlternativeImageFormat = async (src: string): Promise<string | null> =
 };
 
 // Img component - capitalized to comply with React hooks rules
-const Img = (props: DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement> & { slug?: string }) => {
+const Img = (
+  props: DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement> & {
+    slug?: string;
+  },
+) => {
   const { src, alt, slug } = props;
   const [imageSrc, setImageSrc] = useState<string>('');
   const [isError, setIsError] = useState(false);
@@ -181,15 +185,13 @@ const MDXComponents = {
   ol: (props: React.HTMLAttributes<HTMLOListElement>) => (
     <ol className="mb-4 list-decimal pl-6 text-gray-600" {...props} />
   ),
-  li: (props: React.HTMLAttributes<HTMLLIElement>) => (
-    <li className="mb-2" {...props} />
-  ),
+  li: (props: React.HTMLAttributes<HTMLLIElement>) => <li className="mb-2" {...props} />,
   a: ({ href, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
     const isExternal = href?.startsWith('http');
-    
+
     if (isExternal) {
       return (
-        <a 
+        <a
           href={href}
           className="text-openai-green hover:text-opacity-80"
           target="_blank"
@@ -198,7 +200,7 @@ const MDXComponents = {
         />
       );
     }
-    
+
     return (
       <Link
         href={(href || '/') as Route}
@@ -207,14 +209,14 @@ const MDXComponents = {
       />
     );
   },
-  
+
   // Media elements - Img is a capitalized component to comply with React hooks rules
   img: Img,
-  
+
   // Custom components
   YouTube: ({ id }: { id: string }) => (
     <div className="my-8 aspect-video overflow-hidden rounded-lg">
-      <iframe 
+      <iframe
         src={`https://www.youtube.com/embed/${id}`}
         className="h-full w-full"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -222,7 +224,7 @@ const MDXComponents = {
       />
     </div>
   ),
-  
+
   Tweet: ({ id }: { id: string }) => (
     <div className="my-8">
       <blockquote className="twitter-tweet">
@@ -231,24 +233,26 @@ const MDXComponents = {
       <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>
     </div>
   ),
-  
+
   // Callout component for important information
-  Callout: ({ children, type = 'info' }: { children: React.ReactNode; type?: 'info' | 'warning' | 'success' }) => {
+  Callout: ({
+    children,
+    type = 'info',
+  }: {
+    children: React.ReactNode;
+    type?: 'info' | 'warning' | 'success';
+  }) => {
     const styles = {
       info: 'bg-blue-50 border-blue-200 text-blue-800',
       warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
-      success: 'bg-green-50 border-green-200 text-green-800'
+      success: 'bg-green-50 border-green-200 text-green-800',
     };
-    
+
     // Ensure type is a valid value
-    const safeType = (type && ['info', 'warning', 'success'].includes(type)) ? type : 'info';
-    
-    return (
-      <div className={`my-6 rounded-lg border-l-4 p-4 ${styles[safeType]}`}>
-        {children}
-      </div>
-    );
-  }
+    const safeType = type && ['info', 'warning', 'success'].includes(type) ? type : 'info';
+
+    return <div className={`my-6 rounded-lg border-l-4 p-4 ${styles[safeType]}`}>{children}</div>;
+  },
 };
 
-export default MDXComponents; 
+export default MDXComponents;

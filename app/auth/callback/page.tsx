@@ -3,38 +3,16 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { createClientComponentClient } from '@/lib/supabase';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { ROUTES } from '@/lib/routes';
 
 type CallbackStatus = 'loading' | 'success' | 'error';
 type CallbackType = 'signup' | 'recovery' | 'email_change' | 'unknown';
 
 /**
- * Loading fallback for Suspense boundary
- */
-function LoadingFallback() {
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center px-4">
-      <div className="max-w-md w-full">
-        <div className="text-center mb-8">
-          <Link href="/" className="text-3xl font-bold text-gray-900">
-            Botsmann
-          </Link>
-        </div>
-        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">Loading...</h2>
-            <p className="text-gray-600">Please wait...</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/**
- * Auth Callback Content - uses useSearchParams
+ * Auth Callback Content Component
+ *
+ * This component uses useSearchParams and must be wrapped in Suspense.
  */
 function AuthCallbackContent() {
   const searchParams = useSearchParams();
@@ -143,64 +121,61 @@ function AuthCallbackContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center px-4">
-      <div className="max-w-md w-full">
-        <div className="text-center mb-8">
-          <Link href="/" className="text-3xl font-bold text-gray-900">
-            Botsmann
-          </Link>
+    <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
+      {status === 'loading' && (
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Verifying...</h2>
+          <p className="text-gray-600">Please wait while we verify your link.</p>
         </div>
+      )}
 
-        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
-          {status === 'loading' && (
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">Verifying...</h2>
-              <p className="text-gray-600">Please wait while we verify your link.</p>
-            </div>
-          )}
-
-          {status === 'success' && (
-            <div className="text-center">
-              <div className="text-green-600 text-5xl mb-4">✓</div>
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                {getSuccessMessage().title}
-              </h2>
-              <p className="text-gray-600 mb-6">{getSuccessMessage().description}</p>
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto" />
-            </div>
-          )}
-
-          {status === 'error' && (
-            <div className="text-center">
-              <div className="text-red-500 text-5xl mb-4">!</div>
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">Verification Failed</h2>
-              <p className="text-gray-600 mb-6">
-                {errorMessage || 'The link is invalid or has expired. Please try again.'}
-              </p>
-              <div className="space-y-3">
-                <Link
-                  href={ROUTES.AUTH.SIGNIN}
-                  className="block w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors text-center"
-                >
-                  Go to Sign In
-                </Link>
-                <Link
-                  href={ROUTES.AUTH.SIGNUP}
-                  className="block w-full py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors text-center"
-                >
-                  Create New Account
-                </Link>
-              </div>
-            </div>
-          )}
+      {status === 'success' && (
+        <div className="text-center">
+          <div className="text-green-600 text-5xl mb-4">✓</div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">{getSuccessMessage().title}</h2>
+          <p className="text-gray-600 mb-6">{getSuccessMessage().description}</p>
+          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto" />
         </div>
+      )}
 
-        <div className="mt-6 text-center">
-          <Link href="/" className="text-sm text-gray-500 hover:text-gray-700">
-            Back to Home
-          </Link>
+      {status === 'error' && (
+        <div className="text-center">
+          <div className="text-red-500 text-5xl mb-4">!</div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Verification Failed</h2>
+          <p className="text-gray-600 mb-6">
+            {errorMessage || 'The link is invalid or has expired. Please try again.'}
+          </p>
+          <div className="space-y-3">
+            <Link
+              href={ROUTES.AUTH.SIGNIN}
+              className="block w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors text-center"
+            >
+              Go to Sign In
+            </Link>
+            <Link
+              href={ROUTES.AUTH.SIGNUP}
+              className="block w-full py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors text-center"
+            >
+              Create New Account
+            </Link>
+          </div>
         </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Loading fallback for Suspense boundary
+ */
+function LoadingFallback() {
+  return (
+    <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
+        <h2 className="text-xl font-semibold text-gray-900 mb-2">Loading...</h2>
+        <p className="text-gray-600">Please wait...</p>
       </div>
     </div>
   );
@@ -218,8 +193,24 @@ function AuthCallbackContent() {
  */
 export default function AuthCallbackPage() {
   return (
-    <Suspense fallback={<LoadingFallback />}>
-      <AuthCallbackContent />
-    </Suspense>
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center px-4">
+      <div className="max-w-md w-full">
+        <div className="text-center mb-8">
+          <Link href="/" className="text-3xl font-bold text-gray-900">
+            Botsmann
+          </Link>
+        </div>
+
+        <Suspense fallback={<LoadingFallback />}>
+          <AuthCallbackContent />
+        </Suspense>
+
+        <div className="mt-6 text-center">
+          <Link href="/" className="text-sm text-gray-500 hover:text-gray-700">
+            Back to Home
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 }

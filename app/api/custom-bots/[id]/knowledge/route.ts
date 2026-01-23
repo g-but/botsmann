@@ -96,7 +96,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
             source: chunk.source ?? null,
             embedding,
           };
-        })
+        }),
       );
 
       const { data: created, error: insertError } = await supabase
@@ -109,11 +109,15 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         return jsonError(
           'Failed to create knowledge chunks',
           'DATABASE_ERROR',
-          HTTP_STATUS.INTERNAL_ERROR
+          HTTP_STATUS.INTERNAL_ERROR,
         );
       }
 
-      return jsonSuccess({ chunks: created, count: created?.length ?? 0 }, undefined, HTTP_STATUS.CREATED);
+      return jsonSuccess(
+        { chunks: created, count: created?.length ?? 0 },
+        undefined,
+        HTTP_STATUS.CREATED,
+      );
     } else {
       // Single chunk creation
       const validation = CreateKnowledgeChunkSchema.safeParse({ ...body, bot_id: botId });
@@ -148,7 +152,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         return jsonError(
           'Failed to create knowledge chunk',
           'DATABASE_ERROR',
-          HTTP_STATUS.INTERNAL_ERROR
+          HTTP_STATUS.INTERNAL_ERROR,
         );
       }
 
@@ -190,7 +194,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       return jsonError(
         'Failed to fetch knowledge chunks',
         'DATABASE_ERROR',
-        HTTP_STATUS.INTERNAL_ERROR
+        HTTP_STATUS.INTERNAL_ERROR,
       );
     }
 
@@ -215,7 +219,11 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     const chunkId = searchParams.get('chunkId');
 
     if (!chunkId) {
-      return jsonError('chunkId query parameter required', 'VALIDATION_ERROR', HTTP_STATUS.BAD_REQUEST);
+      return jsonError(
+        'chunkId query parameter required',
+        'VALIDATION_ERROR',
+        HTTP_STATUS.BAD_REQUEST,
+      );
     }
 
     // Verify bot ownership
@@ -248,7 +256,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       return jsonError(
         'Failed to delete knowledge chunk',
         'DATABASE_ERROR',
-        HTTP_STATUS.INTERNAL_ERROR
+        HTTP_STATUS.INTERNAL_ERROR,
       );
     }
 

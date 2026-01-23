@@ -17,10 +17,10 @@ const CaseIntakeForm: React.FC<CaseIntakeFormProps> = ({ onSubmit, onCancel }) =
     description: '',
     jurisdiction: {
       country: 'CH',
-      region: 'ZH' // Default to Zurich
+      region: 'ZH', // Default to Zurich
     },
     urgency: 'standard',
-    budget: 'consultation'
+    budget: 'consultation',
   });
 
   const canSubmit = intake.description.trim().length >= 50;
@@ -95,9 +95,7 @@ const CaseIntakeForm: React.FC<CaseIntakeFormProps> = ({ onSubmit, onCancel }) =
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-3">
             Describe your situation
-            <span className="ml-2 text-xs font-normal text-gray-500">
-              (Minimum 50 characters)
-            </span>
+            <span className="ml-2 text-xs font-normal text-gray-500">(Minimum 50 characters)</span>
           </label>
           <textarea
             value={intake.description}
@@ -126,7 +124,12 @@ const CaseIntakeForm: React.FC<CaseIntakeFormProps> = ({ onSubmit, onCancel }) =
             className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-2"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
             </svg>
             Show more options (jurisdiction, urgency, budget)
           </button>
@@ -147,7 +150,7 @@ const CaseIntakeForm: React.FC<CaseIntakeFormProps> = ({ onSubmit, onCancel }) =
                   onClick={() =>
                     setIntake({
                       ...intake,
-                      jurisdiction: { country: 'CH', region: 'ZH' }
+                      jurisdiction: { country: 'CH', region: 'ZH' },
                     })
                   }
                   className={`p-4 rounded-lg border-2 transition-all ${
@@ -169,7 +172,7 @@ const CaseIntakeForm: React.FC<CaseIntakeFormProps> = ({ onSubmit, onCancel }) =
                   onClick={() =>
                     setIntake({
                       ...intake,
-                      jurisdiction: { country: 'US', region: 'CA' }
+                      jurisdiction: { country: 'US', region: 'CA' },
                     })
                   }
                   className={`p-4 rounded-lg border-2 transition-all ${
@@ -179,9 +182,7 @@ const CaseIntakeForm: React.FC<CaseIntakeFormProps> = ({ onSubmit, onCancel }) =
                   }`}
                 >
                   <div className="text-2xl mb-2">{JURISDICTIONS.US.flag}</div>
-                  <div className="text-sm font-semibold text-gray-900 mb-1">
-                    California, USA
-                  </div>
+                  <div className="text-sm font-semibold text-gray-900 mb-1">California, USA</div>
                   <div className="text-xs text-gray-600">{JURISDICTIONS.US.lawScope}</div>
                 </button>
               </div>
@@ -198,7 +199,9 @@ const CaseIntakeForm: React.FC<CaseIntakeFormProps> = ({ onSubmit, onCancel }) =
                       type="button"
                       onClick={() => {
                         // This would open a modal or redirect to request form
-                        alert('Thank you! We\'ll prioritize your jurisdiction. Please email us at: support@botsmann.com');
+                        alert(
+                          "Thank you! We'll prioritize your jurisdiction. Please email us at: support@botsmann.com",
+                        );
                       }}
                       className="text-sm text-blue-600 hover:text-blue-700 font-medium"
                     >
@@ -298,7 +301,12 @@ const CaseIntakeForm: React.FC<CaseIntakeFormProps> = ({ onSubmit, onCancel }) =
                 stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
               </svg>
               Hide advanced options
             </button>

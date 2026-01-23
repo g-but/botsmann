@@ -58,13 +58,11 @@ export const useScrollNavigation = ({
 
       // Get section IDs from menu items
       const sectionIds = menuItems
-        .filter(item => item.section)
-        .map(item => item.section as string);
+        .filter((item) => item.section)
+        .map((item) => item.section as string);
 
       // Find section elements
-      const sectionElements = sectionIds
-        .map(id => document.getElementById(id))
-        .filter(Boolean);
+      const sectionElements = sectionIds.map((id) => document.getElementById(id)).filter(Boolean);
 
       // Determine which section is in view (check from bottom to top)
       for (let i = sectionElements.length - 1; i >= 0; i--) {

@@ -48,10 +48,10 @@ const TabsContainer: React.FC<TabsContainerProps> = ({
               </button>
             ))}
           </div>
-          
+
           {showFilter && onFilterChange && (
             <div className="py-3 sm:py-0">
-              <select 
+              <select
                 className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md"
                 value={filter}
                 onChange={(e) => onFilterChange(e.target.value)}
@@ -70,11 +70,9 @@ const TabsContainer: React.FC<TabsContainerProps> = ({
       </div>
 
       {/* Tab Content */}
-      <div className="p-6">
-        {children}
-      </div>
+      <div className="p-6">{children}</div>
     </div>
   );
 };
 
-export default TabsContainer; 
+export default TabsContainer;

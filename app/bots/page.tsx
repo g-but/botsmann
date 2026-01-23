@@ -1,96 +1,124 @@
 import React from 'react';
 import Link from 'next/link';
 import bots from '@/data/bots';
-import { getBotPath } from '@/lib/routes';
+import { getChatPathFromBotSlug } from '@/data/professionals';
 
 // Bot display data with detailed explanations
-const botDetails: Record<string, {
-  name: string;
-  type: string;
-  emoji: string;
-  tagline: string;
-  whatItDoes: string;
-  inputData: string;
-  output: string;
-  useCases: string[];
-}> = {
+const botDetails: Record<
+  string,
+  {
+    name: string;
+    type: string;
+    emoji: string;
+    tagline: string;
+    whatItDoes: string;
+    inputData: string;
+    output: string;
+    useCases: string[];
+  }
+> = {
   'legal-expert': {
     name: 'Lex',
     type: 'Legal Assistant',
     emoji: '⚖️',
     tagline: 'Your AI-powered legal companion',
-    whatItDoes: 'Analyzes legal cases, matches you with expert lawyers, and provides secure collaborative workspaces',
+    whatItDoes:
+      'Analyzes legal cases, matches you with expert lawyers, and provides secure collaborative workspaces',
     inputData: 'Legal documents, case descriptions, jurisdiction info',
     output: 'AI case analysis, lawyer matches, secure data room',
-    useCases: ['Immigration cases', 'Employment disputes', 'Real estate contracts', 'Business law']
+    useCases: ['Immigration cases', 'Employment disputes', 'Real estate contracts', 'Business law'],
   },
   'swiss-german-teacher': {
     name: 'Heidi',
     type: 'Swiss German Teacher',
     emoji: '🇨🇭',
     tagline: 'Master Schwyzerdütsch naturally',
-    whatItDoes: 'Provides contextual Swiss German learning with cultural insights and canton-specific variations',
+    whatItDoes:
+      'Provides contextual Swiss German learning with cultural insights and canton-specific variations',
     inputData: 'Your German level, target canton, learning goals',
     output: 'Personalized lessons, pronunciation guides, cultural context',
-    useCases: ['Moving to Switzerland', 'Work in Swiss companies', 'Connect with locals', 'Canton-specific dialects']
+    useCases: [
+      'Moving to Switzerland',
+      'Work in Swiss companies',
+      'Connect with locals',
+      'Canton-specific dialects',
+    ],
   },
   'research-assistant': {
     name: 'Nerd',
     type: 'Research Assistant',
     emoji: '🧠',
     tagline: 'Accelerate your research workflow',
-    whatItDoes: 'Organizes research materials, tracks citations, finds relevant papers, and synthesizes findings',
+    whatItDoes:
+      'Organizes research materials, tracks citations, finds relevant papers, and synthesizes findings',
     inputData: 'Research papers, notes, queries, data sets',
     output: 'Literature reviews, citation networks, summaries, insights',
-    useCases: ['Academic research', 'Market analysis', 'Patent research', 'Technical documentation']
+    useCases: [
+      'Academic research',
+      'Market analysis',
+      'Patent research',
+      'Technical documentation',
+    ],
   },
   'medical-expert': {
     name: 'Imhotep',
     type: 'Medical Expert',
     emoji: '⚕️',
     tagline: 'Evidence-based health insights',
-    whatItDoes: 'Analyzes medical literature, symptoms, and data to provide evidence-based health information',
+    whatItDoes:
+      'Analyzes medical literature, symptoms, and data to provide evidence-based health information',
     inputData: 'Symptoms, medical history, lab results, research papers',
     output: 'Evidence-based insights, specialist recommendations, treatment options',
-    useCases: ['Second opinions', 'Research rare conditions', 'Treatment comparisons', 'Clinical studies']
+    useCases: [
+      'Second opinions',
+      'Research rare conditions',
+      'Treatment comparisons',
+      'Clinical studies',
+    ],
   },
   'artistic-advisor': {
     name: 'Artr',
     type: 'Creative Assistant',
     emoji: '🎨',
     tagline: 'Your creative co-pilot',
-    whatItDoes: 'Analyzes art styles, generates creative concepts, and provides artistic feedback and guidance',
+    whatItDoes:
+      'Analyzes art styles, generates creative concepts, and provides artistic feedback and guidance',
     inputData: 'Art references, style preferences, project briefs',
     output: 'Style analysis, creative concepts, technical feedback',
-    useCases: ['Style exploration', 'Concept development', 'Art history research', 'Portfolio review']
+    useCases: [
+      'Style exploration',
+      'Concept development',
+      'Art history research',
+      'Portfolio review',
+    ],
   },
   'product-manager': {
     name: 'Trident',
     type: 'Product Manager',
     emoji: '🔱',
     tagline: 'Strategic product development',
-    whatItDoes: 'Analyzes market data, user feedback, and competitive landscape to guide product strategy',
+    whatItDoes:
+      'Analyzes market data, user feedback, and competitive landscape to guide product strategy',
     inputData: 'User feedback, market data, feature requests, analytics',
     output: 'Product roadmaps, prioritization, competitive analysis',
-    useCases: ['Feature prioritization', 'Market analysis', 'User research', 'Roadmap planning']
-  }
+    useCases: ['Feature prioritization', 'Market analysis', 'User research', 'Roadmap planning'],
+  },
 };
 
 export default function BotsList() {
   // Only mark bots as "ready" if they have actual working try links
   // Currently only Heidi (swiss-german-teacher) has a GPT link
-  const readyBots = bots.filter(b => b.tryLink).map(b => b.slug);
+  const readyBots = bots.filter((b) => b.tryLink).map((b) => b.slug);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
       <div className="mx-auto max-w-screen-xl px-6 py-16">
         {/* Header with Core Concept */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
-            Specialized AI Bots
-          </h1>
+          <h1 className="text-5xl font-bold text-gray-900 mb-4">Specialized AI Bots</h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Each bot is an expert in its domain, trained to ingest your data and deliver exactly what you need
+            Each bot is an expert in its domain, trained to ingest your data and deliver exactly
+            what you need
           </p>
 
           {/* Core Concept Visualization */}
@@ -134,13 +162,16 @@ export default function BotsList() {
           {bots.map((bot) => {
             const details = botDetails[bot.slug] || {
               name: bot.title,
-              type: bot.slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+              type: bot.slug
+                .split('-')
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' '),
               emoji: '🤖',
               tagline: 'AI-powered assistant',
               whatItDoes: 'Helps with various tasks',
               inputData: 'Your data',
               output: 'Helpful insights',
-              useCases: []
+              useCases: [],
             };
 
             const isReady = readyBots.includes(bot.slug);
@@ -148,7 +179,7 @@ export default function BotsList() {
             return (
               <Link
                 key={bot.slug}
-                href={getBotPath(bot.slug)}
+                href={getChatPathFromBotSlug(bot.slug)}
                 className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-gray-100 hover:border-blue-200"
               >
                 {!isReady && (
@@ -173,7 +204,9 @@ export default function BotsList() {
 
                 {/* What It Does */}
                 <div className="px-6 pb-4">
-                  <h3 className="text-xs font-semibold text-gray-500 uppercase mb-2">What it does</h3>
+                  <h3 className="text-xs font-semibold text-gray-500 uppercase mb-2">
+                    What it does
+                  </h3>
                   <p className="text-sm text-gray-700 leading-relaxed">{details.whatItDoes}</p>
                 </div>
 
@@ -196,10 +229,15 @@ export default function BotsList() {
                 {/* Use Cases */}
                 {details.useCases && details.useCases.length > 0 && (
                   <div className="px-6 pb-4">
-                    <h3 className="text-xs font-semibold text-gray-500 uppercase mb-2">Perfect for</h3>
+                    <h3 className="text-xs font-semibold text-gray-500 uppercase mb-2">
+                      Perfect for
+                    </h3>
                     <div className="flex flex-wrap gap-1.5">
                       {details.useCases.slice(0, 3).map((useCase, idx) => (
-                        <span key={idx} className="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">
+                        <span
+                          key={idx}
+                          className="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded"
+                        >
                           {useCase}
                         </span>
                       ))}
@@ -210,9 +248,19 @@ export default function BotsList() {
                 {/* CTA */}
                 <div className="px-6 pb-6">
                   <div className="flex items-center text-blue-600 font-semibold group-hover:gap-2 transition-all">
-                    <span>{isReady ? 'Try Now' : 'Learn More'}</span>
-                    <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    <span>Chat Now</span>
+                    <svg
+                      className="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                      />
                     </svg>
                   </div>
                 </div>
@@ -227,8 +275,8 @@ export default function BotsList() {
             Need a custom bot for your domain?
           </h3>
           <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-            We build specialized AI bots for any field. From healthcare to finance, education to engineering -
-            if you have data, we can build intelligence around it.
+            We build specialized AI bots for any field. From healthcare to finance, education to
+            engineering - if you have data, we can build intelligence around it.
           </p>
           <Link
             href="/#collaboration"
@@ -236,7 +284,12 @@ export default function BotsList() {
           >
             Let's Build Together
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 7l5 5m0 0l-5 5m5-5H6"
+              />
             </svg>
           </Link>
         </div>

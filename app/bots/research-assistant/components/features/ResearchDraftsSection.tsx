@@ -1,6 +1,6 @@
 /**
  * ResearchDraftsSection.tsx
- * 
+ *
  * This component showcases the AI-Generated Research Drafts feature of the Research Assistant Bot.
  * It demonstrates how the bot can synthesize information from various sources to generate
  * structured research content like abstracts, literature reviews, and methodology sections
@@ -31,8 +31,8 @@ const ResearchDraftsSection: React.FC = () => {
       sources: [
         'Davidson, R. J., & Kaszniak, A. W. (2015). Conceptual and methodological issues in research on mindfulness and meditation. American Psychologist, 70(7), 581-592.',
         'Zeidan, F., Johnson, S. K., Diamond, B. J., David, Z., & Goolkasian, P. (2010). Mindfulness meditation improves cognition: Evidence of brief mental training. Consciousness and Cognition, 19(2), 597-605.',
-        'Lutz, A., Slagter, H. A., Dunne, J. D., & Davidson, R. J. (2008). Attention regulation and monitoring in meditation. Trends in Cognitive Sciences, 12(4), 163-169.'
-      ]
+        'Lutz, A., Slagter, H. A., Dunne, J. D., & Davidson, R. J. (2008). Attention regulation and monitoring in meditation. Trends in Cognitive Sciences, 12(4), 163-169.',
+      ],
     },
     literature: {
       type: 'literature',
@@ -42,8 +42,8 @@ const ResearchDraftsSection: React.FC = () => {
         'Tang, J., Chen, H., & Singh, P. (2022). Measuring outcomes of urban climate adaptation policies: A comparative analysis of 40 global cities. Urban Climate, 31, 100545.',
         'Hernandez, M., & Wong, K. (2021). Community-led climate adaptation: Case studies from the Global South. Journal of Environmental Planning and Management, 64(10), 1863-1882.',
         'Patel, R., Mahmood, A., & Johnson, T. (2023). Technical innovations in green infrastructure for climate resilient cities. Landscape and Urban Planning, 221, 104355.',
-        'Carter, J.G., Cavan, G., Connelly, A., Guy, S., Handley, J., & Kazmierczak, A. (2015). Climate change and the city: Building capacity for urban adaptation. Progress in Planning, 95, 1-66.'
-      ]
+        'Carter, J.G., Cavan, G., Connelly, A., Guy, S., Handley, J., & Kazmierczak, A. (2015). Climate change and the city: Building capacity for urban adaptation. Progress in Planning, 95, 1-66.',
+      ],
     },
     methodology: {
       type: 'methodology',
@@ -52,8 +52,8 @@ const ResearchDraftsSection: React.FC = () => {
       sources: [
         'Zhou, X., & Zafarani, R. (2020). A survey of fake news: Fundamental theories, detection methods, and opportunities. ACM Computing Surveys, 53(5), 1-40.',
         'Devlin, J., Chang, M. W., Lee, K., & Toutanova, K. (2018). BERT: Pre-training of deep bidirectional transformers for language understanding. arXiv preprint arXiv:1810.04805.',
-        'Shaar, S., Babulkov, N., Da San Martino, G., & Nakov, P. (2020). That is a known lie: Detecting previously fact-checked claims. arXiv preprint arXiv:2005.06058.'
-      ]
+        'Shaar, S., Babulkov, N., Da San Martino, G., & Nakov, P. (2020). That is a known lie: Detecting previously fact-checked claims. arXiv preprint arXiv:2005.06058.',
+      ],
     },
     discussion: {
       type: 'discussion',
@@ -63,16 +63,16 @@ const ResearchDraftsSection: React.FC = () => {
         'Buolamwini, J., & Gebru, T. (2018). Gender shades: Intersectional accuracy disparities in commercial gender classification. Proceedings of the 1st Conference on Fairness, Accountability and Transparency, 81, 77-91.',
         'Najibi, A. (2020). Racial discrimination in face recognition technology. Science in the News, Harvard University Graduate School of Arts and Sciences.',
         'European Union Agency for Fundamental Rights. (2021). Facial recognition technology: fundamental rights considerations in the context of law enforcement.',
-        'Wang, Y., & Kosinski, M. (2018). Deep neural networks are more accurate than humans at detecting sexual orientation from facial images. Journal of Personality and Social Psychology, 114(2), 246-257.'
-      ]
-    }
+        'Wang, Y., & Kosinski, M. (2018). Deep neural networks are more accurate than humans at detecting sexual orientation from facial images. Journal of Personality and Social Psychology, 114(2), 246-257.',
+      ],
+    },
   };
 
   const draftTypes = [
     { value: 'abstract', label: 'Abstract', icon: <FiClipboard /> },
     { value: 'literature', label: 'Literature Review', icon: <FiBookOpen /> },
     { value: 'methodology', label: 'Methodology', icon: <FiFileText /> },
-    { value: 'discussion', label: 'Discussion', icon: <FiEdit /> }
+    { value: 'discussion', label: 'Discussion', icon: <FiEdit /> },
   ];
 
   const currentDraft = draftExamples[selectedDraft];
@@ -82,14 +82,15 @@ const ResearchDraftsSection: React.FC = () => {
       <div className={styles.container}>
         <h2 className={styles.featureTitle}>AI-Generated Research Drafts</h2>
         <p className={styles.featureSubtitle}>
-          Transform your research notes and sources into polished, structured content with proper citations
+          Transform your research notes and sources into polished, structured content with proper
+          citations
         </p>
 
         <div className={styles.draftSectionContainer}>
           <div className={styles.draftTypeSelector}>
             <h3>Select Draft Type</h3>
             <div className={styles.draftTypeButtons}>
-              {draftTypes.map(type => (
+              {draftTypes.map((type) => (
                 <button
                   key={type.value}
                   className={`${styles.draftTypeButton} ${selectedDraft === type.value ? styles.activeDraftType : ''}`}
@@ -110,13 +111,15 @@ const ResearchDraftsSection: React.FC = () => {
           <div className={styles.draftPreviewContainer}>
             <div className={styles.draftPreviewHeader}>
               <h3>{currentDraft.title}</h3>
-              <span className={styles.draftTypeBadge}>{draftTypes.find(t => t.value === selectedDraft)?.label}</span>
+              <span className={styles.draftTypeBadge}>
+                {draftTypes.find((t) => t.value === selectedDraft)?.label}
+              </span>
             </div>
-            
+
             <div className={styles.draftContent}>
               <p>{currentDraft.content}</p>
             </div>
-            
+
             <div className={styles.draftSources}>
               <h4>References</h4>
               <ul>
@@ -169,4 +172,4 @@ const ResearchDraftsSection: React.FC = () => {
   );
 };
 
-export default ResearchDraftsSection; 
+export default ResearchDraftsSection;

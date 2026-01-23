@@ -1,6 +1,6 @@
 /**
  * Collaboration Form Component
- * 
+ *
  * Form for people interested in collaborating on AI research and development
  */
 
@@ -18,7 +18,7 @@ export default function CollaborationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  
+
   const {
     register,
     handleSubmit,
@@ -29,19 +29,19 @@ export default function CollaborationForm() {
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     setSubmitError(null);
-    
+
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
       console.info('Collaboration form submitted:', data);
-      
+
       // In production, we would send this data to an API endpoint
       // await fetch('/api/collaboration', {
       //   method: 'POST',
       //   headers: { 'Content-Type': 'application/json' },
       //   body: JSON.stringify(data),
       // });
-      
+
       setSubmitSuccess(true);
       reset();
     } catch (error) {
@@ -55,10 +55,12 @@ export default function CollaborationForm() {
   if (submitSuccess) {
     return (
       <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
-        <h3 className="text-xl font-medium text-green-800 mb-3">Thanks for joining our community!</h3>
+        <h3 className="text-xl font-medium text-green-800 mb-3">
+          Thanks for joining our community!
+        </h3>
         <p className="text-green-700 mb-4">
-          We're excited to collaborate with you on building the future of AI. 
-          We'll be in touch soon to discuss how we can work together.
+          We're excited to collaborate with you on building the future of AI. We'll be in touch soon
+          to discuss how we can work together.
         </p>
         <button
           onClick={() => setSubmitSuccess(false)}
@@ -75,7 +77,10 @@ export default function CollaborationForm() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1 text-left">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700 mb-1 text-left"
+            >
               Name
             </label>
             <input
@@ -91,9 +96,12 @@ export default function CollaborationForm() {
               <p className="mt-1 text-sm text-red-600 text-left">{errors.name.message}</p>
             )}
           </div>
-          
+
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1 text-left">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-1 text-left"
+            >
               Email
             </label>
             <input
@@ -103,12 +111,12 @@ export default function CollaborationForm() {
                 errors.email ? 'border-red-500' : 'border-gray-300'
               }`}
               placeholder="Your email"
-              {...register('email', { 
+              {...register('email', {
                 required: 'Email is required',
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                   message: 'Invalid email address',
-                }
+                },
               })}
             />
             {errors.email && (
@@ -116,9 +124,12 @@ export default function CollaborationForm() {
             )}
           </div>
         </div>
-        
+
         <div>
-          <label htmlFor="expertise" className="block text-sm font-medium text-gray-700 mb-1 text-left">
+          <label
+            htmlFor="expertise"
+            className="block text-sm font-medium text-gray-700 mb-1 text-left"
+          >
             Your Background
           </label>
           <select
@@ -140,9 +151,12 @@ export default function CollaborationForm() {
             <p className="mt-1 text-sm text-red-600 text-left">{errors.expertise.message}</p>
           )}
         </div>
-        
+
         <div>
-          <label htmlFor="interests" className="block text-sm font-medium text-gray-700 mb-1 text-left">
+          <label
+            htmlFor="interests"
+            className="block text-sm font-medium text-gray-700 mb-1 text-left"
+          >
             How would you like to collaborate?
           </label>
           <textarea
@@ -158,13 +172,13 @@ export default function CollaborationForm() {
             <p className="mt-1 text-sm text-red-600 text-left">{errors.interests.message}</p>
           )}
         </div>
-        
+
         {submitError && (
           <div className="p-3 bg-red-50 border border-red-200 rounded text-red-700 text-sm">
             {submitError}
           </div>
         )}
-        
+
         <div className="text-center">
           <button
             type="submit"
@@ -179,4 +193,4 @@ export default function CollaborationForm() {
       </form>
     </div>
   );
-} 
+}

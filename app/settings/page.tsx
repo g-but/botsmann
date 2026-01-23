@@ -5,11 +5,13 @@ import Link from 'next/link';
 import { useRequireAuth } from '@/lib/auth';
 import { UpdateProfileSchema, DISPLAY_NAME_MAX_LENGTH } from '@/lib/schemas/auth';
 import { UserAvatar } from '@/components/shared/UserAvatar';
+import { InfrastructureWidget } from '@/components/infrastructure';
+import { type ProviderId, type ConnectionStatus } from '@/lib/infrastructure';
 
 interface UserSettings {
-  preferred_model: string;
+  preferred_model: ProviderId;
   groq_api_key: string | null;
-  openai_api_key: string | null;
+  openrouter_api_key: string | null;
   ollama_url: string | null;
 }
 
@@ -25,13 +27,10 @@ export default function SettingsPage() {
   const [settings, setSettings] = useState<UserSettings>({
     preferred_model: 'groq',
     groq_api_key: null,
-    openai_api_key: null,
+    openrouter_api_key: null,
     ollama_url: null,
   });
-  const [showAdvanced, setShowAdvanced] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const [error, setError] = useState('');
+  const [providerStatus, setProviderStatus] = useState<ConnectionStatus>('connected');
 
   // Profile editing state
   const [isEditingProfile, setIsEditingProfile] = useState(false);
@@ -58,13 +57,16 @@ export default function SettingsPage() {
           const data = await response.json();
           if (data.settings) {
             setSettings(data.settings);
-            // Show advanced if user has custom keys
-            if (
-              data.settings.groq_api_key ||
-              data.settings.openai_api_key ||
-              data.settings.ollama_url
-            ) {
-              setShowAdvanced(true);
+            // Determine provider status based on configuration
+            const provider = data.settings.preferred_model || 'groq';
+            if (provider === 'groq') {
+              setProviderStatus('connected'); // Groq always works
+            } else if (provider === 'openrouter' && data.settings.openrouter_api_key) {
+              setProviderStatus('connected');
+            } else if (provider === 'ollama' && data.settings.ollama_url) {
+              setProviderStatus('connected');
+            } else {
+              setProviderStatus('not-configured');
             }
           }
         }
@@ -75,35 +77,6 @@ export default function SettingsPage() {
 
     loadSettings();
   }, [user]);
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setSaving(true);
-    setError('');
-    setSaved(false);
-
-    try {
-      const response = await fetch('/api/settings', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(settings),
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to save settings');
-      }
-
-      setSaved(true);
-      setTimeout(() => setSaved(false), 3000);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save settings');
-    } finally {
-      setSaving(false);
-    }
-  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -358,114 +331,8 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        {/* Advanced Section (Collapsed) */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <button
-            onClick={() => setShowAdvanced(!showAdvanced)}
-            className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
-          >
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900">Advanced Settings</h2>
-              <p className="text-sm text-gray-500">
-                For developers who want to use their own AI provider
-              </p>
-            </div>
-            <svg
-              className={`w-5 h-5 text-gray-400 transition-transform ${showAdvanced ? 'rotate-180' : ''}`}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </button>
-
-          {showAdvanced && (
-            <form onSubmit={handleSubmit} className="px-6 pb-6 border-t border-gray-100">
-              <div className="py-4 mb-4 bg-amber-50 -mx-6 px-6 border-b border-amber-100">
-                <p className="text-sm text-amber-800">
-                  <strong>Note:</strong> These settings are optional. Botsmann works out of the box
-                  without any configuration.
-                </p>
-              </div>
-
-              {/* Groq API Key */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Groq API Key</label>
-                <p className="text-xs text-gray-500 mb-2">
-                  Leave empty to use Botsmann&apos;s free AI service
-                </p>
-                <input
-                  type="password"
-                  value={settings.groq_api_key || ''}
-                  onChange={(e) =>
-                    setSettings({ ...settings, groq_api_key: e.target.value || null })
-                  }
-                  placeholder="gsk_..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              {/* OpenAI API Key */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  OpenAI API Key
-                </label>
-                <p className="text-xs text-gray-500 mb-2">
-                  For GPT-4 access (requires OpenAI account with billing)
-                </p>
-                <input
-                  type="password"
-                  value={settings.openai_api_key || ''}
-                  onChange={(e) =>
-                    setSettings({ ...settings, openai_api_key: e.target.value || null })
-                  }
-                  placeholder="sk-..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              {/* Ollama URL */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Local AI Server (Ollama)
-                </label>
-                <p className="text-xs text-gray-500 mb-2">
-                  Run AI on your own computer for maximum privacy
-                </p>
-                <input
-                  type="url"
-                  value={settings.ollama_url || ''}
-                  onChange={(e) => setSettings({ ...settings, ollama_url: e.target.value || null })}
-                  placeholder="http://localhost:11434"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              {/* Error/Success Messages */}
-              {error && <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-4">{error}</div>}
-              {saved && (
-                <div className="bg-green-50 text-green-600 p-4 rounded-lg mb-4">
-                  Settings saved!
-                </div>
-              )}
-
-              {/* Save Button */}
-              <button
-                type="submit"
-                disabled={saving}
-                className="px-6 py-3 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 disabled:opacity-50 transition-colors"
-              >
-                {saving ? 'Saving...' : 'Save Advanced Settings'}
-              </button>
-            </form>
-          )}
-        </div>
+        {/* AI Infrastructure Widget */}
+        <InfrastructureWidget currentProvider={settings.preferred_model} status={providerStatus} />
       </div>
     </div>
   );

@@ -5,7 +5,9 @@
  * Runs locally in Node.js - no API costs
  */
 
-import { pipeline, type FeatureExtractionPipeline } from '@xenova/transformers';
+// Defer heavy import to runtime to speed up dev/server startup.
+// Avoid pulling @xenova/transformers into the initial bundle.
+import type { FeatureExtractionPipeline } from '@xenova/transformers';
 
 // Model configuration
 const MODEL_NAME = 'Xenova/all-MiniLM-L6-v2';
@@ -30,6 +32,7 @@ async function getEmbeddingPipeline(): Promise<FeatureExtractionPipeline> {
 
   // eslint-disable-next-line no-console
   console.log('Initializing embedding model...');
+  const { pipeline } = await import('@xenova/transformers');
   pipelineLoading = pipeline('feature-extraction', MODEL_NAME, {
     // Use ONNX runtime for better performance
     quantized: true,
@@ -112,7 +115,7 @@ export function cosineSimilarity(a: number[], b: number[]): number {
 export function chunkText(
   text: string,
   targetTokens: number = 500,
-  overlapTokens: number = 50
+  overlapTokens: number = 50,
 ): string[] {
   // Approximate tokens as words (rough estimate: 1 token ≈ 0.75 words)
   const wordsPerToken = 0.75;

@@ -8,14 +8,13 @@
 import { type NextRequest } from 'next/server';
 import { getServiceClient } from '@/lib/supabase';
 import { verifyUser } from '@/lib/api-utils';
+import { jsonSuccess, jsonError, jsonUnauthorized, handleError, HTTP_STATUS } from '@/lib/api';
 import {
-  jsonSuccess,
-  jsonError,
-  jsonUnauthorized,
-  handleError,
-  HTTP_STATUS,
-} from '@/lib/api';
-import { MODEL_PROVIDERS, DEFAULT_USER_SETTINGS, DB_ERROR_CODES, DOMAIN_ERRORS } from '@/lib/constants';
+  MODEL_PROVIDERS,
+  DEFAULT_USER_SETTINGS,
+  DB_ERROR_CODES,
+  DOMAIN_ERRORS,
+} from '@/lib/constants';
 
 export async function GET(req: NextRequest) {
   try {
@@ -50,7 +49,7 @@ export async function PUT(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { preferred_model, groq_api_key, openai_api_key, ollama_url } = body;
+    const { preferred_model, groq_api_key, openrouter_api_key, ollama_url } = body;
 
     // Validate preferred_model
     if (!MODEL_PROVIDERS.includes(preferred_model)) {
@@ -59,15 +58,13 @@ export async function PUT(req: NextRequest) {
 
     const supabase = getServiceClient();
 
-    const { error } = await supabase
-      .from('user_settings')
-      .upsert({
-        id: user.id,
-        preferred_model,
-        groq_api_key: groq_api_key || null,
-        openai_api_key: openai_api_key || null,
-        ollama_url: ollama_url || null,
-      });
+    const { error } = await supabase.from('user_settings').upsert({
+      id: user.id,
+      preferred_model,
+      groq_api_key: groq_api_key || null,
+      openrouter_api_key: openrouter_api_key || null,
+      ollama_url: ollama_url || null,
+    });
 
     if (error) {
       throw error;

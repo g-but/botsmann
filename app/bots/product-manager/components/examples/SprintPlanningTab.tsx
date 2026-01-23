@@ -20,7 +20,8 @@ const SPRINT_TASKS: SprintTask[] = [
     id: 1,
     title: 'User Registration Flow',
     storyPoints: 5,
-    description: 'Implement secure registration with email verification and password strength validation',
+    description:
+      'Implement secure registration with email verification and password strength validation',
     subtasks: [
       'Create registration API endpoint',
       'Implement email verification service',

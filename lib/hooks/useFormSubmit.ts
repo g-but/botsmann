@@ -56,37 +56,40 @@ export function useFormSubmit<T, R = unknown>({
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const submit = useCallback(async (data: T): Promise<R | null> => {
-    setIsSubmitting(true);
-    setError(null);
+  const submit = useCallback(
+    async (data: T): Promise<R | null> => {
+      setIsSubmitting(true);
+      setError(null);
 
-    try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
 
-      const result = await response.json();
+        const result = await response.json();
 
-      if (!response.ok) {
-        throw new Error(result.error || defaultErrorMessage);
+        if (!response.ok) {
+          throw new Error(result.error || defaultErrorMessage);
+        }
+
+        setIsSuccess(true);
+        onSuccess?.(result);
+        return result as R;
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : defaultErrorMessage;
+        setError(errorMessage);
+        onError?.(err instanceof Error ? err : new Error(errorMessage));
+        return null;
+      } finally {
+        setIsSubmitting(false);
       }
-
-      setIsSuccess(true);
-      onSuccess?.(result);
-      return result as R;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : defaultErrorMessage;
-      setError(errorMessage);
-      onError?.(err instanceof Error ? err : new Error(errorMessage));
-      return null;
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [endpoint, onSuccess, onError, defaultErrorMessage]);
+    },
+    [endpoint, onSuccess, onError, defaultErrorMessage],
+  );
 
   const reset = useCallback(() => {
     setIsSubmitting(false);

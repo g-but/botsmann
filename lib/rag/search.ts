@@ -25,7 +25,7 @@ export function tokenize(text: string): string[] {
     .toLowerCase()
     .replace(/[^\w\s]/g, ' ')
     .split(/\s+/)
-    .filter(word => word.length > 2);
+    .filter((word) => word.length > 2);
 }
 
 /**
@@ -33,14 +33,14 @@ export function tokenize(text: string): string[] {
  */
 function calculateScore(
   chunk: KnowledgeChunk,
-  queryTerms: string[]
+  queryTerms: string[],
 ): { score: number; matchedTerms: string[] } {
   const matchedTerms: string[] = [];
   let score = 0;
 
   // Combine all searchable text
   const chunkText = `${chunk.question} ${chunk.content} ${chunk.topic}`.toLowerCase();
-  const chunkKeywords = chunk.keywords.map(k => k.toLowerCase());
+  const chunkKeywords = chunk.keywords.map((k) => k.toLowerCase());
 
   for (const term of queryTerms) {
     // Exact keyword match (highest weight)
@@ -51,9 +51,7 @@ function calculateScore(
     }
 
     // Partial keyword match
-    const partialKeywordMatch = chunkKeywords.some(k =>
-      k.includes(term) || term.includes(k)
-    );
+    const partialKeywordMatch = chunkKeywords.some((k) => k.includes(term) || term.includes(k));
     if (partialKeywordMatch) {
       score += 2;
       matchedTerms.push(term);
@@ -69,7 +67,7 @@ function calculateScore(
 
   // Boost for question match (likely direct answer)
   const questionTerms = tokenize(chunk.question);
-  const questionOverlap = queryTerms.filter(t => questionTerms.includes(t)).length;
+  const questionOverlap = queryTerms.filter((t) => questionTerms.includes(t)).length;
   score += questionOverlap * 0.5;
 
   return { score, matchedTerms: Array.from(new Set(matchedTerms)) };
@@ -81,7 +79,7 @@ function calculateScore(
 export function searchKnowledge(
   query: string,
   chunks: KnowledgeChunk[],
-  topK: number = 3
+  topK: number = 3,
 ): SearchResult[] {
   const queryTerms = tokenize(query);
 
@@ -90,11 +88,11 @@ export function searchKnowledge(
   }
 
   const results: SearchResult[] = chunks
-    .map(chunk => {
+    .map((chunk) => {
       const { score, matchedTerms } = calculateScore(chunk, queryTerms);
       return { chunk, score, matchedTerms };
     })
-    .filter(result => result.score > 0)
+    .filter((result) => result.score > 0)
     .sort((a, b) => b.score - a.score)
     .slice(0, topK);
 
@@ -122,10 +120,7 @@ A: ${result.chunk.content}`;
  * Generate a response using retrieved context (without LLM - template based)
  * This is a fallback for when no LLM is available
  */
-export function generateTemplateResponse(
-  query: string,
-  results: SearchResult[]
-): string {
+export function generateTemplateResponse(query: string, results: SearchResult[]): string {
   if (results.length === 0) {
     return "I don't have specific information about that in my knowledge base. Try asking about Swiss German greetings, numbers, food, directions, culture, dialects, or common expressions!";
   }
@@ -140,10 +135,10 @@ export function generateTemplateResponse(
 
   // Multiple partial matches - combine info
   if (results.length > 1) {
-    const topics = Array.from(new Set(results.map(r => r.chunk.topic)));
+    const topics = Array.from(new Set(results.map((r) => r.chunk.topic)));
     const combinedContent = results
       .slice(0, 2)
-      .map(r => r.chunk.content)
+      .map((r) => r.chunk.content)
       .join('\n\nAlso relevant: ');
 
     return `Based on your question about ${topics.join(' and ')}:\n\n${combinedContent}`;

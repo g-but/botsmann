@@ -27,14 +27,12 @@ export function MegaMenuPanel({ items, config, onNavigate }: MegaMenuPanelProps)
     <div className="overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 border border-gray-100">
       {/* Optional Header */}
       {config?.header && (
-        <div className={`border-b border-gray-100 px-6 py-4 ${config.header.gradient ?? 'bg-gradient-to-r from-blue-50 to-cyan-50'}`}>
-          <h3 className="text-sm font-semibold text-gray-900">
-            {config.header.title}
-          </h3>
+        <div
+          className={`border-b border-gray-100 px-6 py-4 ${config.header.gradient ?? 'bg-gradient-to-r from-blue-50 to-cyan-50'}`}
+        >
+          <h3 className="text-sm font-semibold text-gray-900">{config.header.title}</h3>
           {config.header.subtitle && (
-            <p className="mt-1 text-xs text-gray-600">
-              {config.header.subtitle}
-            </p>
+            <p className="mt-1 text-xs text-gray-600">{config.header.subtitle}</p>
           )}
         </div>
       )}
@@ -42,11 +40,7 @@ export function MegaMenuPanel({ items, config, onNavigate }: MegaMenuPanelProps)
       {/* Menu Items Grid */}
       <div className={`relative grid gap-1 bg-white p-4 ${gridCols}`}>
         {items.map((item) => (
-          <MegaMenuItem
-            key={item.label}
-            item={item}
-            onNavigate={onNavigate}
-          />
+          <MegaMenuItem key={item.label} item={item} onNavigate={onNavigate} />
         ))}
       </div>
 

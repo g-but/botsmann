@@ -21,10 +21,7 @@ export const BotSection: FC<BotSectionProps> = ({
   const spacingClasses = isLast ? 'mb-24' : 'my-16';
 
   return (
-    <section
-      id={id}
-      className={`${baseClasses} ${spacingClasses} ${className}`.trim()}
-    >
+    <section id={id} className={`${baseClasses} ${spacingClasses} ${className}`.trim()}>
       {children}
     </section>
   );

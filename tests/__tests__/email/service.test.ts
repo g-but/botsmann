@@ -4,9 +4,9 @@ import { CustomerSchema } from '@/lib/schemas/customer';
 // Mock the AWS SDK
 jest.mock('@aws-sdk/client-ses', () => ({
   SESClient: jest.fn().mockImplementation(() => ({
-    send: jest.fn().mockResolvedValue({ MessageId: 'test-message-id' })
+    send: jest.fn().mockResolvedValue({ MessageId: 'test-message-id' }),
   })),
-  SendEmailCommand: jest.fn().mockImplementation((params) => params)
+  SendEmailCommand: jest.fn().mockImplementation((params) => params),
 }));
 
 describe('EmailService', () => {
@@ -39,8 +39,8 @@ describe('EmailService', () => {
       message: 'Test message',
       preferences: {
         newsletter: true,
-        productUpdates: true
-      }
+        productUpdates: true,
+      },
     });
 
     await expect(emailService.sendWelcomeEmail(customer)).resolves.not.toThrow();
@@ -53,8 +53,8 @@ describe('EmailService', () => {
       message: 'Test message',
       preferences: {
         newsletter: true,
-        productUpdates: false
-      }
+        productUpdates: false,
+      },
     });
 
     await expect(emailService.sendAdminNotification(customer)).resolves.not.toThrow();
@@ -65,8 +65,8 @@ describe('EmailService', () => {
       CustomerSchema.parseAsync({
         name: '',
         email: 'invalid-email',
-        message: ''
-      })
+        message: '',
+      }),
     ).rejects.toThrow();
   });
 });

@@ -21,49 +21,60 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFilesUploaded, maxFiles =
     setIsDragging(false);
   }, []);
 
-  const processFiles = useCallback((fileList: FileList) => {
-    const files: UploadedFile[] = Array.from(fileList).slice(0, maxFiles).map(file => ({
-      id: Math.random().toString(36).substr(2, 9),
-      name: file.name,
-      type: file.type,
-      size: file.size,
-      status: 'uploading' as const
-    }));
+  const processFiles = useCallback(
+    (fileList: FileList) => {
+      const files: UploadedFile[] = Array.from(fileList)
+        .slice(0, maxFiles)
+        .map((file) => ({
+          id: Math.random().toString(36).substr(2, 9),
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          status: 'uploading' as const,
+        }));
 
-    // Simulate upload and AI processing
-    files.forEach(file => {
-      setTimeout(() => {
-        file.status = 'processing';
-        onFilesUploaded([file]);
-      }, 500);
+      // Simulate upload and AI processing
+      files.forEach((file) => {
+        setTimeout(() => {
+          file.status = 'processing';
+          onFilesUploaded([file]);
+        }, 500);
 
-      setTimeout(() => {
-        file.status = 'completed';
-        // AI categorization would happen here
-        file.category = detectCategory(file.name);
-        onFilesUploaded([file]);
-      }, 1500);
-    });
+        setTimeout(() => {
+          file.status = 'completed';
+          // AI categorization would happen here
+          file.category = detectCategory(file.name);
+          onFilesUploaded([file]);
+        }, 1500);
+      });
 
-    onFilesUploaded(files);
-  }, [maxFiles, onFilesUploaded]);
+      onFilesUploaded(files);
+    },
+    [maxFiles, onFilesUploaded],
+  );
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      setIsDragging(false);
 
-    const { files } = e.dataTransfer;
-    if (files?.length) {
-      processFiles(files);
-    }
-  }, [processFiles]);
+      const { files } = e.dataTransfer;
+      if (files?.length) {
+        processFiles(files);
+      }
+    },
+    [processFiles],
+  );
 
-  const handleFileInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target;
-    if (files?.length) {
-      processFiles(files);
-    }
-  }, [processFiles]);
+  const handleFileInput = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { files } = e.target;
+      if (files?.length) {
+        processFiles(files);
+      }
+    },
+    [processFiles],
+  );
 
   return (
     <div
@@ -72,16 +83,15 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFilesUploaded, maxFiles =
       onDrop={handleDrop}
       className={`
         border-2 border-dashed rounded-xl p-8 text-center transition-all
-        ${isDragging
-          ? 'border-blue-500 bg-blue-50 scale-105'
-          : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
+        ${
+          isDragging
+            ? 'border-blue-500 bg-blue-50 scale-105'
+            : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
         }
       `}
     >
       <div className="text-4xl mb-3">📁</div>
-      <h4 className="font-semibold text-gray-900 mb-2">
-        Drop files here or click to upload
-      </h4>
+      <h4 className="font-semibold text-gray-900 mb-2">Drop files here or click to upload</h4>
       <p className="text-sm text-gray-600 mb-4">
         Supports PDF, DOC, DOCX, JPG, PNG (max {maxFiles} files)
       </p>
@@ -113,10 +123,13 @@ function detectCategory(filename: string): string {
   if (lower.includes('contract') || lower.includes('agreement')) return 'contracts';
   if (lower.includes('email') || lower.includes('letter')) return 'correspondence';
   if (lower.includes('court') || lower.includes('filing')) return 'court-filings';
-  if (lower.includes('id') || lower.includes('passport') || lower.includes('license')) return 'identification';
-  if (lower.includes('bank') || lower.includes('invoice') || lower.includes('receipt')) return 'financial';
+  if (lower.includes('id') || lower.includes('passport') || lower.includes('license'))
+    return 'identification';
+  if (lower.includes('bank') || lower.includes('invoice') || lower.includes('receipt'))
+    return 'financial';
   if (lower.includes('medical') || lower.includes('health')) return 'medical';
-  if (lower.includes('photo') || lower.includes('evidence') || lower.includes('proof')) return 'evidence';
+  if (lower.includes('photo') || lower.includes('evidence') || lower.includes('proof'))
+    return 'evidence';
 
   return 'other';
 }

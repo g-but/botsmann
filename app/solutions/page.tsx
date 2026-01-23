@@ -5,19 +5,19 @@ import solutions from '@/data/solutions.json';
 
 export default function SolutionsPage() {
   const allSolutions = [
-    ...solutions.individuals.map(s => ({ ...s, category: 'individuals' })),
-    ...solutions.businesses.map(s => ({ ...s, category: 'businesses' })),
-    ...solutions.governments.map(s => ({ ...s, category: 'governments' }))
+    ...solutions.individuals.map((s) => ({ ...s, category: 'individuals' })),
+    ...solutions.businesses.map((s) => ({ ...s, category: 'businesses' })),
+    ...solutions.governments.map((s) => ({ ...s, category: 'governments' })),
   ];
-  
+
   return (
     <div className="mx-auto max-w-screen-xl px-6 py-12">
       <div className="mb-12 text-center">
         <h1 className="mb-4 text-4xl font-semibold tracking-tight">AI Solutions for Everyone</h1>
         <p className="mx-auto max-w-3xl text-lg text-gray-600">
-          At Botsmann, we develop cutting-edge AI solutions tailored to the unique needs of individuals, 
-          businesses, and governments. Our innovative technologies help automate tasks, enhance 
-          productivity, and unlock new possibilities.
+          At Botsmann, we develop cutting-edge AI solutions tailored to the unique needs of
+          individuals, businesses, and governments. Our innovative technologies help automate tasks,
+          enhance productivity, and unlock new possibilities.
         </p>
       </div>
 
@@ -33,8 +33,8 @@ export default function SolutionsPage() {
           <div className="flex flex-1 flex-col p-6">
             <h2 className="mb-3 text-2xl font-semibold text-gray-900">For Individuals</h2>
             <p className="mb-5 flex-1 text-gray-600">
-              Enhance your personal life with AI assistants that help you shop smarter, 
-              learn languages faster, and get expert advice on legal, medical, and creative matters.
+              Enhance your personal life with AI assistants that help you shop smarter, learn
+              languages faster, and get expert advice on legal, medical, and creative matters.
             </p>
             <Link
               href="/solutions/individuals"
@@ -42,7 +42,12 @@ export default function SolutionsPage() {
             >
               Learn more
               <svg className="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
               </svg>
             </Link>
           </div>
@@ -61,8 +66,8 @@ export default function SolutionsPage() {
           <div className="flex flex-1 flex-col p-6">
             <h2 className="mb-3 text-2xl font-semibold text-gray-900">For Businesses</h2>
             <p className="mb-5 flex-1 text-gray-600">
-              Streamline operations, increase efficiency, and gain valuable insights with 
-              our AI solutions designed specifically for businesses of all sizes.
+              Streamline operations, increase efficiency, and gain valuable insights with our AI
+              solutions designed specifically for businesses of all sizes.
             </p>
             <Link
               href="/solutions/businesses"
@@ -70,7 +75,12 @@ export default function SolutionsPage() {
             >
               Learn more
               <svg className="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
               </svg>
             </Link>
           </div>
@@ -89,8 +99,8 @@ export default function SolutionsPage() {
           <div className="flex flex-1 flex-col p-6">
             <h2 className="mb-3 text-2xl font-semibold text-gray-900">For Governments</h2>
             <p className="mb-5 flex-1 text-gray-600">
-              Enhance transparency, improve public services, and optimize resource allocation with our 
-              specialized AI tools designed for government agencies and public institutions.
+              Enhance transparency, improve public services, and optimize resource allocation with
+              our specialized AI tools designed for government agencies and public institutions.
             </p>
             <Link
               href="/solutions/governments"
@@ -98,7 +108,12 @@ export default function SolutionsPage() {
             >
               Learn more
               <svg className="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
               </svg>
             </Link>
           </div>
@@ -110,8 +125,8 @@ export default function SolutionsPage() {
         <h2 className="mb-8 text-3xl font-semibold text-gray-900">All Solutions</h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {allSolutions.map((solution) => (
-            <Link 
-              key={`${solution.category}-${solution.slug}`} 
+            <Link
+              key={`${solution.category}-${solution.slug}`}
               href={`/solutions/${solution.category}/${solution.slug}` as Route}
               className="group flex h-full flex-col rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md relative"
             >
@@ -134,9 +149,12 @@ export default function SolutionsPage() {
 
       {/* Call to action */}
       <div className="mt-16 rounded-xl bg-gray-50 p-8 text-center">
-        <h2 className="mb-4 text-3xl font-bold text-gray-900">Ready to Transform Your Experience?</h2>
+        <h2 className="mb-4 text-3xl font-bold text-gray-900">
+          Ready to Transform Your Experience?
+        </h2>
         <p className="mx-auto mb-6 max-w-2xl text-lg text-gray-600">
-          Contact us today to discuss how our AI solutions can be tailored to your specific needs and challenges.
+          Contact us today to discuss how our AI solutions can be tailored to your specific needs
+          and challenges.
         </p>
         <Link
           href="/contact"

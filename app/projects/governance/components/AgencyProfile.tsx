@@ -95,11 +95,15 @@ const AgencyProfile: React.FC<AgencyProfileProps> = ({ agency }) => {
                   <span>Budget: {formatCurrency(agency.budget.total)}/yr</span>
                 </div>
                 <div className="mt-2 flex items-center">
-                  <div className={`px-2 py-1 text-xs font-medium rounded-full ${
-                    agency.transparencyScore >= 80 ? 'bg-green-100 text-green-800' :
-                    agency.transparencyScore >= 60 ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-red-100 text-red-800'
-                  }`}>
+                  <div
+                    className={`px-2 py-1 text-xs font-medium rounded-full ${
+                      agency.transparencyScore >= 80
+                        ? 'bg-green-100 text-green-800'
+                        : agency.transparencyScore >= 60
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : 'bg-red-100 text-red-800'
+                    }`}
+                  >
                     Transparency Score: {agency.transparencyScore}/100
                   </div>
                 </div>
@@ -107,7 +111,7 @@ const AgencyProfile: React.FC<AgencyProfileProps> = ({ agency }) => {
             </div>
             <div className="mt-5 flex lg:mt-0 lg:ml-4">
               <span className="ml-3">
-                <button 
+                <button
                   type="button"
                   className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
@@ -115,7 +119,7 @@ const AgencyProfile: React.FC<AgencyProfileProps> = ({ agency }) => {
                 </button>
               </span>
               <span className="ml-3">
-                <button 
+                <button
                   type="button"
                   className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
@@ -126,7 +130,7 @@ const AgencyProfile: React.FC<AgencyProfileProps> = ({ agency }) => {
           </div>
         </div>
       </div>
-      
+
       {/* Tab Navigation */}
       <div className="border-b border-gray-200 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -147,7 +151,7 @@ const AgencyProfile: React.FC<AgencyProfileProps> = ({ agency }) => {
           </nav>
         </div>
       </div>
-      
+
       {/* Agency Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Overview Tab */}
@@ -169,13 +173,17 @@ const AgencyProfile: React.FC<AgencyProfileProps> = ({ agency }) => {
                           <span>Spent: {formatCurrency(agency.budget.spent)}</span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2.5 mt-1">
-                          <div 
-                            className="bg-blue-600 h-2.5 rounded-full" 
-                            style={{ width: `${(agency.budget.spent / agency.budget.allocated) * 100}%` }}
+                          <div
+                            className="bg-blue-600 h-2.5 rounded-full"
+                            style={{
+                              width: `${(agency.budget.spent / agency.budget.allocated) * 100}%`,
+                            }}
                           ></div>
                         </div>
                       </div>
-                      <p className="text-xs text-gray-500">Fiscal Year: {agency.budget.fiscalYear}</p>
+                      <p className="text-xs text-gray-500">
+                        Fiscal Year: {agency.budget.fiscalYear}
+                      </p>
                     </dd>
                   </div>
                   <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -183,19 +191,27 @@ const AgencyProfile: React.FC<AgencyProfileProps> = ({ agency }) => {
                     <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <span className="block text-2xl font-bold text-blue-600">{agency.citizenImpact.servicesProvided.toLocaleString()}</span>
+                          <span className="block text-2xl font-bold text-blue-600">
+                            {agency.citizenImpact.servicesProvided.toLocaleString()}
+                          </span>
                           <span className="text-xs text-gray-500">Services Provided</span>
                         </div>
                         <div>
-                          <span className="block text-2xl font-bold text-blue-600">{agency.citizenImpact.citizensServed.toLocaleString()}</span>
+                          <span className="block text-2xl font-bold text-blue-600">
+                            {agency.citizenImpact.citizensServed.toLocaleString()}
+                          </span>
                           <span className="text-xs text-gray-500">Citizens Served</span>
                         </div>
                         <div>
-                          <span className="block text-2xl font-bold text-blue-600">{agency.citizenImpact.satisfactionScore}%</span>
+                          <span className="block text-2xl font-bold text-blue-600">
+                            {agency.citizenImpact.satisfactionScore}%
+                          </span>
                           <span className="text-xs text-gray-500">Satisfaction Score</span>
                         </div>
                         <div>
-                          <span className="block text-2xl font-bold text-blue-600">{agency.citizenImpact.avgResponseTime}</span>
+                          <span className="block text-2xl font-bold text-blue-600">
+                            {agency.citizenImpact.avgResponseTime}
+                          </span>
                           <span className="text-xs text-gray-500">Average Response Time</span>
                         </div>
                       </div>
@@ -204,23 +220,23 @@ const AgencyProfile: React.FC<AgencyProfileProps> = ({ agency }) => {
                 </dl>
               </div>
             </div>
-            
+
             {/* Agency Metrics */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {agency.metrics.map((metric, index) => (
                 <div key={index} className="bg-white overflow-hidden shadow rounded-lg">
                   <div className="px-4 py-5 sm:p-6">
-                    <dt className="text-sm font-medium text-gray-500 truncate">
-                      {metric.name}
-                    </dt>
-                    <dd className="mt-1 text-3xl font-semibold text-gray-900">
-                      {metric.value}
-                    </dd>
-                    <dd className={`mt-1 text-sm ${
-                      metric.trend === 'up' ? 'text-green-600' :
-                      metric.trend === 'down' ? 'text-red-600' :
-                      'text-gray-500'
-                    }`}>
+                    <dt className="text-sm font-medium text-gray-500 truncate">{metric.name}</dt>
+                    <dd className="mt-1 text-3xl font-semibold text-gray-900">{metric.value}</dd>
+                    <dd
+                      className={`mt-1 text-sm ${
+                        metric.trend === 'up'
+                          ? 'text-green-600'
+                          : metric.trend === 'down'
+                            ? 'text-red-600'
+                            : 'text-gray-500'
+                      }`}
+                    >
                       {metric.change}
                     </dd>
                   </div>
@@ -229,7 +245,7 @@ const AgencyProfile: React.FC<AgencyProfileProps> = ({ agency }) => {
             </div>
           </div>
         )}
-        
+
         {/* Transactions Tab */}
         {activeTab === 'transactions' && (
           <div>
@@ -237,10 +253,10 @@ const AgencyProfile: React.FC<AgencyProfileProps> = ({ agency }) => {
               <ul role="list" className="divide-y divide-gray-200">
                 {agency.transactions.map((transaction) => (
                   <li key={transaction.id}>
-                    <Link 
+                    <Link
                       href={{
-                        pathname: "/projects/governance/open-pay/[id]",
-                        query: { id: transaction.id }
+                        pathname: '/projects/governance/open-pay/[id]',
+                        query: { id: transaction.id },
                       }}
                       className="block hover:bg-gray-50"
                     >
@@ -251,11 +267,15 @@ const AgencyProfile: React.FC<AgencyProfileProps> = ({ agency }) => {
                               {transaction.description}
                             </p>
                             <div className="ml-2 flex-shrink-0 flex">
-                              <p className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                transaction.status === 'Completed' ? 'bg-green-100 text-green-800' :
-                                transaction.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
-                                'bg-red-100 text-red-800'
-                              }`}>
+                              <p
+                                className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                  transaction.status === 'Completed'
+                                    ? 'bg-green-100 text-green-800'
+                                    : transaction.status === 'Pending'
+                                      ? 'bg-yellow-100 text-yellow-800'
+                                      : 'bg-red-100 text-red-800'
+                                }`}
+                              >
                                 {transaction.status}
                               </p>
                             </div>
@@ -282,7 +302,7 @@ const AgencyProfile: React.FC<AgencyProfileProps> = ({ agency }) => {
             </div>
           </div>
         )}
-        
+
         {/* Regulations Tab */}
         {activeTab === 'regulations' && (
           <div>
@@ -292,30 +312,39 @@ const AgencyProfile: React.FC<AgencyProfileProps> = ({ agency }) => {
                   <li key={regulation.id}>
                     <div className="px-4 py-5 sm:px-6">
                       <div className="flex items-center justify-between">
-                        <h3 className="text-lg leading-6 font-medium text-gray-900">{regulation.title}</h3>
+                        <h3 className="text-lg leading-6 font-medium text-gray-900">
+                          {regulation.title}
+                        </h3>
                         <div className="ml-2 flex-shrink-0 flex">
-                          <p className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                            regulation.status === 'active' ? 'bg-green-100 text-green-800' :
-                            regulation.status === 'proposed' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-red-100 text-red-800'
-                          }`}>
+                          <p
+                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                              regulation.status === 'active'
+                                ? 'bg-green-100 text-green-800'
+                                : regulation.status === 'proposed'
+                                  ? 'bg-yellow-100 text-yellow-800'
+                                  : 'bg-red-100 text-red-800'
+                            }`}
+                          >
                             {regulation.status.charAt(0).toUpperCase() + regulation.status.slice(1)}
                           </p>
                         </div>
                       </div>
-                      <p className="mt-1 max-w-2xl text-sm text-gray-500">{regulation.description}</p>
-                      
+                      <p className="mt-1 max-w-2xl text-sm text-gray-500">
+                        {regulation.description}
+                      </p>
+
                       <div className="mt-3 sm:mt-4">
                         <div className="sm:flex sm:items-baseline sm:justify-between">
                           <p className="text-sm text-gray-500">
-                            Enacted: {regulation.dateEnacted} | Last Updated: {regulation.lastUpdated}
+                            Enacted: {regulation.dateEnacted} | Last Updated:{' '}
+                            {regulation.lastUpdated}
                           </p>
                           <p className="mt-2 text-sm text-gray-500 sm:mt-0">
-                            Enabling Law: {' '}
-                            <Link 
+                            Enabling Law:{' '}
+                            <Link
                               href={{
-                                pathname: "/projects/governance/open-law/[id]",
-                                query: { id: regulation.enablingLawId }
+                                pathname: '/projects/governance/open-law/[id]',
+                                query: { id: regulation.enablingLawId },
                               }}
                               className="text-blue-600 hover:text-blue-800"
                             >
@@ -324,7 +353,7 @@ const AgencyProfile: React.FC<AgencyProfileProps> = ({ agency }) => {
                           </p>
                         </div>
                       </div>
-                      
+
                       {/* KPIs */}
                       <div className="mt-4 border-t border-gray-200 pt-4">
                         <h4 className="text-sm font-medium text-gray-500">Performance Metrics:</h4>
@@ -332,15 +361,22 @@ const AgencyProfile: React.FC<AgencyProfileProps> = ({ agency }) => {
                           {regulation.kpis.map((kpi, idx) => (
                             <div key={idx} className="relative">
                               <div className="flex items-center">
-                                <div className={`flex-shrink-0 h-3 w-3 rounded-full ${
-                                  kpi.status === 'achieved' ? 'bg-green-500' :
-                                  kpi.status === 'on-track' ? 'bg-blue-500' :
-                                  kpi.status === 'at-risk' ? 'bg-yellow-500' :
-                                  'bg-red-500'
-                                }`} />
+                                <div
+                                  className={`flex-shrink-0 h-3 w-3 rounded-full ${
+                                    kpi.status === 'achieved'
+                                      ? 'bg-green-500'
+                                      : kpi.status === 'on-track'
+                                        ? 'bg-blue-500'
+                                        : kpi.status === 'at-risk'
+                                          ? 'bg-yellow-500'
+                                          : 'bg-red-500'
+                                  }`}
+                                />
                                 <div className="ml-3">
                                   <p className="text-sm font-medium text-gray-900">{kpi.metric}</p>
-                                  <p className="text-sm text-gray-500">{kpi.current} / {kpi.target}</p>
+                                  <p className="text-sm text-gray-500">
+                                    {kpi.current} / {kpi.target}
+                                  </p>
                                 </div>
                               </div>
                             </div>
@@ -354,11 +390,14 @@ const AgencyProfile: React.FC<AgencyProfileProps> = ({ agency }) => {
             </div>
           </div>
         )}
-        
+
         {/* Team Tab */}
         {activeTab === 'team' && (
           <div>
-            <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            <ul
+              role="list"
+              className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+            >
               {agency.team.map((member) => (
                 <li
                   key={member.id}
@@ -368,7 +407,11 @@ const AgencyProfile: React.FC<AgencyProfileProps> = ({ agency }) => {
                     <div className="w-24 h-24 flex-shrink-0 mx-auto rounded-full bg-gray-200 overflow-hidden">
                       {member.imageUrl ? (
                         /* eslint-disable-next-line @next/next/no-img-element -- Dynamic external image URL from data */
-                        <img className="w-24 h-24 object-cover" src={member.imageUrl} alt={member.name} />
+                        <img
+                          className="w-24 h-24 object-cover"
+                          src={member.imageUrl}
+                          alt={member.name}
+                        />
                       ) : (
                         <div className="h-full w-full flex items-center justify-center bg-gray-300 text-gray-500 text-2xl">
                           {member.name.charAt(0)}
@@ -382,11 +425,15 @@ const AgencyProfile: React.FC<AgencyProfileProps> = ({ agency }) => {
                       <dt className="sr-only">Department</dt>
                       <dd className="text-gray-500 text-xs">{member.department}</dd>
                       <dd className="mt-3">
-                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                          member.transparency >= 80 ? 'bg-green-100 text-green-800' :
-                          member.transparency >= 60 ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-red-100 text-red-800'
-                        }`}>
+                        <span
+                          className={`px-2 py-1 text-xs font-medium rounded-full ${
+                            member.transparency >= 80
+                              ? 'bg-green-100 text-green-800'
+                              : member.transparency >= 60
+                                ? 'bg-yellow-100 text-yellow-800'
+                                : 'bg-red-100 text-red-800'
+                          }`}
+                        >
                           T-Score: {member.transparency}/100
                         </span>
                       </dd>
@@ -397,8 +444,8 @@ const AgencyProfile: React.FC<AgencyProfileProps> = ({ agency }) => {
                       <div className="w-0 flex-1 flex">
                         <Link
                           href={{
-                            pathname: "/projects/governance/employees/[id]",
-                            query: { id: member.id }
+                            pathname: '/projects/governance/employees/[id]',
+                            query: { id: member.id },
                           }}
                           className="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500"
                         >
@@ -427,4 +474,4 @@ const AgencyProfile: React.FC<AgencyProfileProps> = ({ agency }) => {
   );
 };
 
-export default AgencyProfile; 
+export default AgencyProfile;

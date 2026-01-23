@@ -7,7 +7,8 @@ import { categoryConfig } from '@/types/knowledge';
 
 export const metadata: Metadata = {
   title: 'Guides | Botsmann Knowledge Center',
-  description: 'Step-by-step tutorials for building AI bots, infrastructure setup, and integrations.',
+  description:
+    'Step-by-step tutorials for building AI bots, infrastructure setup, and integrations.',
 };
 
 interface GuidesPageProps {
@@ -46,12 +47,10 @@ export default async function GuidesPage({ searchParams }: GuidesPageProps) {
             <span className="text-gray-900">Guides</span>
           </nav>
 
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Guides & Tutorials
-          </h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Guides & Tutorials</h1>
           <p className="text-xl text-gray-600 max-w-2xl">
-            Learn to build AI bots, set up infrastructure, and deploy to production
-            with step-by-step tutorials for all skill levels.
+            Learn to build AI bots, set up infrastructure, and deploy to production with
+            step-by-step tutorials for all skill levels.
           </p>
         </div>
       </div>
@@ -93,7 +92,11 @@ export default async function GuidesPage({ searchParams }: GuidesPageProps) {
             <span className="text-sm font-medium text-gray-700">Category:</span>
             <div className="flex flex-wrap gap-2">
               <Link
-                href={difficultyFilter ? `/knowledge/guides?difficulty=${difficultyFilter}` : '/knowledge/guides'}
+                href={
+                  difficultyFilter
+                    ? `/knowledge/guides?difficulty=${difficultyFilter}`
+                    : '/knowledge/guides'
+                }
                 className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
                   !categoryFilter
                     ? 'bg-gray-900 text-white'
@@ -134,9 +137,7 @@ export default async function GuidesPage({ searchParams }: GuidesPageProps) {
         ) : (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">📚</div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              No guides found
-            </h3>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">No guides found</h3>
             <p className="text-gray-600 mb-6">
               {difficultyFilter || categoryFilter
                 ? 'Try adjusting your filters to see more guides.'
@@ -157,8 +158,8 @@ export default async function GuidesPage({ searchParams }: GuidesPageProps) {
         <div className="mt-16 rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 p-8 text-center text-white">
           <h2 className="text-2xl font-bold mb-4">Need Help?</h2>
           <p className="text-blue-100 mb-6 max-w-xl mx-auto">
-            Can&apos;t find what you&apos;re looking for? Our team is here to help you build
-            your AI infrastructure.
+            Can&apos;t find what you&apos;re looking for? Our team is here to help you build your AI
+            infrastructure.
           </p>
           <Link
             href="/contact"

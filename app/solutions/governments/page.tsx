@@ -5,7 +5,8 @@ import Link from 'next/link';
 import solutionsData from '@/data/solutions.json';
 
 export default function GovernmentsSolutions() {
-  const genericInfo = "Our solutions for governments focus on transparency, efficiency, and public accountability through advanced AI tools.";
+  const genericInfo =
+    'Our solutions for governments focus on transparency, efficiency, and public accountability through advanced AI tools.';
   const governments = solutionsData.governments;
 
   return (

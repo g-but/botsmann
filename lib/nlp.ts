@@ -9,14 +9,15 @@ export async function processQuery(query: string): Promise<NLPResult> {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         model: 'gpt-3.5-turbo',
-        messages: [{
-          role: 'system',
-          content: `Convert one-word shopping queries into structured product search parameters.
+        messages: [
+          {
+            role: 'system',
+            content: `Convert one-word shopping queries into structured product search parameters.
                    Return a JSON object with 'category' and 'attributes'.
                    Example: For "laptop", return:
                    {
@@ -26,14 +27,16 @@ export async function processQuery(query: string): Promise<NLPResult> {
                        "minRam": "8GB",
                        "minStorage": "256GB"
                      }
-                   }`
-        }, {
-          role: 'user',
-          content: query
-        }],
+                   }`,
+          },
+          {
+            role: 'user',
+            content: query,
+          },
+        ],
         temperature: 0.7,
-        max_tokens: 150
-      })
+        max_tokens: 150,
+      }),
     });
 
     if (!response.ok) {
@@ -42,7 +45,7 @@ export async function processQuery(query: string): Promise<NLPResult> {
 
     const data = await response.json();
     const content = data.choices[0]?.message?.content;
-    
+
     if (!content) {
       throw new Error('Invalid response from OpenAI');
     }
@@ -51,13 +54,13 @@ export async function processQuery(query: string): Promise<NLPResult> {
       const parsed = JSON.parse(content);
       return {
         category: parsed.category || 'general',
-        attributes: parsed.attributes || {}
+        attributes: parsed.attributes || {},
       };
     } catch (parseError) {
       console.error('Failed to parse OpenAI response:', parseError);
       return {
         category: 'general',
-        attributes: { query }
+        attributes: { query },
       };
     }
   } catch (error) {
@@ -65,7 +68,7 @@ export async function processQuery(query: string): Promise<NLPResult> {
     // Fallback to basic search
     return {
       category: 'general',
-      attributes: { query }
+      attributes: { query },
     };
   }
 }

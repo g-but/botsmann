@@ -1,5 +1,9 @@
 # Shared Context - Botsmann Architecture
 
+ARCHIVE NOTICE FOR MONGODB SECTIONS
+
+- The database is Supabase (PostgreSQL with RLS). Any sections mentioning MongoDB/Mongoose are historical context and are not current. Prefer docs/SUPABASE_SETUP.md and docs/SSOT.md for the source of truth.
+
 This document provides comprehensive technical context for the Botsmann project.
 
 ---
@@ -8,42 +12,42 @@ This document provides comprehensive technical context for the Botsmann project.
 
 ### Frontend
 
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| Next.js | 14.x | React framework (App Router) |
-| React | 18.x | UI library |
-| TypeScript | 5.x | Type safety |
-| Tailwind CSS | 3.x | Utility-first styling |
-| DaisyUI | 5.x | Component library |
-| Framer Motion | 12.x | Animations |
+| Technology    | Version | Purpose                      |
+| ------------- | ------- | ---------------------------- |
+| Next.js       | 14.x    | React framework (App Router) |
+| React         | 18.x    | UI library                   |
+| TypeScript    | 5.x     | Type safety                  |
+| Tailwind CSS  | 3.x     | Utility-first styling        |
+| DaisyUI       | 5.x     | Component library            |
+| Framer Motion | 12.x    | Animations                   |
 
 ### Backend
 
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| Next.js API Routes | - | Serverless functions |
-| MongoDB | 6.x | Database |
-| Mongoose | 8.x | ODM |
-| Zod | 3.x | Schema validation |
+| Technology          | Version | Purpose                          |
+| ------------------- | ------- | -------------------------------- |
+| Next.js API Routes  | -       | Serverless functions             |
+| Supabase (Postgres) | 15.x    | Database + Auth + Storage + RLS  |
+| @supabase/\*        | 2.x     | JS client + Next.js auth helpers |
+| Zod                 | 3.x     | Schema validation                |
 
 ### Infrastructure
 
-| Service | Purpose |
-|---------|---------|
-| Vercel | Hosting & deployment |
-| MongoDB Atlas | Database hosting |
-| AWS SES | Email delivery |
-| SendGrid | Backup email |
-| Mailgun | Backup email |
+| Service  | Purpose                          |
+| -------- | -------------------------------- |
+| Vercel   | Hosting & deployment             |
+| Supabase | Database, Auth, Storage, SQL API |
+| AWS SES  | Email delivery                   |
+| SendGrid | Backup email                     |
+| Mailgun  | Backup email                     |
 
 ### Development Tools
 
-| Tool | Purpose |
-|------|---------|
-| Jest | Unit testing |
+| Tool                  | Purpose           |
+| --------------------- | ----------------- |
+| Jest                  | Unit testing      |
 | React Testing Library | Component testing |
-| ESLint | Code linting |
-| Prettier | Code formatting |
+| ESLint                | Code linting      |
+| Prettier              | Code formatting   |
 
 ---
 
@@ -117,6 +121,7 @@ botsmann/
 ### App Router (Next.js 14)
 
 We use the App Router for:
+
 - Server Components by default (better performance)
 - Nested layouts
 - Built-in loading/error states
@@ -125,6 +130,7 @@ We use the App Router for:
 ### MongoDB with Mongoose
 
 Chosen for:
+
 - Flexible schema for diverse bot data
 - Easy scaling with MongoDB Atlas
 - Good TypeScript support via Mongoose
@@ -132,6 +138,7 @@ Chosen for:
 ### Serverless API Routes
 
 All backend logic runs in Vercel serverless functions:
+
 - No server to maintain
 - Auto-scaling
 - Pay-per-use
@@ -140,16 +147,16 @@ All backend logic runs in Vercel serverless functions:
 
 ## Environment Variables
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `MONGODB_URI` | Yes | MongoDB connection string |
-| `API_KEY` | Yes | Internal API authentication |
-| `NEXT_PUBLIC_API_KEY` | Yes | Client-side API key |
-| `NEXT_AWS_ACCESS_KEY_ID` | No | AWS SES access key |
-| `NEXT_AWS_SECRET_ACCESS_KEY` | No | AWS SES secret |
-| `NEXT_AWS_REGION` | No | AWS region |
-| `FROM_EMAIL` | No | Sender email address |
-| `ADMIN_EMAIL` | No | Admin notification email |
+| Variable                     | Required | Description                 |
+| ---------------------------- | -------- | --------------------------- |
+| `MONGODB_URI`                | Yes      | MongoDB connection string   |
+| `API_KEY`                    | Yes      | Internal API authentication |
+| `NEXT_PUBLIC_API_KEY`        | Yes      | Client-side API key         |
+| `NEXT_AWS_ACCESS_KEY_ID`     | No       | AWS SES access key          |
+| `NEXT_AWS_SECRET_ACCESS_KEY` | No       | AWS SES secret              |
+| `NEXT_AWS_REGION`            | No       | AWS region                  |
+| `FROM_EMAIL`                 | No       | Sender email address        |
+| `ADMIN_EMAIL`                | No       | Admin notification email    |
 
 **Setup:** Copy `.env.example` to `.env` and fill in values.
 
@@ -158,6 +165,7 @@ All backend logic runs in Vercel serverless functions:
 ## Data Flow
 
 ### Bot Page Request
+
 ```
 Browser → app/bots/[slug]/page.tsx
                 ↓
@@ -169,6 +177,7 @@ Browser → app/bots/[slug]/page.tsx
 ```
 
 ### API Request
+
 ```
 Client → app/api/[route]/route.ts
                 ↓
@@ -180,6 +189,7 @@ Client → app/api/[route]/route.ts
 ```
 
 ### Form Submission
+
 ```
 User → components/*Form.tsx
                 ↓
@@ -196,28 +206,31 @@ User → components/*Form.tsx
 
 ## Key Files Reference
 
-| File | Purpose | When to Modify |
-|------|---------|----------------|
-| `data/bots.ts` | Bot configurations | Adding/editing bots |
-| `app/layout.tsx` | Root layout | Global UI changes |
-| `components/Navigation.tsx` | Main nav | Adding pages |
-| `tailwind.config.js` | Theme config | Styling changes |
-| `types/*.ts` | Type definitions | Data structure changes |
+| File                        | Purpose            | When to Modify         |
+| --------------------------- | ------------------ | ---------------------- |
+| `data/bots.ts`              | Bot configurations | Adding/editing bots    |
+| `app/layout.tsx`            | Root layout        | Global UI changes      |
+| `components/Navigation.tsx` | Main nav           | Adding pages           |
+| `tailwind.config.js`        | Theme config       | Styling changes        |
+| `types/*.ts`                | Type definitions   | Data structure changes |
 
 ---
 
 ## Deployment
 
 ### Automatic (Recommended)
+
 Push to `main` branch → GitHub Actions → Vercel
 
 ### Manual
+
 ```bash
 npm run build
 vercel --prod
 ```
 
 ### Preview Deployments
+
 Every PR gets a preview URL automatically.
 
 ---

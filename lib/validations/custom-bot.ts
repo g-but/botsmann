@@ -47,15 +47,8 @@ export const CreateCustomBotSchema = z.object({
     .string()
     .min(3, 'Title must be at least 3 characters')
     .max(100, 'Title must be at most 100 characters'),
-  description: z
-    .string()
-    .max(500, 'Description must be at most 500 characters')
-    .optional(),
-  emoji: z
-    .string()
-    .max(10, 'Emoji must be at most 10 characters')
-    .optional()
-    .default('🤖'),
+  description: z.string().max(500, 'Description must be at most 500 characters').optional(),
+  emoji: z.string().max(10, 'Emoji must be at most 10 characters').optional().default('🤖'),
   accent_color: AccentColorSchema.optional().default('blue'),
   system_prompt: z
     .string()
@@ -78,10 +71,7 @@ export const UpdateCustomBotSchema = z.object({
     .max(500, 'Description must be at most 500 characters')
     .nullable()
     .optional(),
-  emoji: z
-    .string()
-    .max(10, 'Emoji must be at most 10 characters')
-    .optional(),
+  emoji: z.string().max(10, 'Emoji must be at most 10 characters').optional(),
   accent_color: AccentColorSchema.optional(),
   system_prompt: z
     .string()
@@ -138,7 +128,7 @@ export const BulkCreateKnowledgeChunksSchema = z.object({
         content: z.string().min(10).max(10000),
         keywords: z.array(z.string().max(50)).max(20).optional(),
         source: z.string().max(500).optional(),
-      })
+      }),
     )
     .min(1, 'At least one chunk required')
     .max(100, 'Maximum 100 chunks per request'),

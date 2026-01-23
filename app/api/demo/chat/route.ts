@@ -54,7 +54,12 @@ Key value propositions:
 - No subscriptions for local setups
 - Expert consulting available`;
 
-async function generateWithGroq(userMessage: string, context: string): Promise<string> {
+async function generateWithGroq(
+  userMessage: string,
+  context: string,
+  customSystemPrompt?: string,
+  additionalContext?: string,
+): Promise<string> {
   const apiKey = process.env.GROQ_API_KEY;
 
   if (!apiKey) {
@@ -62,18 +67,31 @@ async function generateWithGroq(userMessage: string, context: string): Promise<s
     return context;
   }
 
+  // Use custom system prompt if provided, otherwise use default
+  const systemPrompt = customSystemPrompt || SYSTEM_PROMPT;
+
+  // Build user message content with all context
+  let userContent = '';
+  if (additionalContext) {
+    userContent += `${additionalContext}\n\n---\n`;
+  }
+  if (context) {
+    userContent += `Context information:\n${context}\n\n---\n`;
+  }
+  userContent += `User message: ${userMessage}`;
+
   try {
     const response = await fetch(GROQ_API_URL, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         model: GROQ_MODEL,
         messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: `Context information:\n${context}\n\n---\nUser question: ${userMessage}` }
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userContent },
         ],
         temperature: 0.7,
         max_tokens: 1024,
@@ -102,17 +120,17 @@ function tokenize(text: string): string[] {
     .toLowerCase()
     .replace(/[^\w\s]/g, ' ')
     .split(/\s+/)
-    .filter(word => word.length > 2);
+    .filter((word) => word.length > 2);
 }
 
 function calculateScore(
   chunk: KnowledgeChunk,
-  queryTerms: string[]
+  queryTerms: string[],
 ): { score: number; matchedTerms: string[] } {
   const matchedTerms: string[] = [];
   let score = 0;
   const chunkText = `${chunk.question} ${chunk.content} ${chunk.topic}`.toLowerCase();
-  const chunkKeywords = chunk.keywords.map(k => k.toLowerCase());
+  const chunkKeywords = chunk.keywords.map((k) => k.toLowerCase());
 
   for (const term of queryTerms) {
     if (chunkKeywords.includes(term)) {
@@ -120,7 +138,7 @@ function calculateScore(
       matchedTerms.push(term);
       continue;
     }
-    const partialKeywordMatch = chunkKeywords.some(k => k.includes(term) || term.includes(k));
+    const partialKeywordMatch = chunkKeywords.some((k) => k.includes(term) || term.includes(k));
     if (partialKeywordMatch) {
       score += 2;
       matchedTerms.push(term);
@@ -133,7 +151,7 @@ function calculateScore(
   }
 
   const questionTerms = tokenize(chunk.question);
-  const questionOverlap = queryTerms.filter(t => questionTerms.includes(t)).length;
+  const questionOverlap = queryTerms.filter((t) => questionTerms.includes(t)).length;
   score += questionOverlap * 0.5;
 
   return { score, matchedTerms: Array.from(new Set(matchedTerms)) };
@@ -142,17 +160,17 @@ function calculateScore(
 function searchKnowledge(
   query: string,
   chunks: KnowledgeChunk[],
-  topK: number = 3
+  topK: number = 3,
 ): SearchResult[] {
   const queryTerms = tokenize(query);
   if (queryTerms.length === 0) return [];
 
   return chunks
-    .map(chunk => {
+    .map((chunk) => {
       const { score, matchedTerms } = calculateScore(chunk, queryTerms);
       return { chunk, score, matchedTerms };
     })
-    .filter(result => result.score > 0)
+    .filter((result) => result.score > 0)
     .sort((a, b) => b.score - a.score)
     .slice(0, topK);
 }
@@ -168,28 +186,37 @@ const knowledgeChunks: KnowledgeChunk[] = [
     topic: 'About Botsmann',
     question: 'What is Botsmann and what is your philosophy?',
     content: `Botsmann is a platform that builds private AI assistants. We believe in the transformative power of transparency and automation. Our core principles are: making processes transparent, automating redundant tasks, and empowering individuals through technology. By building in public, financing in public, and transacting in public, we create systems that are accountable and trustworthy. Our tagline is "Your Data. Your AI. Your Control."`,
-    keywords: ['botsmann', 'about', 'philosophy', 'company', 'who', 'what', 'transparency', 'automation']
+    keywords: [
+      'botsmann',
+      'about',
+      'philosophy',
+      'company',
+      'who',
+      'what',
+      'transparency',
+      'automation',
+    ],
   },
   {
     id: 'about-mission',
     topic: 'About Botsmann',
-    question: 'What is Botsmann\'s mission?',
+    question: "What is Botsmann's mission?",
     content: `Botsmann's mission is to methodically automate redundant, intransparent, and labor-intensive processes. We aim to free people from unpleasant tasks, giving them back their most precious resource: time and freedom to focus on what truly matters. We help you build private AI assistants that know YOUR information—medical records, legal documents, financial data, learning materials.`,
-    keywords: ['mission', 'goal', 'purpose', 'automate', 'automation', 'free', 'time']
+    keywords: ['mission', 'goal', 'purpose', 'automate', 'automation', 'free', 'time'],
   },
   {
     id: 'about-approach',
     topic: 'About Botsmann',
-    question: 'What is Botsmann\'s approach to AI?',
+    question: "What is Botsmann's approach to AI?",
     content: `Through innovative AI solutions and automation technologies, Botsmann transforms complex, time-consuming workflows into efficient, transparent processes. Our commitment to transparency ensures that every automated decision is traceable and understandable, building trust between humans and AI systems. We offer both local deployment (runs on your computer for maximum privacy) and cloud deployment (access anywhere).`,
-    keywords: ['approach', 'method', 'how', 'ai', 'transparent', 'trust', 'local', 'cloud']
+    keywords: ['approach', 'method', 'how', 'ai', 'transparent', 'trust', 'local', 'cloud'],
   },
   {
     id: 'privacy-first',
     topic: 'Privacy & Security',
     question: 'How does Botsmann handle privacy and data security?',
     content: `Privacy is at the core of Botsmann. We build private AI assistants where your data stays yours. You can choose to run the AI locally on your computer for maximum privacy, or in the cloud for anywhere access. For local setups, there are no subscriptions required—you own it forever. We never share your data with third parties, and you have complete control over your information.`,
-    keywords: ['privacy', 'security', 'data', 'private', 'local', 'safe', 'secure', 'protection']
+    keywords: ['privacy', 'security', 'data', 'private', 'local', 'safe', 'secure', 'protection'],
   },
 
   // How It Works
@@ -198,21 +225,30 @@ const knowledgeChunks: KnowledgeChunk[] = [
     topic: 'How It Works',
     question: 'How do I get started with Botsmann?',
     content: `Getting started is simple! Step 1: Book a free consultation call. We'll understand your use case—whether it's medical, legal, financial, or learning—and recommend the best approach for your needs. No commitment required, just a friendly conversation to explore possibilities.`,
-    keywords: ['start', 'begin', 'first', 'consultation', 'call', 'book', 'free', 'getting']
+    keywords: ['start', 'begin', 'first', 'consultation', 'call', 'book', 'free', 'getting'],
   },
   {
     id: 'how-step-2',
     topic: 'How It Works',
     question: 'What happens after the consultation?',
     content: `Step 2: We set everything up for you. You choose whether you want local deployment (runs on your computer, maximum privacy) or cloud deployment (access from anywhere). We handle all the technical complexity—configuring the AI, loading your data, and making sure everything works smoothly.`,
-    keywords: ['setup', 'configure', 'install', 'deployment', 'local', 'cloud', 'technical', 'after']
+    keywords: [
+      'setup',
+      'configure',
+      'install',
+      'deployment',
+      'local',
+      'cloud',
+      'technical',
+      'after',
+    ],
   },
   {
     id: 'how-step-3',
     topic: 'How It Works',
     question: 'Do I need a subscription?',
     content: `Step 3: You own it forever! Your AI assistant knows your information and is ready to help. For local setups, there are no subscriptions required—it's yours to keep. Cloud deployments have ongoing hosting costs, but you still own your data and can export it anytime.`,
-    keywords: ['subscription', 'cost', 'price', 'own', 'forever', 'keep', 'payment', 'pricing']
+    keywords: ['subscription', 'cost', 'price', 'own', 'forever', 'keep', 'payment', 'pricing'],
   },
 
   // Bots - Heidi
@@ -221,14 +257,14 @@ const knowledgeChunks: KnowledgeChunk[] = [
     topic: 'AI Assistants',
     question: 'What is Heidi?',
     content: `Heidi is our Swiss German Teacher bot. She's your AI companion for High German and Züridütsch—helping you learn the language and discover events in Zurich. Heidi adapts to your learning style, tests your progress intelligently, and provides dual-language support with High German and Züridütsch side by side. She also includes Swiss culture tips and local know-how.`,
-    keywords: ['heidi', 'swiss', 'german', 'teacher', 'language', 'learn', 'zurich', 'züridütsch']
+    keywords: ['heidi', 'swiss', 'german', 'teacher', 'language', 'learn', 'zurich', 'züridütsch'],
   },
   {
     id: 'bot-heidi-features',
     topic: 'AI Assistants',
     question: 'What can Heidi do?',
     content: `Heidi's features include: Adaptive learning that tests your progress in smart ways, discovering tonight's events and activities in Zurich, dual-language comparison between High German and Züridütsch, real-life context examples for words and phrases, instant writing help for emails and texts in both languages, and Swiss cultural insights including history and social life tips. Heidi is currently live and available!`,
-    keywords: ['heidi', 'features', 'learn', 'events', 'zurich', 'language', 'culture', 'writing']
+    keywords: ['heidi', 'features', 'learn', 'events', 'zurich', 'language', 'culture', 'writing'],
   },
 
   // Bots - Research Assistant
@@ -237,14 +273,14 @@ const knowledgeChunks: KnowledgeChunk[] = [
     topic: 'AI Assistants',
     question: 'What is the Research Assistant?',
     content: `The Research Assistant (nicknamed "Nerd") is an AI-powered research companion for organizing data, generating insights, and discovering connections. It's designed for academics, scientists, journalists, and industry professionals who want to elevate their research workflow with AI automation.`,
-    keywords: ['research', 'assistant', 'nerd', 'academic', 'science', 'data', 'organize']
+    keywords: ['research', 'assistant', 'nerd', 'academic', 'science', 'data', 'organize'],
   },
   {
     id: 'bot-research-features',
     topic: 'AI Assistants',
     question: 'What can the Research Assistant do?',
     content: `The Research Assistant features: Automated research systematization (organizes your uploaded materials), web scraping for the latest updates in your field, AI-generated research drafts with proper citations, daily thought-provoking questions to challenge your thinking, Big Discovery Mode to identify research gaps and novel connections, and integration tools for collaboration. It helps transform how you conduct research.`,
-    keywords: ['research', 'features', 'organize', 'scraping', 'drafts', 'citations', 'discovery']
+    keywords: ['research', 'features', 'organize', 'scraping', 'drafts', 'citations', 'discovery'],
   },
 
   // Bots - Medical Expert
@@ -253,14 +289,14 @@ const knowledgeChunks: KnowledgeChunk[] = [
     topic: 'AI Assistants',
     question: 'What is Imhotep the Medical Expert?',
     content: `Imhotep is our Medical Expert Assistant—a private AI health assistant that works with your medical history, lab results, and treatment records. It's designed to support healthcare professionals with evidence-based insights and comprehensive research analysis. Named after the ancient Egyptian physician, Imhotep helps you stay current with medical research and make informed decisions.`,
-    keywords: ['imhotep', 'medical', 'health', 'doctor', 'healthcare', 'lab', 'treatment']
+    keywords: ['imhotep', 'medical', 'health', 'doctor', 'healthcare', 'lab', 'treatment'],
   },
   {
     id: 'bot-medical-features',
     topic: 'AI Assistants',
     question: 'What can the Medical Expert do?',
     content: `The Medical Expert (Imhotep) provides: Evidence-based insights from medical literature, research assistance and analysis, case analysis support, medical literature review, and clinical guidelines integration. It's designed to assist medical professionals in staying current with research while keeping your health data private and secure. Note: It supports healthcare professionals and is not a replacement for medical advice.`,
-    keywords: ['medical', 'features', 'evidence', 'research', 'clinical', 'health', 'guidelines']
+    keywords: ['medical', 'features', 'evidence', 'research', 'clinical', 'health', 'guidelines'],
   },
 
   // Bots - Legal Expert
@@ -269,14 +305,14 @@ const knowledgeChunks: KnowledgeChunk[] = [
     topic: 'AI Assistants',
     question: 'What is Lex the Legal Expert?',
     content: `Lex is our Legal Expert Assistant—a Swiss legal assistant with AI analysis, lawyer collaboration features, and jurisdiction-specific expertise. It helps navigate legal complexities with comprehensive legal research and analysis support for legal professionals.`,
-    keywords: ['lex', 'legal', 'lawyer', 'law', 'swiss', 'jurisdiction', 'contract']
+    keywords: ['lex', 'legal', 'lawyer', 'law', 'swiss', 'jurisdiction', 'contract'],
   },
   {
     id: 'bot-legal-features',
     topic: 'AI Assistants',
     question: 'What can the Legal Expert do?',
     content: `The Legal Expert (Lex) provides: Legal research assistance, document analysis, case law insights, regulatory compliance support, and contract review assistance. It combines advanced legal knowledge with AI capabilities to provide comprehensive support for legal research and analysis. Note: Lex is a research tool and not a replacement for professional legal advice.`,
-    keywords: ['legal', 'features', 'research', 'contract', 'compliance', 'document', 'analysis']
+    keywords: ['legal', 'features', 'research', 'contract', 'compliance', 'document', 'analysis'],
   },
 
   // Bots - Trident
@@ -285,14 +321,14 @@ const knowledgeChunks: KnowledgeChunk[] = [
     topic: 'AI Assistants',
     question: 'What is Trident?',
     content: `Trident is our AI Product Manager—a specialized tool that combines project management capabilities with technical guidance to streamline development workflow. It's specifically optimized for Cursor development and helps teams organize tasks, create implementation plans, and deliver quality software faster.`,
-    keywords: ['trident', 'product', 'manager', 'cursor', 'development', 'project', 'management']
+    keywords: ['trident', 'product', 'manager', 'cursor', 'development', 'project', 'management'],
   },
   {
     id: 'bot-trident-features',
     topic: 'AI Assistants',
     question: 'What can Trident do?',
     content: `Trident provides: Project management to organize tasks and deliverables, technical direction with implementation-ready specifications, workflow optimization to eliminate roadblocks, detailed implementation planning and roadmaps, quality assurance strategies, and Cursor-optimized workflows. It produces clear specifications, architecture diagrams, and risk assessments that developers can immediately use.`,
-    keywords: ['trident', 'features', 'project', 'tasks', 'specifications', 'roadmap', 'cursor']
+    keywords: ['trident', 'features', 'project', 'tasks', 'specifications', 'roadmap', 'cursor'],
   },
 
   // Bots - Artistic Advisor
@@ -301,14 +337,14 @@ const knowledgeChunks: KnowledgeChunk[] = [
     topic: 'AI Assistants',
     question: 'What is Muse the Artistic Advisor?',
     content: `Muse is our Artistic Advisor—an AI that enhances your creative process with expert guidance on composition, style analysis, and technique refinement for your artistic projects. Whether you're a painter, designer, or creative professional, Muse helps you explore new techniques while maintaining your unique vision.`,
-    keywords: ['muse', 'artistic', 'art', 'creative', 'design', 'composition', 'style']
+    keywords: ['muse', 'artistic', 'art', 'creative', 'design', 'composition', 'style'],
   },
   {
     id: 'bot-muse-features',
     topic: 'AI Assistants',
     question: 'What can the Artistic Advisor do?',
     content: `The Artistic Advisor (Muse) provides: Style analysis to understand and develop your artistic voice, composition guidance for better visual arrangements, technique suggestions based on your goals, color theory assistance, and art history insights to inspire your work. Muse helps artists explore new techniques and refine their style while maintaining their unique creative vision.`,
-    keywords: ['artistic', 'features', 'style', 'composition', 'color', 'technique', 'history']
+    keywords: ['artistic', 'features', 'style', 'composition', 'color', 'technique', 'history'],
   },
 
   // Consulting Services
@@ -317,14 +353,22 @@ const knowledgeChunks: KnowledgeChunk[] = [
     topic: 'Consulting',
     question: 'What consulting services does Botsmann offer?',
     content: `Botsmann offers expert AI bot consulting services. We provide: Custom bot development (we design and build AI bots tailored to your business processes), Integration & deployment (seamlessly integrate AI into your existing systems), and Training & support (knowledge transfer, best practices, and ongoing support). Our team helps you design, develop, and deploy intelligent assistants tailored to your specific needs.`,
-    keywords: ['consulting', 'services', 'custom', 'development', 'integration', 'training', 'support']
+    keywords: [
+      'consulting',
+      'services',
+      'custom',
+      'development',
+      'integration',
+      'training',
+      'support',
+    ],
   },
   {
     id: 'consulting-diy',
     topic: 'Consulting',
     question: 'Can I build my own AI assistant?',
     content: `Yes! If you prefer to build it yourself, we offer free DIY guides in our Knowledge Center with step-by-step instructions. We believe in empowering users with knowledge. However, if you want expert guidance or don't have the time, our consulting team is happy to help with custom development and deployment.`,
-    keywords: ['diy', 'self', 'build', 'guide', 'knowledge', 'tutorial', 'learn']
+    keywords: ['diy', 'self', 'build', 'guide', 'knowledge', 'tutorial', 'learn'],
   },
 
   // Contact & Getting Started
@@ -333,14 +377,14 @@ const knowledgeChunks: KnowledgeChunk[] = [
     topic: 'Contact',
     question: 'How do I book a consultation?',
     content: `You can book a free consultation by visiting the Contact page on our website or clicking "Book a Consultation" on the homepage. We'll schedule a call to understand your needs—whether it's medical, legal, financial, or learning use cases—and recommend the best approach. No commitment required!`,
-    keywords: ['contact', 'consultation', 'book', 'call', 'talk', 'meet', 'schedule']
+    keywords: ['contact', 'consultation', 'book', 'call', 'talk', 'meet', 'schedule'],
   },
   {
     id: 'demo-available',
     topic: 'Demo',
     question: 'Can I try a demo?',
     content: `Yes! You're using the demo right now! This assistant demonstrates how our RAG (Retrieval Augmented Generation) technology works. It searches a knowledge base to find relevant information and uses AI to generate helpful responses. This is the same technology we use to build private AI assistants for clients. Want to see how it could work with your data? Book a consultation!`,
-    keywords: ['demo', 'try', 'test', 'example', 'live', 'experience', 'sample', 'rag']
+    keywords: ['demo', 'try', 'test', 'example', 'live', 'experience', 'sample', 'rag'],
   },
 
   // All Bots Overview
@@ -349,8 +393,8 @@ const knowledgeChunks: KnowledgeChunk[] = [
     topic: 'AI Assistants',
     question: 'What AI assistants does Botsmann offer?',
     content: `Botsmann offers six specialized AI assistants: 1) Heidi - Swiss German Teacher (live), 2) Lex - Legal Expert (coming soon), 3) Imhotep - Medical Expert (coming soon), 4) Nerd - Research Assistant (coming soon), 5) Trident - AI Product Manager (coming soon), and 6) Muse - Artistic Advisor (coming soon). Each bot is specialized for its domain while keeping your data private and secure.`,
-    keywords: ['bots', 'assistants', 'all', 'list', 'available', 'offer', 'which']
-  }
+    keywords: ['bots', 'assistants', 'all', 'list', 'available', 'offer', 'which'],
+  },
 ];
 
 // ============================================================================
@@ -360,6 +404,9 @@ const knowledgeChunks: KnowledgeChunk[] = [
 const ChatRequestSchema = z.object({
   message: z.string().min(1, 'Message is required'),
   includeContext: z.boolean().optional().default(false),
+  // Optional overrides for bot-specific demos
+  systemPrompt: z.string().optional(),
+  additionalContext: z.string().optional(),
 });
 
 // ============================================================================
@@ -369,39 +416,58 @@ const ChatRequestSchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { message, includeContext } = ChatRequestSchema.parse(body);
+    const { message, includeContext, systemPrompt, additionalContext } =
+      ChatRequestSchema.parse(body);
 
-    // Search the knowledge base
-    const results = searchKnowledge(message, knowledgeChunks, 3);
+    // Determine if this is a bot-specific demo (with custom system prompt)
+    // or the default Botsmann knowledge base demo
+    const isBotDemo = !!systemPrompt;
 
-    // Build context from search results
-    const context = results.length > 0
-      ? results.map(r => r.chunk.content).join('\n\n')
-      : "I don't have specific information about that. Try asking about Botsmann's AI assistants (Heidi, Lex, Imhotep, Nerd, Trident, Muse), how to get started, our consulting services, or privacy practices!";
+    // For bot-specific demos, we don't search the Botsmann knowledge base
+    // The LLM will respond based on the custom system prompt and additional context
+    let results: SearchResult[] = [];
+    let context = '';
+
+    if (!isBotDemo) {
+      // Default Botsmann demo: search the knowledge base
+      results = searchKnowledge(message, knowledgeChunks, 3);
+      context =
+        results.length > 0
+          ? results.map((r) => r.chunk.content).join('\n\n')
+          : "I don't have specific information about that. Try asking about Botsmann's AI assistants (Heidi, Lex, Imhotep, Nerd, Trident, Muse), how to get started, our consulting services, or privacy practices!";
+    }
 
     // Generate response with Groq (or fallback to context)
-    const response = await generateWithGroq(message, context);
+    const response = await generateWithGroq(message, context, systemPrompt, additionalContext);
 
     // Build response data
     const responseData: {
       success: boolean;
-      response: string;
-      sources: Array<{ topic: string; question: string; score: number }>;
-      context?: string;
-      llmEnabled: boolean;
+      data: {
+        response: string;
+        sources?: Array<{ title: string; content: string; relevance?: number }>;
+        context?: string;
+        provider: string;
+      };
     } = {
       success: true,
-      response,
-      sources: results.map(r => ({
-        topic: r.chunk.topic,
-        question: r.chunk.question,
-        score: r.score,
-      })),
-      llmEnabled: !!process.env.GROQ_API_KEY,
+      data: {
+        response,
+        provider: process.env.GROQ_API_KEY ? 'groq' : 'fallback',
+      },
     };
 
+    // Include sources for Botsmann demo
+    if (!isBotDemo && results.length > 0) {
+      responseData.data.sources = results.map((r) => ({
+        title: r.chunk.question,
+        content: r.chunk.content.substring(0, 100) + '...',
+        relevance: r.score / 10, // Normalize score to 0-1 range
+      }));
+    }
+
     if (includeContext) {
-      responseData.context = context;
+      responseData.data.context = context;
     }
 
     return NextResponse.json(responseData);
@@ -420,7 +486,7 @@ export async function GET() {
     status: 'ok',
     message: 'Botsmann AI Assistant API',
     chunks: knowledgeChunks.length,
-    topics: Array.from(new Set(knowledgeChunks.map(c => c.topic))),
+    topics: Array.from(new Set(knowledgeChunks.map((c) => c.topic))),
     llmEnabled: !!process.env.GROQ_API_KEY,
     llmProvider: 'Groq (free tier)',
   });

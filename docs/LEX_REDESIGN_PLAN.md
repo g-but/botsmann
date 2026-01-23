@@ -52,14 +52,15 @@
 ## 🔄 Redesigned Demo Flow (Simplified)
 
 ### Step 1: Case Intake (Progressive Disclosure)
+
 **Focus**: Gather essential info without overwhelming
 
 ```typescript
 interface CaseIntake {
   // Phase 1: Basic (always visible)
   caseType: 'personal' | 'business';
-  legalArea: string;        // Immigration, Employment, etc.
-  description: string;      // Minimum 50 chars
+  legalArea: string; // Immigration, Employment, etc.
+  description: string; // Minimum 50 chars
 
   // Phase 2: Location (progressive)
   jurisdiction: 'CH' | 'US';
@@ -73,12 +74,14 @@ interface CaseIntake {
 ```
 
 **UI Pattern**:
+
 - Start with 3 fields (type, area, description)
 - "Show more options" expands jurisdiction/urgency
 - File upload at the end (optional)
 - NO overwhelming icons, clean minimal design
 
 ### Step 2: AI Lawyer Matching
+
 **Focus**: Show 2-3 top matches, explain matching logic
 
 ```typescript
@@ -87,23 +90,26 @@ interface LawyerMatch {
   name: string;
   specialty: string[];
   jurisdiction: string;
-  experience: number;      // years
-  rating: number;          // 1-5
-  matchScore: number;      // 0-100 (AI calculated)
-  matchReasons: string[];  // Why this lawyer?
+  experience: number; // years
+  rating: number; // 1-5
+  matchScore: number; // 0-100 (AI calculated)
+  matchReasons: string[]; // Why this lawyer?
   availability: 'immediate' | 'this-week' | '1-2-weeks';
   consultationFee?: number;
 }
 ```
 
 **UI Pattern**:
+
 - Show top 3 matches with match score
 - Explain WHY each lawyer was matched
 - Simple selection (no complex filters in demo)
 - "View more lawyers" loads additional (progressive)
 
 ### Step 3: Portal Preview
+
 **Show portal creation** → User chooses perspective:
+
 - "View as Client" → ClientPortal
 - "View as Lawyer" → LawyerPortal
 
@@ -114,6 +120,7 @@ interface LawyerMatch {
 ### Client Portal (`/workspace/ClientPortal.tsx`)
 
 **Core Views**:
+
 1. **Overview** - Case status, next steps, timeline
 2. **Files** - Upload, organize, share with lawyer
 3. **Messages** - AI + human lawyer chat (unified)
@@ -121,6 +128,7 @@ interface LawyerMatch {
 5. **Billing** - Transparent cost tracking
 
 **Key Features**:
+
 - Simple file upload with auto-categorization
 - Real-time chat (AI answers instantly, lawyer when available)
 - Permission controls (who sees what files)
@@ -129,6 +137,7 @@ interface LawyerMatch {
 ### Lawyer Portal (`/workspace/LawyerPortal.tsx`)
 
 **Core Views**:
+
 1. **Dashboard** - All active cases, priorities
 2. **Case Details** - Deep dive into specific case
 3. **Document Review** - AI-assisted analysis
@@ -137,6 +146,7 @@ interface LawyerMatch {
 6. **Billing & Time Tracking** - Track hours, generate invoices
 
 **Key Features**:
+
 - AI case summarization
 - Suggested next actions based on case type
 - Multi-level access (assign to team members)
@@ -147,6 +157,7 @@ interface LawyerMatch {
 ## 🗂️ Data Models (Production-Ready)
 
 ### Case Model
+
 ```typescript
 interface Case {
   id: string;
@@ -172,8 +183,8 @@ interface Case {
 
 interface Jurisdiction {
   country: 'CH' | 'US';
-  region?: string;        // Canton or State
-  specificLocation?: string;  // City (optional)
+  region?: string; // Canton or State
+  specificLocation?: string; // City (optional)
 }
 
 interface Participant {
@@ -187,20 +198,21 @@ interface Participant {
 ```
 
 ### File Model
+
 ```typescript
 interface CaseFile {
   id: string;
   caseId: string;
   name: string;
-  type: string;          // MIME type
+  type: string; // MIME type
   size: number;
   uploadedBy: string;
   uploadedAt: Date;
 
   // AI Analysis
-  category?: FileCategory;  // contract, evidence, correspondence, etc.
+  category?: FileCategory; // contract, evidence, correspondence, etc.
   aiSummary?: string;
-  extractedEntities?: Entity[];  // dates, people, amounts
+  extractedEntities?: Entity[]; // dates, people, amounts
 
   // Access Control
   visibility: 'private' | 'lawyer-only' | 'team' | 'all-participants';
@@ -222,6 +234,7 @@ type FileCategory =
 ```
 
 ### Message Model
+
 ```typescript
 interface Message {
   id: string;
@@ -230,15 +243,15 @@ interface Message {
   senderRole: 'client' | 'lawyer' | 'ai';
 
   content: string;
-  attachments?: string[];  // File IDs
+  attachments?: string[]; // File IDs
 
   // AI Specific
-  aiModel?: string;        // If AI generated
-  aiConfidence?: number;   // Confidence score
+  aiModel?: string; // If AI generated
+  aiConfidence?: number; // Confidence score
   needsHumanReview?: boolean;
 
   // Visibility
-  visibleTo: string[];     // User IDs
+  visibleTo: string[]; // User IDs
 
   // Metadata
   timestamp: Date;
@@ -252,18 +265,21 @@ interface Message {
 ## 🎨 UI/UX Principles
 
 ### Progressive Disclosure
+
 1. **Start Simple**: Show only essential fields
 2. **Reveal on Demand**: "Show more options" for advanced features
 3. **Smart Defaults**: Pre-select common choices
 4. **Contextual Help**: Tooltips on hover, not always visible
 
 ### Minimal Icons
+
 - Use icons ONLY when they add clarity
 - Prefer text labels for primary actions
 - Icons for secondary/tertiary actions (edit, delete)
 - Emoji sparingly for delight, not information
 
 ### Clean Design
+
 - White space is good
 - Clear visual hierarchy
 - Focus on one primary action per screen
@@ -274,6 +290,7 @@ interface Message {
 ## 🔐 Security & Permissions
 
 ### Access Levels
+
 ```typescript
 type Permission =
   | 'view-case'
@@ -288,15 +305,23 @@ type Permission =
   | 'manage-billing';
 
 const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
-  client: ['view-case', 'view-files', 'upload-files', 'view-messages', 'send-messages', 'view-billing'],
+  client: [
+    'view-case',
+    'view-files',
+    'upload-files',
+    'view-messages',
+    'send-messages',
+    'view-billing',
+  ],
   lawyer: ['*'], // All permissions
   paralegal: ['view-case', 'view-files', 'upload-files', 'view-messages', 'send-messages'],
   expert: ['view-files'], // Only files shared with them
-  admin: ['view-case', 'view-files', 'view-messages'] // Law firm admin
+  admin: ['view-case', 'view-files', 'view-messages'], // Law firm admin
 };
 ```
 
 ### File Sharing Workflow
+
 1. Client uploads file → default "private" (only client + lawyer)
 2. Lawyer can request to share: "Can I share this with paralegal X?"
 3. Client approves/denies
@@ -307,18 +332,21 @@ const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
 ## 🚀 Implementation Plan
 
 ### Phase 1: Simplify Demo (Week 1)
+
 - [ ] Reduce jurisdictions to CH + US only
 - [ ] Redesign Step 1: Progressive case intake form
 - [ ] Redesign Step 2: Simple lawyer matching (top 3)
 - [ ] Create portal preview (choose perspective)
 
 ### Phase 2: Build Client Portal (Week 2)
+
 - [ ] Create `/workspace/ClientPortal.tsx`
 - [ ] Implement 5 core views (Overview, Files, Messages, Tasks, Billing)
 - [ ] File upload with categorization
 - [ ] Real-time chat interface (AI + lawyer)
 
 ### Phase 3: Build Lawyer Portal (Week 3)
+
 - [ ] Create `/workspace/LawyerPortal.tsx`
 - [ ] Implement dashboard (all cases)
 - [ ] Case detail view with AI insights
@@ -326,6 +354,7 @@ const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
 - [ ] Client permission requests
 
 ### Phase 4: Shared Components (Week 4)
+
 - [ ] Extract common components to `/workspace/shared/`
 - [ ] Unified file manager
 - [ ] Unified chat interface (used by both portals)
@@ -333,6 +362,7 @@ const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
 - [ ] Audit log component
 
 ### Phase 5: Polish & Integration (Week 5)
+
 - [ ] Mobile responsiveness
 - [ ] Loading states, error handling
 - [ ] Animations (subtle, not overwhelming)
@@ -343,17 +373,20 @@ const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
 ## 📊 Success Metrics
 
 ### Demo Effectiveness
+
 - User completes intake in < 2 minutes
 - Match understanding (user knows WHY lawyer was matched)
 - Portal clarity (user understands dual perspectives)
 
 ### Code Quality
+
 - < 500 lines per component (modular)
 - 90%+ TypeScript coverage
 - Reusable components (DRY)
 - Clear separation of concerns
 
 ### Production Readiness
+
 - All data models defined
 - Security/permissions implemented
 - Audit trail working
@@ -446,5 +479,5 @@ const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
 
 ---
 
-*Last Updated: 2025-10-02*
-*Status: Ready for implementation*
+_Last Updated: 2025-10-02_
+_Status: Ready for implementation_

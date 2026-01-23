@@ -39,9 +39,9 @@ const ComponentCards: React.FC<ComponentCardsProps> = ({ cards }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
       {cards.map((card) => (
-        <Link 
+        <Link
           href={{ pathname: card.path }}
-          key={card.id} 
+          key={card.id}
           className={`group border rounded-lg overflow-hidden hover:shadow-md transition-shadow ${
             getColorClasses(card.color).split(' ')[2]
           }`}
@@ -57,8 +57,18 @@ const ComponentCards: React.FC<ComponentCardsProps> = ({ cards }) => {
             <div className="flex justify-end">
               <span className="inline-flex items-center text-sm font-medium text-gray-500 group-hover:text-gray-700">
                 Explore
-                <svg className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                <svg
+                  className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
                 </svg>
               </span>
             </div>
@@ -69,4 +79,4 @@ const ComponentCards: React.FC<ComponentCardsProps> = ({ cards }) => {
   );
 };
 
-export default ComponentCards; 
+export default ComponentCards;

@@ -6,19 +6,22 @@ interface TimelineViewProps {
   messages: ChatMessage[];
 }
 
-type TimelineItem =
-  | (ChatMessage & { itemType: 'message' })
-  | (UploadedFile & { itemType: 'file' });
+type TimelineItem = (ChatMessage & { itemType: 'message' }) | (UploadedFile & { itemType: 'file' });
 
 export const TimelineView: FC<TimelineViewProps> = ({ files, messages }) => {
   // Combine and sort items by timestamp
   const timelineItems: TimelineItem[] = [
     ...messages.map((m) => ({ ...m, itemType: 'message' as const })),
-    ...files.map((f) => ({ ...f, itemType: 'file' as const, timestamp: f.timestamp || new Date() })),
+    ...files.map((f) => ({
+      ...f,
+      itemType: 'file' as const,
+      timestamp: f.timestamp || new Date(),
+    })),
   ]
     .sort(
       (a, b) =>
-        new Date(b.timestamp || Date.now()).getTime() - new Date(a.timestamp || Date.now()).getTime()
+        new Date(b.timestamp || Date.now()).getTime() -
+        new Date(a.timestamp || Date.now()).getTime(),
     )
     .slice(0, 20);
 

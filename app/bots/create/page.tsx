@@ -112,9 +112,7 @@ export default function CreateBotPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Create Your AI Assistant</h1>
-          <p className="mt-2 text-gray-600">
-            Build a custom bot with your expertise and knowledge
-          </p>
+          <p className="mt-2 text-gray-600">Build a custom bot with your expertise and knowledge</p>
         </div>
 
         {/* Progress Indicator */}

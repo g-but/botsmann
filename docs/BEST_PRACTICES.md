@@ -11,18 +11,21 @@ This document defines the core principles for developing Botsmann. All contribut
 **Definition:** Every piece of knowledge must have a single, unambiguous representation in the system.
 
 **In Practice:**
+
 - Extract repeated logic into reusable functions in `lib/`
 - Create shared components for repeated UI patterns
 - Use TypeScript generics for type reuse
 - Centralize configuration in `data/` or environment variables
 
 **Bad:**
+
 ```typescript
 // Repeated in multiple files
 const formatDate = (date: Date) => date.toLocaleDateString('de-CH');
 ```
 
 **Good:**
+
 ```typescript
 // lib/formatters.ts
 export const formatDate = (date: Date) => date.toLocaleDateString('de-CH');
@@ -38,12 +41,14 @@ import { formatDate } from '@/lib/formatters';
 **Definition:** Any data element should be stored exactly once, with all other usages referencing that single source.
 
 **In Practice:**
+
 - Bot configurations live in `data/bots.ts` only
 - Type definitions live in `types/` only
 - Environment variables are the SSOT for secrets
 - API responses define the data contract
 
 **Bad:**
+
 ```typescript
 // Hardcoded in component
 const bots = [
@@ -53,6 +58,7 @@ const bots = [
 ```
 
 **Good:**
+
 ```typescript
 // data/bots.ts (SSOT)
 export const BOTS = [
@@ -71,16 +77,17 @@ import { BOTS } from '@/data/bots';
 
 **In Practice:**
 
-| Layer | Responsibility | Location |
-|-------|---------------|----------|
-| Pages | Routing, layout | `app/` |
-| Components | UI rendering | `components/` |
-| Hooks | State logic | `lib/hooks/` |
-| Services | API calls | `lib/services/` |
-| Utilities | Pure functions | `lib/` |
-| Types | Type definitions | `types/` |
+| Layer      | Responsibility   | Location        |
+| ---------- | ---------------- | --------------- |
+| Pages      | Routing, layout  | `app/`          |
+| Components | UI rendering     | `components/`   |
+| Hooks      | State logic      | `lib/hooks/`    |
+| Services   | API calls        | `lib/services/` |
+| Utilities  | Pure functions   | `lib/`          |
+| Types      | Type definitions | `types/`        |
 
 **Bad:**
+
 ```typescript
 // Component doing too much
 export function BotPage() {
@@ -99,6 +106,7 @@ export function BotPage() {
 ```
 
 **Good:**
+
 ```typescript
 // Separated concerns
 // lib/services/bots.ts
@@ -124,12 +132,14 @@ export function BotPage() {
 **Definition:** Show only what's necessary at each level; reveal complexity gradually.
 
 **In Practice:**
+
 - README.md: Quick start only
 - AGENTS.md: Essential dev info
 - docs/: Deep dives by topic
 - Code comments: Only for non-obvious logic
 
 **Documentation Hierarchy:**
+
 ```
 README.md           → "What is this? How do I run it?"
 AGENTS.md           → "How do I develop on this?"
@@ -145,12 +155,14 @@ docs/SHARED_CONTEXT.md → "What's the architecture?"
 **Definition:** Don't add functionality until it's necessary.
 
 **In Practice:**
+
 - Don't create abstractions for hypothetical futures
 - Don't add configuration options "just in case"
 - Don't write code for features not yet requested
 - Remove dead code immediately
 
 **Bad:**
+
 ```typescript
 // Over-engineered for imaginary requirements
 interface BotConfig {
@@ -158,11 +170,12 @@ interface BotConfig {
   enabledFeatures: string[];
   experimentalMode?: boolean;
   futureFeatureFlags?: Record<string, boolean>;
-  legacyCompatMode?: boolean;  // "might need this"
+  legacyCompatMode?: boolean; // "might need this"
 }
 ```
 
 **Good:**
+
 ```typescript
 // Only what's actually needed
 interface BotConfig {
@@ -179,18 +192,21 @@ interface BotConfig {
 **Definition:** Simplicity should be a key goal. Avoid unnecessary complexity.
 
 **In Practice:**
+
 - Prefer readable code over clever code
 - Use standard patterns over custom solutions
 - Choose boring technology when possible
 - Write code that junior developers can understand
 
 **Bad:**
+
 ```typescript
 // Clever but unreadable
-const x = arr.reduce((a,b)=>({...a,[b.k]:b.v}),{});
+const x = arr.reduce((a, b) => ({ ...a, [b.k]: b.v }), {});
 ```
 
 **Good:**
+
 ```typescript
 // Clear and maintainable
 const result: Record<string, unknown> = {};
@@ -230,14 +246,14 @@ When using AI assistance, watch for:
 
 ### Common Mistakes
 
-| Mistake | Fix |
-|---------|-----|
-| Hardcoded strings | Use constants in `data/` |
-| `any` types | Define proper interfaces |
-| `console.log` | Use proper error handling |
-| `.then()` chains | Use `async/await` |
-| Inline styles | Use Tailwind classes |
-| Default exports | Use named exports |
+| Mistake           | Fix                       |
+| ----------------- | ------------------------- |
+| Hardcoded strings | Use constants in `data/`  |
+| `any` types       | Define proper interfaces  |
+| `console.log`     | Use proper error handling |
+| `.then()` chains  | Use `async/await`         |
+| Inline styles     | Use Tailwind classes      |
+| Default exports   | Use named exports         |
 
 ---
 

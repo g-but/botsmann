@@ -49,9 +49,13 @@ const mdxComponents = {
   CodeBlock,
   // Custom heading components with anchor links
   h1: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
-    const id = typeof children === 'string'
-      ? children.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '')
-      : '';
+    const id =
+      typeof children === 'string'
+        ? children
+            .toLowerCase()
+            .replace(/\s+/g, '-')
+            .replace(/[^\w-]/g, '')
+        : '';
     return (
       <h1 id={id} className="text-3xl font-bold text-gray-900 mt-8 mb-4 scroll-mt-24" {...props}>
         {children}
@@ -59,9 +63,13 @@ const mdxComponents = {
     );
   },
   h2: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
-    const id = typeof children === 'string'
-      ? children.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '')
-      : '';
+    const id =
+      typeof children === 'string'
+        ? children
+            .toLowerCase()
+            .replace(/\s+/g, '-')
+            .replace(/[^\w-]/g, '')
+        : '';
     return (
       <h2 id={id} className="text-2xl font-bold text-gray-900 mt-8 mb-4 scroll-mt-24" {...props}>
         <a href={`#${id}`} className="hover:text-blue-600 transition-colors">
@@ -71,9 +79,13 @@ const mdxComponents = {
     );
   },
   h3: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
-    const id = typeof children === 'string'
-      ? children.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '')
-      : '';
+    const id =
+      typeof children === 'string'
+        ? children
+            .toLowerCase()
+            .replace(/\s+/g, '-')
+            .replace(/[^\w-]/g, '')
+        : '';
     return (
       <h3 id={id} className="text-xl font-semibold text-gray-900 mt-6 mb-3 scroll-mt-24" {...props}>
         <a href={`#${id}`} className="hover:text-blue-600 transition-colors">
@@ -83,16 +95,24 @@ const mdxComponents = {
     );
   },
   p: ({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
-    <p className="text-gray-700 mb-4 leading-relaxed" {...props}>{children}</p>
+    <p className="text-gray-700 mb-4 leading-relaxed" {...props}>
+      {children}
+    </p>
   ),
   ul: ({ children, ...props }: React.HTMLAttributes<HTMLUListElement>) => (
-    <ul className="list-disc list-inside mb-4 space-y-2 text-gray-700" {...props}>{children}</ul>
+    <ul className="list-disc list-inside mb-4 space-y-2 text-gray-700" {...props}>
+      {children}
+    </ul>
   ),
   ol: ({ children, ...props }: React.HTMLAttributes<HTMLOListElement>) => (
-    <ol className="list-decimal list-inside mb-4 space-y-2 text-gray-700" {...props}>{children}</ol>
+    <ol className="list-decimal list-inside mb-4 space-y-2 text-gray-700" {...props}>
+      {children}
+    </ol>
   ),
   li: ({ children, ...props }: React.HTMLAttributes<HTMLLIElement>) => (
-    <li className="leading-relaxed" {...props}>{children}</li>
+    <li className="leading-relaxed" {...props}>
+      {children}
+    </li>
   ),
   a: ({ href, children, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
     <a
@@ -126,7 +146,11 @@ const mdxComponents = {
       );
     }
     // Code blocks are handled by CodeBlock component
-    return <code className={className} {...props}>{children}</code>;
+    return (
+      <code className={className} {...props}>
+        {children}
+      </code>
+    );
   },
   pre: ({ children }: React.HTMLAttributes<HTMLPreElement>) => {
     // Extract language from code element if present
@@ -134,15 +158,14 @@ const mdxComponents = {
     const className = codeElement?.props?.className || '';
     const language = className.replace('language-', '');
 
-    return (
-      <CodeBlock language={language}>
-        {codeElement?.props?.children}
-      </CodeBlock>
-    );
+    return <CodeBlock language={language}>{codeElement?.props?.children}</CodeBlock>;
   },
   table: ({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) => (
     <div className="overflow-x-auto my-6">
-      <table className="min-w-full divide-y divide-gray-200 border border-gray-200 rounded-lg" {...props}>
+      <table
+        className="min-w-full divide-y divide-gray-200 border border-gray-200 rounded-lg"
+        {...props}
+      >
         {children}
       </table>
     </div>
@@ -213,16 +236,12 @@ export default async function GuidePage({ params }: GuidePageProps) {
 
           {/* Title and Badge */}
           <div className="flex flex-wrap items-start gap-4 mb-4">
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
-              {metadata.title}
-            </h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">{metadata.title}</h1>
             <DifficultyBadge level={metadata.difficulty} size="lg" />
           </div>
 
           {/* Description */}
-          <p className="text-xl text-gray-600 max-w-3xl mb-6">
-            {metadata.description}
-          </p>
+          <p className="text-xl text-gray-600 max-w-3xl mb-6">{metadata.description}</p>
 
           {/* Meta Info */}
           <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500">
@@ -303,9 +322,7 @@ export default async function GuidePage({ params }: GuidePageProps) {
 
             {/* Feedback Section */}
             <div className="mt-12 p-6 bg-gray-50 rounded-xl border border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Was this guide helpful?
-              </h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Was this guide helpful?</h3>
               <p className="text-gray-600 mb-4">
                 Let us know how we can improve our documentation.
               </p>
@@ -326,9 +343,7 @@ export default async function GuidePage({ params }: GuidePageProps) {
         {/* Related Guides */}
         {relatedGuides.length > 0 && (
           <div className="mt-16 pt-12 border-t border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              Related Guides
-            </h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Related Guides</h2>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {relatedGuides.map((relatedGuide) => (
                 <Link
@@ -343,9 +358,7 @@ export default async function GuidePage({ params }: GuidePageProps) {
                   <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-2">
                     {relatedGuide.title}
                   </h3>
-                  <p className="text-sm text-gray-600 line-clamp-2">
-                    {relatedGuide.description}
-                  </p>
+                  <p className="text-sm text-gray-600 line-clamp-2">{relatedGuide.description}</p>
                 </Link>
               ))}
             </div>
@@ -382,7 +395,12 @@ export default async function GuidePage({ params }: GuidePageProps) {
 function ClockIcon({ className }: { className: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
     </svg>
   );
 }
@@ -390,7 +408,12 @@ function ClockIcon({ className }: { className: string }) {
 function UserIcon({ className }: { className: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+      />
     </svg>
   );
 }
@@ -398,7 +421,12 @@ function UserIcon({ className }: { className: string }) {
 function CalendarIcon({ className }: { className: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+      />
     </svg>
   );
 }
@@ -406,7 +434,12 @@ function CalendarIcon({ className }: { className: string }) {
 function ThumbsUpIcon({ className }: { className: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
+      />
     </svg>
   );
 }
@@ -414,7 +447,12 @@ function ThumbsUpIcon({ className }: { className: string }) {
 function ThumbsDownIcon({ className }: { className: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5"
+      />
     </svg>
   );
 }

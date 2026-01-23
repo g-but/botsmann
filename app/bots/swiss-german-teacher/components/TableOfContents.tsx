@@ -27,13 +27,13 @@ export default function TableOfContents({ items }: TableOfContentsProps) {
       {
         rootMargin: '-20% 0% -80% 0%',
         threshold: 0,
-      }
+      },
     );
 
     items.forEach((item) => {
       const element = document.getElementById(item.id);
       if (element) observer.observe(element);
-      
+
       if (item.subItems) {
         item.subItems.forEach((subItem) => {
           const subElement = document.getElementById(subItem.id);
@@ -46,7 +46,7 @@ export default function TableOfContents({ items }: TableOfContentsProps) {
       items.forEach((item) => {
         const element = document.getElementById(item.id);
         if (element) observer.unobserve(element);
-        
+
         if (item.subItems) {
           item.subItems.forEach((subItem) => {
             const subElement = document.getElementById(subItem.id);
@@ -108,4 +108,4 @@ export default function TableOfContents({ items }: TableOfContentsProps) {
       </ul>
     </nav>
   );
-} 
+}

@@ -121,9 +121,7 @@ export const BotPageTemplate: FC<BotPageTemplateProps> = ({
             <div className="flex flex-col md:flex-row items-center justify-between">
               <div className="flex items-center mb-4 md:mb-0">
                 <span className="text-2xl mr-2">{nav.emoji}</span>
-                <span className="font-bold text-xl text-gray-900">
-                  {nav.navTitle}
-                </span>
+                <span className="font-bold text-xl text-gray-900">{nav.navTitle}</span>
               </div>
 
               <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-8">
@@ -133,10 +131,7 @@ export const BotPageTemplate: FC<BotPageTemplateProps> = ({
                 <a href="#" className="text-gray-500 hover:text-gray-700">
                   Privacy Policy
                 </a>
-                <a
-                  href="mailto:hello@botsmann.com"
-                  className="text-gray-500 hover:text-gray-700"
-                >
+                <a href="mailto:hello@botsmann.com" className="text-gray-500 hover:text-gray-700">
                   Contact Us
                 </a>
               </div>

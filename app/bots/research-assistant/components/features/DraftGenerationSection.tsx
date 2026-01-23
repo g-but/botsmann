@@ -1,6 +1,6 @@
 /**
  * DraftGenerationSection.tsx
- * 
+ *
  * This component showcases Nerd's content creation capabilities,
  * demonstrating how it transforms unstructured notes or voice-to-text musings
  * into well-structured research content with proper formatting and citations.
@@ -30,8 +30,8 @@ const DraftGenerationSection: React.FC = () => {
       sources: [
         'Davidson, R. J., & Kaszniak, A. W. (2015). Conceptual and methodological issues in research on mindfulness and meditation. American Psychologist, 70(7), 581-592.',
         'Zeidan, F., Johnson, S. K., Diamond, B. J., David, Z., & Goolkasian, P. (2010). Mindfulness meditation improves cognition: Evidence of brief mental training. Consciousness and Cognition, 19(2), 597-605.',
-        'Lutz, A., Slagter, H. A., Dunne, J. D., & Davidson, R. J. (2008). Attention regulation and monitoring in meditation. Trends in Cognitive Sciences, 12(4), 163-169.'
-      ]
+        'Lutz, A., Slagter, H. A., Dunne, J. D., & Davidson, R. J. (2008). Attention regulation and monitoring in meditation. Trends in Cognitive Sciences, 12(4), 163-169.',
+      ],
     },
     literature: {
       type: 'literature',
@@ -41,8 +41,8 @@ const DraftGenerationSection: React.FC = () => {
         'Tang, J., Chen, H., & Singh, P. (2022). Measuring outcomes of urban climate adaptation policies: A comparative analysis of 40 global cities. Urban Climate, 31, 100545.',
         'Hernandez, M., & Wong, K. (2021). Community-led climate adaptation: Case studies from the Global South. Journal of Environmental Planning and Management, 64(10), 1863-1882.',
         'Patel, R., Mahmood, A., & Johnson, T. (2023). Technical innovations in green infrastructure for climate resilient cities. Landscape and Urban Planning, 221, 104355.',
-        'Carter, J.G., Cavan, G., Connelly, A., Guy, S., Handley, J., & Kazmierczak, A. (2015). Climate change and the city: Building capacity for urban adaptation. Progress in Planning, 95, 1-66.'
-      ]
+        'Carter, J.G., Cavan, G., Connelly, A., Guy, S., Handley, J., & Kazmierczak, A. (2015). Climate change and the city: Building capacity for urban adaptation. Progress in Planning, 95, 1-66.',
+      ],
     },
     methodology: {
       type: 'methodology',
@@ -51,8 +51,8 @@ const DraftGenerationSection: React.FC = () => {
       sources: [
         'Zhou, X., & Zafarani, R. (2020). A survey of fake news: Fundamental theories, detection methods, and opportunities. ACM Computing Surveys, 53(5), 1-40.',
         'Devlin, J., Chang, M. W., Lee, K., & Toutanova, K. (2018). BERT: Pre-training of deep bidirectional transformers for language understanding. arXiv preprint arXiv:1810.04805.',
-        'Shaar, S., Babulkov, N., Da San Martino, G., & Nakov, P. (2020). That is a known lie: Detecting previously fact-checked claims. arXiv preprint arXiv:2005.06058.'
-      ]
+        'Shaar, S., Babulkov, N., Da San Martino, G., & Nakov, P. (2020). That is a known lie: Detecting previously fact-checked claims. arXiv preprint arXiv:2005.06058.',
+      ],
     },
     discussion: {
       type: 'discussion',
@@ -62,16 +62,16 @@ const DraftGenerationSection: React.FC = () => {
         'Buolamwini, J., & Gebru, T. (2018). Gender shades: Intersectional accuracy disparities in commercial gender classification. Proceedings of the 1st Conference on Fairness, Accountability and Transparency, 81, 77-91.',
         'Najibi, A. (2020). Racial discrimination in face recognition technology. Science in the News, Harvard University Graduate School of Arts and Sciences.',
         'European Union Agency for Fundamental Rights. (2021). Facial recognition technology: fundamental rights considerations in the context of law enforcement.',
-        'Wang, Y., & Kosinski, M. (2018). Deep neural networks are more accurate than humans at detecting sexual orientation from facial images. Journal of Personality and Social Psychology, 114(2), 246-257.'
-      ]
-    }
+        'Wang, Y., & Kosinski, M. (2018). Deep neural networks are more accurate than humans at detecting sexual orientation from facial images. Journal of Personality and Social Psychology, 114(2), 246-257.',
+      ],
+    },
   };
 
   const draftTypes = [
     { value: 'abstract', label: 'Abstract', icon: <FiClipboard /> },
     { value: 'literature', label: 'Literature Review', icon: <FiBookOpen /> },
     { value: 'methodology', label: 'Methodology', icon: <FiFileText /> },
-    { value: 'discussion', label: 'Discussion', icon: <FiEdit /> }
+    { value: 'discussion', label: 'Discussion', icon: <FiEdit /> },
   ];
 
   const currentDraft = draftExamples[selectedDraft];
@@ -79,10 +79,13 @@ const DraftGenerationSection: React.FC = () => {
   return (
     <div className="my-24">
       <div className="mb-8 text-center">
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">Transform Unstructured Notes into Polished Research</h2>
+        <h2 className="text-3xl font-bold text-gray-900 mb-4">
+          Transform Unstructured Notes into Polished Research
+        </h2>
         <p className="text-gray-700 max-w-3xl mx-auto">
-          Nerd helps you transform your unstructured notes, voice recordings, and casual musings into
-          well-structured, publication-ready research content with proper formatting and citations.
+          Nerd helps you transform your unstructured notes, voice recordings, and casual musings
+          into well-structured, publication-ready research content with proper formatting and
+          citations.
         </p>
       </div>
 
@@ -90,7 +93,7 @@ const DraftGenerationSection: React.FC = () => {
         <div className={styles.draftTypeSelector}>
           <h3>Select Draft Type</h3>
           <div className={styles.draftTypeButtons}>
-            {draftTypes.map(type => (
+            {draftTypes.map((type) => (
               <button
                 key={type.value}
                 className={`${styles.draftTypeButton} ${selectedDraft === type.value ? styles.activeDraftType : ''}`}
@@ -108,19 +111,18 @@ const DraftGenerationSection: React.FC = () => {
           </div>
         </div>
 
-        <div 
-          className={styles.draftPreviewContainer}
-          key={selectedDraft}
-        >
+        <div className={styles.draftPreviewContainer} key={selectedDraft}>
           <div className={styles.draftPreviewHeader}>
             <h3>{currentDraft.title}</h3>
-            <span className={styles.draftTypeBadge}>{draftTypes.find(t => t.value === selectedDraft)?.label}</span>
+            <span className={styles.draftTypeBadge}>
+              {draftTypes.find((t) => t.value === selectedDraft)?.label}
+            </span>
           </div>
-          
+
           <div className={styles.draftContent}>
             <p>{currentDraft.content}</p>
           </div>
-          
+
           <div className={styles.draftSources}>
             <h4>References</h4>
             <ul>
@@ -149,28 +151,27 @@ const DraftGenerationSection: React.FC = () => {
 
       <div className="mt-16 bg-indigo-50 rounded-xl p-8">
         <div className="max-w-3xl mx-auto">
-          <h3 className="text-xl font-semibold text-gray-900 mb-4">
-            Common Use Cases
-          </h3>
+          <h3 className="text-xl font-semibold text-gray-900 mb-4">Common Use Cases</h3>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-white p-5 rounded-lg shadow-sm">
               <h4 className="font-medium text-lg mb-2">Voice to Research</h4>
               <p className="text-gray-600 text-sm">
-                Record your thoughts and ideas as voice memos, and Nerd converts them into structured research outlines and drafts.
+                Record your thoughts and ideas as voice memos, and Nerd converts them into
+                structured research outlines and drafts.
               </p>
             </div>
             <div className="bg-white p-5 rounded-lg shadow-sm">
               <h4 className="font-medium text-lg mb-2">Research Reports</h4>
               <p className="text-gray-600 text-sm">
-                Transform raw data and analysis into structured reports with methodology sections, findings, and discussion
-                points that highlight key insights.
+                Transform raw data and analysis into structured reports with methodology sections,
+                findings, and discussion points that highlight key insights.
               </p>
             </div>
             <div className="bg-white p-5 rounded-lg shadow-sm">
               <h4 className="font-medium text-lg mb-2">Literature Reviews</h4>
               <p className="text-gray-600 text-sm">
-                Generate comprehensive literature reviews that synthesize findings across multiple sources with consistent
-                formatting and proper attribution.
+                Generate comprehensive literature reviews that synthesize findings across multiple
+                sources with consistent formatting and proper attribution.
               </p>
             </div>
           </div>
@@ -178,40 +179,44 @@ const DraftGenerationSection: React.FC = () => {
       </div>
 
       <div className="mt-10">
-        <h3 className="text-xl font-semibold text-gray-900 mb-4 text-center">
-          How It Works
-        </h3>
+        <h3 className="text-xl font-semibold text-gray-900 mb-4 text-center">How It Works</h3>
         <ol className="flex flex-wrap justify-center mb-8">
           <li className="flex items-center m-3 bg-white p-3 rounded-lg shadow-sm">
-            <span className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-800 font-semibold mr-3">1</span>
+            <span className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-800 font-semibold mr-3">
+              1
+            </span>
             <span>Upload notes, recordings, or share your research ideas</span>
           </li>
           <li className="flex items-center m-3 bg-white p-3 rounded-lg shadow-sm">
-            <span className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-800 font-semibold mr-3">2</span>
+            <span className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-800 font-semibold mr-3">
+              2
+            </span>
             <span>Select the type of content you need</span>
           </li>
           <li className="flex items-center m-3 bg-white p-3 rounded-lg shadow-sm">
-            <span className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-800 font-semibold mr-3">3</span>
+            <span className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-800 font-semibold mr-3">
+              3
+            </span>
             <span>Provide specific focus or requirements</span>
           </li>
           <li className="flex items-center m-3 bg-white p-3 rounded-lg shadow-sm">
-            <span className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-800 font-semibold mr-3">4</span>
+            <span className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-800 font-semibold mr-3">
+              4
+            </span>
             <span>Review, edit, and export your research draft</span>
           </li>
         </ol>
 
         <div className="text-center">
           <p className="text-gray-700 mb-6 max-w-2xl mx-auto">
-            Our AI-powered draft generation significantly reduces the time spent on formatting and structuring,
-            allowing you to focus on refining the content and developing your ideas.
+            Our AI-powered draft generation significantly reduces the time spent on formatting and
+            structuring, allowing you to focus on refining the content and developing your ideas.
           </p>
-          <button className={styles.primaryButton}>
-            Try Content Creation
-          </button>
+          <button className={styles.primaryButton}>Try Content Creation</button>
         </div>
       </div>
     </div>
   );
 };
 
-export default DraftGenerationSection; 
+export default DraftGenerationSection;

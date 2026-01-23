@@ -7,63 +7,59 @@ export const JURISDICTIONS = {
     code: 'CH',
     name: 'Switzerland',
     flag: '🇨🇭',
-    regions: [
-      { code: 'ZH', name: 'Zürich', available: true }
-    ],
-    lawScope: 'Federal Swiss Law'
+    regions: [{ code: 'ZH', name: 'Zürich', available: true }],
+    lawScope: 'Federal Swiss Law',
   },
   US: {
     code: 'US',
     name: 'United States',
     flag: '🇺🇸',
-    regions: [
-      { code: 'CA', name: 'California', available: true }
-    ],
-    lawScope: 'Federal & California State Law'
-  }
+    regions: [{ code: 'CA', name: 'California', available: true }],
+    lawScope: 'Federal & California State Law',
+  },
 } as const;
 
 export const LEGAL_AREAS = [
   {
     id: 'immigration',
     name: 'Immigration',
-    description: 'Visa, citizenship, work permits'
+    description: 'Visa, citizenship, work permits',
   },
   {
     id: 'employment',
     name: 'Employment',
-    description: 'Contracts, disputes, termination'
+    description: 'Contracts, disputes, termination',
   },
   {
     id: 'real-estate',
     name: 'Real Estate',
-    description: 'Property, leases, transactions'
+    description: 'Property, leases, transactions',
   },
   {
     id: 'family',
     name: 'Family Law',
-    description: 'Divorce, custody, support'
+    description: 'Divorce, custody, support',
   },
   {
     id: 'business',
     name: 'Business',
-    description: 'Formation, contracts, compliance'
+    description: 'Formation, contracts, compliance',
   },
   {
     id: 'intellectual-property',
     name: 'IP & Patents',
-    description: 'Trademarks, copyrights, patents'
+    description: 'Trademarks, copyrights, patents',
   },
   {
     id: 'tax',
     name: 'Tax',
-    description: 'Planning, disputes, compliance'
+    description: 'Planning, disputes, compliance',
   },
   {
     id: 'estate',
     name: 'Estate Planning',
-    description: 'Wills, trusts, inheritance'
-  }
+    description: 'Wills, trusts, inheritance',
+  },
 ] as const;
 
 export const FILE_CATEGORIES = {
@@ -73,7 +69,7 @@ export const FILE_CATEGORIES = {
   'court-filing': { label: 'Court Filing', color: 'red' },
   identification: { label: 'ID Document', color: 'yellow' },
   financial: { label: 'Financial', color: 'indigo' },
-  other: { label: 'Other', color: 'gray' }
+  other: { label: 'Other', color: 'gray' },
 } as const;
 
 export const ROLE_PERMISSIONS = {
@@ -83,16 +79,10 @@ export const ROLE_PERMISSIONS = {
     'upload-files',
     'view-messages',
     'send-messages',
-    'view-billing'
+    'view-billing',
   ],
   lawyer: ['*'], // All permissions
-  paralegal: [
-    'view-case',
-    'view-files',
-    'upload-files',
-    'view-messages',
-    'send-messages'
-  ],
+  paralegal: ['view-case', 'view-files', 'upload-files', 'view-messages', 'send-messages'],
   expert: ['view-files'], // Only files shared with them
-  admin: ['view-case', 'view-files', 'view-messages']
+  admin: ['view-case', 'view-files', 'view-messages'],
 } as const;

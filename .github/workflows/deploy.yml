@@ -2,9 +2,9 @@ name: Deploy to Vercel
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build-and-deploy:
@@ -24,6 +24,9 @@ jobs:
         run: npm run build:ci
         env:
           NEXT_PUBLIC_DEPLOY_TIME: ${{ github.event.head_commit.timestamp }}
+
+      - name: Run format check
+        run: npm run format:check --if-present
 
       - name: Run linting
         run: npm run lint --if-present

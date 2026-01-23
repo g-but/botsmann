@@ -38,10 +38,10 @@ const DemoOrchestrator: React.FC = () => {
     { id: 'intake', label: 'Case Details', icon: '📝', number: 1 },
     { id: 'ai-analysis', label: 'AI Analysis', icon: '🤖', number: 2 },
     { id: 'lawyer-match', label: 'Find Lawyer', icon: '⚖️', number: 3 },
-    { id: 'workspace', label: 'Workspace', icon: '💼', number: 4 }
+    { id: 'workspace', label: 'Workspace', icon: '💼', number: 4 },
   ];
 
-  const currentStepIndex = steps.findIndex(s => s.id === currentStep);
+  const currentStepIndex = steps.findIndex((s) => s.id === currentStep);
 
   return (
     <section className="mb-20" id="demo">
@@ -84,8 +84,8 @@ const DemoOrchestrator: React.FC = () => {
                       isCompleted
                         ? 'bg-green-500 text-white scale-100'
                         : isCurrent
-                        ? 'bg-gradient-to-br from-blue-600 to-cyan-600 text-white scale-110 shadow-lg'
-                        : 'bg-gray-200 text-gray-400 scale-100'
+                          ? 'bg-gradient-to-br from-blue-600 to-cyan-600 text-white scale-110 shadow-lg'
+                          : 'bg-gray-200 text-gray-400 scale-100'
                     }`}
                   >
                     {isCompleted ? '✓' : step.icon}
@@ -93,10 +93,14 @@ const DemoOrchestrator: React.FC = () => {
 
                   {/* Step Label */}
                   <div className="mt-2 text-center">
-                    <div className={`text-xs font-semibold ${isCurrent ? 'text-blue-600' : 'text-gray-500'}`}>
+                    <div
+                      className={`text-xs font-semibold ${isCurrent ? 'text-blue-600' : 'text-gray-500'}`}
+                    >
                       Step {step.number}
                     </div>
-                    <div className={`text-sm font-medium mt-1 ${isCurrent ? 'text-gray-900' : 'text-gray-600'}`}>
+                    <div
+                      className={`text-sm font-medium mt-1 ${isCurrent ? 'text-gray-900' : 'text-gray-600'}`}
+                    >
                       {step.label}
                     </div>
                   </div>
@@ -112,9 +116,7 @@ const DemoOrchestrator: React.FC = () => {
         {/* Step 1: Case Intake */}
         {currentStep === 'intake' && (
           <div className="animate-fadeIn">
-            <CaseIntakeForm
-              onSubmit={handleIntakeComplete}
-            />
+            <CaseIntakeForm onSubmit={handleIntakeComplete} />
           </div>
         )}
 
@@ -133,10 +135,13 @@ const DemoOrchestrator: React.FC = () => {
         {currentStep === 'lawyer-match' && caseIntake && (
           <div className="animate-fadeIn">
             <div className="bg-white rounded-2xl shadow-xl p-8 border-2 border-gray-100">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Finding Your Perfect Lawyer...</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                Finding Your Perfect Lawyer...
+              </h3>
               <p className="text-gray-600 mb-8">
-                This is where the lawyer matching component will go. Based on your AI analysis and case details,
-                we'll show you the top 3 best-matched lawyers with clear explanations of why they're a great fit.
+                This is where the lawyer matching component will go. Based on your AI analysis and
+                case details, we'll show you the top 3 best-matched lawyers with clear explanations
+                of why they're a great fit.
               </p>
 
               <div className="flex items-center justify-between">
@@ -205,8 +210,9 @@ const DemoOrchestrator: React.FC = () => {
           <div>
             <h4 className="font-semibold text-gray-900 mb-2">This is a Demo</h4>
             <p className="text-sm text-gray-600">
-              This demo shows how Lex works. The AI analysis is simulated, and lawyer matches are examples.
-              In production, you'll get real AI-powered legal analysis and connect with actual verified lawyers.
+              This demo shows how Lex works. The AI analysis is simulated, and lawyer matches are
+              examples. In production, you'll get real AI-powered legal analysis and connect with
+              actual verified lawyers.
             </p>
           </div>
         </div>

@@ -9,10 +9,7 @@ describeFn('Consultations API', () => {
   // Clean up test data after each test
   afterEach(async () => {
     // Delete test consultations (those with test email domain)
-    await supabase
-      .from('consultations')
-      .delete()
-      .like('email', '%@example.com');
+    await supabase.from('consultations').delete().like('email', '%@example.com');
   });
 
   it('creates a consultation', async () => {

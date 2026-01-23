@@ -5,4 +5,4 @@
  * This file is kept for backwards compatibility with existing imports.
  */
 
-export { isValidEmail, isNotEmpty, formatErrorMessage } from '@/lib/validation'; 
+export { isValidEmail, isNotEmpty, formatErrorMessage } from '@/lib/validation';

@@ -7,10 +7,10 @@ export default function Credit() {
   return (
     <div className="mx-auto max-w-screen-xl px-6 py-12">
       <h1 className="mb-8 text-4xl font-semibold tracking-tight">Credit Workflow Automation</h1>
-      
+
       <div className="mb-12">
         <p className="text-lg text-gray-600">
-          Streamline your credit operations with our AI-powered workflow automation solution. 
+          Streamline your credit operations with our AI-powered workflow automation solution.
           Monitor portfolio companies, analyze financial data, and make informed decisions faster.
         </p>
       </div>
@@ -21,7 +21,8 @@ export default function Credit() {
           <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
             <h3 className="mb-2 text-xl font-medium">Automated Reporting</h3>
             <p className="text-gray-600">
-              Automatically ingest and process regular reports from portfolio companies, saving time and reducing errors.
+              Automatically ingest and process regular reports from portfolio companies, saving time
+              and reducing errors.
             </p>
           </div>
           <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
@@ -33,7 +34,8 @@ export default function Credit() {
           <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
             <h3 className="mb-2 text-xl font-medium">Financial Analysis</h3>
             <p className="text-gray-600">
-              Comprehensive analysis of financials, KPIs, and qualitative factors including investor information.
+              Comprehensive analysis of financials, KPIs, and qualitative factors including investor
+              information.
             </p>
           </div>
         </div>
@@ -64,7 +66,8 @@ export default function Credit() {
             <div>
               <h3 className="mb-2 text-xl font-medium">AI Analysis</h3>
               <p className="text-gray-600">
-                Our AI processes financial data, identifies trends, and generates insights automatically.
+                Our AI processes financial data, identifies trends, and generates insights
+                automatically.
               </p>
             </div>
           </div>

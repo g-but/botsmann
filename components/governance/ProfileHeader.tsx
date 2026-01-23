@@ -47,14 +47,12 @@ export const ProfileHeader: FC<ProfileHeaderProps> = ({
       <div className="relative max-w-7xl mx-auto">
         <div className="md:flex md:items-center md:justify-between">
           <div className="flex-1 min-w-0 flex items-center">
-            <Avatar
-              src={avatarUrl}
-              alt={name}
-              size="lg"
-            />
+            <Avatar src={avatarUrl} alt={name} size="lg" />
             <div className="ml-4">
               <h1 className="text-2xl font-bold text-white truncate">{name}</h1>
-              <p className="text-white opacity-90">{idLabel}: {id}</p>
+              <p className="text-white opacity-90">
+                {idLabel}: {id}
+              </p>
               {subtitle && <p className="text-white opacity-80">{subtitle}</p>}
             </div>
           </div>

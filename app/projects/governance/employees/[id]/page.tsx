@@ -11,7 +11,7 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
   const employeeId = params.id;
 
   // Find the employee with the matching ID
-  const employee = sampleTeamMembers.find(emp => emp.id === employeeId);
+  const employee = sampleTeamMembers.find((emp) => emp.id === employeeId);
 
   // If employee not found, show error and link back to all employees
   if (!employee) {
@@ -19,12 +19,23 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
       <div className="min-h-screen bg-gray-50 pt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
           <nav className="mb-6 flex items-center">
-            <Link 
+            <Link
               href="/projects/governance/portal"
               className="text-sm text-gray-500 hover:text-gray-700 flex items-center"
             >
-              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+              <svg
+                className="w-4 h-4 mr-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M15 19l-7-7 7-7"
+                ></path>
               </svg>
               Portal
             </Link>
@@ -36,7 +47,7 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
               Employees
             </Link>
           </nav>
-          
+
           <div className="bg-white shadow rounded-lg p-8 text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Employee Not Found</h1>
             <p className="text-gray-600 mb-6">
@@ -53,17 +64,28 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
       </div>
     );
   }
-  
+
   return (
     <div className="min-h-screen bg-gray-50 pt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
         <nav className="mb-6 flex items-center">
-          <Link 
+          <Link
             href="/projects/governance/portal"
             className="text-sm text-gray-500 hover:text-gray-700 flex items-center"
           >
-            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+            <svg
+              className="w-4 h-4 mr-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M15 19l-7-7 7-7"
+              ></path>
             </svg>
             Portal
           </Link>
@@ -77,7 +99,7 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
           <span className="mx-2 text-gray-500">/</span>
           <span className="text-sm text-gray-900">{employee.name}</span>
         </nav>
-        
+
         <div className="bg-white shadow rounded-lg overflow-hidden mb-8">
           {/* Employee Header */}
           <div className="bg-gradient-to-r from-blue-600 to-blue-800 px-4 py-6 sm:px-6 lg:px-8">
@@ -102,19 +124,21 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
                 </div>
               </div>
               <div className="mt-4 md:mt-0">
-                <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-blue-900 bg-opacity-50 text-blue-100`}>
+                <span
+                  className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-blue-900 bg-opacity-50 text-blue-100`}
+                >
                   Transparency Score: {employee.transparency}/100
                 </span>
               </div>
             </div>
           </div>
-          
+
           {/* Employee Bio */}
           <div className="px-4 py-5 sm:p-6 border-b border-gray-200">
             <h2 className="text-lg font-medium text-gray-900 mb-2">Professional Biography</h2>
             <p className="text-gray-600">{employee.bio}</p>
           </div>
-          
+
           {/* Employment Details */}
           <div className="px-4 py-5 sm:p-6 border-b border-gray-200">
             <h2 className="text-lg font-medium text-gray-900 mb-4">Employment Details</h2>
@@ -138,7 +162,10 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
               <div className="sm:col-span-1">
                 <dt className="text-sm font-medium text-gray-500">Email</dt>
                 <dd className="mt-1 text-sm text-gray-900">
-                  <a href={`mailto:${employee.contact.email}`} className="text-blue-600 hover:text-blue-500">
+                  <a
+                    href={`mailto:${employee.contact.email}`}
+                    className="text-blue-600 hover:text-blue-500"
+                  >
                     {employee.contact.email}
                   </a>
                 </dd>
@@ -149,7 +176,7 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
               </div>
             </dl>
           </div>
-          
+
           {/* Responsibilities */}
           <div className="px-4 py-5 sm:p-6">
             <h2 className="text-lg font-medium text-gray-900 mb-4">Responsibilities & Authority</h2>
@@ -158,42 +185,87 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
                 {employee.responsibilities.map((resp, index) => (
                   <li key={index} className="flex text-sm text-gray-600">
-                    <svg className="h-5 w-5 text-blue-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg
+                      className="h-5 w-5 text-blue-500 mr-2 flex-shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                     {resp}
                   </li>
                 ))}
               </ul>
             </div>
-            
+
             {/* Placeholder for decision authority - would be populated from real data */}
             <div className="bg-gray-50 rounded-lg p-4">
               <h3 className="text-sm font-medium text-gray-800 mb-2">Decision-Making Authority</h3>
               <ul className="text-sm text-gray-600 space-y-2">
                 <li className="flex">
-                  <svg className="h-5 w-5 text-gray-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg
+                    className="h-5 w-5 text-gray-500 mr-2 flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
-                  Can approve expenditures up to {formatCurrency(employee.position.includes('Director') ? 50000 : 10000)}
+                  Can approve expenditures up to{' '}
+                  {formatCurrency(employee.position.includes('Director') ? 50000 : 10000)}
                 </li>
                 <li className="flex">
-                  <svg className="h-5 w-5 text-gray-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg
+                    className="h-5 w-5 text-gray-500 mr-2 flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
-                  {employee.position.includes('Director') ? 'Final approval' : 'Recommends'} for departmental policies
+                  {employee.position.includes('Director') ? 'Final approval' : 'Recommends'} for
+                  departmental policies
                 </li>
                 <li className="flex">
-                  <svg className="h-5 w-5 text-gray-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg
+                    className="h-5 w-5 text-gray-500 mr-2 flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
-                  {employee.position.includes('Director') || employee.position.includes('Chief') ? 'Participates in' : 'Provides input for'} strategic planning
+                  {employee.position.includes('Director') || employee.position.includes('Chief')
+                    ? 'Participates in'
+                    : 'Provides input for'}{' '}
+                  strategic planning
                 </li>
               </ul>
             </div>
           </div>
         </div>
-        
+
         {/* Performance & Transparency */}
         <div className="bg-white shadow rounded-lg overflow-hidden mb-8">
           <div className="px-4 py-5 sm:px-6 bg-gray-50 border-b border-gray-200">
@@ -204,7 +276,9 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
           </div>
           <div className="p-6">
             <div className="mb-6">
-              <h3 className="text-sm font-medium text-gray-800 mb-4">Transparency Score Components</h3>
+              <h3 className="text-sm font-medium text-gray-800 mb-4">
+                Transparency Score Components
+              </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-green-50 rounded-lg p-4">
                   <div className="flex justify-between items-baseline mb-2">
@@ -214,7 +288,10 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
                     </span>
                   </div>
                   <div className="w-full bg-white rounded-full h-2">
-                    <div className="bg-green-500 h-2 rounded-full" style={{ width: `${Math.round(employee.transparency * 0.95)}%` }}></div>
+                    <div
+                      className="bg-green-500 h-2 rounded-full"
+                      style={{ width: `${Math.round(employee.transparency * 0.95)}%` }}
+                    ></div>
                   </div>
                   <p className="mt-2 text-xs text-green-700">
                     Measures completeness of required public disclosures
@@ -228,7 +305,10 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
                     </span>
                   </div>
                   <div className="w-full bg-white rounded-full h-2">
-                    <div className="bg-blue-500 h-2 rounded-full" style={{ width: `${Math.round(employee.transparency * 0.9)}%` }}></div>
+                    <div
+                      className="bg-blue-500 h-2 rounded-full"
+                      style={{ width: `${Math.round(employee.transparency * 0.9)}%` }}
+                    ></div>
                   </div>
                   <p className="mt-2 text-xs text-blue-700">
                     Evaluates documentation of decisions and rationales
@@ -242,7 +322,12 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
                     </span>
                   </div>
                   <div className="w-full bg-white rounded-full h-2">
-                    <div className="bg-purple-500 h-2 rounded-full" style={{ width: `${Math.min(100, Math.round(employee.transparency * 1.05))}%` }}></div>
+                    <div
+                      className="bg-purple-500 h-2 rounded-full"
+                      style={{
+                        width: `${Math.min(100, Math.round(employee.transparency * 1.05))}%`,
+                      }}
+                    ></div>
                   </div>
                   <p className="mt-2 text-xs text-purple-700">
                     Measures responsiveness to public inquiries and feedback
@@ -250,29 +335,51 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
                 </div>
               </div>
             </div>
-            
+
             <div>
               <h3 className="text-sm font-medium text-gray-800 mb-4">Performance Highlights</h3>
               <div className="bg-yellow-50 rounded-lg p-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div>
-                    <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Projects Managed</h4>
-                    <p className="text-xl font-semibold text-gray-900">{employee.yearsOfService * 2 + 4}</p>
-                    <p className="text-xs text-gray-500 mt-1">+{employee.yearsOfService < 5 ? 2 : 1} from previous year</p>
+                    <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">
+                      Projects Managed
+                    </h4>
+                    <p className="text-xl font-semibold text-gray-900">
+                      {employee.yearsOfService * 2 + 4}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      +{employee.yearsOfService < 5 ? 2 : 1} from previous year
+                    </p>
                   </div>
                   <div>
-                    <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Budget Responsibility</h4>
-                    <p className="text-xl font-semibold text-gray-900">{formatCurrency(employee.salary * 8)}</p>
+                    <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">
+                      Budget Responsibility
+                    </h4>
+                    <p className="text-xl font-semibold text-gray-900">
+                      {formatCurrency(employee.salary * 8)}
+                    </p>
                     <p className="text-xs text-gray-500 mt-1">For current fiscal year</p>
                   </div>
                   <div>
-                    <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Team Size</h4>
-                    <p className="text-xl font-semibold text-gray-900">{employee.position.includes('Director') ? 12 : employee.position.includes('Manager') ? 6 : 2}</p>
+                    <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">
+                      Team Size
+                    </h4>
+                    <p className="text-xl font-semibold text-gray-900">
+                      {employee.position.includes('Director')
+                        ? 12
+                        : employee.position.includes('Manager')
+                          ? 6
+                          : 2}
+                    </p>
                     <p className="text-xs text-gray-500 mt-1">Direct reports</p>
                   </div>
                   <div>
-                    <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Public Engagement</h4>
-                    <p className="text-xl font-semibold text-gray-900">{employee.position.includes('Relations') ? 95 : 78}%</p>
+                    <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">
+                      Public Engagement
+                    </h4>
+                    <p className="text-xl font-semibold text-gray-900">
+                      {employee.position.includes('Relations') ? 95 : 78}%
+                    </p>
                     <p className="text-xs text-gray-500 mt-1">Response rate to inquiries</p>
                   </div>
                 </div>
@@ -280,7 +387,7 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
             </div>
           </div>
         </div>
-        
+
         {/* Contact and Feedback */}
         <div className="bg-white shadow rounded-lg overflow-hidden">
           <div className="px-4 py-5 sm:px-6 bg-gray-50 border-b border-gray-200">
@@ -297,7 +404,10 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
                   <div className="sm:col-span-1">
                     <dt className="text-sm font-medium text-gray-500">Email</dt>
                     <dd className="mt-1 text-sm text-gray-900">
-                      <a href={`mailto:${employee.contact.email}`} className="text-blue-600 hover:text-blue-500">
+                      <a
+                        href={`mailto:${employee.contact.email}`}
+                        className="text-blue-600 hover:text-blue-500"
+                      >
                         {employee.contact.email}
                       </a>
                     </dd>
@@ -330,4 +440,4 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
       </div>
     </div>
   );
-} 
+}

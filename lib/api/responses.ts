@@ -68,7 +68,7 @@ type HttpStatusCode = (typeof HTTP_STATUS)[keyof typeof HTTP_STATUS];
 export function jsonSuccess<T>(
   data: T,
   message?: string,
-  status: HttpStatusCode = HTTP_STATUS.OK
+  status: HttpStatusCode = HTTP_STATUS.OK,
 ): NextResponse<ApiResponse<T>> {
   const response: ApiResponse<T> = { success: true, data };
   if (message) response.message = message;
@@ -78,10 +78,7 @@ export function jsonSuccess<T>(
 /**
  * Create a success response with just a message (no data)
  */
-export function jsonMessage(
-  message: string,
-  status = HTTP_STATUS.OK
-): NextResponse<ApiResponse> {
+export function jsonMessage(message: string, status = HTTP_STATUS.OK): NextResponse<ApiResponse> {
   return NextResponse.json({ success: true, message }, { status });
 }
 
@@ -92,7 +89,7 @@ export function jsonError(
   error: string,
   code: ErrorCode = 'INTERNAL_ERROR',
   status: HttpStatusCode = HTTP_STATUS.INTERNAL_ERROR,
-  details?: ValidationError[]
+  details?: ValidationError[],
 ): NextResponse<ApiResponse> {
   const response: ApiResponse = { success: false, error, code };
   if (details?.length) response.details = details;
@@ -104,7 +101,7 @@ export function jsonError(
  */
 export function jsonValidationError(
   message: string,
-  details: ValidationError[]
+  details: ValidationError[],
 ): NextResponse<ApiResponse> {
   return jsonError(message, 'VALIDATION_ERROR', HTTP_STATUS.BAD_REQUEST, details);
 }
@@ -113,7 +110,7 @@ export function jsonValidationError(
  * Create a rate limit error response
  */
 export function jsonRateLimitError(
-  message = 'Rate limit exceeded. Please try again later.'
+  message = 'Rate limit exceeded. Please try again later.',
 ): NextResponse<ApiResponse> {
   return jsonError(message, 'RATE_LIMIT', HTTP_STATUS.RATE_LIMIT);
 }
@@ -121,18 +118,14 @@ export function jsonRateLimitError(
 /**
  * Create an unauthorized error response
  */
-export function jsonUnauthorized(
-  message = 'Unauthorized'
-): NextResponse<ApiResponse> {
+export function jsonUnauthorized(message = 'Unauthorized'): NextResponse<ApiResponse> {
   return jsonError(message, 'UNAUTHORIZED', HTTP_STATUS.UNAUTHORIZED);
 }
 
 /**
  * Create a not found error response
  */
-export function jsonNotFound(
-  message = 'Not found'
-): NextResponse<ApiResponse> {
+export function jsonNotFound(message = 'Not found'): NextResponse<ApiResponse> {
   return jsonError(message, 'NOT_FOUND', HTTP_STATUS.NOT_FOUND);
 }
 
@@ -140,7 +133,7 @@ export function jsonNotFound(
  * Create a service unavailable error response
  */
 export function jsonServiceUnavailable(
-  message = 'Service temporarily unavailable'
+  message = 'Service temporarily unavailable',
 ): NextResponse<ApiResponse> {
   return jsonError(message, 'SERVICE_UNAVAILABLE', HTTP_STATUS.SERVICE_UNAVAILABLE);
 }
@@ -161,7 +154,7 @@ export function formatZodErrors(error: ZodError): ValidationError[] {
  */
 export async function validateBody<T>(
   request: Request,
-  schema: ZodSchema<T>
+  schema: ZodSchema<T>,
 ): Promise<{ data: T } | { error: NextResponse<ApiResponse> }> {
   try {
     const body = await request.json();
@@ -185,7 +178,7 @@ export async function validateBody<T>(
  * Type guard to check if validation result has error
  */
 export function hasValidationError<T>(
-  result: { data: T } | { error: NextResponse<ApiResponse> }
+  result: { data: T } | { error: NextResponse<ApiResponse> },
 ): result is { error: NextResponse<ApiResponse> } {
   return 'error' in result;
 }

@@ -1,6 +1,6 @@
 /**
  * DiscoverySection.tsx
- * 
+ *
  * This component showcases the Discovery Mode feature of the Nerd AI Research Assistant.
  * It demonstrates how Nerd can identify research gaps, suggest novel connections
  * between concepts, and generate hypotheses that could lead to significant breakthroughs.
@@ -23,32 +23,35 @@ const DiscoverySection: React.FC = () => {
     {
       id: 'ai-ethics',
       name: 'AI Ethics & Governance',
-      description: 'Exploring the moral implications and regulatory frameworks for artificial intelligence systems.',
+      description:
+        'Exploring the moral implications and regulatory frameworks for artificial intelligence systems.',
       insights: [
         'Cross-domain research suggests that combining indigenous knowledge systems with AI ethics could produce more culturally inclusive governance frameworks.',
         'Analysis of historical technology regulation reveals a pattern where narrow technical solutions fail when not paired with socio-cultural adaptation strategies.',
-        'Unexplored connection between environmental law precedents and AI liability frameworks could address current gaps in algorithmic accountability.'
-      ]
+        'Unexplored connection between environmental law precedents and AI liability frameworks could address current gaps in algorithmic accountability.',
+      ],
     },
     {
       id: 'climate-solutions',
       name: 'Climate Change Solutions',
-      description: 'Investigating innovative approaches to mitigate and adapt to global climate change.',
+      description:
+        'Investigating innovative approaches to mitigate and adapt to global climate change.',
       insights: [
         'Traditional agricultural practices from three distinct geographical regions show unexplored potential for carbon sequestration when combined with modern soil science.',
         "Overlooked research on deep ocean currents suggests possible mechanical intervention points for heat redistribution that haven't been modeled in climate simulations.",
-        'Pattern analysis indicates that urban architectural designs inspired by certain biological structures could reduce city heat islands by up to 4°C while requiring minimal energy input.'
-      ]
+        'Pattern analysis indicates that urban architectural designs inspired by certain biological structures could reduce city heat islands by up to 4°C while requiring minimal energy input.',
+      ],
     },
     {
       id: 'neuroscience',
       name: 'Cognitive Neuroscience',
-      description: 'Studying the biological processes underlying cognition with a focus on neural connections.',
+      description:
+        'Studying the biological processes underlying cognition with a focus on neural connections.',
       insights: [
         'Previously unconnected research in mycology and neuroplasticity suggests fungal communication networks may provide new models for understanding brain resilience.',
         'Systematic gap analysis reveals that sleep studies have overlooked potential connections between dream states and specific protein synthesis patterns relevant to memory consolidation.',
-        'Quantum physics principles applied to neurotransmitter behavior might explain anomalous results in consciousness studies that current models cannot account for.'
-      ]
+        'Quantum physics principles applied to neurotransmitter behavior might explain anomalous results in consciousness studies that current models cannot account for.',
+      ],
     },
     {
       id: 'materials-science',
@@ -57,20 +60,22 @@ const DiscoverySection: React.FC = () => {
       insights: [
         'Bibliometric analysis reveals minimal overlap between biomimicry research and semiconductor development, suggesting unexplored territory for self-healing electronic components.',
         'Mathematical patterns in crystal formation studies parallel emerging theories in quantum computing, potentially enabling room-temperature quantum materials.',
-        'Historical research on ancient metallurgical techniques contains unexploited insights that could revolutionize modern material fabrication with significantly lower energy requirements.'
-      ]
-    }
+        'Historical research on ancient metallurgical techniques contains unexploited insights that could revolutionize modern material fabrication with significantly lower energy requirements.',
+      ],
+    },
   ];
-  
-  const selectedDomain = researchDomains.find(domain => domain.id === activeDomain) || researchDomains[0];
+
+  const selectedDomain =
+    researchDomains.find((domain) => domain.id === activeDomain) || researchDomains[0];
 
   return (
     <section className="my-24">
       <div className="mb-8 text-center">
         <h2 className="text-3xl font-bold text-gray-900 mb-4">Discovery Mode</h2>
         <p className="text-gray-700 max-w-3xl mx-auto">
-          Uncover hidden connections and generate novel hypotheses with AI-powered research exploration
-          that identifies patterns across disparate sources and suggests promising new directions.
+          Uncover hidden connections and generate novel hypotheses with AI-powered research
+          exploration that identifies patterns across disparate sources and suggests promising new
+          directions.
         </p>
       </div>
 
@@ -79,7 +84,7 @@ const DiscoverySection: React.FC = () => {
           <div className={styles.domainSelector}>
             <h3>Research Domains</h3>
             <div className={styles.domainButtons}>
-              {researchDomains.map(domain => (
+              {researchDomains.map((domain) => (
                 <button
                   key={domain.id}
                   className={`${styles.domainButton} ${activeDomain === domain.id ? styles.activeDomain : ''}`}
@@ -118,13 +123,30 @@ const DiscoverySection: React.FC = () => {
                   <div className={styles.graphNode} style={{ top: '40%', left: '60%' }}></div>
                   <div className={styles.graphNode} style={{ top: '70%', left: '70%' }}></div>
                   <div className={styles.graphNode} style={{ top: '30%', left: '80%' }}></div>
-                  <div className={styles.graphEdge} style={{ width: '30%', top: '25%', left: '32%', transform: 'rotate(30deg)' }}></div>
-                  <div className={styles.graphEdge} style={{ width: '25%', top: '45%', left: '40%', transform: 'rotate(-40deg)' }}></div>
-                  <div className={styles.graphEdge} style={{ width: '20%', top: '68%', left: '22%', transform: 'rotate(70deg)' }}></div>
-                  <div className={styles.graphEdge} style={{ width: '35%', top: '35%', left: '62%', transform: 'rotate(10deg)' }}></div>
-                  <div className={styles.graphEdge} style={{ width: '28%', top: '65%', left: '65%', transform: 'rotate(-30deg)' }}></div>
+                  <div
+                    className={styles.graphEdge}
+                    style={{ width: '30%', top: '25%', left: '32%', transform: 'rotate(30deg)' }}
+                  ></div>
+                  <div
+                    className={styles.graphEdge}
+                    style={{ width: '25%', top: '45%', left: '40%', transform: 'rotate(-40deg)' }}
+                  ></div>
+                  <div
+                    className={styles.graphEdge}
+                    style={{ width: '20%', top: '68%', left: '22%', transform: 'rotate(70deg)' }}
+                  ></div>
+                  <div
+                    className={styles.graphEdge}
+                    style={{ width: '35%', top: '35%', left: '62%', transform: 'rotate(10deg)' }}
+                  ></div>
+                  <div
+                    className={styles.graphEdge}
+                    style={{ width: '28%', top: '65%', left: '65%', transform: 'rotate(-30deg)' }}
+                  ></div>
                 </div>
-                <p className={styles.visualCaption}>Knowledge Graph Showing Potential Connections Between Research Areas</p>
+                <p className={styles.visualCaption}>
+                  Knowledge Graph Showing Potential Connections Between Research Areas
+                </p>
               </div>
             </div>
           </div>
@@ -173,4 +195,4 @@ const DiscoverySection: React.FC = () => {
   );
 };
 
-export default DiscoverySection; 
+export default DiscoverySection;

@@ -1,6 +1,9 @@
 import { ProductResult } from '@/types/products';
 
-export async function searchRicardo(_category: string, _attributes: Record<string, unknown>): Promise<ProductResult[]> {
+export async function searchRicardo(
+  _category: string,
+  _attributes: Record<string, unknown>,
+): Promise<ProductResult[]> {
   if (!process.env.RICARDO_API_KEY) {
     console.info('Ricardo API key is not configured');
     return [];
@@ -9,7 +12,7 @@ export async function searchRicardo(_category: string, _attributes: Record<strin
   try {
     // TODO: Implement real Ricardo API integration
     // This is a mock implementation for development
-    await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API delay
+    await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate API delay
 
     return [
       {
@@ -19,7 +22,7 @@ export async function searchRicardo(_category: string, _attributes: Record<strin
         price: 89.99,
         image: 'https://via.placeholder.com/300',
         url: 'https://ricardo.ch/product1',
-        platform: 'Ricardo'
+        platform: 'Ricardo',
       },
       {
         id: 'ric2',
@@ -28,8 +31,8 @@ export async function searchRicardo(_category: string, _attributes: Record<strin
         price: 129.99,
         image: 'https://via.placeholder.com/300',
         url: 'https://ricardo.ch/product2',
-        platform: 'Ricardo'
-      }
+        platform: 'Ricardo',
+      },
     ];
   } catch (error) {
     console.info('Ricardo search error:', error);

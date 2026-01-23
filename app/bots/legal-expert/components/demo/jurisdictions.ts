@@ -66,8 +66,8 @@ export const JURISDICTIONS: JurisdictionHierarchy[] = [
       { code: 'US-WA', name: 'Washington', flag: '🇺🇸', type: 'state' },
       { code: 'US-WV', name: 'West Virginia', flag: '🇺🇸', type: 'state' },
       { code: 'US-WI', name: 'Wisconsin', flag: '🇺🇸', type: 'state' },
-      { code: 'US-WY', name: 'Wyoming', flag: '🇺🇸', type: 'state' }
-    ]
+      { code: 'US-WY', name: 'Wyoming', flag: '🇺🇸', type: 'state' },
+    ],
   },
   {
     code: 'EU',
@@ -102,8 +102,8 @@ export const JURISDICTIONS: JurisdictionHierarchy[] = [
       { code: 'SK', name: 'Slovakia', flag: '🇸🇰', type: 'country' },
       { code: 'SI', name: 'Slovenia', flag: '🇸🇮', type: 'country' },
       { code: 'ES', name: 'Spain', flag: '🇪🇸', type: 'country', popular: true },
-      { code: 'SE', name: 'Sweden', flag: '🇸🇪', type: 'country' }
-    ]
+      { code: 'SE', name: 'Sweden', flag: '🇸🇪', type: 'country' },
+    ],
   },
   {
     code: 'UK',
@@ -115,8 +115,8 @@ export const JURISDICTIONS: JurisdictionHierarchy[] = [
       { code: 'UK-ENG', name: 'England', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', type: 'region', popular: true },
       { code: 'UK-SCT', name: 'Scotland', flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', type: 'region' },
       { code: 'UK-WLS', name: 'Wales', flag: '🏴󠁧󠁢󠁷󠁬󠁳󠁿', type: 'region' },
-      { code: 'UK-NIR', name: 'Northern Ireland', flag: '🇬🇧', type: 'region' }
-    ]
+      { code: 'UK-NIR', name: 'Northern Ireland', flag: '🇬🇧', type: 'region' },
+    ],
   },
   {
     code: 'CA',
@@ -134,8 +134,8 @@ export const JURISDICTIONS: JurisdictionHierarchy[] = [
       { code: 'CA-ON', name: 'Ontario', flag: '🇨🇦', type: 'province', popular: true },
       { code: 'CA-PE', name: 'Prince Edward Island', flag: '🇨🇦', type: 'province' },
       { code: 'CA-QC', name: 'Quebec', flag: '🇨🇦', type: 'province', popular: true },
-      { code: 'CA-SK', name: 'Saskatchewan', flag: '🇨🇦', type: 'province' }
-    ]
+      { code: 'CA-SK', name: 'Saskatchewan', flag: '🇨🇦', type: 'province' },
+    ],
   },
   {
     code: 'AU',
@@ -149,8 +149,8 @@ export const JURISDICTIONS: JurisdictionHierarchy[] = [
       { code: 'AU-QLD', name: 'Queensland', flag: '🇦🇺', type: 'state' },
       { code: 'AU-SA', name: 'South Australia', flag: '🇦🇺', type: 'state' },
       { code: 'AU-WA', name: 'Western Australia', flag: '🇦🇺', type: 'state' },
-      { code: 'AU-TAS', name: 'Tasmania', flag: '🇦🇺', type: 'state' }
-    ]
+      { code: 'AU-TAS', name: 'Tasmania', flag: '🇦🇺', type: 'state' },
+    ],
   },
   {
     code: 'AE',
@@ -165,15 +165,15 @@ export const JURISDICTIONS: JurisdictionHierarchy[] = [
       { code: 'AE-AJ', name: 'Ajman', flag: '🇦🇪', type: 'emirate' },
       { code: 'AE-UQ', name: 'Umm Al Quwain', flag: '🇦🇪', type: 'emirate' },
       { code: 'AE-FU', name: 'Fujairah', flag: '🇦🇪', type: 'emirate' },
-      { code: 'AE-RK', name: 'Ras Al Khaimah', flag: '🇦🇪', type: 'emirate' }
-    ]
+      { code: 'AE-RK', name: 'Ras Al Khaimah', flag: '🇦🇪', type: 'emirate' },
+    ],
   },
   {
     code: 'SG',
     name: 'Singapore',
     flag: '🇸🇬',
     type: 'city-state',
-    popular: true
+    popular: true,
   },
   {
     code: 'CH',
@@ -207,15 +207,15 @@ export const JURISDICTIONS: JurisdictionHierarchy[] = [
       { code: 'CH-VS', name: 'Valais', flag: '🇨🇭', type: 'state' },
       { code: 'CH-NE', name: 'Neuchâtel', flag: '🇨🇭', type: 'state' },
       { code: 'CH-GE', name: 'Geneva', flag: '🇨🇭', type: 'state', popular: true },
-      { code: 'CH-JU', name: 'Jura', flag: '🇨🇭', type: 'state' }
-    ]
+      { code: 'CH-JU', name: 'Jura', flag: '🇨🇭', type: 'state' },
+    ],
   },
   {
     code: 'HK',
     name: 'Hong Kong',
     flag: '🇭🇰',
     type: 'city-state',
-    popular: true
+    popular: true,
   },
   {
     code: 'IN',
@@ -228,53 +228,56 @@ export const JURISDICTIONS: JurisdictionHierarchy[] = [
       { code: 'IN-MH', name: 'Maharashtra', flag: '🇮🇳', type: 'state', popular: true },
       { code: 'IN-KA', name: 'Karnataka', flag: '🇮🇳', type: 'state', popular: true },
       { code: 'IN-TN', name: 'Tamil Nadu', flag: '🇮🇳', type: 'state' },
-      { code: 'IN-GJ', name: 'Gujarat', flag: '🇮🇳', type: 'state' }
-    ]
+      { code: 'IN-GJ', name: 'Gujarat', flag: '🇮🇳', type: 'state' },
+    ],
   },
   {
     code: 'JP',
     name: 'Japan',
     flag: '🇯🇵',
     type: 'country',
-    popular: true
+    popular: true,
   },
   {
     code: 'KR',
     name: 'South Korea',
     flag: '🇰🇷',
     type: 'country',
-    popular: true
+    popular: true,
   },
   {
     code: 'BR',
     name: 'Brazil',
     flag: '🇧🇷',
     type: 'country',
-    popular: true
+    popular: true,
   },
   {
     code: 'MX',
     name: 'Mexico',
     flag: '🇲🇽',
     type: 'country',
-    popular: true
+    popular: true,
   },
   {
     code: 'NZ',
     name: 'New Zealand',
     flag: '🇳🇿',
-    type: 'country'
+    type: 'country',
   },
   {
     code: 'ZA',
     name: 'South Africa',
     flag: '🇿🇦',
-    type: 'country'
-  }
+    type: 'country',
+  },
 ];
 
 // Helper function to find jurisdiction by code
-export function findJurisdiction(code: string, jurisdictions: JurisdictionHierarchy[] = JURISDICTIONS): JurisdictionHierarchy | null {
+export function findJurisdiction(
+  code: string,
+  jurisdictions: JurisdictionHierarchy[] = JURISDICTIONS,
+): JurisdictionHierarchy | null {
   for (const jurisdiction of jurisdictions) {
     if (jurisdiction.code === code) {
       return jurisdiction;
@@ -288,7 +291,11 @@ export function findJurisdiction(code: string, jurisdictions: JurisdictionHierar
 }
 
 // Get breadcrumb path for a jurisdiction
-export function getJurisdictionPath(code: string, jurisdictions: JurisdictionHierarchy[] = JURISDICTIONS, path: JurisdictionHierarchy[] = []): JurisdictionHierarchy[] {
+export function getJurisdictionPath(
+  code: string,
+  jurisdictions: JurisdictionHierarchy[] = JURISDICTIONS,
+  path: JurisdictionHierarchy[] = [],
+): JurisdictionHierarchy[] {
   for (const jurisdiction of jurisdictions) {
     const currentPath = [...path, jurisdiction];
     if (jurisdiction.code === code) {

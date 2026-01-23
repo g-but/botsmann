@@ -54,13 +54,13 @@ export async function POST(request: NextRequest) {
     let filteredResults = results || [];
     if (documentId) {
       filteredResults = filteredResults.filter(
-        (r: { document_id: string }) => r.document_id === documentId
+        (r: { document_id: string }) => r.document_id === documentId,
       );
     }
 
     // Get document names for the results
     const documentIds = Array.from(
-      new Set(filteredResults.map((r: { document_id: string }) => r.document_id))
+      new Set(filteredResults.map((r: { document_id: string }) => r.document_id)),
     );
 
     const { data: documents } = await supabase
@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
       .in('id', documentIds);
 
     const documentMap = new Map(
-      (documents || []).map((d: { id: string; name: string }) => [d.id, d.name])
+      (documents || []).map((d: { id: string; name: string }) => [d.id, d.name]),
     );
 
     // Format results
@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
         document_name: documentMap.get(r.document_id) || 'Unknown',
         content: r.content,
         similarity: r.similarity,
-      })
+      }),
     );
 
     return jsonSuccess({ results: formattedResults, query });

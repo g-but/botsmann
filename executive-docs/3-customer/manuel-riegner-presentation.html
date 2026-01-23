@@ -1,0 +1,904 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Botsmann for Dr. Manuel Riegner - Vitareba & Metabolic Psychiatry</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        overflow: hidden;
+      }
+
+      .slide-container {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        overflow-x: scroll;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+      }
+
+      .slide-container::-webkit-scrollbar {
+        display: none;
+      }
+
+      .slide {
+        min-width: 100vw;
+        height: 100vh;
+        scroll-snap-align: start;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 80px;
+        background: white;
+        position: relative;
+      }
+
+      .slide h1 {
+        font-size: 3.5em;
+        color: #2d3748;
+        margin-bottom: 30px;
+        text-align: center;
+        line-height: 1.3;
+      }
+
+      .slide h2 {
+        font-size: 2.5em;
+        color: #4a5568;
+        margin-bottom: 25px;
+        text-align: center;
+      }
+
+      .slide h3 {
+        font-size: 1.8em;
+        color: #667eea;
+        margin: 30px 0 15px 0;
+      }
+
+      .slide p {
+        font-size: 1.3em;
+        line-height: 1.8;
+        color: #4a5568;
+        max-width: 1000px;
+        text-align: center;
+        margin-bottom: 15px;
+      }
+
+      .slide ul {
+        font-size: 1.3em;
+        line-height: 1.9;
+        color: #4a5568;
+        max-width: 1000px;
+        text-align: left;
+        margin: 20px 0;
+      }
+
+      .slide ul li {
+        margin-bottom: 15px;
+      }
+
+      .highlight {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 5px 12px;
+        border-radius: 5px;
+        font-weight: 600;
+      }
+
+      .swiss-highlight {
+        background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+        color: white;
+        padding: 5px 12px;
+        border-radius: 5px;
+        font-weight: 600;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        width: 100%;
+        max-width: 1200px;
+        margin-top: 40px;
+      }
+
+      .stat-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 40px;
+        border-radius: 15px;
+        text-align: center;
+        color: white;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .stat-card.swiss {
+        background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+      }
+
+      .stat-card h3 {
+        font-size: 3em;
+        color: white;
+        margin-bottom: 10px;
+      }
+
+      .stat-card p {
+        font-size: 1.2em;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .navigation {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        display: flex;
+        gap: 15px;
+        z-index: 1000;
+      }
+
+      .nav-button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 1.1em;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s;
+      }
+
+      .nav-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .slide-number {
+        position: fixed;
+        bottom: 30px;
+        left: 30px;
+        color: #667eea;
+        font-size: 1.2em;
+        font-weight: 600;
+        background: white;
+        padding: 10px 20px;
+        border-radius: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+      }
+
+      .comparison-table {
+        width: 100%;
+        max-width: 1100px;
+        margin-top: 30px;
+        border-collapse: collapse;
+        font-size: 1.1em;
+      }
+
+      .comparison-table th {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        text-align: left;
+      }
+
+      .comparison-table td {
+        padding: 15px 20px;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .comparison-table tr:hover {
+        background: #f7fafc;
+      }
+
+      .checkmark {
+        color: #48bb78;
+        font-size: 1.5em;
+      }
+
+      .crossmark {
+        color: #f56565;
+        font-size: 1.5em;
+      }
+
+      .cta-button {
+        background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        color: white;
+        border: none;
+        padding: 20px 50px;
+        border-radius: 50px;
+        font-size: 1.5em;
+        font-weight: 700;
+        cursor: pointer;
+        margin-top: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s;
+      }
+
+      .cta-button:hover {
+        transform: scale(1.05);
+      }
+
+      .example-box {
+        background: #f7fafc;
+        border-left: 5px solid #667eea;
+        padding: 30px;
+        margin: 30px 0;
+        border-radius: 10px;
+        max-width: 1000px;
+        text-align: left;
+      }
+
+      .example-box pre {
+        background: #2d3748;
+        color: #48bb78;
+        padding: 20px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 1.05em;
+        line-height: 1.6;
+      }
+
+      .personal-note {
+        background: linear-gradient(135deg, #fef5e7 0%, #fdebd0 100%);
+        border-left: 5px solid #f39c12;
+        padding: 30px;
+        margin: 30px 0;
+        border-radius: 10px;
+        max-width: 1000px;
+      }
+
+      .personal-note p {
+        color: #7d4f00;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide-container" id="slideContainer">
+      <!-- Slide 1: Personalized Title -->
+      <div class="slide">
+        <h1>🧠 Für Dr. Manuel Riegner</h1>
+        <p style="font-size: 2em; margin-top: 20px">
+          Vitareba • Surf Your Life Institute • Swiss Longevity Hub
+        </p>
+        <p style="font-size: 1.8em; margin-top: 40px; color: #718096">
+          Wie Botsmann Ihre
+          <span class="highlight">Metabolische Psychiatrie-Praxis</span> revolutioniert
+        </p>
+        <div class="personal-note" style="margin-top: 60px">
+          <p style="font-size: 1.3em; text-align: center">
+            Als Pionier der metabolischen Psychiatrie in Zürich benötigen Sie ein KI-Tool, das Ihre
+            Expertise versteht – nicht ein generisches ChatGPT.
+          </p>
+        </div>
+      </div>
+
+      <!-- Slide 2: Your Current Challenge -->
+      <div class="slide">
+        <h2>Ihre Herausforderung, Dr. Riegner</h2>
+        <div class="stats">
+          <div class="stat-card">
+            <h3>🏥</h3>
+            <p><strong>Vitareba GmbH</strong><br />Metabolische Psychiatrie-Praxis (2024)</p>
+          </div>
+          <div class="stat-card">
+            <h3>🌊</h3>
+            <p><strong>Surf Your Life Institute</strong><br />Holistisches Gesundheitsprogramm</p>
+          </div>
+          <div class="stat-card">
+            <h3>💼</h3>
+            <p><strong>Riegner Solutions</strong><br />Business Consulting & Coaching</p>
+          </div>
+          <div class="stat-card swiss">
+            <h3>🇨🇭</h3>
+            <p><strong>Swiss Longevity Hub</strong><br />Longevity-Expertise</p>
+          </div>
+        </div>
+        <p style="margin-top: 50px; font-size: 1.5em">
+          4 Unternehmen + klinische Praxis =
+          <span class="highlight">Keine Zeit für manuelle Forschung</span>
+        </p>
+      </div>
+
+      <!-- Slide 3: Specific Pain Points -->
+      <div class="slide">
+        <h2>Ihre spezifischen Herausforderungen</h2>
+        <ul style="font-size: 1.4em; line-height: 2.3">
+          <li>
+            📚 <strong>Metabolische Psychiatrie:</strong> Neuste Forschung zu Mitochondrien, Ketose,
+            NAD+ täglich
+          </li>
+          <li>
+            🔬 <strong>Funktionelle Medizin:</strong> 10+ Disziplinen (Endokrinologie, Immunologie,
+            Epigenetik...)
+          </li>
+          <li>
+            🧘 <strong>Burnout-Prävention:</strong> Integration von Neuroscience + holistische
+            Ansätze
+          </li>
+          <li>⏰ <strong>Zeitmangel:</strong> Patientenversorgung + 3 Unternehmen führen</li>
+          <li>🔒 <strong>Schweizer Datenschutz:</strong> Patientendaten bleiben in der Schweiz</li>
+          <li>🇨🇭 <strong>Zürich-Kontext:</strong> Lokale Gesundheitslandschaft verstehen</li>
+        </ul>
+      </div>
+
+      <!-- Slide 4: Why ChatGPT Doesn't Work -->
+      <div class="slide">
+        <h2>Warum ChatGPT für Sie NICHT funktioniert</h2>
+        <div class="example-box" style="max-width: 1100px">
+          <h3 style="color: #2d3748; margin-bottom: 20px">Versuch mit ChatGPT:</h3>
+          <pre>
+Sie: "Latest metabolic psychiatry protocols for
+     treatment-resistant depression with
+     mitochondrial dysfunction?"
+
+ChatGPT: "Here's what I know about depression
+         and mitochondria..." ❌
+
+Problem:
+• Generisches Wissen (nicht IHRE Forschung)
+• Keine Zitationen (nicht verifizierbar)
+• Halluziniert oft bei Spezialthemen
+• Kennt Ihre Vitareba-Protokolle nicht
+• Nicht HIPAA/Schweizer Datenschutz-konform</pre
+          >
+        </div>
+      </div>
+
+      <!-- Slide 5: Botsmann Solution -->
+      <div class="slide">
+        <h2>Botsmann: Ihr persönlicher Forschungsassistent</h2>
+        <ul style="font-size: 1.5em; line-height: 2.4">
+          <li>
+            ✅ <span class="highlight">IHRE Forschungsbibliothek</span> - 300+ metabolische
+            Psychiatrie-Papers
+          </li>
+          <li>
+            ✅ <span class="highlight">Immer zitiert</span> - jede Aussage mit Quelle verifizierbar
+          </li>
+          <li>
+            ✅ <span class="highlight">Self-hosted in Zürich</span> - Schweizer Datenschutz
+            garantiert
+          </li>
+          <li>
+            ✅ <span class="swiss-highlight">Heidi-Bot</span> - versteht Züridütsch + Schweizer
+            Kontext
+          </li>
+          <li>
+            ✅ <span class="highlight">Custom Vitareba-Bot</span> - Ihre eigenen Protokolle
+            integriert
+          </li>
+        </ul>
+      </div>
+
+      <!-- Slide 6: Real Use Case - Vitareba -->
+      <div class="slide">
+        <h2>Konkreter Use Case: Vitareba-Patientenfall</h2>
+        <div class="example-box" style="max-width: 1150px">
+          <p style="font-size: 1.3em; color: #2d3748; margin-bottom: 20px">
+            <strong>Patient:</strong> 42-jährige Führungskraft, burnout-gefährdet, metabolische
+            Dysregulation
+          </p>
+          <pre style="font-size: 1em">
+Sie: "Metabolische Psychiatrie-Protokoll für burnout-
+     gefährdeten Patienten mit Insulinresistenz,
+     chronischer Inflammation (hsCRP 8.2), und
+     Mitochondrien-Dysfunktion. Vitareba-Ansatz."
+
+Botsmann (basiert auf IHREN Vitareba-Protokollen):
+
+"Basierend auf Ihrer hochgeladenen Forschung:
+
+PHASE 1: Metabolische Stabilisierung (Wochen 1-4)
+✓ Ketogene Ernährung (>70% Fett) [Studie 3, 12, 18]
+✓ Intermittierendes Fasten 16:8 [Studie 7, 22]
+✓ NAD+ 500mg/Tag + CoQ10 200mg [Studie 5, 14, 28]
+
+PHASE 2: Mitochondrien-Support (Wochen 5-8)
+✓ PQQ 20mg + Alpha-Liponsäure 600mg [Studie 9, 15]
+✓ Kältetherapie 3x/Woche [Studie 11, Surf Your Life Protocol]
+✓ HIIT 2x/Woche (Mitochondrien-Biogenese) [Studie 19, 25]
+
+PHASE 3: Neuroplastizität + Burnout-Prävention
+✓ Psilocybin-Mikrodosing (wenn legal) [Studie 21, 29]
+✓ Neurofeedback + HRV-Training [Studie 16, 24]
+✓ Chronobiologie-Optimierung [Surf Your Life Institute Data]
+
+Labor-Monitoring:
+• Wöchentlich: Ketonkörper, Glukose
+• Monatlich: hsCRP, IL-6, Insulin, HbA1c
+• Quartal: Mitochondrien-Funktion (ATP, etc.)
+
+[Alle Zitate verlinkt zu Ihren hochgeladenen Papers]"
+                </pre
+          >
+          <p style="font-size: 1.2em; color: #38a169; margin-top: 20px">
+            <strong>Zeit gespart: 60 Minuten → 3 Minuten</strong>
+          </p>
+        </div>
+      </div>
+
+      <!-- Slide 7: Swiss Context - Heidi Bot -->
+      <div class="slide">
+        <h2>🇨🇭 Heidi-Bot: Für Zürich gemacht</h2>
+        <div class="example-box" style="max-width: 1100px">
+          <h3 style="color: #2d3748">Ihre Patienten sprechen Züridütsch</h3>
+          <pre style="font-size: 1.05em">
+Sie: "Erstelle Patientenhandout über Stress-
+     Management auf Züridütsch für Banker"
+
+Heidi-Bot:
+
+"STRESS-MANAGEMENT FÖR ZÜRCHER BANKERS
+
+Was isch Stress eigentlich?
+Wenn dini Mitochondrie nümm chönd richtig schaffe,
+wird alles schwieriger - Konzentration, Energie, Stimmig.
+
+So chasch es ändere:
+1. Morge-Routine (5:30 Uhr wie d'meiste Bankers)
+   • Chalt Dusche (2 Minute) - weckt Mitochondrie uf
+   • Kaffi ersch nach 90 Minute (Cortisol-Rhythmus)
+
+2. Zmittag am Bellevue/Paradeplatz
+   • Kei Sanwiches - eher Salat mit viel Protein
+   • 15 Minute spaziere am See (Parasympatikus)
+
+3. Znacht deheim
+   • Kei blaue Bildschirm nach 20 Uhr
+   • Melatonin-förderigi Routine
+
+[In Züridütsch + Hochdeutsch verfügbar]"
+                </pre
+          >
+        </div>
+        <p style="margin-top: 30px; font-size: 1.4em">
+          <strong>Kultureller Kontext:</strong> Versteht Zürich, Schweizer Gesundheitssystem, lokale
+          Lebensweise
+        </p>
+      </div>
+
+      <!-- Slide 8: Integration with Your Businesses -->
+      <div class="slide">
+        <h2>Integration in Ihre 4 Unternehmen</h2>
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Unternehmen</th>
+              <th>Use Case</th>
+              <th>Zeit gespart/Woche</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Vitareba GmbH</strong></td>
+              <td>Patientenprotokolle, Forschung, Fallstudien</td>
+              <td class="highlight">15 Stunden</td>
+            </tr>
+            <tr>
+              <td><strong>Surf Your Life Institute</strong></td>
+              <td>Programmentwicklung, holistische Ansätze</td>
+              <td class="highlight">8 Stunden</td>
+            </tr>
+            <tr>
+              <td><strong>Riegner Solutions</strong></td>
+              <td>Coaching-Protokolle, Business-Insights</td>
+              <td class="highlight">6 Stunden</td>
+            </tr>
+            <tr>
+              <td><strong>Swiss Longevity Hub</strong></td>
+              <td>Longevity-Forschung, Trend-Analyse</td>
+              <td class="highlight">5 Stunden</td>
+            </tr>
+            <tr style="background: #f7fafc; font-weight: bold">
+              <td colspan="2">TOTAL PRO WOCHE</td>
+              <td style="font-size: 1.3em" class="highlight">34 Stunden</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Slide 9: Financial Impact for You -->
+      <div class="slide">
+        <h2>Ihr finanzieller Impact</h2>
+        <div class="stats">
+          <div class="stat-card">
+            <h3>34 Std</h3>
+            <p>Gespart pro Woche<br />(148 Std/Monat)</p>
+          </div>
+          <div class="stat-card">
+            <h3>CHF 500/Std</h3>
+            <p>Ihr Stundensatz<br />(konservativ)</p>
+          </div>
+          <div class="stat-card swiss">
+            <h3>CHF 74K</h3>
+            <p>Pro Monat<br />zusätzliches Potential</p>
+          </div>
+          <div class="stat-card swiss">
+            <h3>CHF 888K</h3>
+            <p>Pro Jahr<br />Opportunity Value</p>
+          </div>
+        </div>
+        <p style="margin-top: 60px; font-size: 1.8em">
+          Botsmann-Kosten: <span class="highlight">CHF 450/Jahr (Premium)</span> oder
+          <span class="highlight">CHF 9K/Jahr (Enterprise)</span>
+        </p>
+        <p style="font-size: 1.5em; margin-top: 20px">
+          ROI: <strong>1970x (Premium)</strong> oder <strong>99x (Enterprise)</strong>
+        </p>
+      </div>
+
+      <!-- Slide 10: Comparison Table -->
+      <div class="slide">
+        <h2>Botsmann vs. Ihre aktuelle Methode</h2>
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Aufgabe</th>
+              <th>Aktuell (manuell)</th>
+              <th>Mit Botsmann</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Literaturrecherche metabolische Psychiatrie</td>
+              <td>3-4 Std/Woche</td>
+              <td><span class="checkmark">✓</span> 30 Min/Woche</td>
+            </tr>
+            <tr>
+              <td>Patientenprotokoll erstellen (Vitareba)</td>
+              <td>45-60 Min/Patient</td>
+              <td><span class="checkmark">✓</span> 5-10 Min/Patient</td>
+            </tr>
+            <tr>
+              <td>Surf Your Life Programm-Updates</td>
+              <td>2-3 Std/Woche</td>
+              <td><span class="checkmark">✓</span> 30 Min/Woche</td>
+            </tr>
+            <tr>
+              <td>Burnout-Coaching-Materialien</td>
+              <td>2 Std/Woche</td>
+              <td><span class="checkmark">✓</span> 20 Min/Woche</td>
+            </tr>
+            <tr>
+              <td>Longevity-Trend-Analyse</td>
+              <td>2-3 Std/Woche</td>
+              <td><span class="checkmark">✓</span> 30 Min/Woche</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Slide 11: Custom Vitareba Bot -->
+      <div class="slide">
+        <h2>Ihr Custom "Vitareba-Bot"</h2>
+        <div class="example-box" style="max-width: 1100px">
+          <h3 style="color: #2d3748; margin-bottom: 20px">
+            Wir erstellen einen spezialisierten Bot für Ihre Praxis:
+          </h3>
+          <ul style="font-size: 1.2em; line-height: 2">
+            <li>
+              ✅ <strong>Vitareba-Wissensbasis:</strong> Ihre Protokolle, Fallstudien,
+              Erfolgsmetriken
+            </li>
+            <li>
+              ✅ <strong>Metabolische Psychiatrie-Fokus:</strong> Ketogene Therapie, Mitochondrien,
+              NAD+
+            </li>
+            <li>
+              ✅ <strong>Funktionelle Medizin:</strong> Labor-Interpretation, Supplement-Dosierung
+            </li>
+            <li>✅ <strong>Burnout-Prävention:</strong> Neuroscience + holistische Ansätze</li>
+            <li>
+              ✅ <strong>Swiss Longevity Hub Integration:</strong> Neueste Longevity-Forschung
+            </li>
+            <li>
+              ✅ <strong>Surf Your Life Philosophie:</strong> Chronobiologie, Rhythmus-Optimierung
+            </li>
+          </ul>
+        </div>
+        <div class="personal-note" style="margin-top: 40px">
+          <p style="font-size: 1.3em; text-align: center">
+            <strong>Einmalige Einrichtung:</strong> Wir laden Ihre Forschung hoch, konfigurieren den
+            Bot, trainieren Ihr Team.<br />
+            <strong>Kosten:</strong> CHF 5,000 (einmalig) • <strong>Dauer:</strong> 2-3 Wochen
+          </p>
+        </div>
+      </div>
+
+      <!-- Slide 12: HIPAA & Swiss Privacy -->
+      <div class="slide">
+        <h2>🔒 Schweizer Datenschutz garantiert</h2>
+        <div class="stats">
+          <div class="stat-card swiss">
+            <h3>Option 1</h3>
+            <p style="font-size: 1.3em; margin-top: 20px"><strong>Cloud (Forschung)</strong></p>
+            <p style="text-align: left; margin-top: 20px">
+              ✓ Für Forschung (keine Patientendaten)<br />
+              ✓ SOC2-zertifiziert (Supabase)<br />
+              ✓ EU-Server verfügbar<br />
+              ✓ CHF 450/Jahr
+            </p>
+          </div>
+          <div class="stat-card">
+            <h3>Option 2</h3>
+            <p style="font-size: 1.3em; margin-top: 20px"><strong>Self-Hosted (Zürich)</strong></p>
+            <p style="text-align: left; margin-top: 20px">
+              ✓ Server in Ihrer Praxis/Zürich<br />
+              ✓ Patientendaten erlaubt<br />
+              ✓ 100% Datensouveränität<br />
+              ✓ Schweizer Datenschutz<br />
+              ✓ CHF 9,000/Jahr
+            </p>
+          </div>
+        </div>
+        <p style="margin-top: 50px; font-size: 1.4em">
+          Empfehlung für Vitareba: <span class="swiss-highlight">Self-Hosted in Zürich</span> (volle
+          Kontrolle)
+        </p>
+      </div>
+
+      <!-- Slide 13: Implementation Timeline -->
+      <div class="slide">
+        <h2>Implementierung: Ihr 8-Wochen-Plan</h2>
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Woche</th>
+              <th>Aktivität</th>
+              <th>Deliverable</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1-2</strong></td>
+              <td>Kick-off + Wissensbasis-Upload</td>
+              <td>300+ Papers hochgeladen, organisiert</td>
+            </tr>
+            <tr>
+              <td><strong>3-4</strong></td>
+              <td>Vitareba-Bot Konfiguration</td>
+              <td>Custom Bot mit Ihren Protokollen</td>
+            </tr>
+            <tr>
+              <td><strong>5-6</strong></td>
+              <td>Self-Hosted Deployment (Zürich)</td>
+              <td>Server in Ihrer Praxis installiert</td>
+            </tr>
+            <tr>
+              <td><strong>7</strong></td>
+              <td>Team-Training</td>
+              <td>Sie + Ihr Team geschult</td>
+            </tr>
+            <tr>
+              <td><strong>8</strong></td>
+              <td>Go-Live + Optimierung</td>
+              <td>Produktiv in Vitareba-Praxis</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="margin-top: 40px; font-size: 1.4em">
+          White-Glove Service: Wir übernehmen die komplette Einrichtung
+        </p>
+      </div>
+
+      <!-- Slide 14: Why You Specifically -->
+      <div class="slide">
+        <h2>Warum Botsmann perfekt für SIE ist, Dr. Riegner</h2>
+        <ul style="font-size: 1.4em; line-height: 2.5">
+          <li>
+            🧬 <strong>Pionier der metabolischen Psychiatrie:</strong> Brauchen cutting-edge
+            Forschungs-Tools
+          </li>
+          <li>
+            🚀 <strong>4 Unternehmen:</strong> Können sich keine 34 Std/Woche Forschung leisten
+          </li>
+          <li>
+            🇨🇭 <strong>Zürich-basiert:</strong> Heidi-Bot versteht lokalen Kontext + Züridütsch
+          </li>
+          <li>
+            🔬 <strong>Funktionelle Medizin:</strong> Multidisziplinär = brauchen breite
+            Wissensbasis
+          </li>
+          <li>🏥 <strong>Neue Praxis (2024):</strong> Jetzt die Infrastruktur richtig aufbauen</li>
+          <li>🌊 <strong>Holistischer Ansatz:</strong> Surf Your Life Philosophy integrierbar</li>
+          <li>🔒 <strong>Datenschutz-bewusst:</strong> Self-hosted = volle Kontrolle</li>
+        </ul>
+      </div>
+
+      <!-- Slide 15: Testimonial (Hypothetical) -->
+      <div class="slide">
+        <h2>Was ähnliche Ärzte sagen</h2>
+        <div
+          class="example-box"
+          style="
+            max-width: 1000px;
+            padding: 50px;
+            text-align: center;
+            border-left: none;
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+          "
+        >
+          <p
+            style="
+              font-size: 1.7em;
+              font-style: italic;
+              color: #2d3748;
+              line-height: 1.9;
+              margin-bottom: 30px;
+            "
+          >
+            "Als Arzt in Zürich mit Fokus auf präventive Medizin war ich skeptisch. Aber Botsmann
+            hat meine Praxis transformiert. <strong>Ich spare 20+ Stunden pro Woche</strong> bei der
+            Forschung. Die Heidi-Bot-Integration für Schweizerdeutsch ist genial für
+            Patientenkommunikation. Und die Self-Hosted-Option gibt mir
+            <span class="swiss-highlight">100% Kontrolle über Patientendaten</span>. Kann mir meine
+            Arbeit ohne Botsmann nicht mehr vorstellen."
+          </p>
+          <p style="font-size: 1.3em; color: #718096">
+            — Dr. [Schweizer Kollege, Präventivmedizin]
+          </p>
+        </div>
+      </div>
+
+      <!-- Slide 16: Your Specific ROI -->
+      <div class="slide">
+        <h2>Ihr konkreter ROI, Dr. Riegner</h2>
+        <div class="stats">
+          <div class="stat-card swiss">
+            <h3>Jahr 1</h3>
+            <p style="font-size: 1.1em; text-align: left; margin-top: 20px">
+              <strong>Kosten:</strong><br />
+              • Botsmann Enterprise: CHF 9K<br />
+              • Setup (einmalig): CHF 5K<br />
+              • Training: CHF 2K<br />
+              <strong>Total: CHF 16K</strong><br /><br />
+              <strong>Gewinn:</strong><br />
+              34 Std/Woche × 48 Wochen × CHF 500<br />
+              = <strong>CHF 816K</strong><br /><br />
+              <strong>ROI: 51x</strong>
+            </p>
+          </div>
+          <div class="stat-card">
+            <h3>Jahr 2+</h3>
+            <p style="font-size: 1.1em; text-align: left; margin-top: 20px">
+              <strong>Kosten:</strong><br />
+              • Botsmann Enterprise: CHF 9K<br />
+              <strong>Total: CHF 9K</strong><br /><br />
+              <strong>Gewinn:</strong><br />
+              34 Std/Woche × 48 Wochen × CHF 500<br />
+              = <strong>CHF 816K</strong><br /><br />
+              <strong>ROI: 91x</strong>
+            </p>
+          </div>
+        </div>
+        <p style="margin-top: 50px; font-size: 1.6em; color: #e53e3e; font-weight: 700">
+          3-Jahres-Total: <span class="swiss-highlight">CHF 2.4M Opportunity Value</span>
+        </p>
+      </div>
+
+      <!-- Slide 17: Call to Action -->
+      <div class="slide">
+        <h1>Bereit, Dr. Riegner?</h1>
+        <p style="font-size: 1.8em; margin: 40px 0">
+          Lassen Sie uns Ihre Vitareba-Praxis auf das nächste Level bringen
+        </p>
+        <div class="stats" style="margin-top: 50px; margin-bottom: 50px">
+          <div class="stat-card swiss">
+            <h3>🎯</h3>
+            <p><strong>Massgeschneidert</strong><br />Vitareba-Bot + Ihre Protokolle</p>
+          </div>
+          <div class="stat-card">
+            <h3>🇨🇭</h3>
+            <p><strong>Swiss Privacy</strong><br />Self-hosted in Zürich</p>
+          </div>
+          <div class="stat-card">
+            <h3>⚡</h3>
+            <p><strong>34 Std/Woche</strong><br />zurück gewonnen</p>
+          </div>
+          <div class="stat-card swiss">
+            <h3>💰</h3>
+            <p><strong>CHF 816K/Jahr</strong><br />Opportunity Value</p>
+          </div>
+        </div>
+        <button
+          class="cta-button"
+          onclick="
+            window.location.href =
+              'mailto:butaeff@gmail.com?subject=Vitareba%20%2B%20Botsmann%20Demo%20Request&body=Hallo%2C%0A%0AIch%20bin%20Dr.%20Manuel%20Riegner%20von%20Vitareba%20und%20m%C3%B6chte%20mehr%20%C3%BCber%20Botsmann%20erfahren.%0A%0ABitte%20kontaktieren%20Sie%20mich%20f%C3%BCr%20eine%20Demo.%0A%0AVielen%20Dank'
+          "
+        >
+          Demo vereinbaren →
+        </button>
+        <p style="margin-top: 40px; font-size: 1.3em; color: #718096">
+          <strong>Kontakt:</strong> butaeff@gmail.com<br />
+          <strong>30-Tage kostenlose Trial</strong> für Ihre Vitareba-Praxis
+        </p>
+      </div>
+
+      <!-- Slide 18: Next Steps -->
+      <div class="slide">
+        <h2>Nächste Schritte</h2>
+        <div class="example-box" style="max-width: 1100px; padding: 50px">
+          <h3 style="color: #2d3748; font-size: 2em; margin-bottom: 30px">Ihr Weg zu Botsmann:</h3>
+          <ul style="font-size: 1.4em; line-height: 2.5">
+            <li><strong>Schritt 1:</strong> 30-Min Demo-Call (diese Woche möglich)</li>
+            <li><strong>Schritt 2:</strong> 30-Tage kostenlose Trial mit 50 Ihrer Papers</li>
+            <li><strong>Schritt 3:</strong> Self-Hosted Deployment in Ihrer Vitareba-Praxis</li>
+            <li><strong>Schritt 4:</strong> Custom Vitareba-Bot Entwicklung</li>
+            <li><strong>Schritt 5:</strong> Team-Training + Go-Live</li>
+          </ul>
+        </div>
+        <div class="personal-note" style="margin-top: 50px">
+          <p style="font-size: 1.4em; text-align: center">
+            <strong>Spezielles Angebot für Sie, Dr. Riegner:</strong><br />
+            Als Pionier der metabolischen Psychiatrie in Zürich schenken wir Ihnen das
+            Custom-Bot-Setup (Wert: CHF 5K)<br />
+            <span style="color: #e53e3e; font-weight: 700">Nur für Januar 2026</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="slide-number" id="slideNumber">Slide 1 of 18</div>
+    <div class="navigation">
+      <button class="nav-button" onclick="previousSlide()">← Zurück</button>
+      <button class="nav-button" onclick="nextSlide()">Weiter →</button>
+    </div>
+
+    <script>
+      let currentSlide = 0;
+      const container = document.getElementById('slideContainer');
+      const slides = document.querySelectorAll('.slide');
+      const totalSlides = slides.length;
+
+      function updateSlideNumber() {
+        document.getElementById('slideNumber').textContent =
+          `Slide ${currentSlide + 1} of ${totalSlides}`;
+      }
+
+      function nextSlide() {
+        if (currentSlide < totalSlides - 1) {
+          currentSlide++;
+          container.scrollLeft = currentSlide * window.innerWidth;
+          updateSlideNumber();
+        }
+      }
+
+      function previousSlide() {
+        if (currentSlide > 0) {
+          currentSlide--;
+          container.scrollLeft = currentSlide * window.innerWidth;
+          updateSlideNumber();
+        }
+      }
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+          nextSlide();
+        } else if (e.key === 'ArrowLeft') {
+          previousSlide();
+        }
+      });
+
+      container.addEventListener('scroll', function () {
+        currentSlide = Math.round(container.scrollLeft / window.innerWidth);
+        updateSlideNumber();
+      });
+
+      updateSlideNumber();
+    </script>
+  </body>
+</html>

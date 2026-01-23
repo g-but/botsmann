@@ -1,3 +1,5 @@
+ARCHIVED: This document contains outdated MongoDB-era instructions. Prefer docs/SUPABASE_SETUP.md and docs/SSOT.md.
+
 # DevOps Implementation Plan - Botsmann/Lex Platform
 
 **Based on**: DEVOPS_AUDIT_REPORT.md
@@ -13,6 +15,7 @@
 #### Step 1: Rotate All Credentials (URGENT - Do First!)
 
 **MongoDB:**
+
 ```bash
 # 1. Log into MongoDB Atlas
 # 2. Navigate to Database Access
@@ -22,6 +25,7 @@
 ```
 
 **Gmail App Password:**
+
 ```bash
 # 1. Go to Google Account → Security → 2-Step Verification → App Passwords
 # 2. Revoke existing password "botsmann"
@@ -30,6 +34,7 @@
 ```
 
 **Environment Variables (Vercel):**
+
 ```bash
 # 1. Go to Vercel Dashboard → botsmann project → Settings → Environment Variables
 # 2. Add:
@@ -69,6 +74,7 @@ git push origin --force --tags
 ```
 
 **Alternative (Safer but Slower):**
+
 ```bash
 git filter-branch --force --index-filter \
   "git rm --cached --ignore-unmatch .env" \
@@ -80,6 +86,7 @@ git push origin --force --all
 #### Step 3: Update .gitignore and Local .env
 
 **Update .gitignore:**
+
 ```bash
 # Already in .gitignore, but let's make it explicit
 cat >> .gitignore << 'EOF'
@@ -98,6 +105,7 @@ EOF
 ```
 
 **Create Local .env (for development):**
+
 ```bash
 # Copy from .env.example
 cp .env.example .env
@@ -139,6 +147,7 @@ git log --all --full-history -- .env
 #### Step 1: Update package.json
 
 **Before:**
+
 ```json
 {
   "scripts": {
@@ -148,6 +157,7 @@ git log --all --full-history -- .env
 ```
 
 **After:**
+
 ```json
 {
   "scripts": {
@@ -163,7 +173,7 @@ git log --all --full-history -- .env
   },
   "dependencies": {
     // ... existing deps
-    "react-icons": "^5.5.0",    // Already present
+    "react-icons": "^5.5.0", // Already present
     "framer-motion": "^12.23.22" // Already present
   }
 }
@@ -186,15 +196,11 @@ npx husky add .husky/commit-msg 'npx --no -- commitlint --edit "$1"'
 ```
 
 **Create `.lintstagedrc.js`:**
+
 ```javascript
 module.exports = {
-  '*.{js,jsx,ts,tsx}': [
-    'eslint --fix',
-    'prettier --write',
-  ],
-  '*.{json,md,yml,yaml}': [
-    'prettier --write',
-  ],
+  '*.{js,jsx,ts,tsx}': ['eslint --fix', 'prettier --write'],
+  '*.{json,md,yml,yaml}': ['prettier --write'],
   '*.ts?(x)': [
     () => 'tsc --noEmit', // Type check
   ],
@@ -204,13 +210,14 @@ module.exports = {
 #### Step 3: Add Dependency Validation
 
 **Create `scripts/check-deps.js`:**
+
 ```javascript
 const fs = require('fs');
 const pkg = require('../package.json');
 
 const requiredDeps = ['react', 'next', 'react-dom', 'react-icons', 'framer-motion'];
 
-const missingDeps = requiredDeps.filter(dep => !pkg.dependencies[dep]);
+const missingDeps = requiredDeps.filter((dep) => !pkg.dependencies[dep]);
 
 if (missingDeps.length > 0) {
   console.error('❌ Missing required dependencies:', missingDeps.join(', '));
@@ -221,6 +228,7 @@ console.log('✅ All required dependencies present');
 ```
 
 **Update package.json:**
+
 ```json
 {
   "scripts": {
@@ -236,28 +244,29 @@ console.log('✅ All required dependencies present');
 #### Step 1: Add Dependabot
 
 **Create `.github/dependabot.yml`:**
+
 ```yaml
 version: 2
 updates:
   # npm dependencies
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     open-pull-requests-limit: 10
     reviewers:
-      - "g-but"
+      - 'g-but'
     labels:
-      - "dependencies"
-      - "security"
+      - 'dependencies'
+      - 'security'
 
   # GitHub Actions
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     reviewers:
-      - "g-but"
+      - 'g-but'
 ```
 
 #### Step 2: Add Snyk Security Scanning
@@ -277,6 +286,7 @@ snyk monitor
 ```
 
 **Create `.github/workflows/security.yml`:**
+
 ```yaml
 name: Security Scan
 on:
@@ -301,6 +311,7 @@ jobs:
 #### Step 3: Add Secrets Scanning
 
 **Create `.github/workflows/secrets-scan.yml`:**
+
 ```yaml
 name: Secrets Scan
 on: [push, pull_request]
@@ -318,6 +329,7 @@ jobs:
 ```
 
 **Create `.gitleaks.toml`:**
+
 ```toml
 [extend]
 useDefault = true
@@ -424,6 +436,7 @@ jobs:
 ### Day 6: Create Dockerfile
 
 **Create `Dockerfile`:**
+
 ```dockerfile
 # Multi-stage build for optimal image size
 
@@ -472,6 +485,7 @@ CMD ["node", "server.js"]
 ```
 
 **Create `.dockerignore`:**
+
 ```
 node_modules
 .next
@@ -491,6 +505,7 @@ npm-debug.log*
 ### Day 7: Docker Compose for Local Dev
 
 **Create `docker-compose.yml`:**
+
 ```yaml
 version: '3.8'
 
@@ -500,7 +515,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - '3000:3000'
     env_file:
       - .env.local
     environment:
@@ -516,7 +531,7 @@ services:
   mongodb:
     image: mongo:7
     ports:
-      - "27017:27017"
+      - '27017:27017'
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
@@ -530,7 +545,7 @@ services:
   mongo-express:
     image: mongo-express:latest
     ports:
-      - "8081:8081"
+      - '8081:8081'
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: admin
       ME_CONFIG_MONGODB_ADMINPASSWORD: password
@@ -549,6 +564,7 @@ networks:
 ```
 
 **Create `docker-compose.prod.yml`:**
+
 ```yaml
 version: '3.8'
 
@@ -559,7 +575,7 @@ services:
       dockerfile: Dockerfile
       target: runner
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - NODE_ENV=production
     env_file:
@@ -599,8 +615,9 @@ npx @sentry/wizard@latest -i nextjs
 ```
 
 **Configure `sentry.client.config.ts`:**
+
 ```typescript
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from '@sentry/nextjs';
 
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
@@ -611,6 +628,7 @@ Sentry.init({
 ```
 
 **Update `.env.example`:**
+
 ```
 NEXT_PUBLIC_SENTRY_DSN=
 SENTRY_AUTH_TOKEN=
@@ -619,13 +637,14 @@ SENTRY_AUTH_TOKEN=
 ### Day 13: Logging Setup
 
 **Create `lib/logger.ts`:**
+
 ```typescript
 import pino from 'pino';
 
 export const logger = pino({
   level: process.env.LOG_LEVEL || 'info',
   browser: {
-    asObject: true
+    asObject: true,
   },
   formatters: {
     level(label) {
@@ -637,6 +656,7 @@ export const logger = pino({
 ```
 
 **Update `.gitignore`:**
+
 ```
 # Logs
 logs/
@@ -649,17 +669,20 @@ yarn-error.log*
 ### Day 14-15: Uptime Monitoring
 
 **UptimeRobot Setup:**
+
 1. Sign up at https://uptimerobot.com
 2. Add monitor: https://botsmann.vercel.app
 3. Set up alerts (email, Slack)
 4. Configure status page
 
 **Vercel Analytics:**
+
 ```bash
 npm install @vercel/analytics
 ```
 
 **Add to `_app.tsx`:**
+
 ```typescript
 import { Analytics } from '@vercel/analytics/react';
 
@@ -680,6 +703,7 @@ export default function App({ Component, pageProps }) {
 ### Terraform Setup
 
 **Create `terraform/main.tf`:**
+
 ```hcl
 terraform {
   required_version = ">= 1.0"
@@ -735,6 +759,7 @@ npx playwright install
 ```
 
 **Create `playwright.config.ts`:**
+
 ```typescript
 import { defineConfig } from '@playwright/test';
 
@@ -760,6 +785,7 @@ export default defineConfig({
 ### Performance Testing
 
 **Create `.github/workflows/performance.yml`:**
+
 ```yaml
 name: Performance
 on:
@@ -784,6 +810,7 @@ jobs:
 ## 📋 IMPLEMENTATION CHECKLIST
 
 ### Week 1: Critical Security ✅
+
 - [ ] Day 1: Rotate all credentials
 - [ ] Day 1: Remove .env from Git history
 - [ ] Day 1: Set up Vercel environment variables
@@ -795,6 +822,7 @@ jobs:
 - [ ] Day 5: Create basic CI pipeline
 
 ### Week 2: Containerization ✅
+
 - [ ] Day 6: Create Dockerfile
 - [ ] Day 6: Create .dockerignore
 - [ ] Day 7: Create docker-compose.yml
@@ -805,6 +833,7 @@ jobs:
 - [ ] Day 10: Document Docker setup
 
 ### Week 3: Monitoring ✅
+
 - [ ] Day 11: Set up Sentry
 - [ ] Day 12: Configure error tracking
 - [ ] Day 13: Implement structured logging
@@ -813,6 +842,7 @@ jobs:
 - [ ] Day 15: Configure Vercel Analytics
 
 ### Week 4-5: Infrastructure as Code ✅
+
 - [ ] Create Terraform config
 - [ ] Set up remote state (S3)
 - [ ] Define all resources
@@ -821,6 +851,7 @@ jobs:
 - [ ] Document infrastructure
 
 ### Week 6-7: Advanced CI/CD ✅
+
 - [ ] Set up E2E testing (Playwright)
 - [ ] Add performance testing (Lighthouse)
 - [ ] Visual regression testing
@@ -828,6 +859,7 @@ jobs:
 - [ ] Deployment strategies
 
 ### Week 8: Production Readiness ✅
+
 - [ ] Security audit
 - [ ] Performance audit
 - [ ] Load testing
@@ -874,6 +906,6 @@ npm run monitor:health
 
 ---
 
-*Implementation Plan Version: 1.0*
-*Last Updated: January 2025*
-*Status: Ready for Execution*
+_Implementation Plan Version: 1.0_
+_Last Updated: January 2025_
+_Status: Ready for Execution_

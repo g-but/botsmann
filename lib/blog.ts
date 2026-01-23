@@ -25,7 +25,7 @@ const CONFIG = {
   // Set to true to always use the current date for published posts, even if they have a date
   FORCE_CURRENT_DATE_FOR_PUBLISHED: true,
   // Set to true to enable more verbose logging
-  VERBOSE_LOGGING: true
+  VERBOSE_LOGGING: true,
 };
 
 // Revalidation time in seconds (1 hour) - enables ISR instead of forcing dynamic rendering
@@ -36,7 +36,7 @@ async function fileExistsOnGitHub(path: string): Promise<boolean> {
   try {
     const response = await fetch(`${GITHUB_RAW_BASE}/${path}`, {
       method: 'HEAD',
-      next: { revalidate: REVALIDATE_INTERVAL }
+      next: { revalidate: REVALIDATE_INTERVAL },
     });
     return response.ok;
   } catch (error) {
@@ -59,8 +59,10 @@ function determinePostDate(data: { published?: boolean; date?: string }): string
     // If we're forcing current date for all published posts OR if no date is provided
     if (CONFIG.FORCE_CURRENT_DATE_FOR_PUBLISHED || !data.date) {
       if (CONFIG.VERBOSE_LOGGING) {
-        console.info(`Using current date (${currentDate}) for published post.`,
-                    data.date ? `Original date was: ${data.date}` : 'No original date was provided.');
+        console.info(
+          `Using current date (${currentDate}) for published post.`,
+          data.date ? `Original date was: ${data.date}` : 'No original date was provided.',
+        );
       }
       return currentDate;
     }
@@ -79,7 +81,7 @@ export async function fetchBlogPosts(): Promise<BlogPost[]> {
     // Use ISR with revalidation instead of no-store to support static generation
     const res = await fetch(
       `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/posts`,
-      { next: { revalidate: REVALIDATE_INTERVAL } }
+      { next: { revalidate: REVALIDATE_INTERVAL } },
     );
 
     if (!res.ok) {
@@ -98,10 +100,9 @@ export async function fetchBlogPosts(): Promise<BlogPost[]> {
         console.info('Processing post directory:', slug);
 
         // Fetch the index.mdx file for this post
-        const mdxRes = await fetch(
-          `${GITHUB_RAW_BASE}/posts/${slug}/index.mdx`,
-          { next: { revalidate: REVALIDATE_INTERVAL } }
-        );
+        const mdxRes = await fetch(`${GITHUB_RAW_BASE}/posts/${slug}/index.mdx`, {
+          next: { revalidate: REVALIDATE_INTERVAL },
+        });
 
         if (!mdxRes.ok) {
           console.info(`Failed to fetch MDX for ${slug}:`, mdxRes.status, mdxRes.statusText);
@@ -163,9 +164,9 @@ export async function fetchBlogPosts(): Promise<BlogPost[]> {
           excerpt: data.excerpt || '',
           content,
           tags: data.tags || [],
-          featuredImage
+          featuredImage,
         };
-      })
+      }),
     );
 
     // Filter out null values and sort by date (newest first)
@@ -190,10 +191,9 @@ export async function fetchBlogPostBySlug(slug: string): Promise<BlogPost | null
 
     // Fetch the index.mdx file for this post
     // Use ISR with revalidation instead of no-store to support static generation
-    const mdxRes = await fetch(
-      `${GITHUB_RAW_BASE}/posts/${slug}/index.mdx`,
-      { next: { revalidate: REVALIDATE_INTERVAL } }
-    );
+    const mdxRes = await fetch(`${GITHUB_RAW_BASE}/posts/${slug}/index.mdx`, {
+      next: { revalidate: REVALIDATE_INTERVAL },
+    });
 
     if (!mdxRes.ok) {
       console.info(`Failed to fetch post for ${slug}:`, mdxRes.status, mdxRes.statusText);
@@ -215,8 +215,11 @@ export async function fetchBlogPostBySlug(slug: string): Promise<BlogPost | null
     const postDate = determinePostDate(data);
 
     if (CONFIG.VERBOSE_LOGGING) {
-      console.info(`Post date for ${slug}:`, postDate,
-                  data.date ? `Original date: ${data.date}` : 'No original date found');
+      console.info(
+        `Post date for ${slug}:`,
+        postDate,
+        data.date ? `Original date: ${data.date}` : 'No original date found',
+      );
     }
 
     // Process featured image
@@ -260,7 +263,7 @@ export async function fetchBlogPostBySlug(slug: string): Promise<BlogPost | null
       excerpt: data.excerpt || '',
       content,
       tags: data.tags || [],
-      featuredImage
+      featuredImage,
     };
   } catch (error) {
     console.info(`Failed to fetch post for ${slug}:`, error);

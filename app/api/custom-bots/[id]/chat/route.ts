@@ -32,6 +32,41 @@ import { API_CONFIG, DOMAIN_ERRORS } from '@/lib/constants';
 // Extend function timeout for model loading (Vercel)
 export const maxDuration = 30;
 
+/**
+ * Parse LLM response to extract main content and context-aware suggestions
+ */
+function parseResponseWithSuggestions(rawContent: string): {
+  content: string;
+  suggestions: string[];
+} {
+  const lines = rawContent.split('\n');
+  const suggestions: string[] = [];
+  const contentLines: string[] = [];
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (trimmed.startsWith('>>>')) {
+      // Extract the suggestion after >>>
+      const suggestion = trimmed.slice(3).trim();
+      if (suggestion && suggestion.length > 3) {
+        suggestions.push(suggestion);
+      }
+    } else {
+      contentLines.push(line);
+    }
+  }
+
+  // Clean up trailing empty lines from content
+  while (contentLines.length > 0 && contentLines[contentLines.length - 1].trim() === '') {
+    contentLines.pop();
+  }
+
+  return {
+    content: contentLines.join('\n').trim(),
+    suggestions: suggestions.slice(0, 3), // Limit to 3 suggestions
+  };
+}
+
 const ChatRequestSchema = z.object({
   message: z.string().min(1, 'Message required').max(5000, 'Message too long'),
   contextSize: z.number().min(1).max(10).optional().default(5),
@@ -99,8 +134,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     const apiKey =
       provider === 'groq'
         ? settings?.groq_api_key
-        : provider === 'openai'
-          ? settings?.openai_api_key
+        : provider === 'openrouter'
+          ? settings?.openrouter_api_key
           : null;
     const ollamaUrl = settings?.ollama_url;
 
@@ -137,7 +172,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         console.log(
           '[Custom Bot Chat] Embedding generated in',
           Date.now() - embeddingStartTime,
-          'ms'
+          'ms',
         );
       } catch (embeddingError) {
         console.error('[Custom Bot Chat] Embedding failed:', embeddingError);
@@ -148,13 +183,13 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
           return jsonError(
             DOMAIN_ERRORS.SERVICE_WARMING_UP,
             'SERVICE_UNAVAILABLE',
-            HTTP_STATUS.SERVICE_UNAVAILABLE
+            HTTP_STATUS.SERVICE_UNAVAILABLE,
           );
         }
         return jsonError(
           DOMAIN_ERRORS.FAILED_PROCESS_QUERY,
           'SERVICE_UNAVAILABLE',
-          HTTP_STATUS.SERVICE_UNAVAILABLE
+          HTTP_STATUS.SERVICE_UNAVAILABLE,
         );
       }
 
@@ -162,11 +197,14 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       console.log('[Custom Bot Chat] Searching knowledge base...');
       const searchStartTime = Date.now();
 
-      const { data: searchResults, error: searchError } = await supabase.rpc('match_bot_knowledge', {
-        query_embedding: `[${queryEmbedding.join(',')}]`,
-        target_bot_id: botId,
-        match_count: contextSize,
-      });
+      const { data: searchResults, error: searchError } = await supabase.rpc(
+        'match_bot_knowledge',
+        {
+          query_embedding: `[${queryEmbedding.join(',')}]`,
+          target_bot_id: botId,
+          match_count: contextSize,
+        },
+      );
 
       console.log('[Custom Bot Chat] Search completed in', Date.now() - searchStartTime, 'ms');
 
@@ -186,7 +224,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
             if (remainingSpace > 200) {
               const topicLabel = chunk.topic ? `[${chunk.topic}]` : '[Knowledge]';
               contextParts.push(
-                `${topicLabel}\n${chunk.content.substring(0, remainingSpace)}... [truncated]`
+                `${topicLabel}\n${chunk.content.substring(0, remainingSpace)}... [truncated]`,
               );
             }
             break;
@@ -205,7 +243,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
             topic: chunk.topic,
             preview: chunk.content.substring(0, 200) + (chunk.content.length > 200 ? '...' : ''),
             similarity: chunk.similarity,
-          })
+          }),
         );
 
         console.log('[Custom Bot Chat] Context built, chars:', totalChars);
@@ -218,6 +256,16 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       userMessage = `Relevant knowledge:\n\n${context}\n\n---\n\nUser question: ${message}`;
     }
 
+    // Enhanced system prompt to include follow-up suggestion generation
+    const enhancedSystemPrompt = `${bot.system_prompt}
+
+IMPORTANT: After your response, always include 2-3 contextually relevant follow-up questions the user might want to ask next. These should be specific to what was just discussed, not generic questions. Format them on separate lines at the very end of your response, each starting with ">>>" like this:
+>>>Question 1 here?
+>>>Question 2 here?
+>>>Question 3 here?
+
+Make the questions natural, conversational, and directly related to the current topic.`;
+
     // Generate response using LLM
     console.log('[Custom Bot Chat] Calling LLM, provider:', provider);
     const llmStartTime = Date.now();
@@ -225,7 +273,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     try {
       const llmResponse = await generateLLMResponse(
         [
-          { role: 'system', content: bot.system_prompt },
+          { role: 'system', content: enhancedSystemPrompt },
           { role: 'user', content: userMessage },
         ],
         {
@@ -234,14 +282,19 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
           ollamaUrl,
           temperature: 0.7,
           maxTokens: 1024,
-        }
+        },
       );
 
       console.log('[Custom Bot Chat] LLM response in', Date.now() - llmStartTime, 'ms');
       console.log('[Custom Bot Chat] Total time:', Date.now() - startTime, 'ms');
 
+      // Parse response to extract suggestions
+      const { content, suggestions } = parseResponseWithSuggestions(llmResponse.content);
+
       return jsonSuccess({
-        response: llmResponse.content,
+        content,
+        response: content, // Keep for backward compatibility
+        suggestions,
         sources,
         bot: {
           id: bot.id,
@@ -275,7 +328,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
           return jsonError(
             DOMAIN_ERRORS.OLLAMA_NOT_RUNNING,
             'SERVICE_UNAVAILABLE',
-            HTTP_STATUS.SERVICE_UNAVAILABLE
+            HTTP_STATUS.SERVICE_UNAVAILABLE,
           );
         }
 
@@ -283,7 +336,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         return jsonError(
           DOMAIN_ERRORS.AI_UNAVAILABLE,
           'SERVICE_UNAVAILABLE',
-          HTTP_STATUS.SERVICE_UNAVAILABLE
+          HTTP_STATUS.SERVICE_UNAVAILABLE,
         );
       }
 

@@ -21,3 +21,19 @@ export {
   type UpdateKnowledgeChunkInput,
   type BulkCreateKnowledgeChunksInput,
 } from './custom-bot';
+
+// Conversation validations
+export {
+  ConversationBotTypeSchema,
+  MessageSourceSchema,
+  CreateConversationSchema,
+  UpdateConversationSchema,
+  AddMessageSchema,
+  OnboardingStepSchema,
+  CompleteOnboardingSchema,
+  type CreateConversationInput,
+  type UpdateConversationInput,
+  type AddMessageInput,
+  type OnboardingStepInput,
+  type CompleteOnboardingInput,
+} from './conversation';

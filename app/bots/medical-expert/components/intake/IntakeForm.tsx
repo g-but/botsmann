@@ -17,9 +17,9 @@ const IntakeForm: React.FC<IntakeFormProps> = ({ getTryLink }) => {
           Answer a few questions about your health to get personalized recommendations.
         </p>
         <div className="text-center">
-          <a 
-            href={getTryLink()} 
-            target="_blank" 
+          <a
+            href={getTryLink()}
+            target="_blank"
             rel="noopener noreferrer"
             className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors inline-block"
           >
@@ -31,4 +31,4 @@ const IntakeForm: React.FC<IntakeFormProps> = ({ getTryLink }) => {
   );
 };
 
-export default IntakeForm; 
+export default IntakeForm;
