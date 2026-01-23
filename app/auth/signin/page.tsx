@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useAuth, isRateLimitError, getRateLimitRetryAfter } from '@/lib/auth';
 import { SignInSchema } from '@/lib/schemas/auth';
 import { ROUTES } from '@/lib/routes';
+import { PageLoading } from '@/components/shared/LoadingSpinner';
+import { ClockIcon } from '@/components/icons';
 
 export default function SignInPage() {
   const { signIn, loading: authLoading, user } = useAuth();
@@ -71,11 +73,7 @@ export default function SignInPage() {
   };
 
   if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
-      </div>
-    );
+    return <PageLoading />;
   }
 
   const isRateLimited = rateLimitSeconds > 0;
@@ -98,19 +96,7 @@ export default function SignInPage() {
               >
                 {isRateLimited ? (
                   <div className="flex items-center gap-2">
-                    <svg
-                      className="w-5 h-5 flex-shrink-0"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
+                    <ClockIcon className="w-5 h-5 flex-shrink-0" />
                     <span>Too many attempts. Try again in {rateLimitSeconds}s</span>
                   </div>
                 ) : (

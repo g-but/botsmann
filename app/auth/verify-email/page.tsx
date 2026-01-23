@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth, isRateLimitError, getRateLimitRetryAfter } from '@/lib/auth';
 import { ROUTES } from '@/lib/routes';
+import { PageLoading } from '@/components/shared/LoadingSpinner';
 
 /**
  * Verify Email Page
@@ -68,11 +69,7 @@ export default function VerifyEmailPage() {
 
   // Loading state
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
-      </div>
-    );
+    return <PageLoading />;
   }
 
   // Not logged in - redirect to signin
