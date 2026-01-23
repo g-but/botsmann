@@ -41,10 +41,10 @@ const bots: Bot[] = [
       accentColor: 'red',
       menuItems: [
         { id: 'demo', label: 'Demo', icon: '💬', section: 'demo' },
-        { id: 'features', label: 'Features', icon: '✨', section: 'features' },
+        { id: 'language-learning', label: 'Learning', icon: '📚', section: 'language-learning' },
         { id: 'communication', label: 'Communication', icon: '✉️', section: 'communication' },
-        { id: 'culture', label: 'Culture', icon: '🏔️', section: 'culture' },
-        { id: 'waitlist', label: 'Join Waitlist', icon: '📝', section: 'waitlist' }
+        { id: 'integration', label: 'Social', icon: '🏔️', section: 'integration' },
+        { id: 'future', label: 'Vision', icon: '🚀', section: 'future' }
       ]
     }
   },

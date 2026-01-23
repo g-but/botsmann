@@ -52,11 +52,11 @@ const SwissContentSection: React.FC = () => {
         
         <div className="text-center">
           <button
-            onClick={() => document.getElementById('waitlist-form')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() => document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' })}
             className={btnSecondary}
-            aria-label="Join waitlist for Swiss content"
+            aria-label="Try Heidi now"
           >
-            Join Waitlist for Early Access
+            Try Heidi Now
           </button>
         </div>
       </div>
