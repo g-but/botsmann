@@ -5,7 +5,8 @@ import { fetchInfrastructureGuides } from '@/lib/knowledge';
 
 export const metadata: Metadata = {
   title: 'Infrastructure Guides | Botsmann Knowledge Center',
-  description: 'Compare hosting options, AI models, and deployment strategies for your AI infrastructure.',
+  description:
+    'Compare hosting options, AI models, and deployment strategies for your AI infrastructure.',
 };
 
 export default async function InfrastructurePage() {
@@ -25,12 +26,10 @@ export default async function InfrastructurePage() {
             <span className="text-gray-900">Infrastructure</span>
           </nav>
 
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Infrastructure & Hosting
-          </h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Infrastructure & Hosting</h1>
           <p className="text-xl text-gray-600 max-w-2xl">
-            Choose the right infrastructure for your AI projects. Compare hosting options,
-            AI models, and understand the costs involved.
+            Choose the right infrastructure for your AI projects. Compare hosting options, AI
+            models, and understand the costs involved.
           </p>
         </div>
       </div>
@@ -67,7 +66,8 @@ export default async function InfrastructurePage() {
                 </li>
               </ul>
               <div className="text-sm text-gray-500">
-                <span className="font-medium">Best for:</span> Teams with DevOps experience, privacy-sensitive applications
+                <span className="font-medium">Best for:</span> Teams with DevOps experience,
+                privacy-sensitive applications
               </div>
             </div>
 
@@ -95,7 +95,8 @@ export default async function InfrastructurePage() {
                 </li>
               </ul>
               <div className="text-sm text-gray-500">
-                <span className="font-medium">Best for:</span> Startups, rapid prototyping, teams without DevOps
+                <span className="font-medium">Best for:</span> Startups, rapid prototyping, teams
+                without DevOps
               </div>
             </div>
 
@@ -123,7 +124,8 @@ export default async function InfrastructurePage() {
                 </li>
               </ul>
               <div className="text-sm text-gray-500">
-                <span className="font-medium">Best for:</span> Low-traffic apps, side projects, event-driven workloads
+                <span className="font-medium">Best for:</span> Low-traffic apps, side projects,
+                event-driven workloads
               </div>
             </div>
           </div>
@@ -176,8 +178,8 @@ export default async function InfrastructurePage() {
                     AI Model Comparison
                   </h3>
                   <p className="text-gray-600 text-sm mb-4">
-                    OpenAI vs Claude vs open source. Compare GPT-4, Claude 3, Llama 3, Mistral
-                    by quality, cost, speed, and privacy.
+                    OpenAI vs Claude vs open source. Compare GPT-4, Claude 3, Llama 3, Mistral by
+                    quality, cost, speed, and privacy.
                   </p>
                   <div className="flex items-center text-sm text-blue-600 font-medium">
                     Read comparison
@@ -201,8 +203,8 @@ export default async function InfrastructurePage() {
                     Cost Estimation Guide
                   </h3>
                   <p className="text-gray-600 text-sm mb-4">
-                    Understand token pricing, estimate monthly costs for different usage levels,
-                    and discover hidden infrastructure costs.
+                    Understand token pricing, estimate monthly costs for different usage levels, and
+                    discover hidden infrastructure costs.
                   </p>
                   <div className="flex items-center text-sm text-blue-600 font-medium">
                     Read guide
@@ -226,8 +228,8 @@ export default async function InfrastructurePage() {
                     Security Best Practices
                   </h3>
                   <p className="text-gray-600 text-sm mb-4">
-                    Secure your AI infrastructure. API key management, data encryption,
-                    rate limiting, and compliance considerations.
+                    Secure your AI infrastructure. API key management, data encryption, rate
+                    limiting, and compliance considerations.
                   </p>
                   <div className="flex items-center text-sm text-blue-600 font-medium">
                     Read guide
@@ -242,9 +244,7 @@ export default async function InfrastructurePage() {
         {/* Quick Reference Tables */}
         <div className="mb-16">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Quick Reference</h2>
-          <p className="text-gray-600 mb-8">
-            At-a-glance comparisons for common decisions.
-          </p>
+          <p className="text-gray-600 mb-8">At-a-glance comparisons for common decisions.</p>
 
           {/* Hosting Quick Compare */}
           <div className="bg-white rounded-xl border border-gray-200 overflow-hidden mb-8">
@@ -255,33 +255,67 @@ export default async function InfrastructurePage() {
               <table className="w-full">
                 <thead>
                   <tr className="bg-gray-50">
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Option</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Setup</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cost</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Control</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Best For</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Option
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Setup
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Cost
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Control
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Best For
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   <tr>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Vercel / Netlify</td>
-                    <td className="px-6 py-4 whitespace-nowrap"><DifficultyDot level="easy" /> Easy</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$20-100/mo</td>
-                    <td className="px-6 py-4 whitespace-nowrap"><DifficultyDot level="low" /> Limited</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                      Vercel / Netlify
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <DifficultyDot level="easy" /> Easy
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      $20-100/mo
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <DifficultyDot level="low" /> Limited
+                    </td>
                     <td className="px-6 py-4 text-sm text-gray-600">Quick deploys, small teams</td>
                   </tr>
                   <tr>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">AWS / GCP</td>
-                    <td className="px-6 py-4 whitespace-nowrap"><DifficultyDot level="medium" /> Medium</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$50-500/mo</td>
-                    <td className="px-6 py-4 whitespace-nowrap"><DifficultyDot level="high" /> High</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                      AWS / GCP
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <DifficultyDot level="medium" /> Medium
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      $50-500/mo
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <DifficultyDot level="high" /> High
+                    </td>
                     <td className="px-6 py-4 text-sm text-gray-600">Scale, enterprise features</td>
                   </tr>
                   <tr>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Self-hosted VPS</td>
-                    <td className="px-6 py-4 whitespace-nowrap"><DifficultyDot level="hard" /> Complex</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$10-200/mo</td>
-                    <td className="px-6 py-4 whitespace-nowrap"><DifficultyDot level="full" /> Full</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                      Self-hosted VPS
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <DifficultyDot level="hard" /> Complex
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      $10-200/mo
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <DifficultyDot level="full" /> Full
+                    </td>
                     <td className="px-6 py-4 text-sm text-gray-600">Privacy, cost control</td>
                   </tr>
                 </tbody>
@@ -298,40 +332,82 @@ export default async function InfrastructurePage() {
               <table className="w-full">
                 <thead>
                   <tr className="bg-gray-50">
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Model</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quality</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cost</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Speed</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Self-host?</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Model
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Quality
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Cost
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Speed
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Self-host?
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   <tr>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">GPT-4o</td>
-                    <td className="px-6 py-4 whitespace-nowrap"><QualityStars stars={5} /></td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$5/1M tokens</td>
-                    <td className="px-6 py-4 whitespace-nowrap"><DifficultyDot level="high" /> Fast</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                      GPT-4o
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <QualityStars stars={5} />
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      $5/1M tokens
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <DifficultyDot level="high" /> Fast
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">No</td>
                   </tr>
                   <tr>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Claude 3.5 Sonnet</td>
-                    <td className="px-6 py-4 whitespace-nowrap"><QualityStars stars={5} /></td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$3/1M tokens</td>
-                    <td className="px-6 py-4 whitespace-nowrap"><DifficultyDot level="high" /> Fast</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                      Claude 3.5 Sonnet
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <QualityStars stars={5} />
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      $3/1M tokens
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <DifficultyDot level="high" /> Fast
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">No</td>
                   </tr>
                   <tr>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Llama 3 70B</td>
-                    <td className="px-6 py-4 whitespace-nowrap"><QualityStars stars={4} /></td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Free (self-host)</td>
-                    <td className="px-6 py-4 whitespace-nowrap"><DifficultyDot level="medium" /> Medium</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                      Llama 3 70B
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <QualityStars stars={4} />
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      Free (self-host)
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <DifficultyDot level="medium" /> Medium
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">Yes</td>
                   </tr>
                   <tr>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Mistral Large</td>
-                    <td className="px-6 py-4 whitespace-nowrap"><QualityStars stars={4} /></td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$2/1M tokens</td>
-                    <td className="px-6 py-4 whitespace-nowrap"><DifficultyDot level="high" /> Fast</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                      Mistral Large
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <QualityStars stars={4} />
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      $2/1M tokens
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <DifficultyDot level="high" /> Fast
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">Yes</td>
                   </tr>
                 </tbody>
@@ -344,8 +420,8 @@ export default async function InfrastructurePage() {
         <div className="rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 p-8 text-center text-white">
           <h2 className="text-2xl font-bold mb-4">Need Help Deciding?</h2>
           <p className="text-purple-100 mb-6 max-w-xl mx-auto">
-            Not sure which infrastructure is right for your project? We can help you
-            evaluate options and make the right choice.
+            Not sure which infrastructure is right for your project? We can help you evaluate
+            options and make the right choice.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
@@ -405,7 +481,12 @@ function QualityStars({ stars }: { stars: number }) {
 function ServerIcon({ className }: { className: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"
+      />
     </svg>
   );
 }
@@ -413,7 +494,12 @@ function ServerIcon({ className }: { className: string }) {
 function CloudIcon({ className }: { className: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"
+      />
     </svg>
   );
 }
@@ -421,7 +507,12 @@ function CloudIcon({ className }: { className: string }) {
 function BoltIcon({ className }: { className: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M13 10V3L4 14h7v7l9-11h-7z"
+      />
     </svg>
   );
 }

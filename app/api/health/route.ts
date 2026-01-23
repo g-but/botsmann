@@ -7,10 +7,7 @@ export async function GET() {
       return jsonServiceUnavailable('Database not configured');
     }
 
-    const { error } = await supabase
-      .from('consultations')
-      .select('id')
-      .limit(1);
+    const { error } = await supabase.from('consultations').select('id').limit(1);
 
     if (error) {
       throw error;

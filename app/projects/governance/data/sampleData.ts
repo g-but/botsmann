@@ -2,7 +2,12 @@
 
 import { AgencyData, AgencyTeamMember, AgencyRegulation } from '../components/AgencyProfile';
 import { EnhancedTransaction } from '../components/TransactionWithTraceability';
-import { CitizenData, TaxPayment, CitizenContribution, CitizenBenefit } from '../components/CitizenProfile';
+import {
+  CitizenData,
+  TaxPayment,
+  CitizenContribution,
+  CitizenBenefit,
+} from '../components/CitizenProfile';
 
 // Sample Team Members
 export const sampleTeamMembers: AgencyTeamMember[] = [
@@ -20,13 +25,13 @@ export const sampleTeamMembers: AgencyTeamMember[] = [
       'Agency oversight',
       'Strategic planning',
       'Interdepartmental coordination',
-      'Budget approval'
+      'Budget approval',
     ],
     contact: {
       email: 'eleanor.rodriguez@gov.example',
       phone: '(555) 123-4567',
-      office: 'HQ - Suite 400'
-    }
+      office: 'HQ - Suite 400',
+    },
   },
   {
     id: 'tm2',
@@ -42,13 +47,13 @@ export const sampleTeamMembers: AgencyTeamMember[] = [
       'Daily operations management',
       'Staff supervision',
       'Process improvement',
-      'Performance metrics'
+      'Performance metrics',
     ],
     contact: {
       email: 'marcus.johnson@gov.example',
       phone: '(555) 123-4568',
-      office: 'HQ - Suite 320'
-    }
+      office: 'HQ - Suite 320',
+    },
   },
   {
     id: 'tm3',
@@ -64,13 +69,13 @@ export const sampleTeamMembers: AgencyTeamMember[] = [
       'Budget management',
       'Financial reporting',
       'Audit coordination',
-      'Financial compliance'
+      'Financial compliance',
     ],
     contact: {
       email: 'sarah.chen@gov.example',
       phone: '(555) 123-4569',
-      office: 'HQ - Suite 280'
-    }
+      office: 'HQ - Suite 280',
+    },
   },
   {
     id: 'tm4',
@@ -86,13 +91,13 @@ export const sampleTeamMembers: AgencyTeamMember[] = [
       'Technology infrastructure',
       'Digital services',
       'Cybersecurity',
-      'Data management'
+      'Data management',
     ],
     contact: {
       email: 'james.wilson@gov.example',
       phone: '(555) 123-4570',
-      office: 'Tech Center - Floor 3'
-    }
+      office: 'Tech Center - Floor 3',
+    },
   },
   {
     id: 'tm5',
@@ -108,14 +113,14 @@ export const sampleTeamMembers: AgencyTeamMember[] = [
       'Community outreach',
       'Public meetings',
       'Citizen feedback',
-      'Partnership development'
+      'Partnership development',
     ],
     contact: {
       email: 'maria.gonzalez@gov.example',
       phone: '(555) 123-4571',
-      office: 'Community Center - Room 104'
-    }
-  }
+      office: 'Community Center - Room 104',
+    },
+  },
 ];
 
 // Sample Enhanced Transactions
@@ -133,32 +138,44 @@ export const sampleTransactions: EnhancedTransaction[] = [
       costPerUnit: '$150/sq meter',
       timeline: 'On schedule',
       qualityScore: 95,
-      contractCompliance: 100
+      contractCompliance: 100,
     },
     transparencyScore: 92,
     socialData: {
       publicComments: 18,
       likes: 35,
       concerns: 3,
-      shares: 12
+      shares: 12,
     },
     enablingLaws: [
       { id: 'law3', name: 'Infrastructure Maintenance Act' },
-      { id: 'law7', name: 'Public Works Contracting Standards' }
+      { id: 'law7', name: 'Public Works Contracting Standards' },
     ],
     documents: [
       { id: 'doc1', name: 'Contract Agreement', url: '/documents/tx1/contract.pdf' },
       { id: 'doc2', name: 'Environmental Impact', url: '/documents/tx1/impact.pdf' },
-      { id: 'doc3', name: 'Completion Certificate', url: '/documents/tx1/completion.pdf' }
+      { id: 'doc3', name: 'Completion Certificate', url: '/documents/tx1/completion.pdf' },
     ],
     timeline: [
       { date: '2023-01-10', event: 'Project Approved', description: 'Budget allocation confirmed' },
       { date: '2023-02-05', event: 'Bidding Process', description: '5 contractors submitted bids' },
       { date: '2023-03-20', event: 'Contract Awarded', description: 'Metro Construction selected' },
-      { date: '2023-04-15', event: 'Work Commenced', description: 'Initial road closures and setup' },
-      { date: '2023-06-12', event: 'Final Inspection', description: 'Project passed all quality checks' },
-      { date: '2023-06-15', event: 'Payment Issued', description: 'Final payment for completed work' }
-    ]
+      {
+        date: '2023-04-15',
+        event: 'Work Commenced',
+        description: 'Initial road closures and setup',
+      },
+      {
+        date: '2023-06-12',
+        event: 'Final Inspection',
+        description: 'Project passed all quality checks',
+      },
+      {
+        date: '2023-06-15',
+        event: 'Payment Issued',
+        description: 'Final payment for completed work',
+      },
+    ],
   },
   {
     id: 'tx2',
@@ -173,32 +190,56 @@ export const sampleTransactions: EnhancedTransaction[] = [
       costPerUnit: '$1300/classroom',
       timeline: '2 weeks ahead of schedule',
       qualityScore: 98,
-      contractCompliance: 100
+      contractCompliance: 100,
     },
     transparencyScore: 96,
     socialData: {
       publicComments: 42,
       likes: 156,
       concerns: 5,
-      shares: 37
+      shares: 37,
     },
     enablingLaws: [
       { id: 'law5', name: 'Education Technology Advancement Act' },
-      { id: 'law12', name: 'Digital Literacy Initiative' }
+      { id: 'law12', name: 'Digital Literacy Initiative' },
     ],
     documents: [
       { id: 'doc4', name: 'Equipment Specifications', url: '/documents/tx2/specs.pdf' },
       { id: 'doc5', name: 'School Distribution Plan', url: '/documents/tx2/distribution.pdf' },
-      { id: 'doc6', name: 'Training Schedule', url: '/documents/tx2/training.pdf' }
+      { id: 'doc6', name: 'Training Schedule', url: '/documents/tx2/training.pdf' },
     ],
     timeline: [
-      { date: '2023-03-05', event: 'Needs Assessment', description: 'Evaluation of classroom requirements' },
-      { date: '2023-04-12', event: 'Procurement Approval', description: 'School board approved technology plan' },
-      { date: '2023-05-20', event: 'Vendor Selection', description: 'Scholastic Tech chosen as provider' },
-      { date: '2023-06-15', event: 'Installation Begins', description: 'First phase of schools upgraded' },
-      { date: '2023-06-30', event: 'Teacher Training', description: 'Professional development sessions held' },
-      { date: '2023-07-02', event: 'Project Completion', description: 'All classrooms upgraded and verified' }
-    ]
+      {
+        date: '2023-03-05',
+        event: 'Needs Assessment',
+        description: 'Evaluation of classroom requirements',
+      },
+      {
+        date: '2023-04-12',
+        event: 'Procurement Approval',
+        description: 'School board approved technology plan',
+      },
+      {
+        date: '2023-05-20',
+        event: 'Vendor Selection',
+        description: 'Scholastic Tech chosen as provider',
+      },
+      {
+        date: '2023-06-15',
+        event: 'Installation Begins',
+        description: 'First phase of schools upgraded',
+      },
+      {
+        date: '2023-06-30',
+        event: 'Teacher Training',
+        description: 'Professional development sessions held',
+      },
+      {
+        date: '2023-07-02',
+        event: 'Project Completion',
+        description: 'All classrooms upgraded and verified',
+      },
+    ],
   },
   {
     id: 'tx3',
@@ -213,32 +254,56 @@ export const sampleTransactions: EnhancedTransaction[] = [
       costPerUnit: '$55/sq meter',
       timeline: '1 week delayed (weather)',
       qualityScore: 93,
-      contractCompliance: 98
+      contractCompliance: 98,
     },
     transparencyScore: 90,
     socialData: {
       publicComments: 87,
       likes: 215,
       concerns: 12,
-      shares: 45
+      shares: 45,
     },
     enablingLaws: [
       { id: 'law8', name: 'Public Spaces Enhancement Act' },
-      { id: 'law15', name: 'Community Recreation Standards' }
+      { id: 'law15', name: 'Community Recreation Standards' },
     ],
     documents: [
       { id: 'doc7', name: 'Design Plans', url: '/documents/tx3/design.pdf' },
       { id: 'doc8', name: 'Community Feedback', url: '/documents/tx3/feedback.pdf' },
-      { id: 'doc9', name: 'Sustainability Report', url: '/documents/tx3/sustainability.pdf' }
+      { id: 'doc9', name: 'Sustainability Report', url: '/documents/tx3/sustainability.pdf' },
     ],
     timeline: [
-      { date: '2023-02-10', event: 'Community Input', description: 'Public meetings to gather design ideas' },
-      { date: '2023-03-15', event: 'Design Approval', description: 'Final plans approved by Parks Board' },
-      { date: '2023-04-01', event: 'Construction Begins', description: 'Site preparation and old equipment removal' },
-      { date: '2023-05-10', event: 'Weather Delay', description: 'Heavy rain caused one week delay' },
-      { date: '2023-05-17', event: 'Final Inspection', description: 'Safety certification completed' },
-      { date: '2023-05-18', event: 'Park Reopening', description: 'Ribbon cutting ceremony with residents' }
-    ]
+      {
+        date: '2023-02-10',
+        event: 'Community Input',
+        description: 'Public meetings to gather design ideas',
+      },
+      {
+        date: '2023-03-15',
+        event: 'Design Approval',
+        description: 'Final plans approved by Parks Board',
+      },
+      {
+        date: '2023-04-01',
+        event: 'Construction Begins',
+        description: 'Site preparation and old equipment removal',
+      },
+      {
+        date: '2023-05-10',
+        event: 'Weather Delay',
+        description: 'Heavy rain caused one week delay',
+      },
+      {
+        date: '2023-05-17',
+        event: 'Final Inspection',
+        description: 'Safety certification completed',
+      },
+      {
+        date: '2023-05-18',
+        event: 'Park Reopening',
+        description: 'Ribbon cutting ceremony with residents',
+      },
+    ],
   },
   {
     id: 'tx4',
@@ -253,32 +318,56 @@ export const sampleTransactions: EnhancedTransaction[] = [
       costPerUnit: '$26/resident served',
       timeline: 'On schedule',
       qualityScore: 99,
-      contractCompliance: 100
+      contractCompliance: 100,
     },
     transparencyScore: 98,
     socialData: {
       publicComments: 132,
       likes: 267,
       concerns: 45,
-      shares: 89
+      shares: 89,
     },
     enablingLaws: [
       { id: 'law2', name: 'Public Health Emergency Response Act' },
-      { id: 'law9', name: 'Vaccine Access Initiative' }
+      { id: 'law9', name: 'Vaccine Access Initiative' },
     ],
     documents: [
       { id: 'doc10', name: 'Distribution Strategy', url: '/documents/tx4/strategy.pdf' },
       { id: 'doc11', name: 'Cold Chain Verification', url: '/documents/tx4/coldchain.pdf' },
-      { id: 'doc12', name: 'Community Access Points', url: '/documents/tx4/access.pdf' }
+      { id: 'doc12', name: 'Community Access Points', url: '/documents/tx4/access.pdf' },
     ],
     timeline: [
-      { date: '2023-05-01', event: 'Emergency Declaration', description: 'Health emergency triggered response' },
-      { date: '2023-05-15', event: 'Supplier Contract', description: 'Expedited procurement process completed' },
-      { date: '2023-06-10', event: 'First Delivery', description: 'Initial vaccine supply received' },
-      { date: '2023-06-15', event: 'Distribution Begins', description: 'Priority populations served first' },
-      { date: '2023-07-01', event: 'Phase 2 Rollout', description: 'General population access points opened' },
-      { date: '2023-07-20', event: 'Interim Payment', description: '60% of program completed, interim payment made' }
-    ]
+      {
+        date: '2023-05-01',
+        event: 'Emergency Declaration',
+        description: 'Health emergency triggered response',
+      },
+      {
+        date: '2023-05-15',
+        event: 'Supplier Contract',
+        description: 'Expedited procurement process completed',
+      },
+      {
+        date: '2023-06-10',
+        event: 'First Delivery',
+        description: 'Initial vaccine supply received',
+      },
+      {
+        date: '2023-06-15',
+        event: 'Distribution Begins',
+        description: 'Priority populations served first',
+      },
+      {
+        date: '2023-07-01',
+        event: 'Phase 2 Rollout',
+        description: 'General population access points opened',
+      },
+      {
+        date: '2023-07-20',
+        event: 'Interim Payment',
+        description: '60% of program completed, interim payment made',
+      },
+    ],
   },
   {
     id: 'tx5',
@@ -293,33 +382,57 @@ export const sampleTransactions: EnhancedTransaction[] = [
       costPerUnit: '$12,500/unit',
       timeline: 'On schedule',
       qualityScore: 97,
-      contractCompliance: 100
+      contractCompliance: 100,
     },
     transparencyScore: 94,
     socialData: {
       publicComments: 56,
       likes: 189,
       concerns: 7,
-      shares: 42
+      shares: 42,
     },
     enablingLaws: [
       { id: 'law1', name: 'Emergency Services Modernization Act' },
-      { id: 'law11', name: 'First Responder Safety Standards' }
+      { id: 'law11', name: 'First Responder Safety Standards' },
     ],
     documents: [
       { id: 'doc13', name: 'Equipment Specifications', url: '/documents/tx5/specs.pdf' },
       { id: 'doc14', name: 'Training Certification', url: '/documents/tx5/training.pdf' },
-      { id: 'doc15', name: 'Deployment Plan', url: '/documents/tx5/deployment.pdf' }
+      { id: 'doc15', name: 'Deployment Plan', url: '/documents/tx5/deployment.pdf' },
     ],
     timeline: [
-      { date: '2023-01-20', event: 'Needs Assessment', description: 'Evaluation of current equipment status' },
-      { date: '2023-02-10', event: 'Budget Approval', description: 'City council approved emergency funding' },
-      { date: '2023-02-28', event: 'Vendor Selection', description: 'Competitive bid process completed' },
-      { date: '2023-03-15', event: 'Equipment Delivery', description: 'All ordered items received and inventoried' },
-      { date: '2023-03-20', event: 'Staff Training', description: 'All shifts completed equipment training' },
-      { date: '2023-04-05', event: 'Full Deployment', description: 'New equipment in service across all stations' }
-    ]
-  }
+      {
+        date: '2023-01-20',
+        event: 'Needs Assessment',
+        description: 'Evaluation of current equipment status',
+      },
+      {
+        date: '2023-02-10',
+        event: 'Budget Approval',
+        description: 'City council approved emergency funding',
+      },
+      {
+        date: '2023-02-28',
+        event: 'Vendor Selection',
+        description: 'Competitive bid process completed',
+      },
+      {
+        date: '2023-03-15',
+        event: 'Equipment Delivery',
+        description: 'All ordered items received and inventoried',
+      },
+      {
+        date: '2023-03-20',
+        event: 'Staff Training',
+        description: 'All shifts completed equipment training',
+      },
+      {
+        date: '2023-04-05',
+        event: 'Full Deployment',
+        description: 'New equipment in service across all stations',
+      },
+    ],
+  },
 ];
 
 // Sample Agency Regulations
@@ -327,7 +440,8 @@ export const sampleRegulations: AgencyRegulation[] = [
   {
     id: 'reg1',
     title: 'Public Safety Response Time Standards',
-    description: 'Establishes maximum response times for emergency services based on incident type and location.',
+    description:
+      'Establishes maximum response times for emergency services based on incident type and location.',
     dateEnacted: '2022-09-15',
     lastUpdated: '2023-01-20',
     status: 'active',
@@ -337,28 +451,29 @@ export const sampleRegulations: AgencyRegulation[] = [
         metric: 'Urban Response Time',
         target: '< 4 minutes',
         current: '3.8 minutes',
-        status: 'achieved'
+        status: 'achieved',
       },
       {
         metric: 'Suburban Response Time',
         target: '< 6 minutes',
         current: '5.5 minutes',
-        status: 'achieved'
+        status: 'achieved',
       },
       {
         metric: 'Rural Response Time',
         target: '< 12 minutes',
         current: '13.2 minutes',
-        status: 'at-risk'
-      }
+        status: 'at-risk',
+      },
     ],
     enablingLawId: 'law1',
-    enablingLawName: 'Emergency Services Modernization Act'
+    enablingLawName: 'Emergency Services Modernization Act',
   },
   {
     id: 'reg2',
     title: 'Road Maintenance Quality Standards',
-    description: 'Defines requirements for road repairs, including materials, durability, and environmental considerations.',
+    description:
+      'Defines requirements for road repairs, including materials, durability, and environmental considerations.',
     dateEnacted: '2021-11-30',
     lastUpdated: '2023-02-10',
     status: 'active',
@@ -368,28 +483,29 @@ export const sampleRegulations: AgencyRegulation[] = [
         metric: 'Materials Compliance',
         target: '100%',
         current: '98%',
-        status: 'on-track'
+        status: 'on-track',
       },
       {
         metric: 'Repair Durability',
         target: '5+ years',
         current: '4.7 years avg.',
-        status: 'on-track'
+        status: 'on-track',
       },
       {
         metric: 'Project Documentation',
         target: '100%',
         current: '100%',
-        status: 'achieved'
-      }
+        status: 'achieved',
+      },
     ],
     enablingLawId: 'law3',
-    enablingLawName: 'Infrastructure Maintenance Act'
+    enablingLawName: 'Infrastructure Maintenance Act',
   },
   {
     id: 'reg3',
     title: 'Educational Technology Implementation',
-    description: 'Guidelines for technology deployment in educational settings, including accessibility requirements.',
+    description:
+      'Guidelines for technology deployment in educational settings, including accessibility requirements.',
     dateEnacted: '2022-07-15',
     lastUpdated: '2023-03-05',
     status: 'active',
@@ -399,28 +515,29 @@ export const sampleRegulations: AgencyRegulation[] = [
         metric: 'Student Device Ratio',
         target: '1:1',
         current: '1:1.2',
-        status: 'on-track'
+        status: 'on-track',
       },
       {
         metric: 'Teacher Training',
         target: '100%',
         current: '87%',
-        status: 'at-risk'
+        status: 'at-risk',
       },
       {
         metric: 'Accessibility Compliance',
         target: '100%',
         current: '100%',
-        status: 'achieved'
-      }
+        status: 'achieved',
+      },
     ],
     enablingLawId: 'law5',
-    enablingLawName: 'Education Technology Advancement Act'
+    enablingLawName: 'Education Technology Advancement Act',
   },
   {
     id: 'reg4',
     title: 'Park Sustainability Standards',
-    description: 'Requirements for water conservation, native plants, and sustainable maintenance in public parks.',
+    description:
+      'Requirements for water conservation, native plants, and sustainable maintenance in public parks.',
     dateEnacted: '2022-02-28',
     lastUpdated: '2022-10-15',
     status: 'active',
@@ -430,28 +547,29 @@ export const sampleRegulations: AgencyRegulation[] = [
         metric: 'Water Usage Reduction',
         target: '30%',
         current: '25%',
-        status: 'on-track'
+        status: 'on-track',
       },
       {
         metric: 'Native Plant Coverage',
         target: '75%',
         current: '68%',
-        status: 'on-track'
+        status: 'on-track',
       },
       {
         metric: 'Chemical-Free Maintenance',
         target: '90%',
         current: '85%',
-        status: 'on-track'
-      }
+        status: 'on-track',
+      },
     ],
     enablingLawId: 'law8',
-    enablingLawName: 'Public Spaces Enhancement Act'
+    enablingLawName: 'Public Spaces Enhancement Act',
   },
   {
     id: 'reg5',
     title: 'Health Emergency Response Protocol',
-    description: 'Procedures for coordinating public health responses to emergencies, including resource allocation.',
+    description:
+      'Procedures for coordinating public health responses to emergencies, including resource allocation.',
     dateEnacted: '2022-05-10',
     lastUpdated: '2023-04-20',
     status: 'active',
@@ -461,24 +579,24 @@ export const sampleRegulations: AgencyRegulation[] = [
         metric: 'Response Activation Time',
         target: '< 24 hours',
         current: '18 hours',
-        status: 'achieved'
+        status: 'achieved',
       },
       {
         metric: 'Resource Distribution Equity',
         target: '100%',
         current: '94%',
-        status: 'on-track'
+        status: 'on-track',
       },
       {
         metric: 'Public Communication',
         target: '12 hour updates',
         current: '24 hour updates',
-        status: 'failed'
-      }
+        status: 'failed',
+      },
     ],
     enablingLawId: 'law2',
-    enablingLawName: 'Public Health Emergency Response Act'
-  }
+    enablingLawName: 'Public Health Emergency Response Act',
+  },
 ];
 
 // Sample Agencies
@@ -486,243 +604,251 @@ export const sampleAgencies: AgencyData[] = [
   {
     id: 'dept1',
     name: 'Department of Public Safety',
-    description: 'Responsible for emergency services, law enforcement, and disaster response coordination throughout the jurisdiction.',
+    description:
+      'Responsible for emergency services, law enforcement, and disaster response coordination throughout the jurisdiction.',
     transparencyScore: 87,
     establishment: 'January 15, 1965',
     budget: {
       total: 38500000,
       allocated: 36750000,
       spent: 28125000,
-      fiscalYear: '2023-2024'
+      fiscalYear: '2023-2024',
     },
     metrics: [
       {
         name: 'Emergency Response Time',
         value: '4.2 min',
         change: '-0.3 min from last year',
-        trend: 'up'
+        trend: 'up',
       },
       {
         name: 'Public Safety Index',
         value: '86/100',
         change: '+4 points from last year',
-        trend: 'up'
+        trend: 'up',
       },
       {
         name: 'Staff Training Hours',
         value: '12,450',
         change: '+15% from last year',
-        trend: 'up'
+        trend: 'up',
       },
       {
         name: 'Incident Resolution Rate',
         value: '94%',
         change: '+2% from last year',
-        trend: 'up'
-      }
+        trend: 'up',
+      },
     ],
-    transactions: sampleTransactions.filter(t => t.department === 'Public Safety'),
-    regulations: sampleRegulations.filter(r => r.enablingLawName.includes('Emergency') || r.enablingLawName.includes('First Responder')),
+    transactions: sampleTransactions.filter((t) => t.department === 'Public Safety'),
+    regulations: sampleRegulations.filter(
+      (r) =>
+        r.enablingLawName.includes('Emergency') || r.enablingLawName.includes('First Responder'),
+    ),
     team: sampleTeamMembers.filter((_, index) => [0, 3].includes(index)),
     citizenImpact: {
       servicesProvided: 15680,
       citizensServed: 180450,
       satisfactionScore: 89,
-      avgResponseTime: '4.2 minutes'
-    }
+      avgResponseTime: '4.2 minutes',
+    },
   },
   {
     id: 'dept2',
     name: 'Department of Transportation',
-    description: 'Oversees public transportation systems, road maintenance, traffic management, and infrastructure development.',
+    description:
+      'Oversees public transportation systems, road maintenance, traffic management, and infrastructure development.',
     transparencyScore: 92,
     establishment: 'March 28, 1972',
     budget: {
       total: 42750000,
       allocated: 41500000,
       spent: 32450000,
-      fiscalYear: '2023-2024'
+      fiscalYear: '2023-2024',
     },
     metrics: [
       {
         name: 'Road Condition Index',
         value: '78/100',
         change: '+6 points from last year',
-        trend: 'up'
+        trend: 'up',
       },
       {
         name: 'Public Transit Ridership',
         value: '9.2M',
         change: '+8% from last year',
-        trend: 'up'
+        trend: 'up',
       },
       {
         name: 'Traffic Congestion',
         value: '32%',
         change: '-5% from last year',
-        trend: 'up'
+        trend: 'up',
       },
       {
         name: 'Infrastructure Projects',
         value: '24',
         change: '+3 from last year',
-        trend: 'up'
-      }
+        trend: 'up',
+      },
     ],
-    transactions: sampleTransactions.filter(t => t.department === 'Transportation'),
-    regulations: sampleRegulations.filter(r => r.enablingLawName.includes('Infrastructure')),
+    transactions: sampleTransactions.filter((t) => t.department === 'Transportation'),
+    regulations: sampleRegulations.filter((r) => r.enablingLawName.includes('Infrastructure')),
     team: sampleTeamMembers.filter((_, index) => [1, 4].includes(index)),
     citizenImpact: {
       servicesProvided: 8760,
       citizensServed: 230000,
       satisfactionScore: 82,
-      avgResponseTime: '3.5 days'
-    }
+      avgResponseTime: '3.5 days',
+    },
   },
   {
     id: 'dept3',
     name: 'Department of Education',
-    description: 'Manages public education, school programs, teacher professional development, and educational policy implementation.',
+    description:
+      'Manages public education, school programs, teacher professional development, and educational policy implementation.',
     transparencyScore: 94,
     establishment: 'September 5, 1968',
     budget: {
       total: 65250000,
       allocated: 64100000,
       spent: 48750000,
-      fiscalYear: '2023-2024'
+      fiscalYear: '2023-2024',
     },
     metrics: [
       {
         name: 'Graduation Rate',
         value: '89%',
         change: '+3% from last year',
-        trend: 'up'
+        trend: 'up',
       },
       {
         name: 'Student-Teacher Ratio',
         value: '18:1',
         change: '-1 from last year',
-        trend: 'up'
+        trend: 'up',
       },
       {
         name: 'Digital Access',
         value: '96%',
         change: '+5% from last year',
-        trend: 'up'
+        trend: 'up',
       },
       {
         name: 'Test Score Average',
         value: '78/100',
         change: '+2 points from last year',
-        trend: 'up'
-      }
+        trend: 'up',
+      },
     ],
-    transactions: sampleTransactions.filter(t => t.department === 'Education'),
-    regulations: sampleRegulations.filter(r => r.enablingLawName.includes('Education')),
+    transactions: sampleTransactions.filter((t) => t.department === 'Education'),
+    regulations: sampleRegulations.filter((r) => r.enablingLawName.includes('Education')),
     team: sampleTeamMembers.filter((_, index) => [2, 4].includes(index)),
     citizenImpact: {
       servicesProvided: 350,
       citizensServed: 42500,
       satisfactionScore: 87,
-      avgResponseTime: '5.2 days'
-    }
+      avgResponseTime: '5.2 days',
+    },
   },
   {
     id: 'dept4',
     name: 'Department of Parks & Recreation',
-    description: 'Responsible for maintaining public parks, recreational facilities, and community programs for citizens of all ages.',
+    description:
+      'Responsible for maintaining public parks, recreational facilities, and community programs for citizens of all ages.',
     transparencyScore: 90,
     establishment: 'June 12, 1975',
     budget: {
       total: 28500000,
       allocated: 27900000,
       spent: 21350000,
-      fiscalYear: '2023-2024'
+      fiscalYear: '2023-2024',
     },
     metrics: [
       {
         name: 'Park Access',
         value: '92%',
         change: '+4% from last year',
-        trend: 'up'
+        trend: 'up',
       },
       {
         name: 'Program Participation',
         value: '38,450',
         change: '+12% from last year',
-        trend: 'up'
+        trend: 'up',
       },
       {
         name: 'Green Space',
         value: '1,245 acres',
         change: '+35 acres from last year',
-        trend: 'up'
+        trend: 'up',
       },
       {
         name: 'Facility Condition',
         value: '84/100',
         change: '+5 points from last year',
-        trend: 'up'
-      }
+        trend: 'up',
+      },
     ],
-    transactions: sampleTransactions.filter(t => t.department === 'Parks & Recreation'),
-    regulations: sampleRegulations.filter(r => r.enablingLawName.includes('Public Spaces')),
+    transactions: sampleTransactions.filter((t) => t.department === 'Parks & Recreation'),
+    regulations: sampleRegulations.filter((r) => r.enablingLawName.includes('Public Spaces')),
     team: sampleTeamMembers.filter((_, index) => [0, 4].includes(index)),
     citizenImpact: {
       servicesProvided: 1250,
       citizensServed: 156000,
       satisfactionScore: 91,
-      avgResponseTime: '2.8 days'
-    }
+      avgResponseTime: '2.8 days',
+    },
   },
   {
     id: 'dept5',
     name: 'Department of Public Health',
-    description: 'Manages public health initiatives, disease prevention programs, health education, and emergency health responses.',
+    description:
+      'Manages public health initiatives, disease prevention programs, health education, and emergency health responses.',
     transparencyScore: 96,
     establishment: 'November 3, 1970',
     budget: {
       total: 56750000,
       allocated: 55900000,
       spent: 42650000,
-      fiscalYear: '2023-2024'
+      fiscalYear: '2023-2024',
     },
     metrics: [
       {
         name: 'Vaccination Rate',
         value: '87%',
         change: '+6% from last year',
-        trend: 'up'
+        trend: 'up',
       },
       {
         name: 'Health Screenings',
         value: '45,320',
         change: '+18% from last year',
-        trend: 'up'
+        trend: 'up',
       },
       {
         name: 'Community Health Score',
         value: '82/100',
         change: '+3 points from last year',
-        trend: 'up'
+        trend: 'up',
       },
       {
         name: 'Response Time',
         value: '1.8 hours',
         change: '-0.5 hours from last year',
-        trend: 'up'
-      }
+        trend: 'up',
+      },
     ],
-    transactions: sampleTransactions.filter(t => t.department === 'Public Health'),
-    regulations: sampleRegulations.filter(r => r.enablingLawName.includes('Health')),
+    transactions: sampleTransactions.filter((t) => t.department === 'Public Health'),
+    regulations: sampleRegulations.filter((r) => r.enablingLawName.includes('Health')),
     team: sampleTeamMembers.filter((_, index) => [2, 3].includes(index)),
     citizenImpact: {
       servicesProvided: 32450,
       citizensServed: 210000,
       satisfactionScore: 88,
-      avgResponseTime: '2.2 hours'
-    }
-  }
+      avgResponseTime: '2.2 hours',
+    },
+  },
 ];
 
 // Sample Tax Payments
@@ -734,7 +860,7 @@ export const sampleTaxPayments: TaxPayment[] = [
     date: '2023-04-15',
     status: 'Paid',
     type: 'Income',
-    reference: 'TX-2023-04152'
+    reference: 'TX-2023-04152',
   },
   {
     id: 'tax2',
@@ -743,7 +869,7 @@ export const sampleTaxPayments: TaxPayment[] = [
     date: '2023-03-15',
     status: 'Paid',
     type: 'Property',
-    reference: 'TX-2023-03122'
+    reference: 'TX-2023-03122',
   },
   {
     id: 'tax3',
@@ -752,7 +878,7 @@ export const sampleTaxPayments: TaxPayment[] = [
     date: '2022-04-10',
     status: 'Paid',
     type: 'Income',
-    reference: 'TX-2022-04105'
+    reference: 'TX-2022-04105',
   },
   {
     id: 'tax4',
@@ -761,7 +887,7 @@ export const sampleTaxPayments: TaxPayment[] = [
     date: '2022-03-12',
     status: 'Paid',
     type: 'Property',
-    reference: 'TX-2022-03118'
+    reference: 'TX-2022-03118',
   },
   {
     id: 'tax5',
@@ -770,7 +896,7 @@ export const sampleTaxPayments: TaxPayment[] = [
     date: '2021-04-12',
     status: 'Paid',
     type: 'Income',
-    reference: 'TX-2021-04120'
+    reference: 'TX-2021-04120',
   },
   {
     id: 'tax6',
@@ -779,7 +905,7 @@ export const sampleTaxPayments: TaxPayment[] = [
     date: '2021-03-10',
     status: 'Paid',
     type: 'Property',
-    reference: 'TX-2021-03101'
+    reference: 'TX-2021-03101',
   },
   {
     id: 'tax7',
@@ -788,8 +914,8 @@ export const sampleTaxPayments: TaxPayment[] = [
     date: '2023-06-15',
     status: 'Pending',
     type: 'Other',
-    reference: 'TX-2023-06158'
-  }
+    reference: 'TX-2023-06158',
+  },
 ];
 
 // Sample Contributions
@@ -803,8 +929,8 @@ export const sampleContributions: CitizenContribution[] = [
     contributionHistory: [
       { year: '2021', amount: 1770 },
       { year: '2022', amount: 1890 },
-      { year: '2023', amount: 2040 }
-    ]
+      { year: '2023', amount: 2040 },
+    ],
   },
   {
     agencyId: 'dept2',
@@ -815,8 +941,8 @@ export const sampleContributions: CitizenContribution[] = [
     contributionHistory: [
       { year: '2021', amount: 1480 },
       { year: '2022', amount: 1550 },
-      { year: '2023', amount: 1670 }
-    ]
+      { year: '2023', amount: 1670 },
+    ],
   },
   {
     agencyId: 'dept3',
@@ -827,8 +953,8 @@ export const sampleContributions: CitizenContribution[] = [
     contributionHistory: [
       { year: '2021', amount: 2430 },
       { year: '2022', amount: 2580 },
-      { year: '2023', amount: 2780 }
-    ]
+      { year: '2023', amount: 2780 },
+    ],
   },
   {
     agencyId: 'dept4',
@@ -839,8 +965,8 @@ export const sampleContributions: CitizenContribution[] = [
     contributionHistory: [
       { year: '2021', amount: 650 },
       { year: '2022', amount: 690 },
-      { year: '2023', amount: 740 }
-    ]
+      { year: '2023', amount: 740 },
+    ],
   },
   {
     agencyId: 'dept5',
@@ -851,9 +977,9 @@ export const sampleContributions: CitizenContribution[] = [
     contributionHistory: [
       { year: '2021', amount: 1770 },
       { year: '2022', amount: 1890 },
-      { year: '2023', amount: 2040 }
-    ]
-  }
+      { year: '2023', amount: 2040 },
+    ],
+  },
 ];
 
 // Sample Benefits
@@ -867,7 +993,7 @@ export const sampleBenefits: CitizenBenefit[] = [
     provider: 'Department of Public Health',
     providerId: 'dept5',
     dateReceived: '2023-01-15',
-    status: 'Active'
+    status: 'Active',
   },
   {
     id: 'ben2',
@@ -878,7 +1004,7 @@ export const sampleBenefits: CitizenBenefit[] = [
     provider: 'Department of Education',
     providerId: 'dept3',
     dateReceived: '2023-02-20',
-    status: 'Active'
+    status: 'Active',
   },
   {
     id: 'ben3',
@@ -889,7 +1015,7 @@ export const sampleBenefits: CitizenBenefit[] = [
     provider: 'Department of Transportation',
     providerId: 'dept2',
     dateReceived: '2023-07-01',
-    status: 'Active'
+    status: 'Active',
   },
   {
     id: 'ben4',
@@ -900,7 +1026,7 @@ export const sampleBenefits: CitizenBenefit[] = [
     provider: 'Department of Parks & Recreation',
     providerId: 'dept4',
     dateReceived: '2023-04-10',
-    status: 'Active'
+    status: 'Active',
   },
   {
     id: 'ben5',
@@ -911,8 +1037,8 @@ export const sampleBenefits: CitizenBenefit[] = [
     provider: 'Department of Public Health',
     providerId: 'dept5',
     dateReceived: '2023-05-15',
-    status: 'Pending'
-  }
+    status: 'Pending',
+  },
 ];
 
 // Sample Citizen
@@ -932,15 +1058,15 @@ export const sampleCitizen: CitizenData = {
   votingDistricts: {
     local: 'District 3',
     state: 'State District 8',
-    federal: 'Federal District 2'
+    federal: 'Federal District 2',
   },
-  participationScore: 78
+  participationScore: 78,
 };
 
 const sampleData = {
   agencies: sampleAgencies,
   transactions: sampleTransactions,
-  citizen: sampleCitizen
+  citizen: sampleCitizen,
 };
 
-export default sampleData; 
+export default sampleData;

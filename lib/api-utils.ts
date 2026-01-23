@@ -9,6 +9,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServiceClient } from './supabase';
 import type { User } from '@supabase/supabase-js';
+import { cookies } from 'next/headers';
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { HTTP_STATUS } from './api/responses';
 
 /**
  * Standard API response shape
@@ -33,7 +36,7 @@ export function apiSuccess<T>(data: T, status = 200): NextResponse<ApiResponse<T
 export function apiError(
   error: string,
   status = 500,
-  details?: unknown
+  details?: unknown,
 ): NextResponse<ApiResponse> {
   const response: ApiResponse = { success: false, error };
   if (details !== undefined) {
@@ -45,16 +48,7 @@ export function apiError(
 /**
  * HTTP Status codes as constants
  */
-export const HTTP_STATUS = {
-  OK: 200,
-  CREATED: 201,
-  BAD_REQUEST: 400,
-  UNAUTHORIZED: 401,
-  FORBIDDEN: 403,
-  NOT_FOUND: 404,
-  INTERNAL_ERROR: 500,
-  SERVICE_UNAVAILABLE: 503,
-} as const;
+// NOTE: HTTP status codes are sourced from lib/api/responses (SSOT)
 
 /**
  * Common error messages
@@ -75,38 +69,35 @@ export const ERROR_MESSAGES = {
  * @returns User object if valid, null otherwise
  */
 export async function verifyUser(request: NextRequest): Promise<User | null> {
+  // Preferred: cookie-based via auth-helpers
+  try {
+    const routeClient = createRouteHandlerClient({ cookies });
+    const { data, error } = await routeClient.auth.getUser();
+    if (!error && data.user) return data.user;
+  } catch {}
+
+  // Fallback: Bearer token header
   const authHeader = request.headers.get('authorization');
-  if (!authHeader?.startsWith('Bearer ')) {
-    return null;
+  if (authHeader?.startsWith('Bearer ')) {
+    const token = authHeader.substring(7);
+    const supabase = getServiceClient();
+    const { data, error } = await supabase.auth.getUser(token);
+    if (!error && data.user) return data.user;
   }
-
-  const token = authHeader.substring(7);
-  const supabase = getServiceClient();
-
-  const { data: { user }, error } = await supabase.auth.getUser(token);
-  if (error || !user) {
-    return null;
-  }
-
-  return user;
+  return null;
 }
 
 /**
  * Wrapper for API route handlers with automatic error handling
  * Catches errors and returns appropriate responses
  */
-export function withErrorHandling<T>(
-  handler: (request: NextRequest) => Promise<NextResponse<T>>
-) {
+export function withErrorHandling<T>(handler: (request: NextRequest) => Promise<NextResponse<T>>) {
   return async (request: NextRequest): Promise<NextResponse<T | ApiResponse>> => {
     try {
       return await handler(request);
     } catch (error) {
       console.error('API Error:', error);
-      return apiError(
-        ERROR_MESSAGES.INTERNAL_ERROR,
-        HTTP_STATUS.INTERNAL_ERROR
-      );
+      return apiError(ERROR_MESSAGES.INTERNAL_ERROR, HTTP_STATUS.INTERNAL_ERROR);
     }
   };
 }
@@ -116,7 +107,7 @@ export function withErrorHandling<T>(
  * Returns 401 if user is not authenticated
  */
 export async function requireAuth(
-  request: NextRequest
+  request: NextRequest,
 ): Promise<{ user: User } | NextResponse<ApiResponse>> {
   const user = await verifyUser(request);
   if (!user) {

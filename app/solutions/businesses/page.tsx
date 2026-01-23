@@ -5,7 +5,8 @@ import Link from 'next/link';
 import solutionsData from '@/data/solutions.json';
 
 export default function BusinessesSolutions() {
-  const genericInfo = "Our AI solutions for businesses help optimize operations, enhance decision-making, and streamline processes for enterprise needs.";
+  const genericInfo =
+    'Our AI solutions for businesses help optimize operations, enhance decision-making, and streamline processes for enterprise needs.';
   const businesses = solutionsData.businesses;
 
   return (

@@ -28,6 +28,7 @@ This document outlines the image assets needed for the Techno-Capital project se
 ## Image Directory Setup
 
 The directory structure should be:
+
 ```
 /public
   /images
@@ -35,4 +36,4 @@ The directory structure should be:
     techno-capital.jpg
 ```
 
-You can create placeholder images using online tools or basic graphic design software until final assets are ready. 
+You can create placeholder images using online tools or basic graphic design software until final assets are ready.

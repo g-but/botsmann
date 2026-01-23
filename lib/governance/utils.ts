@@ -28,14 +28,14 @@ export const getTransparencyBarClasses = (score: number): string => {
  */
 export const getStatusBadgeClasses = (status: string): string => {
   const statusMap: Record<string, string> = {
-    'Paid': 'bg-green-100 text-green-800',
-    'Active': 'bg-green-100 text-green-800',
-    'Completed': 'bg-green-100 text-green-800',
-    'Pending': 'bg-yellow-100 text-yellow-800',
-    'Late': 'bg-red-100 text-red-800',
-    'Flagged': 'bg-red-100 text-red-800',
-    'Disputed': 'bg-gray-100 text-gray-800',
-    'Expired': 'bg-gray-100 text-gray-800',
+    Paid: 'bg-green-100 text-green-800',
+    Active: 'bg-green-100 text-green-800',
+    Completed: 'bg-green-100 text-green-800',
+    Pending: 'bg-yellow-100 text-yellow-800',
+    Late: 'bg-red-100 text-red-800',
+    Flagged: 'bg-red-100 text-red-800',
+    Disputed: 'bg-gray-100 text-gray-800',
+    Expired: 'bg-gray-100 text-gray-800',
   };
   return statusMap[status] || 'bg-gray-100 text-gray-800';
 };

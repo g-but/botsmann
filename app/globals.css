@@ -58,7 +58,7 @@ html {
 }
 
 /* Ensure headless UI components have proper z-index */
-[data-headlessui-state="open"] {
+[data-headlessui-state='open'] {
   position: relative;
   z-index: 50;
 }
@@ -78,15 +78,15 @@ html {
     padding-bottom: calc(var(--tw-aspect-h) / var(--tw-aspect-w) * 100%);
     --tw-aspect-w: 16;
   }
-  
+
   .aspect-h-7 {
     --tw-aspect-h: 7;
   }
-  
+
   .aspect-h-9 {
     --tw-aspect-h: 9;
   }
-  
+
   .aspect-w-16 > * {
     position: absolute;
     height: 100%;
@@ -113,8 +113,14 @@ header {
 /* Add these animation classes to your existing globals.css file */
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-fadeIn {
@@ -127,8 +133,8 @@ header {
 }
 
 .no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 /* Add these to your global CSS to fix dropdown behavior */
@@ -138,11 +144,13 @@ header {
   z-index: 1000 !important; /* Extremely high z-index to ensure it's above everything */
   position: absolute !important;
   background-color: white !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
 }
 
 #botsmann-header {
-  z-index: 900 !important; 
+  z-index: 900 !important;
   position: relative !important;
 }
 
@@ -167,8 +175,9 @@ header {
     padding-left: 1rem;
     padding-right: 1rem;
   }
-  
-  .btn-primary, .btn-secondary {
+
+  .btn-primary,
+  .btn-secondary {
     width: 100%;
     justify-content: center;
     margin-bottom: 0.5rem;

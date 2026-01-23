@@ -28,20 +28,12 @@ export function Navigation() {
       <nav className="hidden lg:flex items-center space-x-8">
         <div className="flex-1 flex items-center space-x-8">
           {navItems.map((item) => (
-            <NavItem
-              key={item.label}
-              item={item}
-              isActive={pathname === item.path}
-            />
+            <NavItem key={item.label} item={item} isActive={pathname === item.path} />
           ))}
         </div>
         <div className="flex-shrink-0 flex items-center gap-4">
           {buttonItems.map((item) => (
-            <NavItem
-              key={item.label}
-              item={item}
-              isActive={pathname === item.path}
-            />
+            <NavItem key={item.label} item={item} isActive={pathname === item.path} />
           ))}
           <div className="h-6 w-px bg-gray-200" />
           <AuthNav />

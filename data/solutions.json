@@ -72,8 +72,16 @@
       ],
       "details": "Enterprise knowledge is your competitive advantage — keep it secure. Deploy Botsmann on your infrastructure and let employees chat with company documentation, policies, and procedures without sending sensitive data to external AI services. We provide consulting to set up and customize for your specific needs.",
       "customSections": {
-        "deployment": ["On-premises installation", "Private cloud deployment", "Hybrid configurations"],
-        "consulting": ["Infrastructure assessment", "Custom model training", "Integration with existing systems"]
+        "deployment": [
+          "On-premises installation",
+          "Private cloud deployment",
+          "Hybrid configurations"
+        ],
+        "consulting": [
+          "Infrastructure assessment",
+          "Custom model training",
+          "Integration with existing systems"
+        ]
       },
       "tryLink": "/documents"
     },

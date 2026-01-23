@@ -1,6 +1,9 @@
 import { ProductResult } from '@/types/products';
 
-export async function searchAmazon(_category: string, _attributes: Record<string, unknown>): Promise<ProductResult[]> {
+export async function searchAmazon(
+  _category: string,
+  _attributes: Record<string, unknown>,
+): Promise<ProductResult[]> {
   if (!process.env.AMAZON_API_KEY || !process.env.AMAZON_SECRET_KEY) {
     console.info('Amazon API credentials are not configured');
     return [];
@@ -9,7 +12,7 @@ export async function searchAmazon(_category: string, _attributes: Record<string
   try {
     // TODO: Implement real Amazon Product Advertising API integration
     // This is a mock implementation for development
-    await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API delay
+    await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate API delay
 
     return [
       {
@@ -19,7 +22,7 @@ export async function searchAmazon(_category: string, _attributes: Record<string
         price: 99.99,
         image: 'https://via.placeholder.com/300',
         url: 'https://amazon.com/product1',
-        platform: 'Amazon'
+        platform: 'Amazon',
       },
       {
         id: 'amzn2',
@@ -28,8 +31,8 @@ export async function searchAmazon(_category: string, _attributes: Record<string
         price: 149.99,
         image: 'https://via.placeholder.com/300',
         url: 'https://amazon.com/product2',
-        platform: 'Amazon'
-      }
+        platform: 'Amazon',
+      },
     ];
   } catch (error) {
     console.info('Amazon search error:', error);

@@ -7,7 +7,8 @@ const steps = [
   },
   {
     title: 'AI analysis on your private node',
-    description: 'Lex processes information using your dedicated model without exposing data to third parties.',
+    description:
+      'Lex processes information using your dedicated model without exposing data to third parties.',
   },
   {
     title: 'Receive structured insights',
@@ -21,7 +22,9 @@ const HowItWorksSection: React.FC = () => (
     <ol className="space-y-4">
       {steps.map((step, idx) => (
         <li className="flex items-start" key={idx}>
-          <div className="mr-4 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-openai-green text-white">{idx + 1}</div>
+          <div className="mr-4 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-openai-green text-white">
+            {idx + 1}
+          </div>
           <div>
             <h3 className="font-medium text-gray-900">{step.title}</h3>
             <p className="text-gray-600">{step.description}</p>

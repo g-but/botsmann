@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { message, systemPrompt, additionalContext } = body;
+    const { message, systemPrompt, additionalContext, conversationHistory } = body;
 
     if (!message || typeof message !== 'string') {
       return jsonError('Message required', 'VALIDATION_ERROR', HTTP_STATUS.BAD_REQUEST);
@@ -53,23 +53,35 @@ export async function POST(request: NextRequest) {
     }
 
     // Add a safety wrapper to keep responses appropriate
-    fullSystemPrompt += `\n\nIMPORTANT: Keep responses brief (1-3 sentences), friendly, and stay in character. Never break character or discuss being an AI unless directly asked.`;
+    fullSystemPrompt += `\n\nIMPORTANT: Keep responses helpful and stay in character. Never break character or discuss being an AI unless directly asked.`;
 
     console.log('[Quick Chat API] Calling LLM...');
     const llmStartTime = Date.now();
 
+    // Build messages array with conversation history
+    const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
+      { role: 'system', content: fullSystemPrompt },
+    ];
+
+    // Add conversation history if provided (limit to last 10 exchanges to stay within context)
+    if (Array.isArray(conversationHistory) && conversationHistory.length > 0) {
+      const recentHistory = conversationHistory.slice(-20); // Last 20 messages (10 exchanges)
+      for (const msg of recentHistory) {
+        if (msg.role === 'user' || msg.role === 'assistant') {
+          messages.push({ role: msg.role, content: msg.content });
+        }
+      }
+    }
+
+    // Add the current message
+    messages.push({ role: 'user', content: message });
+
     try {
-      const llmResponse = await generateLLMResponse(
-        [
-          { role: 'system', content: fullSystemPrompt },
-          { role: 'user', content: message },
-        ],
-        {
-          provider: 'groq', // Use Groq as default (fast and free tier)
-          temperature: 0.8, // Slightly higher for more personality
-          maxTokens: 256, // Keep responses short for preview
-        },
-      );
+      const llmResponse = await generateLLMResponse(messages, {
+        provider: 'groq', // Use Groq as default (fast and free tier)
+        temperature: 0.8, // Slightly higher for more personality
+        maxTokens: 256, // Keep responses short for preview
+      });
 
       console.log('[Quick Chat API] LLM response in', Date.now() - llmStartTime, 'ms');
       console.log('[Quick Chat API] Total time:', Date.now() - startTime, 'ms');

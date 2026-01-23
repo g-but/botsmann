@@ -1,17 +1,19 @@
 'use client';
 
-import { useState, useEffect, useRef, type FormEvent, type ChangeEvent } from 'react';
+import { useState, useEffect, useRef, useCallback, type FormEvent, type ChangeEvent } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth';
+import { documentToasts, conversationToasts } from '@/lib/toast';
+import { ConversationList } from '@/components/conversations';
+import { AddToBotModal } from '@/components/documents';
 import type { Document } from '@/types/document';
+import type { Conversation, ConversationMessage, MessageSource } from '@/types/conversation';
 
 interface ChatMessage {
+  id?: string;
   role: 'user' | 'assistant';
   content: string;
-  sources?: {
-    document_name: string;
-    preview: string;
-  }[];
+  sources?: MessageSource[];
 }
 
 export default function DocumentsPage() {
@@ -20,8 +22,6 @@ export default function DocumentsPage() {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [processing, setProcessing] = useState<string | null>(null);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
 
   // Chat state
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
@@ -29,11 +29,18 @@ export default function DocumentsPage() {
   const [chatLoading, setChatLoading] = useState(false);
   const [selectedDocId, setSelectedDocId] = useState<string | null>(null);
 
+  // Conversation state
+  const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
+  const [conversationRefreshTrigger, setConversationRefreshTrigger] = useState(0);
+
+  // Add to Bot modal state
+  const [addToBotModalOpen, setAddToBotModalOpen] = useState(false);
+  const [addToBotDocument, setAddToBotDocument] = useState<{ id: string; name: string } | null>(
+    null,
+  );
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
-
-  // With Supabase Auth Helpers + middleware, API routes read session from cookies.
-  // No need to forward Authorization headers from the client.
 
   // Load documents
   useEffect(() => {
@@ -61,16 +68,47 @@ export default function DocumentsPage() {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessages]);
 
+  // Load conversation messages when active conversation changes
+  useEffect(() => {
+    if (!activeConversationId) {
+      setChatMessages([]);
+      return;
+    }
+
+    const loadConversation = async () => {
+      try {
+        const response = await fetch(`/api/conversations/${activeConversationId}`);
+        const data = await response.json();
+
+        if (data.success && data.data?.conversation) {
+          const conversation: Conversation & { messages: ConversationMessage[] } =
+            data.data.conversation;
+          setChatMessages(
+            conversation.messages.map((msg) => ({
+              id: msg.id,
+              role: msg.role,
+              content: msg.content,
+              sources: msg.sources ?? undefined,
+            })),
+          );
+        }
+      } catch (err) {
+        console.error('Failed to load conversation:', err);
+        conversationToasts.loadError();
+      }
+    };
+
+    loadConversation();
+  }, [activeConversationId]);
+
   const handleUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setUploading(true);
-    setError('');
-    setSuccess('');
 
     try {
-            const formData = new FormData();
+      const formData = new FormData();
       formData.append('file', file);
 
       const response = await fetch('/api/documents', {
@@ -82,12 +120,12 @@ export default function DocumentsPage() {
 
       if (data.success) {
         setDocuments((prev) => [data.document, ...prev]);
-        setSuccess(`Uploaded "${file.name}". Click "Process" to enable search.`);
+        documentToasts.uploadSuccess(file.name);
       } else {
-        setError(data.error || 'Upload failed');
+        documentToasts.uploadError(data.error);
       }
-    } catch (err) {
-      setError('Failed to upload file');
+    } catch {
+      documentToasts.uploadError();
     } finally {
       setUploading(false);
       if (fileInputRef.current) {
@@ -98,10 +136,9 @@ export default function DocumentsPage() {
 
   const handleProcess = async (documentId: string) => {
     setProcessing(documentId);
-    setError('');
 
     try {
-            const response = await fetch('/api/documents/process', {
+      const response = await fetch('/api/documents/process', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -113,9 +150,9 @@ export default function DocumentsPage() {
 
       if (data.success) {
         setDocuments((prev) => prev.map((doc) => (doc.id === documentId ? data.document : doc)));
-        setSuccess(`Processed successfully! ${data.chunks_created} chunks created.`);
+        documentToasts.processSuccess(data.chunks_created);
       } else {
-        setError(data.error || 'Processing failed');
+        documentToasts.processError(data.error);
         // Reload documents to get error state
         const listResponse = await fetch('/api/documents');
         const listData = await listResponse.json();
@@ -123,8 +160,8 @@ export default function DocumentsPage() {
           setDocuments(listData.documents);
         }
       }
-    } catch (err) {
-      setError('Failed to process document');
+    } catch {
+      documentToasts.processError();
     } finally {
       setProcessing(null);
     }
@@ -134,7 +171,7 @@ export default function DocumentsPage() {
     if (!confirm('Are you sure you want to delete this document?')) return;
 
     try {
-            const response = await fetch(`/api/documents?id=${documentId}`, {
+      const response = await fetch(`/api/documents?id=${documentId}`, {
         method: 'DELETE',
       });
 
@@ -142,12 +179,51 @@ export default function DocumentsPage() {
 
       if (data.success) {
         setDocuments((prev) => prev.filter((doc) => doc.id !== documentId));
-        setSuccess('Document deleted');
+        documentToasts.deleteSuccess();
       } else {
-        setError(data.error || 'Delete failed');
+        documentToasts.deleteError(data.error);
+      }
+    } catch {
+      documentToasts.deleteError();
+    }
+  };
+
+  const createNewConversation = useCallback(async (): Promise<string | null> => {
+    try {
+      const response = await fetch('/api/conversations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          bot_type: 'documents',
+          document_id: selectedDocId,
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success && data.data?.conversation) {
+        setConversationRefreshTrigger((prev) => prev + 1);
+        return data.data.conversation.id;
       }
     } catch (err) {
-      setError('Failed to delete document');
+      console.error('Failed to create conversation:', err);
+      conversationToasts.createError();
+    }
+    return null;
+  }, [selectedDocId]);
+
+  const saveMessageToConversation = async (conversationId: string, message: ChatMessage) => {
+    try {
+      await fetch(`/api/conversations/${conversationId}/messages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          role: message.role,
+          content: message.content,
+          sources: message.sources,
+        }),
+      });
+    } catch (err) {
+      console.error('Failed to save message:', err);
     }
   };
 
@@ -157,11 +233,27 @@ export default function DocumentsPage() {
 
     const message = chatInput.trim();
     setChatInput('');
-    setChatMessages((prev) => [...prev, { role: 'user', content: message }]);
+
+    // Create new conversation if needed
+    let convId = activeConversationId;
+    if (!convId) {
+      convId = await createNewConversation();
+      if (convId) {
+        setActiveConversationId(convId);
+      }
+    }
+
+    const userMessage: ChatMessage = { role: 'user', content: message };
+    setChatMessages((prev) => [...prev, userMessage]);
     setChatLoading(true);
 
+    // Save user message to conversation
+    if (convId) {
+      await saveMessageToConversation(convId, userMessage);
+    }
+
     try {
-            const response = await fetch('/api/chat', {
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -175,21 +267,25 @@ export default function DocumentsPage() {
       const data = await response.json();
 
       if (data.success) {
-        setChatMessages((prev) => [
-          ...prev,
-          {
-            role: 'assistant',
-            content: data.response,
-            sources: data.sources,
-          },
-        ]);
+        const assistantMessage: ChatMessage = {
+          role: 'assistant',
+          content: data.response,
+          sources: data.sources,
+        };
+        setChatMessages((prev) => [...prev, assistantMessage]);
+
+        // Save assistant message to conversation
+        if (convId) {
+          await saveMessageToConversation(convId, assistantMessage);
+          setConversationRefreshTrigger((prev) => prev + 1);
+        }
       } else {
         setChatMessages((prev) => [
           ...prev,
           { role: 'assistant', content: `Error: ${data.error}` },
         ]);
       }
-    } catch (err) {
+    } catch {
       setChatMessages((prev) => [
         ...prev,
         { role: 'assistant', content: 'Failed to get response. Please try again.' },
@@ -199,9 +295,31 @@ export default function DocumentsPage() {
     }
   };
 
+  const handleSelectConversation = (id: string | null) => {
+    setActiveConversationId(id);
+    if (!id) {
+      setChatMessages([]);
+    }
+  };
+
+  const handleNewConversation = () => {
+    setActiveConversationId(null);
+    setChatMessages([]);
+  };
+
   const handleSignOut = async () => {
     await signOut();
     window.location.href = '/';
+  };
+
+  const handleOpenAddToBot = (doc: Document) => {
+    setAddToBotDocument({ id: doc.id, name: doc.name });
+    setAddToBotModalOpen(true);
+  };
+
+  const handleCloseAddToBot = () => {
+    setAddToBotModalOpen(false);
+    setAddToBotDocument(null);
   };
 
   const getStatusBadge = (status: Document['status']) => {
@@ -349,109 +467,126 @@ export default function DocumentsPage() {
           </label>
         </div>
 
-        {/* Status Messages */}
-        {error && <div className="mb-4 p-4 bg-red-50 text-red-600 rounded-lg">{error}</div>}
-        {success && <div className="mb-4 p-4 bg-green-50 text-green-600 rounded-lg">{success}</div>}
-
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Documents List */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Documents</h2>
+          <div className="space-y-4">
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Documents</h2>
 
-            {loading ? (
-              <div className="flex justify-center py-8">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600" />
-              </div>
-            ) : documents.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                <svg
-                  className="w-12 h-12 mx-auto mb-4 text-gray-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                  />
-                </svg>
-                <p>No documents yet</p>
-                <p className="text-sm mt-1">Upload a PDF, TXT, or MD file to get started</p>
-              </div>
-            ) : (
-              <div className="space-y-3 max-h-96 overflow-y-auto">
-                {documents.map((doc) => (
-                  <div
-                    key={doc.id}
-                    className={`p-4 border rounded-lg ${
-                      selectedDocId === doc.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
-                    }`}
+              {loading ? (
+                <div className="flex justify-center py-8">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600" />
+                </div>
+              ) : documents.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                  <svg
+                    className="w-12 h-12 mx-auto mb-4 text-gray-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <h3 className="font-medium text-gray-900 truncate">{doc.name}</h3>
-                          {getStatusBadge(doc.status)}
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                  <p>No documents yet</p>
+                  <p className="text-sm mt-1">Upload a PDF, TXT, or MD file to get started</p>
+                </div>
+              ) : (
+                <div className="space-y-3 max-h-72 overflow-y-auto">
+                  {documents.map((doc) => (
+                    <div
+                      key={doc.id}
+                      className={`p-4 border rounded-lg ${
+                        selectedDocId === doc.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
+                      }`}
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <h3 className="font-medium text-gray-900 truncate">{doc.name}</h3>
+                            {getStatusBadge(doc.status)}
+                          </div>
+                          <p className="text-sm text-gray-500 mt-1">
+                            {formatFileSize(doc.size_bytes || 0)}
+                            {doc.chunk_count ? ` • ${doc.chunk_count} chunks` : ''}
+                          </p>
+                          {doc.error_message && (
+                            <p className="text-sm text-red-500 mt-1">{doc.error_message}</p>
+                          )}
                         </div>
-                        <p className="text-sm text-gray-500 mt-1">
-                          {formatFileSize(doc.size_bytes || 0)}
-                          {doc.chunk_count ? ` • ${doc.chunk_count} chunks` : ''}
-                        </p>
-                        {doc.error_message && (
-                          <p className="text-sm text-red-500 mt-1">{doc.error_message}</p>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2 ml-4">
-                        {doc.status === 'pending' && (
+                        <div className="flex items-center gap-2 ml-4">
+                          {doc.status === 'pending' && (
+                            <button
+                              onClick={() => handleProcess(doc.id)}
+                              disabled={processing === doc.id}
+                              className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded hover:bg-blue-200 disabled:opacity-50"
+                            >
+                              {processing === doc.id ? 'Processing...' : 'Process'}
+                            </button>
+                          )}
+                          {doc.status === 'ready' && (
+                            <>
+                              <button
+                                onClick={() => handleOpenAddToBot(doc)}
+                                className="px-3 py-1 text-sm bg-purple-100 text-purple-700 rounded hover:bg-purple-200"
+                                title="Add to Bot"
+                              >
+                                + Bot
+                              </button>
+                              <button
+                                onClick={() =>
+                                  setSelectedDocId(selectedDocId === doc.id ? null : doc.id)
+                                }
+                                className={`px-3 py-1 text-sm rounded ${
+                                  selectedDocId === doc.id
+                                    ? 'bg-blue-600 text-white'
+                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                }`}
+                              >
+                                {selectedDocId === doc.id ? 'Selected' : 'Select'}
+                              </button>
+                            </>
+                          )}
                           <button
-                            onClick={() => handleProcess(doc.id)}
-                            disabled={processing === doc.id}
-                            className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded hover:bg-blue-200 disabled:opacity-50"
+                            onClick={() => handleDelete(doc.id)}
+                            className="p-1 text-gray-400 hover:text-red-500"
+                            title="Delete"
                           >
-                            {processing === doc.id ? 'Processing...' : 'Process'}
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                              />
+                            </svg>
                           </button>
-                        )}
-                        {doc.status === 'ready' && (
-                          <button
-                            onClick={() =>
-                              setSelectedDocId(selectedDocId === doc.id ? null : doc.id)
-                            }
-                            className={`px-3 py-1 text-sm rounded ${
-                              selectedDocId === doc.id
-                                ? 'bg-blue-600 text-white'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                            }`}
-                          >
-                            {selectedDocId === doc.id ? 'Selected' : 'Select'}
-                          </button>
-                        )}
-                        <button
-                          onClick={() => handleDelete(doc.id)}
-                          className="p-1 text-gray-400 hover:text-red-500"
-                          title="Delete"
-                        >
-                          <svg
-                            className="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                            />
-                          </svg>
-                        </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Conversation History */}
+            <ConversationList
+              botType="documents"
+              documentId={selectedDocId ?? undefined}
+              activeConversationId={activeConversationId}
+              onSelectConversation={handleSelectConversation}
+              onNewConversation={handleNewConversation}
+              refreshTrigger={conversationRefreshTrigger}
+            />
           </div>
 
           {/* Chat Interface */}
@@ -500,7 +635,7 @@ export default function DocumentsPage() {
                   ) : (
                     chatMessages.map((msg, i) => (
                       <div
-                        key={i}
+                        key={msg.id || i}
                         className={`p-4 rounded-lg ${
                           msg.role === 'user' ? 'bg-blue-100 ml-8' : 'bg-gray-100 mr-8'
                         }`}
@@ -561,17 +696,27 @@ export default function DocumentsPage() {
           <h3 className="font-semibold text-blue-900 mb-2">How it works</h3>
           <ol className="list-decimal list-inside space-y-2 text-blue-800">
             <li>Upload a document (PDF, TXT, or Markdown)</li>
-            <li>Click "Process" to extract and index the content</li>
+            <li>Click &quot;Process&quot; to extract and index the content</li>
             <li>
               Ask questions in the chat - the AI will search your documents and provide answers
             </li>
           </ol>
           <p className="mt-4 text-sm text-blue-600">
             Your documents are private and only accessible to you. Processing happens locally using
-            free AI models.
+            free AI models. Your conversations are saved automatically.
           </p>
         </div>
       </div>
+
+      {/* Add to Bot Modal */}
+      {addToBotDocument && (
+        <AddToBotModal
+          isOpen={addToBotModalOpen}
+          onClose={handleCloseAddToBot}
+          documentId={addToBotDocument.id}
+          documentName={addToBotDocument.name}
+        />
+      )}
     </div>
   );
 }

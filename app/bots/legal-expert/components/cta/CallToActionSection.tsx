@@ -11,7 +11,7 @@ const CallToActionSection: React.FC<Props> = ({ getTryLink: _getTryLink }) => {
     email: '',
     name: '',
     organization: '',
-    role: ''
+    role: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -39,7 +39,8 @@ const CallToActionSection: React.FC<Props> = ({ getTryLink: _getTryLink }) => {
             <div className="text-center mb-8">
               <h2 className="text-4xl font-bold text-gray-900 mb-4">Join the Waitlist</h2>
               <p className="text-lg text-gray-600">
-                Be among the first to access Lex when we launch. Get early access, exclusive updates, and special pricing for early supporters.
+                Be among the first to access Lex when we launch. Get early access, exclusive
+                updates, and special pricing for early supporters.
               </p>
             </div>
 
@@ -48,7 +49,8 @@ const CallToActionSection: React.FC<Props> = ({ getTryLink: _getTryLink }) => {
                 <div className="text-5xl mb-4">🎉</div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">You're on the list!</h3>
                 <p className="text-gray-700 mb-6">
-                  Thank you for joining our waitlist. We'll keep you updated on our progress and notify you when Lex is ready for early access.
+                  Thank you for joining our waitlist. We'll keep you updated on our progress and
+                  notify you when Lex is ready for early access.
                 </p>
                 <button
                   onClick={() => setSubmitStatus('idle')}
@@ -132,8 +134,20 @@ const CallToActionSection: React.FC<Props> = ({ getTryLink: _getTryLink }) => {
                   {isSubmitting ? (
                     <span className="flex items-center justify-center gap-2">
                       <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                          fill="none"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        />
                       </svg>
                       Joining Waitlist...
                     </span>
@@ -143,7 +157,8 @@ const CallToActionSection: React.FC<Props> = ({ getTryLink: _getTryLink }) => {
                 </button>
 
                 <p className="text-xs text-gray-500 text-center">
-                  By joining, you agree to receive updates about Lex. We respect your privacy and won't spam you.
+                  By joining, you agree to receive updates about Lex. We respect your privacy and
+                  won't spam you.
                 </p>
               </form>
             )}
@@ -157,10 +172,17 @@ const CallToActionSection: React.FC<Props> = ({ getTryLink: _getTryLink }) => {
                 >
                   Try Lex Now
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M13 7l5 5m0 0l-5 5m5-5H6"
+                    />
                   </svg>
                 </a>
-                <p className="text-xs text-gray-500 mt-3">Free AI case analysis • No signup required</p>
+                <p className="text-xs text-gray-500 mt-3">
+                  Free AI case analysis • No signup required
+                </p>
               </div>
             </div>
           </div>
@@ -191,7 +213,9 @@ const CallToActionSection: React.FC<Props> = ({ getTryLink: _getTryLink }) => {
           </div>
         </div>
         <div className="text-center mt-3">
-          <p className="text-xs text-gray-400 italic">We believe in transparency. These numbers update in real-time.</p>
+          <p className="text-xs text-gray-400 italic">
+            We believe in transparency. These numbers update in real-time.
+          </p>
         </div>
       </div>
     </section>

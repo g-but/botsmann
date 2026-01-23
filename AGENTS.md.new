@@ -1,0 +1,635 @@
+# AGENTS.md - Botsmann AI Bot Platform
+
+ARCHIVED: This draft contains overlapping guidance. Prefer the root-level AGENTS.md, docs/SSOT.md, and docs/SUPABASE_SETUP.md as the single source of truth. Database is Supabase (Postgres with RLS).
+
+> **For AI Coding Agents**: This guide helps Claude Code, Cursor, GitHub Copilot, and other AI agents work effectively on the Botsmann codebase.
+
+---
+
+## 🤖 AGENTIC WORKFLOW (READ THIS FIRST)
+
+### Task Execution Protocol
+
+Before starting ANY task, follow this protocol:
+
+#### 1. **Understand & Clarify** (30 seconds)
+- What exactly is the user asking for?
+- What's the expected outcome?
+- Are there ambiguities? Ask for clarification.
+- Check for related issues in docs/
+
+#### 2. **Gather Context** (1-2 minutes)
+Check these files IN ORDER:
+1. `docs/SHARED_CONTEXT.md` - System architecture
+2. `supabase/migrations/*.sql` - Database schema
+3. `lib/supabase.ts` - Type definitions
+4. `lib/auth.tsx` - Auth patterns
+5. Relevant component/API files
+
+**Use grep/search to find similar patterns:**
+```bash
+grep -r "useAuth" app/
+grep -r "verifyUser" app/api/
+grep -r "YOUR_PATTERN" .
+```
+
+#### 3. **Plan the Implementation** (2-3 minutes)
+- List ALL files that need changes
+- Identify dependencies (what must happen first)
+- Plan verification steps
+- Consider edge cases
+
+**Create a mental checklist:**
+- [ ] What files to modify
+- [ ] What to create
+- [ ] How to test
+- [ ] What to document
+
+#### 4. **Execute Incrementally** (main work)
+- Make ONE logical change at a time
+- Test/verify after each change
+- Don't make 10 changes then test
+- Use TypeScript compiler as first verification
+
+#### 5. **Verify Thoroughly** (3-5 minutes)
+```bash
+npm run lint           # Must pass
+npm run build          # Must succeed
+npm run test           # If tests exist
+npm run test:db        # For database changes
+```
+
+Manual checks:
+- [ ] Types are correct (no implicit `any`)
+- [ ] Zod validation on API inputs
+- [ ] RLS policies for new tables
+- [ ] Error handling implemented
+- [ ] User-facing errors are friendly
+
+#### 6. **Document Changes** (1-2 minutes)
+- Update AGENTS.md if new patterns
+- Add JSDoc comments for complex logic
+- Update relevant README if major feature
+
+---
+
+## 🎯 QUICK REFERENCE
+
+### Current Tech Stack
+
+| Component | Technology | Version |
+|-----------|-----------|---------|
+| Framework | Next.js (App Router) | 14.x |
+| Language | TypeScript | 5.x |
+| Database | **Supabase** (PostgreSQL) | Latest |
+| Auth | Supabase Auth | Latest |
+| Storage | Supabase Storage | Latest |
+| Styling | Tailwind CSS + DaisyUI | 3.x |
+| Validation | Zod | 3.x |
+| Testing | Jest + Playwright | Latest |
+| Deployment | Vercel | Latest |
+
+**⚠️ IMPORTANT:** The database is **Supabase**, not MongoDB. Ignore any references to MongoDB.
+
+### Where to Find Things
+
+| Need to... | Look here |
+|-----------|-----------|
+| Understand auth | `lib/auth.tsx` |
+| See database schema | `supabase/migrations/*.sql` |
+| Find type definitions | `lib/supabase.ts` |
+| Learn API patterns | `app/api/settings/route.ts` (best example) |
+| See validation examples | `lib/validations/custom-bot.ts` |
+| Find error responses | `lib/api/responses.ts` |
+| Check protected routes | Files using `useRequireAuth()` |
+| See shared UI components | `components/shared/` |
+
+---
+
+## 🛠️ COMMON TASKS
+
+### Adding a New Authentication Feature
+
+**Context to check first:**
+- `lib/auth.tsx` - Current auth implementation
+- `app/auth/signin/page.tsx` - Existing auth UI
+- `lib/api-utils.ts` - Server-side auth verification
+
+**Steps:**
+1. Check if Supabase supports it (see [Supabase Auth Docs](https://supabase.com/docs/guides/auth))
+2. Add function to `lib/auth.tsx`
+3. Create UI component in `app/auth/[feature]/`
+4. Add API route if needed: `app/api/auth/[feature]/route.ts`
+5. Update types in `lib/supabase.ts` if needed
+6. Test manually
+7. Add error handling
+
+**Example: Password Reset**
+```typescript
+// 1. Add to lib/auth.tsx
+const resetPassword = async (email: string) => {
+  const { error } = await supabaseClient.auth.resetPasswordForEmail(email);
+  return { error };
+};
+
+// 2. Create app/auth/reset-password/page.tsx
+// 3. Add API route if custom logic needed
+// 4. Test in browser
+```
+
+### Adding a New API Route
+
+**Pattern to follow:** `app/api/settings/route.ts`
+
+**Template:**
+```typescript
+import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+import { verifyUser } from '@/lib/api-utils';
+
+const RequestSchema = z.object({
+  field: z.string().min(1),
+});
+
+export async function POST(request: NextRequest) {
+  // 1. Verify authentication
+  const user = await verifyUser(request);
+  if (!user) {
+    return NextResponse.json(
+      { error: 'Unauthorized' },
+      { status: 401 }
+    );
+  }
+
+  try {
+    // 2. Parse and validate request
+    const body = await request.json();
+    const validated = RequestSchema.parse(body);
+
+    // 3. Perform operation
+    // ... your logic here ...
+
+    // 4. Return success
+    return NextResponse.json({ success: true, data: result });
+  } catch (error) {
+    // 5. Handle errors
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: 'Validation failed', details: error.errors },
+        { status: 400 }
+      );
+    }
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+```
+
+**Checklist:**
+- [ ] User verification with `verifyUser()`
+- [ ] Zod schema for input validation
+- [ ] Proper error responses
+- [ ] TypeScript types
+- [ ] Try-catch around operations
+
+### Adding a Database Table
+
+**NEVER directly modify the database**. Always use migrations.
+
+**Steps:**
+1. Create new migration: `supabase/migrations/00X_your_feature.sql`
+2. Define table schema with proper types
+3. Add RLS policies for user data
+4. Add indexes for performance
+5. Update TypeScript types in `lib/supabase.ts`
+6. Apply migration: See `docs/SUPABASE_SETUP.md`
+7. Test: `npm run test:db`
+
+**Template:**
+```sql
+-- Create table
+CREATE TABLE IF NOT EXISTS your_table (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Add indexes
+CREATE INDEX IF NOT EXISTS idx_your_table_user_id ON your_table(user_id);
+
+-- Enable RLS
+ALTER TABLE your_table ENABLE ROW LEVEL SECURITY;
+
+-- Add policies
+CREATE POLICY "Users can view own data"
+  ON your_table FOR SELECT
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own data"
+  ON your_table FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+```
+
+### Adding a New Bot
+
+**Context to check:**
+- `data/bots.ts` - Bot registry
+- `app/bots/medical-expert/` - Example bot
+
+**Steps:**
+1. Create directory: `app/bots/[bot-name]/`
+2. Create `page.tsx` with bot UI
+3. Register in `data/bots.ts`:
+   ```typescript
+   {
+     id: 'bot-name',
+     title: 'Bot Name',
+     description: 'What it does',
+     emoji: '🤖',
+     path: '/bots/bot-name',
+     category: 'research' | 'legal' | 'medical' | 'learning'
+   }
+   ```
+4. Add API route if needed: `app/api/bots/[bot-name]/route.ts`
+5. Test: Navigate to `/bots/bot-name`
+
+---
+
+## 🎨 CODE STYLE REFERENCE
+
+### TypeScript
+
+```typescript
+// ✅ GOOD
+interface UserProfile {
+  id: string;
+  email: string;
+  name: string | null;
+}
+
+type Status = 'pending' | 'processing' | 'ready' | 'error';
+
+// ❌ BAD
+const data: any = {...}; // Avoid 'any' unless justified
+```
+
+### React Components
+
+```typescript
+// ✅ GOOD - Named export, props interface, functional component
+interface ButtonProps {
+  label: string;
+  onClick?: () => void;
+  variant?: 'primary' | 'secondary';
+}
+
+export const Button: React.FC<ButtonProps> = ({
+  label,
+  onClick,
+  variant = 'primary'
+}) => {
+  return (
+    <button
+      onClick={onClick}
+      className={`btn btn-${variant}`}
+    >
+      {label}
+    </button>
+  );
+};
+
+// ❌ BAD - Inline props, default export
+export default function Button(props: any) {
+  return <button onClick={props.onClick}>{props.label}</button>;
+}
+```
+
+### Validation with Zod
+
+```typescript
+// ✅ GOOD - Descriptive errors, specific types
+const UserSchema = z.object({
+  email: z.string().email('Invalid email format'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
+  age: z.number().int().min(13).optional(),
+});
+
+// ❌ BAD - No error messages, weak validation
+const UserSchema = z.object({
+  email: z.string(),
+  password: z.string(),
+});
+```
+
+---
+
+## 🔍 DECISION TREES
+
+### "I need to add a feature" - What do I do?
+
+```
+Is it related to authentication?
+├─ YES
+│  ├─ Check lib/auth.tsx for patterns
+│  ├─ Check if Supabase supports it natively
+│  └─ Add to existing auth context
+└─ NO
+   ├─ Is it a new page?
+   │  ├─ YES → Create in app/[page-name]/page.tsx
+   │  └─ NO → Continue
+   ├─ Is it a new API endpoint?
+   │  ├─ YES → Create in app/api/[route]/route.ts
+   │  └─ NO → Continue
+   ├─ Is it a shared component?
+   │  ├─ YES → Add to components/shared/
+   │  └─ NO → Continue
+   └─ Is it database-related?
+      ├─ YES → Create migration in supabase/migrations/
+      └─ NO → Is it a utility function?
+         ├─ YES → Add to lib/
+         └─ NO → Determine best location
+```
+
+### "I'm getting an error" - How do I debug?
+
+```
+What type of error?
+├─ TypeScript compilation error
+│  ├─ Read the error message carefully
+│  ├─ Check type definitions in lib/supabase.ts
+│  └─ Fix types, don't use 'any' as bandaid
+├─ Runtime error
+│  ├─ Check browser console (for client)
+│  ├─ Check terminal output (for server)
+│  └─ Add console.log strategically
+├─ Database error
+│  ├─ Check Supabase dashboard logs
+│  ├─ Verify RLS policies
+│  ├─ Run: npm run test:db
+│  └─ Check migration files for schema
+└─ Build error
+   ├─ Run: npm run lint
+   ├─ Fix linting issues first
+   └─ Then: npm run build
+```
+
+### "I need to modify the database" - What's the process?
+
+```
+1. Create new migration file
+   ├─ Name: supabase/migrations/00X_feature_name.sql
+   └─ Never modify existing migrations
+
+2. Write SQL carefully
+   ├─ Add IF NOT EXISTS to avoid errors
+   ├─ Include RLS policies
+   └─ Add indexes for performance
+
+3. Update TypeScript types
+   └─ Add interface to lib/supabase.ts
+
+4. Apply migration
+   ├─ Use Supabase CLI
+   └─ Or SQL Editor in dashboard
+
+5. Verify
+   ├─ Run: npm run test:db
+   ├─ Check tables exist
+   └─ Test RLS policies
+```
+
+---
+
+## ⚠️ COMMON PITFALLS
+
+### 1. Don't Assume - Verify
+
+```bash
+# ❌ BAD - Assuming a feature exists
+// Use this function that I think exists
+await sendEmail(user.email);
+
+# ✅ GOOD - Check first
+grep -r "sendEmail" lib/
+# If found, use it. If not, implement it.
+```
+
+### 2. Read Before Writing
+
+```bash
+# ❌ BAD - Writing new pattern without checking existing
+// Create my own auth helper
+const checkAuth = () => {...}
+
+# ✅ GOOD - Use existing pattern
+// Check lib/auth.tsx first
+const { user } = useAuth(); // Ah, this already exists!
+```
+
+### 3. Test Incrementally
+
+```typescript
+// ❌ BAD - Make 10 changes then test
+function complexFeature() {
+  // Change 1
+  // Change 2
+  // ...
+  // Change 10
+}
+// Now test... oh no, which change broke it?
+
+// ✅ GOOD - Test after each logical change
+function feature() {
+  // Change 1
+  console.log('Step 1 works'); // Test
+
+  // Change 2
+  console.log('Step 2 works'); // Test
+}
+```
+
+### 4. Use Proper Tools
+
+```bash
+# ❌ BAD - Trying to create tables via API
+await fetch('/api/create-table', {...});
+
+# ✅ GOOD - Use migrations
+# Create: supabase/migrations/003_new_table.sql
+# Apply: supabase db push
+```
+
+### 5. Don't Ignore TypeScript
+
+```typescript
+// ❌ BAD - Silencing TypeScript with 'any'
+const data: any = await fetch(...);
+
+// ✅ GOOD - Fix the types
+interface ApiResponse {
+  success: boolean;
+  data: UserData;
+}
+const data: ApiResponse = await fetch(...);
+```
+
+---
+
+## 📚 FILE STRUCTURE REFERENCE
+
+```
+botsmann/
+├── app/                          # Next.js App Router
+│   ├── api/                      # API routes
+│   │   ├── auth/                 # Auth endpoints (planned)
+│   │   ├── custom-bots/          # Custom bot CRUD
+│   │   ├── settings/             # User settings ✅ GOOD EXAMPLE
+│   │   └── documents/            # Document upload/manage
+│   ├── auth/                     # Auth pages
+│   │   ├── signin/page.tsx       # Sign in
+│   │   └── signup/page.tsx       # Sign up
+│   ├── bots/                     # Bot pages
+│   │   ├── medical-expert/       # Example bot ✅ GOOD EXAMPLE
+│   │   ├── legal-expert/
+│   │   └── research-assistant/
+│   ├── settings/page.tsx         # User settings page
+│   └── layout.tsx                # Root layout with AuthProvider
+├── components/                   # Shared components
+│   └── shared/                   # Reusable UI components
+├── lib/                          # Utilities
+│   ├── auth.tsx                  # Auth context ✅ READ THIS
+│   ├── supabase.ts               # DB types ✅ READ THIS
+│   ├── api-utils.ts              # API helpers ✅ READ THIS
+│   ├── api/
+│   │   ├── responses.ts          # Standard responses
+│   │   └── index.ts              # API utilities
+│   ├── validations/              # Zod schemas
+│   └── middleware/               # Request middleware
+├── supabase/
+│   └── migrations/               # Database migrations ✅ READ THIS
+│       ├── 001_initial_schema.sql
+│       ├── 002_documents_status.sql
+│       ├── 003_custom_bots.sql
+│       ├── 004_extensions.sql
+│       └── 005_optimizations.sql
+├── docs/                         # Documentation
+│   ├── SUPABASE_SETUP.md         # DB setup guide
+│   ├── BEST_PRACTICES.md         # Coding standards
+│   └── SHARED_CONTEXT.md         # Architecture
+└── .env.local                    # Environment variables (never commit!)
+```
+
+---
+
+## 🧪 TESTING & VERIFICATION
+
+### Pre-Commit Checklist
+
+```bash
+# 1. Linting
+npm run lint                 # Must pass with 0 warnings
+
+# 2. Build
+npm run build                # Must succeed
+
+# 3. Tests
+npm run test                 # If tests exist
+
+# 4. Database (if DB changes)
+npm run test:db              # Verify connection & tables
+
+# 5. Manual testing
+# Start dev server and test in browser
+npm run dev
+```
+
+### Manual Testing Guidelines
+
+**For UI Changes:**
+1. Test in different browsers (Chrome, Firefox, Safari)
+2. Test responsive design (mobile, tablet, desktop)
+3. Test keyboard navigation
+4. Check console for errors
+
+**For API Changes:**
+1. Test with curl or Postman
+2. Test error cases (invalid input, unauthorized, etc.)
+3. Verify database updates
+4. Check response format matches standard
+
+**For Auth Changes:**
+1. Test sign up flow
+2. Test sign in flow
+3. Test protected routes
+4. Test sign out
+5. Check session persistence
+
+---
+
+## 🎓 LEARNING FROM PAST MISTAKES
+
+### What Worked Well (Claude Code)
+
+✅ **Verified current state first** - Checked actual database
+✅ **Tested thoroughly** - Used REST API, created test scripts
+✅ **Read existing code** - Understood patterns before changing
+✅ **Used proper tools** - Supabase CLI, migrations
+✅ **Documented everything** - Created comprehensive guides
+
+### What Went Wrong (Codex)
+
+❌ **Used outdated docs** - Read @AGENT.md instead of AGENTS.md
+❌ **Assumed MongoDB** - Didn't verify actual database
+❌ **No verification** - Didn't test if changes worked
+❌ **No pattern matching** - Didn't check existing code
+❌ **Incomplete setup** - Left system in broken state
+
+### Key Takeaways
+
+1. **Always verify** - Don't assume, check the actual code
+2. **Test incrementally** - Verify each change works
+3. **Follow patterns** - Use existing code as template
+4. **Document as you go** - Help future agents (and humans)
+5. **Use the right tools** - Database needs migrations, not hacks
+
+---
+
+## 🚨 CRITICAL INFORMATION
+
+### Database is Supabase, NOT MongoDB
+
+**Ignore any references to MongoDB.** The project uses:
+- **Database:** PostgreSQL via Supabase
+- **Auth:** Supabase Auth (cookie-based)
+- **Storage:** Supabase Storage
+- **Realtime:** Supabase Realtime (if needed)
+
+### Environment Variables Required
+
+```bash
+# .env.local (NEVER COMMIT THIS FILE)
+NEXT_PUBLIC_SUPABASE_URL=https://[project-ref].supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGci...
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGci...
+SUPABASE_ACCESS_TOKEN=sbp_...
+
+# Optional (for AI models)
+GROQ_API_KEY=gsk_...
+NEXT_AWS_ACCESS_KEY_ID=...
+NEXT_AWS_SECRET_ACCESS_KEY=...
+```
+
+### Never Commit
+
+- `.env.local` or any `.env*` file
+- API keys or secrets
+- Passwords
+- Private keys
+
+---
+
+**Last Updated:** 2026-01-17
+**Status:** ✅ Database connected, ⚠️ Auth partially complete, ❌ Profile/Dashboard missing

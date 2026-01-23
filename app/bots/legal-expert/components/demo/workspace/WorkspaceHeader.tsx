@@ -18,9 +18,7 @@ export const WorkspaceHeader: FC<WorkspaceHeaderProps> = ({ lawyer, onClose }) =
               </div>
               <div>
                 <h1 className="text-xl font-bold text-white">Lex Workspace</h1>
-                <p className="text-xs text-slate-400">
-                  Private Data Room • End-to-End Encrypted
-                </p>
+                <p className="text-xs text-slate-400">Private Data Room • End-to-End Encrypted</p>
               </div>
             </div>
           </div>

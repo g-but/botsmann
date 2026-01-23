@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
       return jsonError(
         `A bot with slug "${slug}" already exists`,
         'DUPLICATE_SLUG',
-        HTTP_STATUS.CONFLICT
+        HTTP_STATUS.CONFLICT,
       );
     }
 
@@ -105,7 +105,7 @@ export async function GET(request: NextRequest) {
         `
         *,
         knowledge_count:bot_knowledge_chunks(count)
-      `
+      `,
       )
       .eq('user_id', user.id)
       .order('created_at', { ascending: false });

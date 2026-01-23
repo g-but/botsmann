@@ -25,7 +25,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
       {
         rootMargin: '-80px 0% -80% 0%',
         threshold: 0,
-      }
+      },
     );
 
     // Observe all headings

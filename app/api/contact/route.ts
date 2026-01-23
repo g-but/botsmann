@@ -1,14 +1,17 @@
 import { type NextRequest } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 import { z } from 'zod';
 import {
   jsonSuccess,
+  jsonError,
   validateBody,
   hasValidationError,
   handleError,
+  HTTP_STATUS,
 } from '@/lib/api';
 import { DOMAIN_ERRORS } from '@/lib/constants';
+import { isSupabaseConfigured, getServiceClient } from '@/lib/supabase';
+import { rateLimit } from '@/lib/rate-limit';
+import { getClientIp } from '@/lib/request';
 
 const ContactSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -17,65 +20,53 @@ const ContactSchema = z.object({
   message: z.string().min(1, 'Message is required'),
 });
 
-type ContactData = z.infer<typeof ContactSchema>;
-
-interface ContactEntry extends ContactData {
-  id: string;
-  timestamp: string;
-}
+const limiter = rateLimit({ limit: 5, interval: 10 * 60 * 1000, uniqueTokenPerInterval: 1000 });
 
 export async function POST(req: NextRequest) {
   try {
+    // Rate limit by IP
+    const ip = getClientIp(req);
+    const { isRateLimited } = await limiter.check(`contact:${ip}`);
+    if (isRateLimited) {
+      return jsonError(
+        'Too many requests. Please try later.',
+        'RATE_LIMIT',
+        HTTP_STATUS.RATE_LIMIT,
+      );
+    }
     // Validate input
     const validation = await validateBody(req, ContactSchema);
     if (hasValidationError(validation)) {
       return validation.error;
     }
 
-    const { name, email, expertise, message } = validation.data;
+    const { name, email, expertise: _expertise, message } = validation.data;
 
-    // Create contact entry
-    const contactEntry: ContactEntry = {
-      id: `contact_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      name,
-      email,
-      expertise,
-      message,
-      timestamp: new Date().toISOString(),
-    };
-
-    // Store to local JSON file (development only)
-    const dataDir = path.join(process.cwd(), 'data');
-    const contactsFilePath = path.join(dataDir, 'contacts.json');
-
-    let contacts: ContactEntry[] = [];
-
-    try {
-      if (!fs.existsSync(dataDir)) {
-        fs.mkdirSync(dataDir, { recursive: true });
+    if (isSupabaseConfigured()) {
+      try {
+        const supabase = getServiceClient();
+        const { data, error } = await supabase
+          .from('consultations')
+          .insert({ name, email, message, status: 'new' })
+          .select('id')
+          .single();
+        if (error) {
+          console.error('Supabase consultations insert error:', error);
+          return jsonError(
+            'Failed to save contact request',
+            'DATABASE_ERROR',
+            HTTP_STATUS.INTERNAL_ERROR,
+          );
+        }
+        return jsonSuccess({ id: data.id }, "Thank you! We'll be in touch soon.");
+      } catch (dbErr) {
+        console.error('Supabase client error (contact):', dbErr);
+        // Fall through to local message (no persistence)
       }
-
-      if (fs.existsSync(contactsFilePath)) {
-        const fileContent = fs.readFileSync(contactsFilePath, 'utf8');
-        contacts = JSON.parse(fileContent);
-      }
-    } catch (error) {
-      console.error('Error reading contacts file:', error);
-      contacts = [];
     }
 
-    contacts.push(contactEntry);
-
-    try {
-      fs.writeFileSync(contactsFilePath, JSON.stringify(contacts, null, 2), 'utf8');
-    } catch {
-      // On Vercel/serverless, file write will fail - that's expected
-    }
-
-    return jsonSuccess(
-      { id: contactEntry.id },
-      "Thank you! We'll be in touch soon."
-    );
+    // Minimal fallback: accept without persistence (serverless FS not reliable)
+    return jsonSuccess({ id: `contact_${Date.now()}` }, "Thank you! We'll be in touch soon.");
   } catch (error) {
     return handleError(error, DOMAIN_ERRORS.FAILED_SUBMIT_CONTACT);
   }

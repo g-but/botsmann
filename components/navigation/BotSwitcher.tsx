@@ -44,7 +44,7 @@ export function BotSwitcher({
 }: BotSwitcherProps) {
   const buttonRef = useRef<HTMLButtonElement>(null);
   // Filter out current bot and bots without nav config
-  const otherBots = bots.filter(bot => bot.slug !== currentBotSlug && bot.nav);
+  const otherBots = bots.filter((bot) => bot.slug !== currentBotSlug && bot.nav);
   const colors = colorClasses[accentColor as keyof typeof colorClasses] || colorClasses.blue;
 
   // Get button position for portal positioning
@@ -77,7 +77,12 @@ export function BotSwitcher({
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
             </svg>
           </Popover.Button>
 
@@ -95,7 +100,9 @@ export function BotSwitcher({
                 <div className="overflow-hidden rounded-xl bg-white shadow-xl ring-1 ring-black ring-opacity-5 border border-gray-100">
                   {/* Header */}
                   <div className="border-b border-gray-100 bg-gray-50 px-4 py-3">
-                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Switch Bot</p>
+                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Switch Bot
+                    </p>
                   </div>
 
                   {/* Bot List */}
@@ -111,7 +118,9 @@ export function BotSwitcher({
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium text-gray-900">{bot.nav?.navTitle}</p>
                           {bot.nav?.navDescription && (
-                            <p className="text-xs text-gray-500 truncate">{bot.nav.navDescription}</p>
+                            <p className="text-xs text-gray-500 truncate">
+                              {bot.nav.navDescription}
+                            </p>
                           )}
                         </div>
                       </Link>
@@ -125,8 +134,18 @@ export function BotSwitcher({
                       onClick={() => close()}
                       className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 6h16M4 10h16M4 14h16M4 18h16"
+                        />
                       </svg>
                       View All Bots
                     </Link>

@@ -18,6 +18,8 @@ import { getServiceClient } from '@/lib/supabase';
 import { verifyUser } from '@/lib/api-utils';
 import { jsonSuccess, jsonError, jsonUnauthorized, HTTP_STATUS } from '@/lib/api';
 import { SYSTEM_PROMPTS, API_CONFIG, DOMAIN_ERRORS } from '@/lib/constants';
+import { rateLimit } from '@/lib/rate-limit';
+import { getClientIp } from '@/lib/request';
 
 // Extend function timeout for model loading (Vercel)
 // Note: Free tier max is 10s, Pro tier allows up to 60s
@@ -31,6 +33,17 @@ export async function POST(request: NextRequest) {
   console.log('[Chat API] Starting request');
 
   try {
+    // Rate limit per user/IP
+    const limiter = rateLimit({ limit: 20, interval: 60 * 1000, uniqueTokenPerInterval: 2000 });
+    const ip = getClientIp(request);
+    const { isRateLimited } = await limiter.check(`chat:${ip}`);
+    if (isRateLimited) {
+      return jsonError(
+        'Too many requests. Please slow down.',
+        'RATE_LIMIT',
+        HTTP_STATUS.RATE_LIMIT,
+      );
+    }
     console.log('[Chat API] Verifying user...');
     const user = await verifyUser(request);
     if (!user) {
@@ -61,11 +74,12 @@ export async function POST(request: NextRequest) {
       .single();
 
     const provider: ModelProvider = settings?.preferred_model || 'groq';
-    const apiKey = provider === 'groq'
-      ? settings?.groq_api_key
-      : provider === 'openai'
-        ? settings?.openai_api_key
-        : null;
+    const apiKey =
+      provider === 'groq'
+        ? settings?.groq_api_key
+        : provider === 'openrouter'
+          ? settings?.openrouter_api_key
+          : null;
     const ollamaUrl = settings?.ollama_url;
 
     // Check if user has any processed documents
@@ -112,14 +126,14 @@ export async function POST(request: NextRequest) {
         return jsonError(
           DOMAIN_ERRORS.SERVICE_WARMING_UP,
           'SERVICE_UNAVAILABLE',
-          HTTP_STATUS.SERVICE_UNAVAILABLE
+          HTTP_STATUS.SERVICE_UNAVAILABLE,
         );
       }
 
       return jsonError(
         DOMAIN_ERRORS.FAILED_PROCESS_QUERY,
         'SERVICE_UNAVAILABLE',
-        HTTP_STATUS.SERVICE_UNAVAILABLE
+        HTTP_STATUS.SERVICE_UNAVAILABLE,
       );
     }
 
@@ -129,7 +143,7 @@ export async function POST(request: NextRequest) {
     const { data: searchResults, error: searchError } = await supabase.rpc('match_documents', {
       query_embedding: `[${queryEmbedding.join(',')}]`,
       match_count: contextSize,
-      filter_user_id: user.id
+      filter_user_id: user.id,
     });
 
     console.log('[Chat API] Search completed in', Date.now() - searchStartTime, 'ms');
@@ -144,12 +158,14 @@ export async function POST(request: NextRequest) {
     let relevantChunks = searchResults || [];
     if (documentId) {
       relevantChunks = relevantChunks.filter(
-        (r: { document_id: string }) => r.document_id === documentId
+        (r: { document_id: string }) => r.document_id === documentId,
       );
     }
 
     // Get document names
-    const documentIds = Array.from(new Set(relevantChunks.map((r: { document_id: string }) => r.document_id)));
+    const documentIds = Array.from(
+      new Set(relevantChunks.map((r: { document_id: string }) => r.document_id)),
+    );
 
     const { data: documents } = await supabase
       .from('documents')
@@ -157,14 +173,18 @@ export async function POST(request: NextRequest) {
       .in('id', documentIds);
 
     const documentMap = new Map(
-      (documents || []).map((d: { id: string; name: string }) => [d.id, d.name])
+      (documents || []).map((d: { id: string; name: string }) => [d.id, d.name]),
     );
 
     // Build context from relevant chunks, respecting token limits
     let totalChars = 0;
     const truncatedChunks: Array<{ document_id: string; content: string; similarity: number }> = [];
 
-    for (const chunk of relevantChunks as Array<{ document_id: string; content: string; similarity: number }>) {
+    for (const chunk of relevantChunks as Array<{
+      document_id: string;
+      content: string;
+      similarity: number;
+    }>) {
       const chunkLength = chunk.content.length;
       if (totalChars + chunkLength > MAX_CONTEXT_CHARS) {
         // Truncate this chunk to fit
@@ -172,7 +192,7 @@ export async function POST(request: NextRequest) {
         if (remainingSpace > 200) {
           truncatedChunks.push({
             ...chunk,
-            content: chunk.content.substring(0, remainingSpace) + '... [truncated]'
+            content: chunk.content.substring(0, remainingSpace) + '... [truncated]',
           });
         }
         break;
@@ -189,17 +209,14 @@ export async function POST(request: NextRequest) {
     const context = contextParts.join('\n\n---\n\n');
 
     // Format sources for response (prepare before LLM call)
-    const sources = relevantChunks.map((chunk: {
-      id: string;
-      document_id: string;
-      content: string;
-      similarity: number;
-    }) => ({
-      document_id: chunk.document_id,
-      document_name: documentMap.get(chunk.document_id) || 'Unknown',
-      preview: chunk.content.substring(0, 200) + (chunk.content.length > 200 ? '...' : ''),
-      similarity: chunk.similarity
-    }));
+    const sources = relevantChunks.map(
+      (chunk: { id: string; document_id: string; content: string; similarity: number }) => ({
+        document_id: chunk.document_id,
+        document_name: documentMap.get(chunk.document_id) || 'Unknown',
+        preview: chunk.content.substring(0, 200) + (chunk.content.length > 200 ? '...' : ''),
+        similarity: chunk.similarity,
+      }),
+    );
 
     // Try to generate response using LLM
     console.log('[Chat API] Calling LLM, provider:', provider, 'context chars:', totalChars);
@@ -210,16 +227,16 @@ export async function POST(request: NextRequest) {
           { role: 'system', content: SYSTEM_PROMPTS.RAG_ASSISTANT },
           {
             role: 'user',
-            content: `Context from documents:\n\n${context}\n\n---\n\nUser question: ${message}`
-          }
+            content: `Context from documents:\n\n${context}\n\n---\n\nUser question: ${message}`,
+          },
         ],
         {
           provider,
           apiKey,
           ollamaUrl,
           temperature: 0.7,
-          maxTokens: 1024
-        }
+          maxTokens: 1024,
+        },
       );
 
       console.log('[Chat API] LLM response received in', Date.now() - llmStartTime, 'ms');
@@ -231,7 +248,6 @@ export async function POST(request: NextRequest) {
         provider: llmResponse.provider,
         model: llmResponse.model,
       });
-
     } catch (llmError) {
       console.error('[Chat API] LLM call failed after', Date.now() - llmStartTime, 'ms');
       // Handle LLM-specific errors with helpful fallbacks
@@ -244,11 +260,11 @@ export async function POST(request: NextRequest) {
                 document_id: string;
                 content: string;
               },
-              index: number
+              index: number,
             ) => {
               const docName = documentMap.get(chunk.document_id) || 'Unknown Document';
               return `**[Source ${index + 1}: ${docName}]**\n${chunk.content}`;
-            }
+            },
           );
 
           return jsonSuccess({
@@ -263,7 +279,7 @@ export async function POST(request: NextRequest) {
           return jsonError(
             DOMAIN_ERRORS.OLLAMA_NOT_RUNNING,
             'SERVICE_UNAVAILABLE',
-            HTTP_STATUS.SERVICE_UNAVAILABLE
+            HTTP_STATUS.SERVICE_UNAVAILABLE,
           );
         }
 
@@ -273,7 +289,7 @@ export async function POST(request: NextRequest) {
         return jsonError(
           DOMAIN_ERRORS.AI_UNAVAILABLE,
           'SERVICE_UNAVAILABLE',
-          HTTP_STATUS.SERVICE_UNAVAILABLE
+          HTTP_STATUS.SERVICE_UNAVAILABLE,
         );
       }
 

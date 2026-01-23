@@ -3,11 +3,13 @@
 ## 🎯 What Changed
 
 ### 1. **Simplified Jurisdictions** ✅
+
 - **Before**: Complex 200+ jurisdiction hierarchy
 - **After**: Only Switzerland (26 cantons) + United States (50 states)
 - **Impact**: Cleaner UI, faster matching, easier to maintain
 
 ### 2. **Progressive Disclosure** ✅
+
 - **Before**: All 10+ fields visible at once, overwhelming
 - **After**: Start with 3 essential fields, expand to show more
 - **Pattern**:
@@ -16,11 +18,13 @@
   - Phase 3 (Later): File upload in workspace
 
 ### 3. **Minimal Icons** ✅
+
 - **Before**: Icons everywhere (🔥, 💼, 📝, etc.)
 - **After**: Only where they add meaning (country flags, case type)
 - **Principle**: Text labels first, icons for decoration last
 
 ### 4. **Modular Architecture** ✅
+
 ```
 /workspace/
 ├── types.ts              # Production-ready type definitions
@@ -34,6 +38,7 @@
 ```
 
 ### 5. **Dual Portal System** (Next Phase)
+
 - **ClientPortal**: Simple, focused on their case
   - Overview, Files, Messages, Tasks, Billing
 - **LawyerPortal**: Power tools for professionals
@@ -45,11 +50,13 @@
 ## 📂 Files Created
 
 ### Production-Ready Foundation
+
 1. `/workspace/types.ts` - All TypeScript interfaces
 2. `/workspace/constants.ts` - Jurisdictions, legal areas, permissions
 3. `/demo/CaseIntakeForm.tsx` - Simplified intake with progressive disclosure
 
 ### Documentation
+
 4. `LEX_REDESIGN_PLAN.md` - Comprehensive architecture doc
 5. `LEX_REDESIGN_SUMMARY.md` - This file
 
@@ -58,17 +65,20 @@
 ## 🚀 Next Steps
 
 ### Immediate (This Week)
+
 - [ ] Simplify LawyerMatcher (show top 3, explain matching)
 - [ ] Build ClientPortal MVP (5 core views)
 - [ ] Build LawyerPortal MVP (dashboard + case detail)
 
 ### Short-term (Next 2 Weeks)
+
 - [ ] Extract shared components (FileManager, ChatInterface)
 - [ ] Implement permission system
 - [ ] Add audit logging
 - [ ] Mobile responsiveness
 
 ### Medium-term (Month 1-2)
+
 - [ ] Connect to real backend (Supabase)
 - [ ] Add authentication (client vs lawyer login)
 - [ ] Payment integration
@@ -79,22 +89,26 @@
 ## 💡 Key Design Principles Applied
 
 ### 1. Progressive Disclosure
+
 - Start simple (3 fields)
 - Reveal complexity on demand ("Show more options")
 - Never overwhelm the user
 
 ### 2. Minimal Visual Noise
+
 - Icons only when necessary
 - Prefer text labels
 - Clean white space
 
 ### 3. Production-First Code
+
 - All types defined upfront
 - Reusable components
 - Clear separation of concerns
 - Can connect real backend without major refactor
 
 ### 4. Dual Perspectives
+
 - Same data, different views
 - Client sees: "My case"
 - Lawyer sees: "All my cases + case details"
@@ -104,20 +118,21 @@
 
 ## 📊 Comparison: Before vs After
 
-| Aspect | Before | After |
-|--------|--------|-------|
-| Jurisdictions | 200+ (overwhelming) | 2 countries, 76 regions |
-| Initial Fields | 10+ visible | 3 visible, 3 expandable |
-| Icons | Everywhere | Minimal (flags, types only) |
-| Architecture | Single demo component | Modular workspace system |
-| Portals | One view for all | Client + Lawyer perspectives |
-| Production Ready | No | Yes (types, permissions, audit) |
+| Aspect           | Before                | After                           |
+| ---------------- | --------------------- | ------------------------------- |
+| Jurisdictions    | 200+ (overwhelming)   | 2 countries, 76 regions         |
+| Initial Fields   | 10+ visible           | 3 visible, 3 expandable         |
+| Icons            | Everywhere            | Minimal (flags, types only)     |
+| Architecture     | Single demo component | Modular workspace system        |
+| Portals          | One view for all      | Client + Lawyer perspectives    |
+| Production Ready | No                    | Yes (types, permissions, audit) |
 
 ---
 
 ## 🏗️ Technical Architecture
 
 ### Type System
+
 ```typescript
 // Core entities
 Case, CaseFile, Message, Task, BillingEntry
@@ -133,6 +148,7 @@ AccessLog, CaseTimeline
 ```
 
 ### Permission System
+
 ```typescript
 ROLE_PERMISSIONS = {
   client: ['view-case', 'view-files', 'upload-files', ...],
@@ -143,6 +159,7 @@ ROLE_PERMISSIONS = {
 ```
 
 ### File Visibility Workflow
+
 1. Client uploads → "private" (only client + lawyer)
 2. Lawyer requests share → "Can I share with paralegal X?"
 3. Client approves/denies
@@ -177,17 +194,20 @@ ROLE_PERMISSIONS = {
 ## 🎯 Success Metrics
 
 ### User Experience
+
 - ✅ User completes intake in < 2 minutes
 - ✅ User understands why lawyer was matched
 - ✅ User can navigate both portals intuitively
 
 ### Code Quality
+
 - ✅ < 500 lines per component (modular)
 - ✅ 100% TypeScript coverage
 - ✅ Reusable components (DRY)
 - ✅ Clear separation of concerns
 
 ### Production Readiness
+
 - ✅ All data models defined
 - ✅ Security/permissions implemented
 - ✅ Audit trail working
@@ -195,5 +215,5 @@ ROLE_PERMISSIONS = {
 
 ---
 
-*Last Updated: 2025-10-02*
-*Status: Foundation complete, building portals next*
+_Last Updated: 2025-10-02_
+_Status: Foundation complete, building portals next_

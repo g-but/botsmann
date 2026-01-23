@@ -8,7 +8,7 @@ const TechSection: React.FC = () => {
     name: '',
     email: '',
     role: '',
-    feedback: ''
+    feedback: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -17,27 +17,43 @@ const TechSection: React.FC = () => {
     {
       category: 'AI & ML',
       technologies: [
-        { name: 'Large Language Models', description: 'Claude, GPT-4, custom fine-tuned models', icon: '🤖' },
-        { name: 'Vector Databases', description: 'Pinecone, Weaviate for semantic search', icon: '🔍' },
-        { name: 'RAG Architecture', description: 'Retrieval-Augmented Generation for accuracy', icon: '📚' }
-      ]
+        {
+          name: 'Large Language Models',
+          description: 'Claude, GPT-4, custom fine-tuned models',
+          icon: '🤖',
+        },
+        {
+          name: 'Vector Databases',
+          description: 'Pinecone, Weaviate for semantic search',
+          icon: '🔍',
+        },
+        {
+          name: 'RAG Architecture',
+          description: 'Retrieval-Augmented Generation for accuracy',
+          icon: '📚',
+        },
+      ],
     },
     {
       category: 'Legal Data',
       technologies: [
         { name: 'Case Law APIs', description: 'Integration with legal databases', icon: '⚖️' },
         { name: 'Document Processing', description: 'OCR, NLP for contract analysis', icon: '📄' },
-        { name: 'Knowledge Graphs', description: 'Structured legal relationships', icon: '🕸️' }
-      ]
+        { name: 'Knowledge Graphs', description: 'Structured legal relationships', icon: '🕸️' },
+      ],
     },
     {
       category: 'Privacy & Security',
       technologies: [
         { name: 'End-to-End Encryption', description: 'Zero-knowledge architecture', icon: '🔒' },
-        { name: 'On-Premise Deployment', description: 'Self-hosted for sensitive data', icon: '🏢' },
-        { name: 'GDPR Compliance', description: 'Privacy-first by design', icon: '✅' }
-      ]
-    }
+        {
+          name: 'On-Premise Deployment',
+          description: 'Self-hosted for sensitive data',
+          icon: '🏢',
+        },
+        { name: 'GDPR Compliance', description: 'Privacy-first by design', icon: '✅' },
+      ],
+    },
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -64,7 +80,8 @@ const TechSection: React.FC = () => {
         </div>
         <h2 className="text-4xl font-bold text-gray-900 mb-4">Built on Cutting-Edge AI</h2>
         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-          We combine state-of-the-art language models with legal domain expertise and privacy-first architecture
+          We combine state-of-the-art language models with legal domain expertise and privacy-first
+          architecture
         </p>
       </div>
 
@@ -72,11 +89,17 @@ const TechSection: React.FC = () => {
       <div className="mb-16">
         <div className="grid md:grid-cols-3 gap-6">
           {techStack.map((stack, index) => (
-            <div key={index} className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-6 border border-slate-200">
+            <div
+              key={index}
+              className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-6 border border-slate-200"
+            >
               <h3 className="text-xl font-bold text-gray-900 mb-6">{stack.category}</h3>
               <div className="space-y-4">
                 {stack.technologies.map((tech, i) => (
-                  <div key={i} className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+                  <div
+                    key={i}
+                    className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
+                  >
                     <div className="flex items-start gap-3">
                       <span className="text-2xl flex-shrink-0">{tech.icon}</span>
                       <div>
@@ -129,19 +152,27 @@ const TechSection: React.FC = () => {
             <div className="grid sm:grid-cols-2 gap-4 text-sm">
               <div className="flex items-start gap-2">
                 <span className="text-green-500 font-bold">✓</span>
-                <span className="text-gray-700"><strong>Modular:</strong> Easy to update and improve</span>
+                <span className="text-gray-700">
+                  <strong>Modular:</strong> Easy to update and improve
+                </span>
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-green-500 font-bold">✓</span>
-                <span className="text-gray-700"><strong>Scalable:</strong> From single user to enterprise</span>
+                <span className="text-gray-700">
+                  <strong>Scalable:</strong> From single user to enterprise
+                </span>
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-green-500 font-bold">✓</span>
-                <span className="text-gray-700"><strong>Private:</strong> Your data never leaves your infrastructure</span>
+                <span className="text-gray-700">
+                  <strong>Private:</strong> Your data never leaves your infrastructure
+                </span>
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-green-500 font-bold">✓</span>
-                <span className="text-gray-700"><strong>Auditable:</strong> Transparent reasoning and sources</span>
+                <span className="text-gray-700">
+                  <strong>Auditable:</strong> Transparent reasoning and sources
+                </span>
               </div>
             </div>
           </div>
@@ -153,7 +184,8 @@ const TechSection: React.FC = () => {
         <div className="max-w-3xl mx-auto">
           <h3 className="text-2xl font-bold text-white mb-3 text-center">We Want Your Feedback</h3>
           <p className="text-slate-300 text-center mb-8">
-            Help us build better. Share your thoughts on our approach, tech stack, or general feedback.
+            Help us build better. Share your thoughts on our approach, tech stack, or general
+            feedback.
           </p>
 
           <div className="flex gap-4 mb-6 justify-center">
@@ -206,7 +238,9 @@ const TechSection: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-200 mb-2">Role / Expertise</label>
+              <label className="block text-sm font-medium text-slate-200 mb-2">
+                Role / Expertise
+              </label>
               <input
                 type="text"
                 required

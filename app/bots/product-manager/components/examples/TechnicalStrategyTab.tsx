@@ -10,7 +10,8 @@ const TECH_STACK: TechStackItem[] = [
   {
     abbrev: 'BE',
     name: 'Node.js with Express',
-    description: 'Provides excellent performance for API-driven applications with extensive middleware ecosystem',
+    description:
+      'Provides excellent performance for API-driven applications with extensive middleware ecosystem',
   },
   {
     abbrev: 'FE',

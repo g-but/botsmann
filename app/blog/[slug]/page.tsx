@@ -14,13 +14,17 @@ export async function generateStaticParams() {
       slug: post.slug,
     }));
   } catch (error) {
-    console.info("Error generating static params:", error);
+    console.info('Error generating static params:', error);
     return [];
   }
 }
 
 // Generate metadata for the page
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
   try {
     const post = await fetchBlogPostBySlug(params.slug);
 
@@ -39,24 +43,26 @@ export async function generateMetadata({ params }: { params: { slug: string } })
         type: 'article',
         publishedTime: post.date,
         authors: [post.author],
-        images: post.featuredImage ? [
-          {
-            url: post.featuredImage,
-            width: 1200,
-            height: 630,
-            alt: post.title
-          }
-        ] : [],
+        images: post.featuredImage
+          ? [
+              {
+                url: post.featuredImage,
+                width: 1200,
+                height: 630,
+                alt: post.title,
+              },
+            ]
+          : [],
       },
       twitter: {
         card: 'summary_large_image',
         title: post.title,
         description: post.excerpt,
         images: post.featuredImage ? [post.featuredImage] : [],
-      }
+      },
     };
   } catch (error) {
-    console.info("Error generating metadata:", error);
+    console.info('Error generating metadata:', error);
     return {
       title: 'Error | Botsmann',
     };
@@ -83,20 +89,16 @@ export default async function BlogPost({ params }: { params: { slug: string } })
       <article className="mx-auto max-w-3xl px-6 py-16">
         <header className="mb-12">
           <div className="flex items-center gap-4 text-sm text-gray-500">
-            <time dateTime={post.date}>
-              {format(new Date(post.date), 'MMMM d, yyyy')}
-            </time>
+            <time dateTime={post.date}>{format(new Date(post.date), 'MMMM d, yyyy')}</time>
             <span>•</span>
             <span>{post.author}</span>
           </div>
 
-          <h1 className="mt-4 text-4xl font-semibold tracking-tight text-gray-900">
-            {post.title}
-          </h1>
+          <h1 className="mt-4 text-4xl font-semibold tracking-tight text-gray-900">{post.title}</h1>
 
           {post.tags && post.tags.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-2">
-              {post.tags.map(tag => (
+              {post.tags.map((tag) => (
                 <span
                   key={tag}
                   className="inline-block rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-700"

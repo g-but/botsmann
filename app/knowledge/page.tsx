@@ -24,77 +24,91 @@ const faqData: FAQItem[] = [
   {
     category: 'Getting Started',
     question: 'What is Botsmann and how can it help my business?',
-    answer: 'Botsmann is an AI bot platform that provides specialized intelligent assistants for various domains including legal, medical, research, and language learning. We help businesses automate tasks, provide 24/7 customer support, and enhance productivity through custom AI solutions tailored to your specific industry needs.',
+    answer:
+      'Botsmann is an AI bot platform that provides specialized intelligent assistants for various domains including legal, medical, research, and language learning. We help businesses automate tasks, provide 24/7 customer support, and enhance productivity through custom AI solutions tailored to your specific industry needs.',
   },
   {
     category: 'Getting Started',
     question: 'Do I need technical expertise to use Botsmann bots?',
-    answer: 'No technical expertise is required to use our pre-built bots. Simply choose the bot that fits your needs and start interacting through natural conversation. For custom bot development or integrations, our consulting team can handle the technical aspects while you focus on your business goals.',
+    answer:
+      'No technical expertise is required to use our pre-built bots. Simply choose the bot that fits your needs and start interacting through natural conversation. For custom bot development or integrations, our consulting team can handle the technical aspects while you focus on your business goals.',
   },
   {
     category: 'Getting Started',
     question: 'How do I get started with a Botsmann bot?',
-    answer: 'Getting started is simple: 1) Browse our collection of specialized bots, 2) Select one that matches your needs, 3) Start interacting through natural language conversation. For enterprise solutions or custom bots, contact our consulting team for a personalized demo and implementation plan.',
+    answer:
+      'Getting started is simple: 1) Browse our collection of specialized bots, 2) Select one that matches your needs, 3) Start interacting through natural language conversation. For enterprise solutions or custom bots, contact our consulting team for a personalized demo and implementation plan.',
   },
   // Building AI Bots
   {
     category: 'Building AI Bots',
     question: 'What technologies do you use to build AI bots?',
-    answer: 'We leverage cutting-edge AI technologies including large language models (LLMs) like GPT-4 and Claude, combined with custom fine-tuning, retrieval-augmented generation (RAG), and domain-specific knowledge bases. Our tech stack includes Next.js, TypeScript, and various AI/ML frameworks for robust, scalable solutions.',
+    answer:
+      'We leverage cutting-edge AI technologies including large language models (LLMs) like GPT-4 and Claude, combined with custom fine-tuning, retrieval-augmented generation (RAG), and domain-specific knowledge bases. Our tech stack includes Next.js, TypeScript, and various AI/ML frameworks for robust, scalable solutions.',
   },
   {
     category: 'Building AI Bots',
     question: 'Can you build a custom bot for my specific industry?',
-    answer: 'Absolutely! Our consulting team specializes in building custom AI bots for any industry. We analyze your workflows, understand your unique requirements, and develop tailored solutions. From healthcare compliance to financial advisory, we have experience across diverse sectors.',
+    answer:
+      'Absolutely! Our consulting team specializes in building custom AI bots for any industry. We analyze your workflows, understand your unique requirements, and develop tailored solutions. From healthcare compliance to financial advisory, we have experience across diverse sectors.',
   },
   {
     category: 'Building AI Bots',
     question: 'How long does it take to develop a custom AI bot?',
-    answer: 'Development timelines vary based on complexity. Simple chatbots can be deployed in 2-4 weeks, while sophisticated enterprise solutions with custom integrations typically take 2-3 months. We provide detailed project timelines during our initial consultation.',
+    answer:
+      'Development timelines vary based on complexity. Simple chatbots can be deployed in 2-4 weeks, while sophisticated enterprise solutions with custom integrations typically take 2-3 months. We provide detailed project timelines during our initial consultation.',
   },
   {
     category: 'Building AI Bots',
     question: 'What is RAG and why is it important for AI bots?',
-    answer: 'RAG (Retrieval-Augmented Generation) combines the power of large language models with your specific knowledge base. This ensures your bot provides accurate, up-to-date information from your documents, databases, and proprietary content rather than generic responses.',
+    answer:
+      'RAG (Retrieval-Augmented Generation) combines the power of large language models with your specific knowledge base. This ensures your bot provides accurate, up-to-date information from your documents, databases, and proprietary content rather than generic responses.',
   },
   // Integration & Deployment
   {
     category: 'Integration & Deployment',
     question: 'Can Botsmann bots integrate with my existing systems?',
-    answer: 'Yes, our bots are designed for seamless integration. We support connections with CRMs (Salesforce, HubSpot), communication platforms (Slack, Teams, WhatsApp), helpdesk systems (Zendesk, Freshdesk), and custom APIs. Our team handles the technical integration process.',
+    answer:
+      'Yes, our bots are designed for seamless integration. We support connections with CRMs (Salesforce, HubSpot), communication platforms (Slack, Teams, WhatsApp), helpdesk systems (Zendesk, Freshdesk), and custom APIs. Our team handles the technical integration process.',
   },
   {
     category: 'Integration & Deployment',
     question: 'What deployment options are available?',
-    answer: 'We offer flexible deployment options: cloud-hosted (managed by us), on-premise (for sensitive data requirements), and hybrid solutions. All deployments include monitoring, maintenance, and regular updates to ensure optimal performance.',
+    answer:
+      'We offer flexible deployment options: cloud-hosted (managed by us), on-premise (for sensitive data requirements), and hybrid solutions. All deployments include monitoring, maintenance, and regular updates to ensure optimal performance.',
   },
   {
     category: 'Integration & Deployment',
     question: 'Is my data secure with Botsmann?',
-    answer: 'Security is our top priority. We implement enterprise-grade encryption, SOC 2 compliance standards, GDPR-compliant data handling, and offer data residency options. For sensitive industries, we provide on-premise deployment with complete data isolation.',
+    answer:
+      'Security is our top priority. We implement enterprise-grade encryption, SOC 2 compliance standards, GDPR-compliant data handling, and offer data residency options. For sensitive industries, we provide on-premise deployment with complete data isolation.',
   },
   // Pricing & Support
   {
     category: 'Pricing & Support',
     question: 'How much does it cost to build a custom AI bot?',
-    answer: 'Pricing depends on complexity, integrations, and support requirements. We offer three tiers: Starter (pre-built bots), Professional (customized solutions), and Enterprise (full custom development with dedicated support). Contact us for a detailed quote based on your specific needs.',
+    answer:
+      'Pricing depends on complexity, integrations, and support requirements. We offer three tiers: Starter (pre-built bots), Professional (customized solutions), and Enterprise (full custom development with dedicated support). Contact us for a detailed quote based on your specific needs.',
   },
   {
     category: 'Pricing & Support',
     question: 'What kind of support do you provide?',
-    answer: 'We provide comprehensive support including: documentation and guides (free), email support (all tiers), priority support with SLAs (Professional+), and dedicated success managers (Enterprise). Our consulting packages also include training sessions for your team.',
+    answer:
+      'We provide comprehensive support including: documentation and guides (free), email support (all tiers), priority support with SLAs (Professional+), and dedicated success managers (Enterprise). Our consulting packages also include training sessions for your team.',
   },
   {
     category: 'Pricing & Support',
     question: 'Do you offer training for our team?',
-    answer: 'Yes! Our consulting packages include training sessions covering bot management, conversation design best practices, and basic troubleshooting. We also provide documentation and video tutorials to help your team get the most out of your AI solution.',
+    answer:
+      'Yes! Our consulting packages include training sessions covering bot management, conversation design best practices, and basic troubleshooting. We also provide documentation and video tutorials to help your team get the most out of your AI solution.',
   },
 ];
 
 const guides: Guide[] = [
   {
     title: 'Building Your First AI Chatbot',
-    description: 'A comprehensive guide to creating a basic AI chatbot from scratch using modern tools and best practices.',
+    description:
+      'A comprehensive guide to creating a basic AI chatbot from scratch using modern tools and best practices.',
     category: 'Beginner',
     readTime: '15 min',
     icon: '🤖',
@@ -102,7 +116,8 @@ const guides: Guide[] = [
   },
   {
     title: 'Implementing RAG for Custom Knowledge',
-    description: 'Learn how to enhance your AI bot with retrieval-augmented generation for domain-specific accuracy.',
+    description:
+      'Learn how to enhance your AI bot with retrieval-augmented generation for domain-specific accuracy.',
     category: 'Intermediate',
     readTime: '25 min',
     icon: '📚',
@@ -110,7 +125,8 @@ const guides: Guide[] = [
   },
   {
     title: 'Designing Effective Conversation Flows',
-    description: 'Best practices for designing intuitive, helpful conversation flows that delight users.',
+    description:
+      'Best practices for designing intuitive, helpful conversation flows that delight users.',
     category: 'Beginner',
     readTime: '12 min',
     icon: '💬',
@@ -118,7 +134,8 @@ const guides: Guide[] = [
   },
   {
     title: 'Integrating AI Bots with Slack & Teams',
-    description: 'Step-by-step guide to deploying your AI assistant in popular workplace communication tools.',
+    description:
+      'Step-by-step guide to deploying your AI assistant in popular workplace communication tools.',
     category: 'Intermediate',
     readTime: '20 min',
     icon: '🔗',
@@ -126,7 +143,8 @@ const guides: Guide[] = [
   },
   {
     title: 'AI Bot Security Best Practices',
-    description: 'Ensure your AI bot implementation follows security best practices and compliance requirements.',
+    description:
+      'Ensure your AI bot implementation follows security best practices and compliance requirements.',
     category: 'Advanced',
     readTime: '30 min',
     icon: '🔒',
@@ -134,7 +152,8 @@ const guides: Guide[] = [
   },
   {
     title: 'Measuring AI Bot Performance',
-    description: 'Key metrics and analytics to track the success and ROI of your AI bot implementation.',
+    description:
+      'Key metrics and analytics to track the success and ROI of your AI bot implementation.',
     category: 'Intermediate',
     readTime: '18 min',
     icon: '📊',
@@ -142,15 +161,20 @@ const guides: Guide[] = [
   },
 ];
 
-const categories = ['All', 'Getting Started', 'Building AI Bots', 'Integration & Deployment', 'Pricing & Support'];
+const categories = [
+  'All',
+  'Getting Started',
+  'Building AI Bots',
+  'Integration & Deployment',
+  'Pricing & Support',
+];
 
 export default function KnowledgeCenterPage() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
 
-  const filteredFAQs = activeCategory === 'All'
-    ? faqData
-    : faqData.filter(faq => faq.category === activeCategory);
+  const filteredFAQs =
+    activeCategory === 'All' ? faqData : faqData.filter((faq) => faq.category === activeCategory);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50">
@@ -173,23 +197,35 @@ export default function KnowledgeCenterPage() {
               Knowledge
             </span>
             <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-              {" "}Center
+              {' '}
+              Center
             </span>
           </h1>
 
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Everything you need to understand, build, and deploy AI bots. Free guides, tutorials, and answers
-            to help you succeed with or without our consulting services.
+            Everything you need to understand, build, and deploy AI bots. Free guides, tutorials,
+            and answers to help you succeed with or without our consulting services.
           </p>
 
           <div className="flex flex-wrap justify-center gap-4">
-            <a href="#guides" className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            <a
+              href="#guides"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity"
+            >
               <span>Browse Guides</span>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                />
               </svg>
             </a>
-            <a href="#faq" className="inline-flex items-center gap-2 border-2 border-emerald-300 text-emerald-700 px-6 py-3 rounded-xl font-semibold hover:border-emerald-500 transition-colors">
+            <a
+              href="#faq"
+              className="inline-flex items-center gap-2 border-2 border-emerald-300 text-emerald-700 px-6 py-3 rounded-xl font-semibold hover:border-emerald-500 transition-colors"
+            >
               <span>View FAQ</span>
             </a>
           </div>
@@ -203,11 +239,13 @@ export default function KnowledgeCenterPage() {
                 Step-by-Step
               </span>
               <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-                {" "}Guides
+                {' '}
+                Guides
               </span>
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Practical tutorials to help you build and deploy AI bots yourself. From beginner to advanced.
+              Practical tutorials to help you build and deploy AI bots yourself. From beginner to
+              advanced.
             </p>
           </div>
 
@@ -220,26 +258,33 @@ export default function KnowledgeCenterPage() {
               >
                 <div className="flex items-start justify-between mb-4">
                   <span className="text-4xl">{guide.icon}</span>
-                  <span className={`text-xs font-medium px-3 py-1 rounded-full ${
-                    guide.category === 'Beginner' ? 'bg-green-100 text-green-700' :
-                    guide.category === 'Intermediate' ? 'bg-yellow-100 text-yellow-700' :
-                    'bg-red-100 text-red-700'
-                  }`}>
+                  <span
+                    className={`text-xs font-medium px-3 py-1 rounded-full ${
+                      guide.category === 'Beginner'
+                        ? 'bg-green-100 text-green-700'
+                        : guide.category === 'Intermediate'
+                          ? 'bg-yellow-100 text-yellow-700'
+                          : 'bg-red-100 text-red-700'
+                    }`}
+                  >
                     {guide.category}
                   </span>
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors">
                   {guide.title}
                 </h3>
-                <p className="text-gray-600 text-sm mb-4">
-                  {guide.description}
-                </p>
+                <p className="text-gray-600 text-sm mb-4">{guide.description}</p>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-gray-500">{guide.readTime} read</span>
                   <span className="text-emerald-600 font-medium group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
                     Read guide
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
                     </svg>
                   </span>
                 </div>
@@ -250,7 +295,9 @@ export default function KnowledgeCenterPage() {
           <div className="text-center mt-8">
             <p className="text-gray-500 text-sm">
               More guides coming soon. Have a topic request?{' '}
-              <Link href="/contact" className="text-emerald-600 hover:underline">Let us know</Link>
+              <Link href="/contact" className="text-emerald-600 hover:underline">
+                Let us know
+              </Link>
             </p>
           </div>
         </section>
@@ -263,11 +310,13 @@ export default function KnowledgeCenterPage() {
                 Frequently Asked
               </span>
               <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-                {" "}Questions
+                {' '}
+                Questions
               </span>
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Quick answers to common questions about AI bots, our platform, and consulting services.
+              Quick answers to common questions about AI bots, our platform, and consulting
+              services.
             </p>
           </div>
 
@@ -300,7 +349,9 @@ export default function KnowledgeCenterPage() {
                   className="w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors"
                 >
                   <div className="flex-1 pr-4">
-                    <span className="text-xs font-medium text-emerald-600 mb-1 block">{faq.category}</span>
+                    <span className="text-xs font-medium text-emerald-600 mb-1 block">
+                      {faq.category}
+                    </span>
                     <span className="font-semibold text-gray-900">{faq.question}</span>
                   </div>
                   <svg
@@ -309,7 +360,12 @@ export default function KnowledgeCenterPage() {
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
                 {openFAQ === index && (
@@ -324,12 +380,10 @@ export default function KnowledgeCenterPage() {
 
         {/* CTA Section */}
         <section className="text-center bg-gradient-to-br from-emerald-50 to-teal-50 rounded-3xl p-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Still have questions?
-          </h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Still have questions?</h2>
           <p className="text-gray-600 mb-8 max-w-xl mx-auto">
-            Our team is here to help. Whether you want to build it yourself or need expert assistance,
-            we're happy to guide you in the right direction.
+            Our team is here to help. Whether you want to build it yourself or need expert
+            assistance, we're happy to guide you in the right direction.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link
@@ -338,7 +392,12 @@ export default function KnowledgeCenterPage() {
             >
               <span>Talk to an Expert</span>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                />
               </svg>
             </Link>
             <Link

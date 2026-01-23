@@ -110,7 +110,8 @@ As an AI coding assistant, Cursor receives several advantages from this speciali
 The Trident is currently in development. The frontend user interface is implemented, while the backend integration with multiple AI models and the fusion engine is under development.
 
 Future enhancements will include:
+
 - Interactive documentation adjustment
 - Real-time collaboration features
 - Documentation version control
-- Integration with code generation tools 
+- Integration with code generation tools

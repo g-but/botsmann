@@ -47,9 +47,7 @@ export function CodeBlock({
       {/* Header with filename and copy button */}
       <div className="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
         <div className="flex items-center gap-2">
-          {filename && (
-            <span className="text-xs text-gray-400 font-mono">{filename}</span>
-          )}
+          {filename && <span className="text-xs text-gray-400 font-mono">{filename}</span>}
           {language && !filename && (
             <span className="text-xs text-gray-500 uppercase">{language}</span>
           )}
@@ -113,12 +111,7 @@ function CopyIcon({ className }: { className: string }) {
 function CheckIcon({ className }: { className: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M5 13l4 4L19 7"
-      />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
     </svg>
   );
 }

@@ -35,7 +35,8 @@
 
 /* Animated gradient backgrounds */
 @keyframes gradient-shift {
-  0%, 100% {
+  0%,
+  100% {
     background-position: 0% 50%;
   }
   50% {
@@ -44,18 +45,22 @@
 }
 
 .animated-gradient {
-  background: linear-gradient(-45deg, #3B82F6, #8B5CF6, #06B6D4, #3B82F6);
+  background: linear-gradient(-45deg, #3b82f6, #8b5cf6, #06b6d4, #3b82f6);
   background-size: 300% 300%;
   animation: gradient-shift 8s ease infinite;
 }
 
 /* Glow effects for trust and credibility */
 .glow-blue {
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), 0 0 40px rgba(59, 130, 246, 0.1);
+  box-shadow:
+    0 0 20px rgba(59, 130, 246, 0.3),
+    0 0 40px rgba(59, 130, 246, 0.1);
 }
 
 .glow-purple {
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3), 0 0 40px rgba(139, 92, 246, 0.1);
+  box-shadow:
+    0 0 20px rgba(139, 92, 246, 0.3),
+    0 0 40px rgba(139, 92, 246, 0.1);
 }
 
 /* Terminal-style for technical credibility */
@@ -69,8 +74,14 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-slideIn {
@@ -78,13 +89,20 @@
 }
 
 @keyframes slideIn {
-  from { opacity: 0; transform: translateX(-20px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 /* Pulse animation for live elements */
 @keyframes pulse-glow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
   }
@@ -156,7 +174,8 @@
 
 /* File drop zone animation */
 @keyframes dropZonePulse {
-  0%, 100% {
+  0%,
+  100% {
     border-color: rgb(59, 130, 246);
     background-color: rgba(59, 130, 246, 0.1);
   }
@@ -172,7 +191,9 @@
 
 /* Typing indicator animation */
 @keyframes typingDot {
-  0%, 60%, 100% {
+  0%,
+  60%,
+  100% {
     transform: translateY(0);
   }
   30% {

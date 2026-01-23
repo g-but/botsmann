@@ -14,8 +14,13 @@ export default function ConsultationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
     try {
@@ -39,7 +44,8 @@ export default function ConsultationForm() {
       reset();
       setSubmitSuccess(true);
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'Failed to submit form. Please try again.';
+      const message =
+        error instanceof Error ? error.message : 'Failed to submit form. Please try again.';
       setSubmitError(message);
     } finally {
       setIsSubmitting(false);
@@ -51,13 +57,27 @@ export default function ConsultationForm() {
       <div className="mx-auto max-w-xl bg-white p-8 rounded-lg shadow-sm border border-green-100">
         <div className="text-center">
           <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
-            <svg className="h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            <svg
+              className="h-6 w-6 text-green-600"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
+              />
             </svg>
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Thank you for joining our community!</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            Thank you for joining our community!
+          </h3>
           <p className="text-sm text-gray-600 mb-6">
-            We're excited about your interest in collaborating. We'll be in touch soon to discuss how we can work together on groundbreaking AI solutions.
+            We're excited about your interest in collaborating. We'll be in touch soon to discuss
+            how we can work together on groundbreaking AI solutions.
           </p>
           <button
             onClick={() => setSubmitSuccess(false)}
@@ -85,9 +105,7 @@ export default function ConsultationForm() {
               id="name"
               className="mt-1 block w-full rounded-md border-gray-200 bg-white px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-openai-green sm:text-sm"
             />
-            {errors.name && (
-              <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
-            )}
+            {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>}
           </div>
 
           <div>
@@ -106,9 +124,7 @@ export default function ConsultationForm() {
               id="email"
               className="mt-1 block w-full rounded-md border-gray-200 bg-white px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-openai-green sm:text-sm"
             />
-            {errors.email && (
-              <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
-            )}
+            {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>}
           </div>
         </div>
 
@@ -138,15 +154,15 @@ export default function ConsultationForm() {
             How would you like to collaborate?
           </label>
           <textarea
-            {...register('message', { required: 'Please tell us how you would like to collaborate' })}
+            {...register('message', {
+              required: 'Please tell us how you would like to collaborate',
+            })}
             rows={4}
             id="message"
             placeholder="Describe your interests and how you'd like to contribute..."
             className="mt-1 block w-full rounded-md border-gray-200 bg-white px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-openai-green sm:text-sm"
           />
-          {errors.message && (
-            <p className="mt-1 text-sm text-red-600">{errors.message.message}</p>
-          )}
+          {errors.message && <p className="mt-1 text-sm text-red-600">{errors.message.message}</p>}
         </div>
 
         {submitError && (

@@ -13,12 +13,14 @@ Fix MDX build error and complete bot page deduplication refactoring.
 ## Task Requirements
 
 ### 1. Fix MDX Build Error (Quick Win)
+
 - Fix the MDX compilation error in `/knowledge/guides/production-deployment`
 - Error: "Unexpected character `1` (U+0031) before name"
 - Likely a syntax issue in the MDX file
 - Verify build passes after fix
 
 ### 2. Bot Page Deduplication (P1)
+
 - Create `components/shared/BotPageTemplate.tsx` - Generic page template
 - Create `components/shared/BotSection.tsx` - Section wrapper component
 - Verify `components/shared/BotNotFoundFallback.tsx` exists (may already exist)
@@ -32,6 +34,7 @@ Fix MDX build error and complete bot page deduplication refactoring.
 - Consolidate shared CSS patterns
 
 ### 3. Verification
+
 - Run `npm run build` - must succeed
 - Run `npm run lint` - must pass with 0 warnings
 - Ensure all bot pages still render correctly

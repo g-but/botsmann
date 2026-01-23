@@ -33,7 +33,7 @@ const DemoPage: FC = () => {
       id: 'welcome',
       role: 'assistant',
       content:
-        'Hello! 👋 I\'m the Botsmann AI Assistant. I can answer questions about our platform, AI assistants (Heidi, Lex, Imhotep, and more), consulting services, and how to get started. Ask me anything!',
+        "Hello! 👋 I'm the Botsmann AI Assistant. I can answer questions about our platform, AI assistants (Heidi, Lex, Imhotep, and more), consulting services, and how to get started. Ask me anything!",
     },
   ]);
   const [input, setInput] = useState('');
@@ -59,7 +59,7 @@ const DemoPage: FC = () => {
       content: input.trim(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
 
@@ -80,20 +80,18 @@ const DemoPage: FC = () => {
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: data.success
-          ? data.response
-          : data.error || 'Sorry, something went wrong.',
+        content: data.success ? data.response : data.error || 'Sorry, something went wrong.',
         sources: data.sources,
       };
 
-      setMessages(prev => [...prev, assistantMessage]);
+      setMessages((prev) => [...prev, assistantMessage]);
     } catch {
-      setMessages(prev => [
+      setMessages((prev) => [
         ...prev,
         {
           id: (Date.now() + 1).toString(),
           role: 'assistant',
-          content: 'Sorry, I couldn\'t connect to the server. Please try again.',
+          content: "Sorry, I couldn't connect to the server. Please try again.",
         },
       ]);
     } finally {
@@ -113,12 +111,8 @@ const DemoPage: FC = () => {
           <div className="flex items-center gap-3">
             <span className="text-3xl">🤖</span>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">
-                Botsmann AI Assistant
-              </h1>
-              <p className="text-sm text-gray-500">
-                RAG Demo • Private AI Knowledge Base
-              </p>
+              <h1 className="text-xl font-bold text-gray-900">Botsmann AI Assistant</h1>
+              <p className="text-sm text-gray-500">RAG Demo • Private AI Knowledge Base</p>
             </div>
           </div>
           <Link
@@ -136,7 +130,7 @@ const DemoPage: FC = () => {
           <p className="text-sm text-blue-800">
             <strong>How it works:</strong> This assistant uses RAG (Retrieval Augmented Generation)
             to search our knowledge base and generate helpful responses.
-            {llmEnabled === true && ' Powered by Groq\'s free LLM tier.'}
+            {llmEnabled === true && " Powered by Groq's free LLM tier."}
             {llmEnabled === false && ' Running in knowledge-base-only mode.'}
           </p>
         </div>
@@ -147,18 +141,14 @@ const DemoPage: FC = () => {
         <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
           {/* Messages */}
           <div className="h-[500px] overflow-y-auto p-4 space-y-4">
-            {messages.map(message => (
+            {messages.map((message) => (
               <div
                 key={message.id}
-                className={`flex ${
-                  message.role === 'user' ? 'justify-end' : 'justify-start'
-                }`}
+                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
                   className={`max-w-[80%] rounded-2xl px-4 py-3 ${
-                    message.role === 'user'
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-100 text-gray-900'
+                    message.role === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-900'
                   }`}
                 >
                   <p className="whitespace-pre-wrap">{message.content}</p>
@@ -219,15 +209,12 @@ const DemoPage: FC = () => {
           )}
 
           {/* Input */}
-          <form
-            onSubmit={handleSubmit}
-            className="border-t border-gray-200 p-4"
-          >
+          <form onSubmit={handleSubmit} className="border-t border-gray-200 p-4">
             <div className="flex gap-3">
               <input
                 type="text"
                 value={input}
-                onChange={e => setInput(e.target.value)}
+                onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask about Botsmann..."
                 className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 disabled={isLoading}
@@ -245,38 +232,46 @@ const DemoPage: FC = () => {
 
         {/* Technical Details */}
         <div className="mt-8 bg-gray-50 rounded-xl p-6 border border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            🔧 How This Demo Works
-          </h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">🔧 How This Demo Works</h2>
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <h3 className="font-medium text-gray-900 mb-2">
-                RAG Architecture
-              </h3>
+              <h3 className="font-medium text-gray-900 mb-2">RAG Architecture</h3>
               <ul className="text-sm text-gray-600 space-y-1">
-                <li>• <strong>Retrieval:</strong> Keyword-based search finds relevant knowledge</li>
-                <li>• <strong>Augmentation:</strong> Retrieved context enhances the prompt</li>
-                <li>• <strong>Generation:</strong> LLM creates a natural response</li>
+                <li>
+                  • <strong>Retrieval:</strong> Keyword-based search finds relevant knowledge
+                </li>
+                <li>
+                  • <strong>Augmentation:</strong> Retrieved context enhances the prompt
+                </li>
+                <li>
+                  • <strong>Generation:</strong> LLM creates a natural response
+                </li>
                 <li>• 23 knowledge chunks about Botsmann</li>
               </ul>
             </div>
             <div>
-              <h3 className="font-medium text-gray-900 mb-2">
-                Technology Stack
-              </h3>
+              <h3 className="font-medium text-gray-900 mb-2">Technology Stack</h3>
               <ul className="text-sm text-gray-600 space-y-1">
-                <li>• <strong>LLM:</strong> Groq (Llama 3.1) - free tier, no cost</li>
-                <li>• <strong>Search:</strong> TF-IDF-like keyword scoring</li>
-                <li>• <strong>Backend:</strong> Next.js API routes</li>
-                <li>• <strong>Deployment:</strong> Vercel serverless</li>
+                <li>
+                  • <strong>LLM:</strong> Groq (Llama 3.1) - free tier, no cost
+                </li>
+                <li>
+                  • <strong>Search:</strong> TF-IDF-like keyword scoring
+                </li>
+                <li>
+                  • <strong>Backend:</strong> Next.js API routes
+                </li>
+                <li>
+                  • <strong>Deployment:</strong> Vercel serverless
+                </li>
               </ul>
             </div>
           </div>
           <div className="mt-4 pt-4 border-t border-gray-200">
             <p className="text-sm text-gray-600">
-              <strong>Want this for your business?</strong> This is a simplified demo.
-              For production, we use vector embeddings for semantic search,
-              and can deploy locally on your infrastructure for maximum privacy.{' '}
+              <strong>Want this for your business?</strong> This is a simplified demo. For
+              production, we use vector embeddings for semantic search, and can deploy locally on
+              your infrastructure for maximum privacy.{' '}
               <Link href="/contact" className="text-blue-600 hover:underline">
                 Book a consultation →
               </Link>

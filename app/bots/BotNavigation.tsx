@@ -44,7 +44,7 @@ export const BotNavigation: React.FC<BotNavigationProps> = ({
   });
 
   // Filter site nav items (exclude button items like "Contact Us")
-  const siteNavItems = menuItems.filter(item => !item.isButton);
+  const siteNavItems = menuItems.filter((item) => !item.isButton);
 
   // Handle scroll to section with mobile menu close
   const handleScrollToSection = (sectionId: string | undefined) => {
@@ -90,14 +90,12 @@ export const BotNavigation: React.FC<BotNavigationProps> = ({
 
           {/* Center: Desktop section navigation */}
           <div className="hidden md:flex md:space-x-1 items-center overflow-x-auto no-scrollbar">
-            {sectionMenuItems.map(item => (
+            {sectionMenuItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => handleScrollToSection(item.section)}
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap flex items-center ${
-                  activeSection === item.section
-                    ? colors.active
-                    : `text-gray-600 ${colors.hover}`
+                  activeSection === item.section ? colors.active : `text-gray-600 ${colors.hover}`
                 } ${item.id === 'roadmap' ? `border ${colors.border}` : ''}`}
               >
                 {item.icon && <span className="mr-1">{item.icon}</span>}
@@ -112,13 +110,29 @@ export const BotNavigation: React.FC<BotNavigationProps> = ({
             <button
               className="md:hidden p-2 rounded-md text-gray-600 hover:text-gray-800 hover:bg-gray-100 focus:outline-none"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                className="h-6 w-6"
+              >
                 {isMobileMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
                 )}
               </svg>
             </button>
@@ -137,7 +151,6 @@ export const BotNavigation: React.FC<BotNavigationProps> = ({
             )}
           </div>
         </div>
-
       </div>
 
       {/* Mobile menu slide-in overlay */}
@@ -186,8 +199,18 @@ export const BotNavigation: React.FC<BotNavigationProps> = ({
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
                           <span className="sr-only">Close menu</span>
-                          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          <svg
+                            className="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M6 18L18 6M6 6l12 12"
+                            />
                           </svg>
                         </button>
                       </div>
@@ -201,8 +224,18 @@ export const BotNavigation: React.FC<BotNavigationProps> = ({
                             className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100"
                             onClick={() => setIsMobileMenuOpen(false)}
                           >
-                            <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                            <svg
+                              className="w-5 h-5 mr-3"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                              />
                             </svg>
                             Home
                           </Link>
@@ -213,8 +246,18 @@ export const BotNavigation: React.FC<BotNavigationProps> = ({
                             className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100"
                             onClick={() => setIsMobileMenuOpen(false)}
                           >
-                            <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            <svg
+                              className="w-5 h-5 mr-3"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                              />
                             </svg>
                             All Bots
                           </Link>
@@ -225,7 +268,7 @@ export const BotNavigation: React.FC<BotNavigationProps> = ({
                           <p className="px-3 text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
                             Botsmann
                           </p>
-                          {siteNavItems.map(item => (
+                          {siteNavItems.map((item) => (
                             <Link
                               key={item.label}
                               href={item.path}
@@ -242,7 +285,7 @@ export const BotNavigation: React.FC<BotNavigationProps> = ({
                           <p className="px-3 text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
                             {botTitle} Sections
                           </p>
-                          {sectionMenuItems.map(item => (
+                          {sectionMenuItems.map((item) => (
                             <button
                               key={item.id}
                               onClick={() => handleScrollToSection(item.section)}

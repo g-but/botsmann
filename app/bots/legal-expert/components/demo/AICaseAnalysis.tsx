@@ -37,29 +37,34 @@ const AICaseAnalysis: React.FC<AICaseAnalysisProps> = ({ intake, onContinue, onB
 
   const performAnalysis = useCallback(() => {
     // Mock AI analysis based on intake data
-    const legalAreaName = LEGAL_AREAS.find(a => a.id === intake.legalArea)?.name || intake.legalArea;
-    const jurisdictionName = intake.jurisdiction.country === 'CH'
-      ? 'Zurich, Switzerland'
-      : 'California, United States';
+    const legalAreaName =
+      LEGAL_AREAS.find((a) => a.id === intake.legalArea)?.name || intake.legalArea;
+    const jurisdictionName =
+      intake.jurisdiction.country === 'CH' ? 'Zurich, Switzerland' : 'California, United States';
 
     const mockAnalysis: AnalysisResult = {
       summary: {
         type: `${intake.caseType === 'personal' ? 'Personal' : 'Business'} - ${legalAreaName}`,
         jurisdiction: jurisdictionName,
-        complexity: intake.description.length > 200 ? 'High' : intake.description.length > 100 ? 'Medium' : 'Low'
+        complexity:
+          intake.description.length > 200
+            ? 'High'
+            : intake.description.length > 100
+              ? 'Medium'
+              : 'Low',
       },
       legalAssessment: {
         relevantLaws: getLaws(intake),
         keyConsiderations: getConsiderations(intake),
-        successProbability: Math.floor(Math.random() * 20) + 75 // 75-95%
+        successProbability: Math.floor(Math.random() * 20) + 75, // 75-95%
       },
       expectations: {
         timeline: getTimeline(intake),
         estimatedCost: getCost(intake),
         requiredDocuments: getDocuments(intake),
-        nextSteps: getNextSteps(intake)
+        nextSteps: getNextSteps(intake),
       },
-      recommendations: getRecommendations(intake)
+      recommendations: getRecommendations(intake),
     };
 
     setTimeout(() => {
@@ -88,27 +93,40 @@ const AICaseAnalysis: React.FC<AICaseAnalysisProps> = ({ intake, onContinue, onB
     const intake = _intake;
     // Focus on FEDERAL laws only - no local ordinances
     if (intake.jurisdiction.country === 'CH') {
-      if (intake.legalArea === 'immigration') return ['Swiss Federal Act on Foreign Nationals (FNA)', 'Federal Ordinance on Admission (OASA)'];
-      if (intake.legalArea === 'employment') return ['Swiss Federal Code of Obligations (CO Art. 319-362)', 'Federal Act on Work (ArG)'];
-      if (intake.legalArea === 'real-estate') return ['Swiss Civil Code (ZGB - Federal)', 'Federal Act on Data Protection (FADP)'];
-      if (intake.legalArea === 'family') return ['Swiss Civil Code (Family Law - ZGB)', 'Federal Act on Registered Partnerships'];
-      if (intake.legalArea === 'business') return ['Swiss Code of Obligations (CO)', 'Federal Act on Unfair Competition'];
+      if (intake.legalArea === 'immigration')
+        return [
+          'Swiss Federal Act on Foreign Nationals (FNA)',
+          'Federal Ordinance on Admission (OASA)',
+        ];
+      if (intake.legalArea === 'employment')
+        return ['Swiss Federal Code of Obligations (CO Art. 319-362)', 'Federal Act on Work (ArG)'];
+      if (intake.legalArea === 'real-estate')
+        return ['Swiss Civil Code (ZGB - Federal)', 'Federal Act on Data Protection (FADP)'];
+      if (intake.legalArea === 'family')
+        return ['Swiss Civil Code (Family Law - ZGB)', 'Federal Act on Registered Partnerships'];
+      if (intake.legalArea === 'business')
+        return ['Swiss Code of Obligations (CO)', 'Federal Act on Unfair Competition'];
       return ['Swiss Civil Code (Federal)', 'Swiss Code of Obligations (Federal)'];
     } else {
       // US Federal + California State (no local ordinances)
-      if (intake.legalArea === 'immigration') return ['Immigration and Nationality Act (INA - Federal)', 'California TRUTH Act'];
-      if (intake.legalArea === 'employment') return ['Fair Labor Standards Act (FLSA - Federal)', 'California Labor Code'];
-      if (intake.legalArea === 'real-estate') return ['Federal Fair Housing Act', 'California Civil Code (Property)'];
+      if (intake.legalArea === 'immigration')
+        return ['Immigration and Nationality Act (INA - Federal)', 'California TRUTH Act'];
+      if (intake.legalArea === 'employment')
+        return ['Fair Labor Standards Act (FLSA - Federal)', 'California Labor Code'];
+      if (intake.legalArea === 'real-estate')
+        return ['Federal Fair Housing Act', 'California Civil Code (Property)'];
       if (intake.legalArea === 'family') return ['Uniform Parentage Act', 'California Family Code'];
-      if (intake.legalArea === 'business') return ['Federal Securities Laws', 'California Corporations Code'];
-      if (intake.legalArea === 'intellectual-property') return ['US Patent Act (Federal)', 'Lanham Act (Federal Trademark)'];
+      if (intake.legalArea === 'business')
+        return ['Federal Securities Laws', 'California Corporations Code'];
+      if (intake.legalArea === 'intellectual-property')
+        return ['US Patent Act (Federal)', 'Lanham Act (Federal Trademark)'];
       return ['Relevant Federal Laws', 'California State Law'];
     }
   };
 
   const getConsiderations = (intake: CaseIntake) => {
     const base: { text: string; type: 'success' | 'warning' }[] = [
-      { text: 'Case eligibility confirmed based on provided details', type: 'success' }
+      { text: 'Case eligibility confirmed based on provided details', type: 'success' },
     ];
 
     if (intake.urgency === 'urgent') {
@@ -144,22 +162,45 @@ const AICaseAnalysis: React.FC<AICaseAnalysisProps> = ({ intake, onContinue, onB
 
   const getDocuments = (intake: CaseIntake): string[] => {
     if (intake.legalArea === 'immigration') {
-      return ['Valid passport', 'Employment contract', 'Proof of qualifications', 'Financial statements', 'Housing documentation'];
+      return [
+        'Valid passport',
+        'Employment contract',
+        'Proof of qualifications',
+        'Financial statements',
+        'Housing documentation',
+      ];
     }
     if (intake.legalArea === 'employment') {
-      return ['Employment contract', 'Communication records', 'Performance reviews', 'Company policies', 'Termination letter (if applicable)'];
+      return [
+        'Employment contract',
+        'Communication records',
+        'Performance reviews',
+        'Company policies',
+        'Termination letter (if applicable)',
+      ];
     }
     if (intake.legalArea === 'real-estate') {
-      return ['Property deed', 'Purchase agreement', 'Inspection reports', 'Title insurance', 'Financial documents'];
+      return [
+        'Property deed',
+        'Purchase agreement',
+        'Inspection reports',
+        'Title insurance',
+        'Financial documents',
+      ];
     }
-    return ['Identification documents', 'Relevant contracts', 'Supporting evidence', 'Financial records'];
+    return [
+      'Identification documents',
+      'Relevant contracts',
+      'Supporting evidence',
+      'Financial records',
+    ];
   };
 
   const getNextSteps = (_intake: CaseIntake): string[] => {
     return [
       'Review and gather all required documentation',
       'Schedule consultation with matched lawyer',
-      'Prepare detailed timeline and action plan'
+      'Prepare detailed timeline and action plan',
     ];
   };
 
@@ -174,7 +215,9 @@ const AICaseAnalysis: React.FC<AICaseAnalysisProps> = ({ intake, onContinue, onB
       recs.push('Consider involving company legal counsel or compliance officer');
     }
 
-    recs.push(`Consult with a ${LEGAL_AREAS.find(a => a.id === intake.legalArea)?.name.toLowerCase()} specialist`);
+    recs.push(
+      `Consult with a ${LEGAL_AREAS.find((a) => a.id === intake.legalArea)?.name.toLowerCase()} specialist`,
+    );
 
     return recs;
   };
@@ -189,7 +232,8 @@ const AICaseAnalysis: React.FC<AICaseAnalysisProps> = ({ intake, onContinue, onB
             </div>
             <h3 className="text-2xl font-bold text-gray-900 mb-3">AI Analyzing Your Case...</h3>
             <p className="text-gray-600">
-              Reviewing jurisdiction-specific laws, analyzing case complexity, and preparing your personalized report
+              Reviewing jurisdiction-specific laws, analyzing case complexity, and preparing your
+              personalized report
             </p>
           </div>
 
@@ -228,9 +272,7 @@ const AICaseAnalysis: React.FC<AICaseAnalysisProps> = ({ intake, onContinue, onB
         <div className="flex items-center gap-4">
           <div className="text-4xl">✨</div>
           <div className="flex-1">
-            <h3 className="text-xl font-bold text-gray-900 mb-1">
-              Analysis Complete!
-            </h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-1">Analysis Complete!</h3>
             <p className="text-gray-700">
               Great news! Your case has strong merit. Here's your personalized AI analysis:
             </p>
@@ -263,11 +305,15 @@ const AICaseAnalysis: React.FC<AICaseAnalysisProps> = ({ intake, onContinue, onB
               </div>
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="text-sm text-gray-600 mb-1">Complexity</div>
-                <div className={`font-semibold ${
-                  analysis.summary.complexity === 'Low' ? 'text-green-600' :
-                  analysis.summary.complexity === 'Medium' ? 'text-yellow-600' :
-                  'text-red-600'
-                }`}>
+                <div
+                  className={`font-semibold ${
+                    analysis.summary.complexity === 'Low'
+                      ? 'text-green-600'
+                      : analysis.summary.complexity === 'Medium'
+                        ? 'text-yellow-600'
+                        : 'text-red-600'
+                  }`}
+                >
                   {analysis.summary.complexity}
                 </div>
               </div>
@@ -298,11 +344,15 @@ const AICaseAnalysis: React.FC<AICaseAnalysisProps> = ({ intake, onContinue, onB
                 <div className="space-y-2">
                   {analysis.legalAssessment.keyConsiderations.map((item, idx) => (
                     <div key={idx} className="flex items-start gap-2">
-                      <span className={`mt-0.5 ${
-                        item.type === 'success' ? 'text-green-600' :
-                        item.type === 'warning' ? 'text-yellow-600' :
-                        'text-blue-600'
-                      }`}>
+                      <span
+                        className={`mt-0.5 ${
+                          item.type === 'success'
+                            ? 'text-green-600'
+                            : item.type === 'warning'
+                              ? 'text-yellow-600'
+                              : 'text-blue-600'
+                        }`}
+                      >
                         {item.type === 'success' ? '✓' : item.type === 'warning' ? '⚠️' : 'ℹ️'}
                       </span>
                       <span className="text-sm text-gray-600">{item.text}</span>
@@ -325,9 +375,11 @@ const AICaseAnalysis: React.FC<AICaseAnalysisProps> = ({ intake, onContinue, onB
                   </span>
                 </div>
                 <p className="text-xs text-gray-600 mt-2">
-                  {analysis.legalAssessment.successProbability >= 80 ? 'High probability of favorable outcome' :
-                   analysis.legalAssessment.successProbability >= 60 ? 'Good chances with proper legal representation' :
-                   'Moderate probability, requires strategic approach'}
+                  {analysis.legalAssessment.successProbability >= 80
+                    ? 'High probability of favorable outcome'
+                    : analysis.legalAssessment.successProbability >= 60
+                      ? 'Good chances with proper legal representation'
+                      : 'Moderate probability, requires strategic approach'}
                 </p>
               </div>
             </div>
@@ -342,17 +394,23 @@ const AICaseAnalysis: React.FC<AICaseAnalysisProps> = ({ intake, onContinue, onB
             <div className="grid md:grid-cols-2 gap-4 mb-4">
               <div className="bg-blue-50 rounded-lg p-4">
                 <div className="text-sm font-semibold text-gray-700 mb-1">Timeline</div>
-                <div className="text-lg font-bold text-blue-600">{analysis.expectations.timeline}</div>
+                <div className="text-lg font-bold text-blue-600">
+                  {analysis.expectations.timeline}
+                </div>
               </div>
               <div className="bg-blue-50 rounded-lg p-4">
                 <div className="text-sm font-semibold text-gray-700 mb-1">Estimated Cost</div>
-                <div className="text-lg font-bold text-blue-600">{analysis.expectations.estimatedCost}</div>
+                <div className="text-lg font-bold text-blue-600">
+                  {analysis.expectations.estimatedCost}
+                </div>
               </div>
             </div>
 
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <div className="text-sm font-semibold text-gray-700 mb-2">Required Documents ({analysis.expectations.requiredDocuments.length}):</div>
+                <div className="text-sm font-semibold text-gray-700 mb-2">
+                  Required Documents ({analysis.expectations.requiredDocuments.length}):
+                </div>
                 <ul className="space-y-1">
                   {analysis.expectations.requiredDocuments.map((doc, idx) => (
                     <li key={idx} className="text-sm text-gray-600 flex items-start gap-2">

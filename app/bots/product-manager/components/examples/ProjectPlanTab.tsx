@@ -13,11 +13,31 @@ interface ResourceAllocation {
 }
 
 const TIMELINE_ITEMS: TimelineItem[] = [
-  { step: 1, title: 'Planning & Requirements (2 weeks)', description: 'Define user flows, security requirements, and integration points' },
-  { step: 2, title: 'Core Authentication (3 weeks)', description: 'Implement user registration, login, and session management' },
-  { step: 3, title: 'OAuth Integration (2 weeks)', description: 'Add support for Google, GitHub, and Microsoft authentication' },
-  { step: 4, title: 'Role-Based Access Control (2 weeks)', description: 'Implement permission system with role hierarchy' },
-  { step: 5, title: 'Testing & Refinement (1 week)', description: 'Security testing, performance optimization, and bug fixes' },
+  {
+    step: 1,
+    title: 'Planning & Requirements (2 weeks)',
+    description: 'Define user flows, security requirements, and integration points',
+  },
+  {
+    step: 2,
+    title: 'Core Authentication (3 weeks)',
+    description: 'Implement user registration, login, and session management',
+  },
+  {
+    step: 3,
+    title: 'OAuth Integration (2 weeks)',
+    description: 'Add support for Google, GitHub, and Microsoft authentication',
+  },
+  {
+    step: 4,
+    title: 'Role-Based Access Control (2 weeks)',
+    description: 'Implement permission system with role hierarchy',
+  },
+  {
+    step: 5,
+    title: 'Testing & Refinement (1 week)',
+    description: 'Security testing, performance optimization, and bug fixes',
+  },
 ];
 
 const RESOURCE_ALLOCATIONS: ResourceAllocation[] = [

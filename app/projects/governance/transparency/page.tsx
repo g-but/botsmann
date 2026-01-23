@@ -8,7 +8,7 @@ import sampleData from '../data/sampleData';
 
 const TransparencyDemoPage = () => {
   const [activeDemo, setActiveDemo] = useState<'transaction' | 'agency' | 'citizen'>('transaction');
-  
+
   return (
     <div className="min-h-screen bg-gray-50 pb-10">
       {/* Hero Section */}
@@ -60,7 +60,7 @@ const TransparencyDemoPage = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Feature Description */}
@@ -68,42 +68,46 @@ const TransparencyDemoPage = () => {
           <div className="px-4 py-5 sm:p-6">
             {activeDemo === 'transaction' && (
               <div>
-                <h2 className="text-xl font-semibold text-gray-900">Enhanced Transaction Traceability</h2>
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Enhanced Transaction Traceability
+                </h2>
                 <p className="mt-2 text-gray-600">
-                  See how every government expenditure is linked to the laws that enabled it,
-                  key performance indicators (KPIs), complete documentation, and a timeline showing
-                  the entire process from approval to completion. Citizens can comment, like, or
-                  raise concerns about any transaction.
+                  See how every government expenditure is linked to the laws that enabled it, key
+                  performance indicators (KPIs), complete documentation, and a timeline showing the
+                  entire process from approval to completion. Citizens can comment, like, or raise
+                  concerns about any transaction.
                 </p>
               </div>
             )}
-            
+
             {activeDemo === 'agency' && (
               <div>
                 <h2 className="text-xl font-semibold text-gray-900">Agency Transparency Profile</h2>
                 <p className="mt-2 text-gray-600">
-                  Comprehensive view of a government agency's operations, including budget allocation,
-                  spending, key metrics, regulations, team members with transparency scores, and direct
-                  citizen impact. This complete picture helps citizens understand what agencies do and
-                  how effectively they serve the public.
+                  Comprehensive view of a government agency's operations, including budget
+                  allocation, spending, key metrics, regulations, team members with transparency
+                  scores, and direct citizen impact. This complete picture helps citizens understand
+                  what agencies do and how effectively they serve the public.
                 </p>
               </div>
             )}
-            
+
             {activeDemo === 'citizen' && (
               <div>
-                <h2 className="text-xl font-semibold text-gray-900">Citizen Contribution Tracking</h2>
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Citizen Contribution Tracking
+                </h2>
                 <p className="mt-2 text-gray-600">
-                  Citizens can see exactly how their tax contributions are distributed across different
-                  government agencies, set advisory preferences for future distributions, track benefits
-                  they receive, and view their participation in governance. This creates a personalized
-                  view of each citizen's relationship with their government.
+                  Citizens can see exactly how their tax contributions are distributed across
+                  different government agencies, set advisory preferences for future distributions,
+                  track benefits they receive, and view their participation in governance. This
+                  creates a personalized view of each citizen's relationship with their government.
                 </p>
               </div>
             )}
           </div>
         </div>
-        
+
         {/* Component Demo */}
         {activeDemo === 'transaction' && (
           <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -112,11 +116,9 @@ const TransparencyDemoPage = () => {
             </div>
           </div>
         )}
-        
-        {activeDemo === 'agency' && (
-          <AgencyProfile agency={sampleData.agencies[0]} />
-        )}
-        
+
+        {activeDemo === 'agency' && <AgencyProfile agency={sampleData.agencies[0]} />}
+
         {activeDemo === 'citizen' && (
           <CitizenProfile citizen={sampleData.citizen} agencies={sampleData.agencies} />
         )}
@@ -125,4 +127,4 @@ const TransparencyDemoPage = () => {
   );
 };
 
-export default TransparencyDemoPage; 
+export default TransparencyDemoPage;

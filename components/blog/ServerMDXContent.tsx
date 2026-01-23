@@ -40,10 +40,18 @@ const ServerMDXComponents = {
     });
 
     if (hasBlockChild) {
-      return <div className="mb-4 text-gray-600" {...props}>{children}</div>;
+      return (
+        <div className="mb-4 text-gray-600" {...props}>
+          {children}
+        </div>
+      );
     }
 
-    return <p className="mb-4 text-gray-600" {...props}>{children}</p>;
+    return (
+      <p className="mb-4 text-gray-600" {...props}>
+        {children}
+      </p>
+    );
   },
   ul: (props: React.HTMLAttributes<HTMLUListElement>) => (
     <ul className="mb-4 list-disc pl-6 text-gray-600" {...props} />
@@ -51,9 +59,7 @@ const ServerMDXComponents = {
   ol: (props: React.HTMLAttributes<HTMLOListElement>) => (
     <ol className="mb-4 list-decimal pl-6 text-gray-600" {...props} />
   ),
-  li: (props: React.HTMLAttributes<HTMLLIElement>) => (
-    <li className="mb-2" {...props} />
-  ),
+  li: (props: React.HTMLAttributes<HTMLLIElement>) => <li className="mb-2" {...props} />,
   a: ({ href, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
     const isExternal = href?.startsWith('http');
 
@@ -99,21 +105,23 @@ const ServerMDXComponents = {
   ),
 
   // Callout component for important information
-  Callout: ({ children, type = 'info' }: { children: React.ReactNode; type?: 'info' | 'warning' | 'success' }) => {
+  Callout: ({
+    children,
+    type = 'info',
+  }: {
+    children: React.ReactNode;
+    type?: 'info' | 'warning' | 'success';
+  }) => {
     const styles = {
       info: 'bg-blue-50 border-blue-200 text-blue-800',
       warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
-      success: 'bg-green-50 border-green-200 text-green-800'
+      success: 'bg-green-50 border-green-200 text-green-800',
     };
 
-    const safeType = (type && ['info', 'warning', 'success'].includes(type)) ? type : 'info';
+    const safeType = type && ['info', 'warning', 'success'].includes(type) ? type : 'info';
 
-    return (
-      <div className={`my-6 rounded-lg border-l-4 p-4 ${styles[safeType]}`}>
-        {children}
-      </div>
-    );
-  }
+    return <div className={`my-6 rounded-lg border-l-4 p-4 ${styles[safeType]}`}>{children}</div>;
+  },
 };
 
 interface ServerMDXContentProps {
@@ -143,17 +151,11 @@ export default function ServerMDXContent({ content, slug }: ServerMDXContentProp
       // Use figure/figcaption for semantic HTML that avoids <p> nesting issues
       return (
         <figure className="my-8">
-          <Image
-            src={imageSrc}
-            alt={alt || ''}
-            width={800}
-            height={450}
-            className="rounded-lg"
-          />
+          <Image src={imageSrc} alt={alt || ''} width={800} height={450} className="rounded-lg" />
           {alt && <figcaption className="mt-2 text-sm text-gray-500 italic">{alt}</figcaption>}
         </figure>
       );
-    }
+    },
   };
 
   return (
@@ -164,8 +166,8 @@ export default function ServerMDXContent({ content, slug }: ServerMDXContentProp
         options={{
           mdxOptions: {
             remarkPlugins: [remarkGfm],
-            rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: 'wrap' }]]
-          }
+            rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: 'wrap' }]],
+          },
         }}
       />
     </div>

@@ -51,9 +51,11 @@ Heidi's functionality is currently delivered via a ChatGPT custom GPT:
 As noted in the TDD, potential future enhancements (requiring approval) include:
 
 ### Phase 2 (3-6 Months):
+
 - Activate `lib/nlp.ts` for in-page demo (e.g., single-word tables via OpenAI API)
 
 ### Phase 3 (12-18 Months):
+
 - Full in-house NLP for all inputs
 - Sign-up system for:
   - Zurich Events: Post events in chat/section
@@ -65,8 +67,9 @@ As noted in the TDD, potential future enhancements (requiring approval) include:
 ## Testing
 
 To test the implementation:
+
 1. Visit the bot page at `/bots/swiss-german-teacher`
 2. Verify all sections display correctly, including the input field
 3. Test the input field by entering text and confirming redirection to ChatGPT
 4. Test the waitlist form by submitting an email and preferences
-5. Check the solution page at `/solutions/individuals/swiss-german-teacher` 
+5. Check the solution page at `/solutions/individuals/swiss-german-teacher`

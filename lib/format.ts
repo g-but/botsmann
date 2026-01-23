@@ -18,7 +18,7 @@
  */
 export const formatCurrency = (
   amount: number,
-  options?: { compact?: boolean; decimals?: number; currency?: string }
+  options?: { compact?: boolean; decimals?: number; currency?: string },
 ): string => {
   const { compact = false, decimals = 0, currency = 'CHF' } = options ?? {};
   const locale = currency === 'CHF' ? 'de-CH' : 'en-US';
@@ -42,7 +42,7 @@ export const formatCurrency = (
  */
 export const formatNumber = (
   value: number,
-  options?: { compact?: boolean; decimals?: number }
+  options?: { compact?: boolean; decimals?: number },
 ): string => {
   const { compact = false, decimals = 0 } = options ?? {};
 
@@ -66,7 +66,7 @@ export const formatDate = (
   options?: {
     style?: 'full' | 'long' | 'medium' | 'short';
     includeTime?: boolean;
-  }
+  },
 ): string => {
   const { style = 'long', includeTime = false } = options ?? {};
 
@@ -98,10 +98,7 @@ export const toISOString = (date?: Date): string => {
  * formatPercent(0.856) // "86%"
  * formatPercent(0.856, { decimals: 1 }) // "85.6%"
  */
-export const formatPercent = (
-  value: number,
-  options?: { decimals?: number }
-): string => {
+export const formatPercent = (value: number, options?: { decimals?: number }): string => {
   const { decimals = 0 } = options ?? {};
 
   return new Intl.NumberFormat('en-US', {

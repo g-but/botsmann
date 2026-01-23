@@ -28,23 +28,23 @@ const sizeClasses = {
  * Botsmann Logo component
  * Single source of truth for logo styling across the app
  */
-export const Logo: FC<LogoProps> = ({
-  href = '/' as Route,
-  showText = true,
-  size = 'md',
-}) => {
+export const Logo: FC<LogoProps> = ({ href = '/' as Route, showText = true, size = 'md' }) => {
   const sizes = sizeClasses[size];
 
   const logoContent = (
     <div className="group flex items-center space-x-3">
       <div className="relative">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg blur opacity-20 group-hover:opacity-30 transition-opacity" />
-        <div className={`relative bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold ${sizes.icon} rounded-lg shadow-lg`}>
+        <div
+          className={`relative bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold ${sizes.icon} rounded-lg shadow-lg`}
+        >
           B
         </div>
       </div>
       {showText && (
-        <span className={`${sizes.text} font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent`}>
+        <span
+          className={`${sizes.text} font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent`}
+        >
           Botsmann
         </span>
       )}

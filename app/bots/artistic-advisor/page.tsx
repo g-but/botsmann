@@ -1,6 +1,6 @@
 'use client';
 
-import { BotPageTemplate, BotSection } from '@/components/shared';
+import { BotPageTemplate, BotSection, DemoSection } from '@/components/shared';
 
 export default function ArtisticAdvisor() {
   return (
@@ -19,9 +19,7 @@ export default function ArtisticAdvisor() {
           <BotSection id="features">
             <div className="grid gap-8 md:grid-cols-2">
               <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-                <h2 className="mb-4 text-2xl font-semibold text-gray-900">
-                  Features
-                </h2>
+                <h2 className="mb-4 text-2xl font-semibold text-gray-900">Features</h2>
                 <ul className="space-y-4">
                   {bot.features.map((feature, index) => (
                     <li key={index} className="flex items-start">
@@ -48,21 +46,16 @@ export default function ArtisticAdvisor() {
                 id="how-it-works"
                 className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm scroll-mt-24"
               >
-                <h2 className="mb-4 text-2xl font-semibold text-gray-900">
-                  How It Works
-                </h2>
+                <h2 className="mb-4 text-2xl font-semibold text-gray-900">How It Works</h2>
                 <ol className="space-y-4">
                   <li className="flex items-start">
                     <div className="mr-4 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-amber-500 text-white">
                       1
                     </div>
                     <div>
-                      <h3 className="font-medium text-gray-900">
-                        Describe your artistic vision
-                      </h3>
+                      <h3 className="font-medium text-gray-900">Describe your artistic vision</h3>
                       <p className="text-gray-600">
-                        Share details about your creative project or style
-                        preferences.
+                        Share details about your creative project or style preferences.
                       </p>
                     </div>
                   </li>
@@ -73,8 +66,7 @@ export default function ArtisticAdvisor() {
                     <div>
                       <h3 className="font-medium text-gray-900">AI Analysis</h3>
                       <p className="text-gray-600">
-                        Our AI processes your input using art knowledge and
-                        creative principles.
+                        Our AI processes your input using art knowledge and creative principles.
                       </p>
                     </div>
                   </li>
@@ -83,12 +75,10 @@ export default function ArtisticAdvisor() {
                       3
                     </div>
                     <div>
-                      <h3 className="font-medium text-gray-900">
-                        Get Creative Insights
-                      </h3>
+                      <h3 className="font-medium text-gray-900">Get Creative Insights</h3>
                       <p className="text-gray-600">
-                        Receive tailored advice, inspiration, and techniques for
-                        your artistic endeavors.
+                        Receive tailored advice, inspiration, and techniques for your artistic
+                        endeavors.
                       </p>
                     </div>
                   </li>
@@ -97,11 +87,23 @@ export default function ArtisticAdvisor() {
             </div>
           </BotSection>
 
+          {/* Demo Section */}
+          <BotSection id="demo">
+            <div className="max-w-5xl mx-auto">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-semibold text-gray-900 mb-3">Try Muse Now</h2>
+                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                  Experience how Muse can spark your creativity. Share your project and get
+                  AI-powered inspiration and feedback.
+                </p>
+              </div>
+              <DemoSection botSlug="artistic-advisor" />
+            </div>
+          </BotSection>
+
           {/* Style Analysis Tool */}
           <BotSection id="style-analysis">
-            <h2 className="mb-8 text-3xl font-semibold text-gray-900">
-              Analyze Your Style
-            </h2>
+            <h2 className="mb-8 text-3xl font-semibold text-gray-900">Analyze Your Style</h2>
             <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
               <p className="mb-4 text-gray-600">
                 Describe your artistic work or upload an image for style analysis.
@@ -125,9 +127,7 @@ export default function ArtisticAdvisor() {
 
           {/* Art Styles Exploration */}
           <BotSection id="art-styles">
-            <h2 className="mb-8 text-3xl font-semibold text-gray-900">
-              Explore Art Styles
-            </h2>
+            <h2 className="mb-8 text-3xl font-semibold text-gray-900">Explore Art Styles</h2>
 
             <div className="grid gap-6 md:grid-cols-3">
               {[
@@ -157,9 +157,7 @@ export default function ArtisticAdvisor() {
                     </div>
                   </div>
                   <div className="p-6">
-                    <h3 className="mb-2 text-xl font-medium text-gray-900">
-                      {artStyle.style}
-                    </h3>
+                    <h3 className="mb-2 text-xl font-medium text-gray-900">{artStyle.style}</h3>
                     <p className="text-gray-600">{artStyle.description}</p>
                   </div>
                 </div>
@@ -169,9 +167,7 @@ export default function ArtisticAdvisor() {
 
           {/* Creative Prompt Generator */}
           <BotSection id="prompt-generator">
-            <h2 className="mb-8 text-3xl font-semibold text-gray-900">
-              Creative Prompt Generator
-            </h2>
+            <h2 className="mb-8 text-3xl font-semibold text-gray-900">Creative Prompt Generator</h2>
             <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
               <p className="mb-4 text-gray-600">
                 Get a random creative prompt to inspire your next project.
@@ -179,8 +175,8 @@ export default function ArtisticAdvisor() {
 
               <div className="mb-6 p-4 bg-gray-50 rounded-md border border-gray-200">
                 <p className="text-lg text-center italic text-gray-700">
-                  &quot;Create a piece that represents the feeling of nostalgia using
-                  only three colors.&quot;
+                  &quot;Create a piece that represents the feeling of nostalgia using only three
+                  colors.&quot;
                 </p>
               </div>
 
@@ -195,12 +191,9 @@ export default function ArtisticAdvisor() {
           {/* CTA Section */}
           <BotSection id="get-started" isLast>
             <div className="rounded-xl bg-gray-50 p-8 text-center">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Ready to Get Started?
-              </h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Ready to Get Started?</h2>
               <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
-                Unlock your creative potential with our AI-powered artistic
-                advisor.
+                Unlock your creative potential with our AI-powered artistic advisor.
               </p>
               <div className="flex justify-center gap-4">
                 <a

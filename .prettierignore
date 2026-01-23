@@ -1,0 +1,14 @@
+node_modules
+.next
+dist
+build
+coverage
+.husky
+out
+public/*.min.js
+public/*.min.css
+*.lock
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+status.json

@@ -10,15 +10,18 @@ interface AIWorkspaceProps {
 
 const AIWorkspace: React.FC<AIWorkspaceProps> = ({ files }) => {
   // Organize files into categories
-  const organizedSections: WorkspaceSection[] = FILE_CATEGORIES.map(category => ({
+  const organizedSections: WorkspaceSection[] = FILE_CATEGORIES.map((category) => ({
     id: category.id,
     title: category.title,
     icon: category.icon,
-    files: files.filter(f => f.category === category.id && f.status === 'completed'),
-    aiSuggestion: getAISuggestion(category.id, files.filter(f => f.category === category.id))
-  })).filter(section => section.files.length > 0 || section.aiSuggestion);
+    files: files.filter((f) => f.category === category.id && f.status === 'completed'),
+    aiSuggestion: getAISuggestion(
+      category.id,
+      files.filter((f) => f.category === category.id),
+    ),
+  })).filter((section) => section.files.length > 0 || section.aiSuggestion);
 
-  const processingFiles = files.filter(f => f.status !== 'completed');
+  const processingFiles = files.filter((f) => f.status !== 'completed');
 
   return (
     <div className="bg-white rounded-xl border-2 border-gray-200 overflow-hidden">
@@ -81,12 +84,8 @@ const AIWorkspace: React.FC<AIWorkspaceProps> = ({ files }) => {
                       >
                         <span className="text-sm">📄</span>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-900 truncate">
-                            {file.name}
-                          </p>
-                          <p className="text-xs text-gray-500">
-                            {formatFileSize(file.size)}
-                          </p>
+                          <p className="text-sm font-medium text-gray-900 truncate">{file.name}</p>
+                          <p className="text-xs text-gray-500">{formatFileSize(file.size)}</p>
                         </div>
                         <span className="text-green-500 text-sm">✓</span>
                       </div>
@@ -131,21 +130,21 @@ function formatFileSize(bytes: number): string {
   const k = 1024;
   const sizes = ['Bytes', 'KB', 'MB', 'GB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+  return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
 }
 
 function getAISuggestion(categoryId: string, files: UploadedFile[]): string | undefined {
   if (files.length === 0) return undefined;
 
   const suggestions: Record<string, string> = {
-    'evidence': `${files.length} evidence file(s) detected. Consider organizing chronologically and adding descriptions for court submission.`,
-    'contracts': `${files.length} contract(s) found. AI has identified key clauses and potential red flags for review.`,
-    'correspondence': `${files.length} correspondence item(s). Timeline view available to track communication history.`,
+    evidence: `${files.length} evidence file(s) detected. Consider organizing chronologically and adding descriptions for court submission.`,
+    contracts: `${files.length} contract(s) found. AI has identified key clauses and potential red flags for review.`,
+    correspondence: `${files.length} correspondence item(s). Timeline view available to track communication history.`,
     'court-filings': `${files.length} court document(s) categorized. Deadlines and filing requirements extracted.`,
-    'identification': `${files.length} ID document(s) verified. Information extracted for case profile.`,
-    'financial': `${files.length} financial record(s) analyzed. Summary of amounts and dates available.`,
-    'medical': `${files.length} medical record(s) processed. Key dates and diagnoses extracted.`,
-    'other': `${files.length} additional document(s) uploaded. AI is analyzing for relevance.`
+    identification: `${files.length} ID document(s) verified. Information extracted for case profile.`,
+    financial: `${files.length} financial record(s) analyzed. Summary of amounts and dates available.`,
+    medical: `${files.length} medical record(s) processed. Key dates and diagnoses extracted.`,
+    other: `${files.length} additional document(s) uploaded. AI is analyzing for relevance.`,
   };
 
   return suggestions[categoryId];

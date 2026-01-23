@@ -8,56 +8,62 @@ const TestimonialsSection: React.FC = () => {
       username: '@LegalEagle_CH',
       title: 'Partner, International Law Firm',
       location: 'Zurich, Switzerland',
-      quote: 'The team behind Lex is doing something extraordinary. Their combination of deep legal understanding and cutting-edge AI expertise is exactly what the legal industry needs. I\'m excited to see where this goes.',
+      quote:
+        "The team behind Lex is doing something extraordinary. Their combination of deep legal understanding and cutting-edge AI expertise is exactly what the legal industry needs. I'm excited to see where this goes.",
       avatar: '🦅',
       expertise: 'Corporate Law',
-      profileUrl: '#'
+      profileUrl: '#',
     },
     {
       username: '@TechLawProf',
       title: 'Professor of Legal Tech',
       location: 'University of St. Gallen',
-      quote: 'I\'ve reviewed their technical approach and vision for AI-assisted legal work. The methodology is sound, the team is dedicated, and the potential impact is significant. This could transform how legal professionals work.',
+      quote:
+        "I've reviewed their technical approach and vision for AI-assisted legal work. The methodology is sound, the team is dedicated, and the potential impact is significant. This could transform how legal professionals work.",
       avatar: '🎓',
       expertise: 'Legal Technology',
-      profileUrl: '#'
+      profileUrl: '#',
     },
     {
       username: '@DataRoomQueen',
       title: 'Legal Counsel, Tech Startup',
       location: 'Berlin, Germany',
-      quote: 'What impressed me most is their commitment to building this responsibly. They\'re not promising overnight miracles, but a thoughtful, research-driven approach to AI legal assistance. I\'m on the waitlist.',
+      quote:
+        "What impressed me most is their commitment to building this responsibly. They're not promising overnight miracles, but a thoughtful, research-driven approach to AI legal assistance. I'm on the waitlist.",
       avatar: '👑',
       expertise: 'Tech & IP Law',
-      profileUrl: '#'
+      profileUrl: '#',
     },
     {
       username: '@JusticeHammer',
       title: 'Former Judge, Commercial Court',
       location: 'London, UK',
-      quote: 'Their long-term vision of AI judges is ambitious but grounded in reality. The team understands the legal system deeply and is building with integrity. I\'m following this project closely.',
+      quote:
+        "Their long-term vision of AI judges is ambitious but grounded in reality. The team understands the legal system deeply and is building with integrity. I'm following this project closely.",
       avatar: '⚖️',
       expertise: 'Commercial Litigation',
-      profileUrl: '#'
+      profileUrl: '#',
     },
     {
       username: '@ResearchNinja_DE',
       title: 'Legal Researcher & Author',
       location: 'Munich, Germany',
-      quote: 'I\'ve seen many AI legal tools, but Lex\'s approach stands out. They\'re transparent about being in development, focused on getting it right rather than rushing to market. That\'s the kind of team I trust.',
+      quote:
+        "I've seen many AI legal tools, but Lex's approach stands out. They're transparent about being in development, focused on getting it right rather than rushing to market. That's the kind of team I trust.",
       avatar: '🥷',
       expertise: 'Legal Research & AI Ethics',
-      profileUrl: '#'
+      profileUrl: '#',
     },
     {
       username: '@ContractWizard',
       title: 'Managing Partner, Boutique Law Firm',
       location: 'Vienna, Austria',
-      quote: 'The potential for AI to augment—not replace—legal professionals is enormous. This team gets it. They\'re building tools that respect the complexity of law while making legal services more accessible.',
+      quote:
+        "The potential for AI to augment—not replace—legal professionals is enormous. This team gets it. They're building tools that respect the complexity of law while making legal services more accessible.",
       avatar: '🧙',
       expertise: 'Business Law',
-      profileUrl: '#'
-    }
+      profileUrl: '#',
+    },
   ];
 
   return (
@@ -69,7 +75,8 @@ const TestimonialsSection: React.FC = () => {
         </div>
         <h2 className="text-4xl font-bold text-gray-900 mb-4">Trusted by Legal Professionals</h2>
         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-          Legal experts on our platform collaborate in AI-powered data rooms with multi-level privacy controls, transparent interactions, and secure case management
+          Legal experts on our platform collaborate in AI-powered data rooms with multi-level
+          privacy controls, transparent interactions, and secure case management
         </p>
       </div>
 
@@ -100,9 +107,7 @@ const TestimonialsSection: React.FC = () => {
             </div>
 
             <div className="mb-4 flex-1">
-              <p className="text-gray-700 text-sm leading-relaxed italic">
-                "{testimonial.quote}"
-              </p>
+              <p className="text-gray-700 text-sm leading-relaxed italic">"{testimonial.quote}"</p>
             </div>
 
             <div className="pt-4 border-t border-gray-100">
@@ -116,9 +121,13 @@ const TestimonialsSection: React.FC = () => {
 
       <div className="mt-12 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-8 border border-blue-100">
         <div className="max-w-3xl mx-auto text-center">
-          <h3 className="text-2xl font-bold text-gray-900 mb-3">Join Legal Professionals Shaping the Future</h3>
+          <h3 className="text-2xl font-bold text-gray-900 mb-3">
+            Join Legal Professionals Shaping the Future
+          </h3>
           <p className="text-gray-700 mb-6">
-            Collaborate on cases in secure, AI-powered data rooms. Control access levels, ensure transparency between attorneys and clients, and work together seamlessly—all while maintaining the highest standards of confidentiality.
+            Collaborate on cases in secure, AI-powered data rooms. Control access levels, ensure
+            transparency between attorneys and clients, and work together seamlessly—all while
+            maintaining the highest standards of confidentiality.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a

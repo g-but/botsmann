@@ -275,20 +275,39 @@ export const getAllProfessionalSlugs = (): string[] => {
 };
 
 /**
- * Generate path to the detailed bot page
+ * Generate path to the professional chat page (chat-first experience)
+ * Users clicking "Talk to X" should land directly on the chat interface
  */
 export const getProfessionalPath = (slug: string): Route => {
-  const professional = getProfessionalBySlug(slug);
-  if (professional) {
-    return `/bots/${professional.botSlug}` as Route;
-  }
   return `/professionals/${slug}` as Route;
 };
 
 /**
- * Get bot path directly from botSlug
+ * Get bot path directly from botSlug (legacy - for marketing pages)
  */
 export const getBotPath = (botSlug: string): Route => {
+  return `/bots/${botSlug}` as Route;
+};
+
+/**
+ * Get professional slug from bot slug
+ * Maps bot slugs to professional slugs for routing to chat-first pages
+ */
+export const getProfessionalSlugFromBotSlug = (botSlug: string): string | undefined => {
+  const professional = professionals.find((p) => p.botSlug === botSlug);
+  return professional?.slug;
+};
+
+/**
+ * Get chat-first path from bot slug
+ * Routes to /professionals/{slug} for immediate chat experience
+ */
+export const getChatPathFromBotSlug = (botSlug: string): Route => {
+  const professionalSlug = getProfessionalSlugFromBotSlug(botSlug);
+  if (professionalSlug) {
+    return `/professionals/${professionalSlug}` as Route;
+  }
+  // Fallback to bot page if no professional mapping exists
   return `/bots/${botSlug}` as Route;
 };
 

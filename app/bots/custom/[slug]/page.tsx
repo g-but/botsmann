@@ -36,6 +36,7 @@ export default function CustomBotPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -88,16 +89,14 @@ export default function CustomBotPage() {
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
     setSending(true);
+    setSuggestions([]); // Clear previous suggestions
 
     try {
       const response = await fetch(`/api/custom-bots/${bot.id}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          messages: [...messages, userMessage].map((m) => ({
-            role: m.role,
-            content: m.content,
-          })),
+          message: userMessage.content,
         }),
       });
 
@@ -110,10 +109,16 @@ export default function CustomBotPage() {
       const assistantMessage: Message = {
         id: crypto.randomUUID(),
         role: 'assistant',
-        content: data.data?.content || 'Sorry, I could not generate a response.',
+        content:
+          data.data?.content || data.data?.response || 'Sorry, I could not generate a response.',
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
+
+      // Store context-aware suggestions
+      if (data.data?.suggestions && Array.isArray(data.data.suggestions)) {
+        setSuggestions(data.data.suggestions);
+      }
     } catch (err) {
       console.error('Chat error:', err);
       const errorMessage: Message = {
@@ -135,6 +140,63 @@ export default function CustomBotPage() {
       sendMessage();
     }
   };
+
+  // Handle suggestion click - directly send the suggestion
+  const handleSuggestionClick = useCallback(
+    async (suggestion: string) => {
+      if (!bot || sending) return;
+
+      const userMessage: Message = {
+        id: crypto.randomUUID(),
+        role: 'user',
+        content: suggestion,
+      };
+
+      setMessages((prev) => [...prev, userMessage]);
+      setSuggestions([]);
+      setSending(true);
+
+      try {
+        const response = await fetch(`/api/custom-bots/${bot.id}/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: suggestion,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to get response');
+        }
+
+        const data = await response.json();
+
+        const assistantMessage: Message = {
+          id: crypto.randomUUID(),
+          role: 'assistant',
+          content:
+            data.data?.content || data.data?.response || 'Sorry, I could not generate a response.',
+        };
+
+        setMessages((prev) => [...prev, assistantMessage]);
+
+        if (data.data?.suggestions && Array.isArray(data.data.suggestions)) {
+          setSuggestions(data.data.suggestions);
+        }
+      } catch (err) {
+        console.error('Chat error:', err);
+        const errorMessage: Message = {
+          id: crypto.randomUUID(),
+          role: 'assistant',
+          content: 'Sorry, there was an error processing your message. Please try again.',
+        };
+        setMessages((prev) => [...prev, errorMessage]);
+      } finally {
+        setSending(false);
+      }
+    },
+    [bot, sending],
+  );
 
   if (loading) {
     return (
@@ -239,6 +301,21 @@ export default function CustomBotPage() {
                   />
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* Context-aware suggestions */}
+          {!sending && suggestions.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-4">
+              {suggestions.map((suggestion, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleSuggestionClick(suggestion)}
+                  className={`px-3 py-2 text-sm rounded-full border ${colors.border} ${colors.text} hover:bg-gray-50 transition-colors text-left`}
+                >
+                  {suggestion}
+                </button>
+              ))}
             </div>
           )}
 

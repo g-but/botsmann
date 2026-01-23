@@ -35,7 +35,7 @@ export default function TableOfContents({ items }: TableOfContentsProps) {
           }
         });
       },
-      { rootMargin: '-10% 0% -80% 0%', threshold: 0 }
+      { rootMargin: '-10% 0% -80% 0%', threshold: 0 },
     );
 
     // Observe all section elements that correspond to TOC items
@@ -69,9 +69,9 @@ export default function TableOfContents({ items }: TableOfContentsProps) {
   // Recursive rendering of TOC items
   const renderTOCItems = (items: TOCItem[], level = 0) => {
     return (
-      <ul className={level === 0 ? "space-y-3" : "pl-4 mt-2 space-y-2"}>
+      <ul className={level === 0 ? 'space-y-3' : 'pl-4 mt-2 space-y-2'}>
         {items.map((item) => (
-          <li key={item.id} className={level === 0 ? "pb-1" : ""}>
+          <li key={item.id} className={level === 0 ? 'pb-1' : ''}>
             <a
               href={`#${item.id}`}
               onClick={(e) => {
@@ -80,9 +80,9 @@ export default function TableOfContents({ items }: TableOfContentsProps) {
               }}
               className={`text-sm ${
                 activeId === item.id
-                  ? "font-semibold text-openai-green"
-                  : "text-gray-600 hover:text-gray-900"
-              } ${level === 0 ? "font-medium" : ""}`}
+                  ? 'font-semibold text-openai-green'
+                  : 'text-gray-600 hover:text-gray-900'
+              } ${level === 0 ? 'font-medium' : ''}`}
               aria-label={`Navigate to ${item.label} section`}
             >
               {item.label}
@@ -95,9 +95,12 @@ export default function TableOfContents({ items }: TableOfContentsProps) {
   };
 
   return (
-    <nav className="hidden lg:block sticky top-24 self-start w-64 p-6 bg-white rounded-lg border border-gray-200 shadow-sm" aria-label="Table of contents">
+    <nav
+      className="hidden lg:block sticky top-24 self-start w-64 p-6 bg-white rounded-lg border border-gray-200 shadow-sm"
+      aria-label="Table of contents"
+    >
       <h2 className="text-lg font-semibold text-gray-900 mb-4">Contents</h2>
       {renderTOCItems(items)}
     </nav>
   );
-} 
+}

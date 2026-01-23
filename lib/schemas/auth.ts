@@ -80,9 +80,9 @@ export type ResetPasswordFormData = z.infer<typeof ResetPasswordSchema>;
  * Settings update schema
  */
 export const UpdateSettingsSchema = z.object({
-  preferred_model: z.enum(['groq', 'openai', 'ollama']),
+  preferred_model: z.enum(['groq', 'openrouter', 'ollama']),
   groq_api_key: z.string().nullable().optional(),
-  openai_api_key: z.string().nullable().optional(),
+  openrouter_api_key: z.string().nullable().optional(),
   ollama_url: z.string().url().nullable().optional().or(z.literal('')),
 });
 

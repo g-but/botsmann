@@ -1,3 +1,5 @@
+ARCHIVED: This document contains outdated MongoDB-era instructions. Prefer docs/SUPABASE_SETUP.md and docs/SSOT.md.
+
 # DevOps Audit Report - Botsmann/Lex Platform
 
 **Audit Date**: January 2025
@@ -22,6 +24,7 @@ This comprehensive DevOps audit evaluates the Botsmann project against industry 
 ### 1. ✅ **Strengths**
 
 #### Configuration Management
+
 - ✅ Using Next.js 14 with standalone output for Docker compatibility
 - ✅ TypeScript with strict type checking enabled
 - ✅ Tailwind CSS for consistent styling
@@ -29,12 +32,14 @@ This comprehensive DevOps audit evaluates the Botsmann project against industry 
 - ✅ Proper cache headers configured in `next.config.js`
 
 #### Code Quality
+
 - ✅ 154 test files present (good test coverage)
 - ✅ Jest configured with TypeScript support
 - ✅ ESLint and testing libraries set up
 - ✅ Component-based architecture (modular design)
 
 #### Deployment
+
 - ✅ Vercel configuration present (`vercel.json`)
 - ✅ Cron job scheduled for daily rebuilds
 - ✅ Standalone build output configured
@@ -44,16 +49,19 @@ This comprehensive DevOps audit evaluates the Botsmann project against industry 
 ## 🔴 **CRITICAL ISSUES** (Must Fix Immediately)
 
 ### 1. **SECURITY: Secrets Exposed in Git Repository**
+
 **Severity**: 🔴 CRITICAL
 **Risk**: Data breach, unauthorized access, financial loss
 
 #### Issues Found:
+
 - ❌ `.env` file is **tracked in Git** and contains real credentials
 - ❌ MongoDB connection string with password exposed
 - ❌ Email credentials (Gmail app password) committed to repository
 - ❌ Public GitHub repository = **credentials are public**
 
 #### Evidence:
+
 ```bash
 $ git ls-files | grep .env
 .env          # ← SHOULD NOT BE HERE!
@@ -66,27 +74,31 @@ EMAIL_PASS=REDACTED_APP_PASSWORD                        # ← EXPOSED!
 ```
 
 #### Impact:
+
 - ✋ **Immediate risk** of database compromise
 - ✋ Email account can be hijacked
 - ✋ All user data potentially accessible
 - ✋ Compliance violations (GDPR, data protection laws)
 
 #### Immediate Actions Required:
+
 1. 🚨 **Rotate ALL credentials immediately**
    - Change MongoDB password
    - Revoke and regenerate Gmail app password
    - Update all API keys
 2. 🚨 **Remove `.env` from Git history**
-3. 🚨 **Add `.env` to `.gitignore` (already there, but file was committed before)
+3. 🚨 \*\*Add `.env` to `.gitignore` (already there, but file was committed before)
 4. 🚨 **Use secrets management** (GitHub Secrets, Vercel env vars)
 
 ---
 
 ### 2. **CI/CD Pipeline: Non-Existent**
+
 **Severity**: 🟠 HIGH
 **Risk**: Manual errors, inconsistent deployments, no quality gates
 
 #### Issues Found:
+
 - ❌ No `.github/workflows/` directory
 - ❌ No automated testing on commits/PRs
 - ❌ No automated deployments
@@ -94,6 +106,7 @@ EMAIL_PASS=REDACTED_APP_PASSWORD                        # ← EXPOSED!
 - ❌ No security scanning
 
 #### Impact:
+
 - Manual deployments = human error risk
 - No quality gates before merge
 - Breaking changes can reach production
@@ -102,16 +115,19 @@ EMAIL_PASS=REDACTED_APP_PASSWORD                        # ← EXPOSED!
 ---
 
 ### 3. **Containerization: Missing**
+
 **Severity**: 🟡 MEDIUM
 **Risk**: Environment inconsistency, deployment issues
 
 #### Issues Found:
+
 - ❌ No `Dockerfile` present
 - ❌ No `docker-compose.yml` for local development
 - ❌ No `.dockerignore` file
 - ✅ Next.js configured for standalone output (Docker-ready)
 
 #### Impact:
+
 - "Works on my machine" problems
 - Difficult local environment setup
 - No consistent dev/prod parity
@@ -120,10 +136,12 @@ EMAIL_PASS=REDACTED_APP_PASSWORD                        # ← EXPOSED!
 ---
 
 ### 4. **Build Process Issues**
+
 **Severity**: 🟡 MEDIUM
 **Risk**: Build failures, dependency issues
 
 #### Issues Found:
+
 - ❌ Build script installs dependencies during build:
   ```json
   "build": "npm install react-icons framer-motion --save && next build"
@@ -133,6 +151,7 @@ EMAIL_PASS=REDACTED_APP_PASSWORD                        # ← EXPOSED!
 - ❌ No separate production build script
 
 #### Impact:
+
 - Unpredictable builds
 - Longer build times
 - Potential version conflicts
@@ -140,10 +159,12 @@ EMAIL_PASS=REDACTED_APP_PASSWORD                        # ← EXPOSED!
 ---
 
 ### 5. **Monitoring & Logging: Insufficient**
+
 **Severity**: 🟡 MEDIUM
 **Risk**: Unable to debug issues, no visibility
 
 #### Issues Found:
+
 - ⚠️ `logs/` directory exists but not in `.gitignore`
 - ❌ No centralized logging (Datadog, Sentry, etc.)
 - ❌ No error tracking
@@ -151,6 +172,7 @@ EMAIL_PASS=REDACTED_APP_PASSWORD                        # ← EXPOSED!
 - ❌ No uptime monitoring
 
 #### Impact:
+
 - Difficult to debug production issues
 - No visibility into errors
 - Cannot track performance degradation
@@ -159,10 +181,12 @@ EMAIL_PASS=REDACTED_APP_PASSWORD                        # ← EXPOSED!
 ---
 
 ### 6. **Infrastructure as Code: Missing**
+
 **Severity**: 🟡 MEDIUM
 **Risk**: Manual infrastructure, no reproducibility
 
 #### Issues Found:
+
 - ❌ No Terraform/CloudFormation/Pulumi
 - ❌ No infrastructure versioning
 - ❌ Manual Vercel configuration
@@ -173,6 +197,7 @@ EMAIL_PASS=REDACTED_APP_PASSWORD                        # ← EXPOSED!
 ## 📋 **Best Practices Checklist**
 
 ### Security ✅❌
+
 - [ ] Secrets not in repository (❌ **CRITICAL**)
 - [ ] Secrets management solution (❌)
 - [ ] Security scanning (❌)
@@ -183,6 +208,7 @@ EMAIL_PASS=REDACTED_APP_PASSWORD                        # ← EXPOSED!
 - [ ] Input validation (⚠️ some validation present)
 
 ### CI/CD Pipeline ✅❌
+
 - [ ] Automated testing (❌)
 - [ ] Automated deployments (⚠️ Vercel auto-deploy exists)
 - [ ] Code quality checks (❌)
@@ -192,6 +218,7 @@ EMAIL_PASS=REDACTED_APP_PASSWORD                        # ← EXPOSED!
 - [ ] Canary deployments (❌)
 
 ### Code Quality ✅❌
+
 - [x] Linting configured (✅)
 - [x] Type checking (✅ TypeScript)
 - [x] Unit tests exist (✅ 154 test files)
@@ -201,6 +228,7 @@ EMAIL_PASS=REDACTED_APP_PASSWORD                        # ← EXPOSED!
 - [ ] Pre-commit hooks (❌)
 
 ### Infrastructure ✅❌
+
 - [ ] Containerization (❌)
 - [ ] Infrastructure as Code (❌)
 - [ ] Environment parity (dev/staging/prod) (⚠️)
@@ -210,6 +238,7 @@ EMAIL_PASS=REDACTED_APP_PASSWORD                        # ← EXPOSED!
 - [ ] Database backups (⚠️ MongoDB Atlas)
 
 ### Monitoring & Observability ✅❌
+
 - [ ] Application monitoring (❌)
 - [ ] Error tracking (❌)
 - [ ] Performance monitoring (❌)
@@ -219,6 +248,7 @@ EMAIL_PASS=REDACTED_APP_PASSWORD                        # ← EXPOSED!
 - [ ] Dashboards (❌)
 
 ### Documentation ✅❌
+
 - [x] README exists (✅ multiple docs)
 - [x] Architecture docs (✅ comprehensive)
 - [ ] Deployment docs (⚠️ partial)
@@ -232,15 +262,15 @@ EMAIL_PASS=REDACTED_APP_PASSWORD                        # ← EXPOSED!
 
 ### Current State: **Level 1 - Initial/Ad Hoc**
 
-| Capability | Level | Notes |
-|------------|-------|-------|
-| Source Control | 2 | Git used, but secrets exposed |
-| Build Automation | 1 | Manual, inconsistent |
-| Deployment | 2 | Vercel auto-deploy, but no proper pipeline |
-| Testing | 2 | Tests exist, but not automated |
-| Monitoring | 1 | Basic logs only |
-| Security | 1 | Critical vulnerabilities |
-| Infrastructure | 1 | Manual, no IaC |
+| Capability       | Level | Notes                                      |
+| ---------------- | ----- | ------------------------------------------ |
+| Source Control   | 2     | Git used, but secrets exposed              |
+| Build Automation | 1     | Manual, inconsistent                       |
+| Deployment       | 2     | Vercel auto-deploy, but no proper pipeline |
+| Testing          | 2     | Tests exist, but not automated             |
+| Monitoring       | 1     | Basic logs only                            |
+| Security         | 1     | Critical vulnerabilities                   |
+| Infrastructure   | 1     | Manual, no IaC                             |
 
 ### Target State: **Level 3-4 - Defined/Managed**
 
@@ -249,6 +279,7 @@ EMAIL_PASS=REDACTED_APP_PASSWORD                        # ← EXPOSED!
 ## 🚨 **Risk Assessment**
 
 ### Critical Risks (Fix Immediately)
+
 1. **Exposed Credentials** - 🔴 CRITICAL
    - MongoDB connection string public
    - Email credentials public
@@ -265,11 +296,13 @@ EMAIL_PASS=REDACTED_APP_PASSWORD                        # ← EXPOSED!
    - Action: Set up GitHub Actions
 
 ### Medium Risks (Fix Soon)
+
 4. **No Containerization** - 🟡 MEDIUM
 5. **Insufficient Monitoring** - 🟡 MEDIUM
 6. **No Infrastructure as Code** - 🟡 MEDIUM
 
 ### Low Risks (Plan to Fix)
+
 7. **No E2E Testing** - 🟢 LOW
 8. **No Performance Testing** - 🟢 LOW
 
@@ -280,6 +313,7 @@ EMAIL_PASS=REDACTED_APP_PASSWORD                        # ← EXPOSED!
 ### 🔥 **IMMEDIATE (This Week)**
 
 #### 1. Secure Credentials (Day 1)
+
 ```bash
 # Remove .env from Git history
 git filter-branch --force --index-filter \
@@ -291,6 +325,7 @@ git push origin --force --all
 ```
 
 **Actions:**
+
 - [ ] Rotate MongoDB password
 - [ ] Regenerate Gmail app password
 - [ ] Remove `.env` from Git history
@@ -298,6 +333,7 @@ git push origin --force --all
 - [ ] Document secret rotation procedure
 
 #### 2. Fix Build Script (Day 1-2)
+
 ```json
 // package.json - BEFORE
 "build": "npm install react-icons framer-motion --save && next build"
@@ -308,12 +344,15 @@ git push origin --force --all
 ```
 
 **Actions:**
+
 - [ ] Move dependencies to `package.json`
 - [ ] Remove install from build script
 - [ ] Add dependency check script
 
 #### 3. Basic CI/CD Pipeline (Day 3-5)
+
 Create `.github/workflows/ci.yml`:
+
 ```yaml
 name: CI
 on: [push, pull_request]
@@ -334,19 +373,23 @@ jobs:
 ### 📅 **SHORT-TERM (Next 2 Weeks)**
 
 #### 4. Containerization
+
 Create `Dockerfile`:
+
 ```dockerfile
 FROM node:20-alpine AS base
 # ... (full Dockerfile in implementation plan)
 ```
 
 #### 5. Security Scanning
+
 - [ ] Add Dependabot
 - [ ] Add Snyk vulnerability scanning
 - [ ] Add secrets scanning (Gitleaks)
 - [ ] Add SAST (Static Application Security Testing)
 
 #### 6. Monitoring & Logging
+
 - [ ] Set up Sentry for error tracking
 - [ ] Configure Vercel Analytics
 - [ ] Add structured logging
@@ -357,18 +400,21 @@ FROM node:20-alpine AS base
 ### 🗓️ **MEDIUM-TERM (Next Month)**
 
 #### 7. Infrastructure as Code
+
 - [ ] Create Terraform configs
 - [ ] Version all infrastructure
 - [ ] Set up staging environment
 - [ ] Document disaster recovery
 
 #### 8. Advanced CI/CD
+
 - [ ] E2E testing in CI
 - [ ] Performance testing
 - [ ] Visual regression testing
 - [ ] Automated security scans
 
 #### 9. Observability
+
 - [ ] APM (Application Performance Monitoring)
 - [ ] Distributed tracing
 - [ ] Custom dashboards
@@ -379,6 +425,7 @@ FROM node:20-alpine AS base
 ### 📊 **LONG-TERM (Next Quarter)**
 
 #### 10. Platform Maturity
+
 - [ ] Multi-region deployment
 - [ ] Chaos engineering
 - [ ] Automated compliance checks
@@ -389,6 +436,7 @@ FROM node:20-alpine AS base
 ## 💰 **Cost-Benefit Analysis**
 
 ### Current State Costs
+
 - **Security Risk**: High (credentials exposed = potential data breach)
 - **Development Speed**: Slow (manual processes)
 - **Quality Issues**: Medium (no automated testing)
@@ -396,12 +444,14 @@ FROM node:20-alpine AS base
 - **Technical Debt**: High
 
 ### Investment Required
+
 - **Immediate Fixes**: 2-3 days engineering time
 - **Short-term Improvements**: 1-2 weeks
 - **Medium-term**: 3-4 weeks
 - **Total Estimated**: 6-8 weeks of DevOps engineering
 
 ### Expected Benefits
+
 - ✅ 95% reduction in security risk
 - ✅ 80% faster deployments
 - ✅ 90% reduction in production bugs
@@ -414,18 +464,21 @@ FROM node:20-alpine AS base
 ## 🎯 **Success Metrics**
 
 ### Short-term (1 Month)
+
 - [ ] Zero secrets in repository
 - [ ] 100% CI/CD coverage
 - [ ] < 10 minutes deployment time
 - [ ] 90%+ test coverage
 
 ### Medium-term (3 Months)
+
 - [ ] 99.9% uptime
 - [ ] < 5 minutes MTTR for critical issues
 - [ ] Zero critical vulnerabilities
 - [ ] Automated rollbacks working
 
 ### Long-term (6 Months)
+
 - [ ] 99.99% uptime
 - [ ] Fully automated deployments
 - [ ] Comprehensive observability
@@ -436,21 +489,25 @@ FROM node:20-alpine AS base
 ## 📚 **Resources & Tools Recommended**
 
 ### Security
+
 - **Secrets Management**: HashiCorp Vault, AWS Secrets Manager, Vercel Env Vars
 - **Scanning**: Snyk, Trivy, Gitleaks, GitGuardian
 - **SAST**: SonarQube, CodeQL
 
 ### CI/CD
+
 - **Pipeline**: GitHub Actions (recommended for this project)
 - **Alternatives**: GitLab CI, CircleCI, Jenkins
 
 ### Monitoring
+
 - **Errors**: Sentry, Rollbar
 - **APM**: Datadog, New Relic, Vercel Analytics
 - **Logs**: Logtail, Better Stack, Datadog
 - **Uptime**: UptimeRobot, Pingdom
 
 ### Infrastructure
+
 - **IaC**: Terraform (recommended), Pulumi, AWS CDK
 - **Containers**: Docker, Kubernetes (if needed)
 - **Hosting**: Vercel (current), AWS ECS/Fargate, Railway
@@ -460,30 +517,35 @@ FROM node:20-alpine AS base
 ## 🚧 **Migration Strategy**
 
 ### Phase 1: Security Lockdown (Week 1)
+
 1. Rotate all credentials
 2. Remove secrets from Git
 3. Set up proper secrets management
 4. Enable security scanning
 
 ### Phase 2: CI/CD Foundation (Week 2)
+
 1. Set up GitHub Actions
 2. Automated testing
 3. Automated deployments
 4. Quality gates
 
 ### Phase 3: Containerization (Week 3-4)
+
 1. Create Dockerfile
 2. Docker Compose for local dev
 3. Test containerized deployment
 4. Document Docker workflow
 
 ### Phase 4: Monitoring & Observability (Week 5-6)
+
 1. Error tracking (Sentry)
 2. Performance monitoring
 3. Log aggregation
 4. Alerting setup
 
 ### Phase 5: Infrastructure as Code (Week 7-8)
+
 1. Terraform setup
 2. Version all infrastructure
 3. Staging environment
@@ -496,6 +558,7 @@ FROM node:20-alpine AS base
 The Botsmann/Lex project has a solid codebase and architecture but **critical DevOps and security gaps** that must be addressed before production deployment.
 
 ### Immediate Actions (Cannot Deploy Without):
+
 1. 🚨 **Rotate exposed credentials** (MongoDB, Email)
 2. 🚨 **Remove `.env` from Git history**
 3. 🚨 **Set up proper secrets management**
@@ -503,6 +566,7 @@ The Botsmann/Lex project has a solid codebase and architecture but **critical De
 5. ✅ **Set up basic CI/CD pipeline**
 
 ### Key Recommendations:
+
 - Adopt **GitHub Actions** for CI/CD
 - Implement **Docker** for consistency
 - Use **Terraform** for infrastructure
@@ -510,6 +574,7 @@ The Botsmann/Lex project has a solid codebase and architecture but **critical De
 - Enable **Dependabot** for security
 
 ### Timeline to Production-Ready:
+
 - **Minimum**: 1 week (security fixes + basic CI/CD)
 - **Recommended**: 6-8 weeks (comprehensive DevOps maturity)
 
@@ -519,6 +584,6 @@ The Botsmann/Lex project has a solid codebase and architecture but **critical De
 
 ---
 
-*Audit Completed: January 2025*
-*Risk Level: 🔴 HIGH (Critical security issues)*
-*Recommended Action: Address critical issues before any production deployment*
+_Audit Completed: January 2025_
+_Risk Level: 🔴 HIGH (Critical security issues)_
+_Recommended Action: Address critical issues before any production deployment_

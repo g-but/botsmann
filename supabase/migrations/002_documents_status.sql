@@ -7,7 +7,8 @@ ADD COLUMN IF NOT EXISTS chunk_count INTEGER DEFAULT 0,
 ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();
 
 -- Add update trigger for documents
-CREATE TRIGGER IF NOT EXISTS update_documents_updated_at
+DROP TRIGGER IF EXISTS update_documents_updated_at ON documents;
+CREATE TRIGGER update_documents_updated_at
   BEFORE UPDATE ON documents
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at();

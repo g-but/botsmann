@@ -62,7 +62,9 @@ export interface UseBotBuilderReturn {
   totalSteps: number;
   // Updates
   updateBasicInfo: (data: Partial<Pick<BotBuilderState, 'slug' | 'title' | 'description'>>) => void;
-  updatePersonality: (data: Partial<Pick<BotBuilderState, 'emoji' | 'accentColor' | 'systemPrompt'>>) => void;
+  updatePersonality: (
+    data: Partial<Pick<BotBuilderState, 'emoji' | 'accentColor' | 'systemPrompt'>>,
+  ) => void;
   addKnowledgeChunk: (chunk: Omit<KnowledgeChunkDraft, 'id'>) => void;
   removeKnowledgeChunk: (id: string) => void;
   updateKnowledgeChunk: (id: string, data: Partial<Omit<KnowledgeChunkDraft, 'id'>>) => void;
@@ -116,14 +118,14 @@ export function useBotBuilder(): UseBotBuilderReturn {
     (data: Partial<Pick<BotBuilderState, 'slug' | 'title' | 'description'>>) => {
       setState((prev) => ({ ...prev, ...data, error: null }));
     },
-    []
+    [],
   );
 
   const updatePersonality = useCallback(
     (data: Partial<Pick<BotBuilderState, 'emoji' | 'accentColor' | 'systemPrompt'>>) => {
       setState((prev) => ({ ...prev, ...data, error: null }));
     },
-    []
+    [],
   );
 
   const addKnowledgeChunk = useCallback((chunk: Omit<KnowledgeChunkDraft, 'id'>) => {
@@ -148,7 +150,7 @@ export function useBotBuilder(): UseBotBuilderReturn {
         knowledgeChunks: prev.knowledgeChunks.map((c) => (c.id === id ? { ...c, ...data } : c)),
       }));
     },
-    []
+    [],
   );
 
   // Submission helpers

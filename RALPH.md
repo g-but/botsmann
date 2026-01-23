@@ -19,11 +19,11 @@ nano @fix_plan.md
 
 Default settings are conservative to work with limited Claude subscriptions:
 
-| Setting | Default | Purpose |
-|---------|---------|---------|
-| Max iterations | 10 | Safety limit |
-| Sleep between | 60s | Prevent rate limits |
-| Prompt file | PROMPT.md | Task description |
+| Setting        | Default   | Purpose             |
+| -------------- | --------- | ------------------- |
+| Max iterations | 10        | Safety limit        |
+| Sleep between  | 60s       | Prevent rate limits |
+| Prompt file    | PROMPT.md | Task description    |
 
 ### Custom Settings
 
@@ -43,12 +43,12 @@ Default settings are conservative to work with limited Claude subscriptions:
 
 ## Files
 
-| File | Purpose |
-|------|---------|
-| `PROMPT.md` | Task description - edit this for each task |
+| File           | Purpose                                        |
+| -------------- | ---------------------------------------------- |
+| `PROMPT.md`    | Task description - edit this for each task     |
 | `@fix_plan.md` | Priority queue - Claude focuses on P0/P1 first |
-| `ralph.sh` | The loop script |
-| `RALPH.md` | This file |
+| `ralph.sh`     | The loop script                                |
+| `RALPH.md`     | This file                                      |
 
 ## Botsmann-Specific Reminders
 
@@ -88,9 +88,11 @@ When running Ralph on Botsmann, ensure tasks include:
 # In PROMPT.md
 
 ## Current Task
+
 Add a new bot page for Financial Advisor (Finance)
 
 ## Success Criteria
+
 - [ ] Bot added to data/bots.ts
 - [ ] Page created at app/bots/financial-advisor/
 - [ ] Following existing bot patterns (legal-expert)
@@ -105,17 +107,21 @@ When ALL criteria met, output:
 ## Troubleshooting
 
 **"Prompt file not found"**
+
 - Create PROMPT.md first
 
 **"Rate limit detected"**
+
 - Normal for limited plans
 - Script waits automatically
 
 **Task not completing**
+
 - Add clearer success criteria
 - Break into smaller subtasks
 - Check @fix_plan.md priorities
 
 **Type errors with `any`**
+
 - Replace with proper interface
 - Use `unknown` with type guards

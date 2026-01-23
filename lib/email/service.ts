@@ -1,16 +1,5 @@
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 import type { Customer } from '@/lib/schemas/customer';
-import { AWS_CONFIG, EMAIL_ADDRESSES, EMAIL_SUBJECTS } from '@/lib/config/email';
-
-export class EmailServiceError extends Error {
-  constructor(
-    message: string,
-    public readonly cause?: unknown
-  ) {
-    super(message);
-    this.name = 'EmailServiceError';
-  }
-}
 
 export class EmailService {
   private ses: SESClient;
@@ -19,11 +8,14 @@ export class EmailService {
 
   constructor() {
     this.ses = new SESClient({
-      region: AWS_CONFIG.region,
-      credentials: AWS_CONFIG.credentials,
+      region: process.env.NEXT_AWS_REGION || 'eu-central-1', // Frankfurt region for Swiss compliance
+      credentials: {
+        accessKeyId: process.env.NEXT_AWS_ACCESS_KEY_ID || '',
+        secretAccessKey: process.env.NEXT_AWS_SECRET_ACCESS_KEY || '',
+      },
     });
-    this.fromEmail = EMAIL_ADDRESSES.from;
-    this.adminEmail = EMAIL_ADDRESSES.admin;
+    this.fromEmail = process.env.FROM_EMAIL || 'noreply@botsmann.com';
+    this.adminEmail = process.env.ADMIN_EMAIL || 'REDACTED_EMAIL';
   }
 
   async sendWelcomeEmail(customer: Customer): Promise<void> {
@@ -34,7 +26,7 @@ export class EmailService {
       },
       Message: {
         Subject: {
-          Data: EMAIL_SUBJECTS.welcome,
+          Data: 'Welcome to Botsmann!',
         },
         Body: {
           Text: {
@@ -47,7 +39,8 @@ export class EmailService {
     try {
       await this.ses.send(new SendEmailCommand(params));
     } catch (error) {
-      throw new EmailServiceError('Failed to send welcome email', error);
+      console.error('Failed to send welcome email:', error);
+      throw error;
     }
   }
 
@@ -59,7 +52,7 @@ export class EmailService {
       },
       Message: {
         Subject: {
-          Data: EMAIL_SUBJECTS.newCustomer,
+          Data: 'New Customer Registration',
         },
         Body: {
           Text: {
@@ -72,7 +65,8 @@ export class EmailService {
     try {
       await this.ses.send(new SendEmailCommand(params));
     } catch (error) {
-      throw new EmailServiceError('Failed to send admin notification', error);
+      console.error('Failed to send admin notification:', error);
+      throw error;
     }
   }
 }

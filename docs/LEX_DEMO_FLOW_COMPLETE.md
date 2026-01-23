@@ -3,6 +3,7 @@
 ## ✅ What's Been Built
 
 ### 1. **Modular Demo Orchestrator** (`DemoOrchestrator.tsx`)
+
 - **Complete state management** for 4-step flow
 - **Smooth transitions** with fade-in animations
 - **Progress indicator** showing current step
@@ -30,12 +31,14 @@ Step 4: Workspace Preview
 ## 🎨 Visual Design
 
 ### Progress Indicator
+
 ```
 [📝 Case Details] ━━━ [🤖 AI Analysis] ━━━ [⚖️ Find Lawyer] ━━━ [💼 Workspace]
    ✓ Completed         Current Step         Upcoming           Upcoming
 ```
 
 **Features**:
+
 - Visual progress bar (fills as you advance)
 - Step numbers (1, 2, 3, 4)
 - Icons for each step
@@ -43,6 +46,7 @@ Step 4: Workspace Preview
 - Completed steps show checkmark (green)
 
 ### Smooth Transitions
+
 - **Fade-in animation** when changing steps
 - **Slide-up effect** (20px → 0)
 - **0.5s duration** for smooth feel
@@ -53,9 +57,11 @@ Step 4: Workspace Preview
 ## 📋 Step Details
 
 ### Step 1: Case Intake ✅
+
 **Component**: `CaseIntakeForm.tsx`
 
 **Flow**:
+
 1. User selects case type (Personal/Business)
 2. User selects legal area (Immigration, Employment, etc.)
 3. User writes description (min 50 chars)
@@ -66,6 +72,7 @@ Step 4: Workspace Preview
 5. Click "Find Lawyers" (actually triggers AI analysis)
 
 **Jurisdictions**:
+
 - **Only 2 options**: Zürich, Switzerland | California, USA
 - Shows law scope: "Federal Swiss Law" | "Federal & CA State Law"
 - "Request New Jurisdiction" button for expansion requests
@@ -73,9 +80,11 @@ Step 4: Workspace Preview
 ---
 
 ### Step 2: AI Analysis ✅
+
 **Component**: `AICaseAnalysis.tsx`
 
 **Flow**:
+
 1. **Loading animation** (3-5 seconds)
    - Progress bar fills
    - Shows: "Analyzing jurisdiction" → "Reviewing case law" → "Generating report"
@@ -89,6 +98,7 @@ Step 4: Workspace Preview
    - "Find Perfect Lawyer" → Step 3
 
 **Federal Laws Focus**:
+
 - Switzerland: Federal laws only (no local Zürich ordinances)
 - US: Federal + California State (no local county/city laws)
 - Clear labeling: "Swiss Federal Act..." | "Federal & California..."
@@ -96,9 +106,11 @@ Step 4: Workspace Preview
 ---
 
 ### Step 3: Lawyer Matching 🚧
+
 **Status**: Placeholder (to be built)
 
 **Planned**:
+
 - Show top 3 matched lawyers
 - Match score (85-96%)
 - Explain WHY they're matched:
@@ -112,9 +124,11 @@ Step 4: Workspace Preview
 ---
 
 ### Step 4: Workspace Preview 🚧
+
 **Status**: Placeholder (to be built)
 
 **Planned**:
+
 - Choose perspective: Client view | Lawyer view
 - Show how workspace looks from both sides
 - Preview file management, chat, collaboration
@@ -125,6 +139,7 @@ Step 4: Workspace Preview
 ## 🔄 State Management
 
 ### Demo State
+
 ```typescript
 type DemoStep = 'intake' | 'ai-analysis' | 'lawyer-match' | 'workspace';
 
@@ -133,11 +148,13 @@ const [caseIntake, setCaseIntake] = useState<CaseIntake | null>(null);
 ```
 
 ### Navigation
+
 - **Forward**: Each step has "Continue" button
 - **Backward**: Each step has "← Back" button
 - **Reset**: "Start Over" available anytime (except step 1)
 
 ### Data Flow
+
 ```
 CaseIntakeForm
     ↓ onSubmit(intake)
@@ -155,22 +172,26 @@ WorkspacePreview (shows collaboration)
 ## 🎯 Key Features
 
 ### 1. Progressive Disclosure
+
 - Start simple (3 fields)
 - Expand to show more (jurisdiction, urgency, budget)
 - Never overwhelming
 
 ### 2. Aha Moment Strategy
+
 - Don't immediately show lawyers
 - First: AI analysis (value delivered!)
 - User thinks: "Wow, this AI understands my case"
 - Then: Perfect lawyer match (trust established)
 
 ### 3. Jurisdictions Simplified
+
 - Only Zürich & California
 - Federal laws focus
 - Clear expansion path via "Request" button
 
 ### 4. Modular Architecture
+
 ```
 /demo/
 ├── DemoOrchestrator.tsx    # Main controller
@@ -181,6 +202,7 @@ WorkspacePreview (shows collaboration)
 ```
 
 Each component:
+
 - Self-contained
 - Reusable
 - Clear props interface
@@ -191,6 +213,7 @@ Each component:
 ## 🚀 What Works Now
 
 ✅ **Complete Flow (Steps 1-2)**:
+
 1. User enters case → CaseIntakeForm
 2. AI analyzes → AICaseAnalysis
 3. Can go back/forward
@@ -199,11 +222,13 @@ Each component:
 6. State preserved
 
 ✅ **Jurisdictions**:
+
 - Zürich, Switzerland (Federal Swiss Law)
 - California, USA (Federal & CA State Law)
 - Request new jurisdiction button
 
 ✅ **Progressive Disclosure**:
+
 - Basic fields first
 - Advanced options expandable
 - Clean, uncluttered UI
@@ -213,6 +238,7 @@ Each component:
 ## 🚧 What's Next
 
 ### Immediate
+
 1. **Build LawyerMatcher** (Step 3)
    - Top 3 lawyers with scores
    - Match explanations
@@ -226,6 +252,7 @@ Each component:
    - Reset to start new case
 
 ### Soon
+
 3. **Smart Suggestions**
    - Context-aware based on jurisdiction + legal area
    - "Common cases in Zürich: Work permit, Family reunification..."
@@ -241,11 +268,13 @@ Each component:
 ## 📊 User Experience
 
 ### Before
+
 - "Chat with Lex" → External ChatGPT
 - No demo, no value shown
 - Users leave without understanding
 
 ### After
+
 - "Try Lex Now" → On-page demo
 - **Step 1**: Easy case entry
 - **Step 2**: AI report (WOW moment!)
@@ -258,11 +287,13 @@ Each component:
 ## 💡 Success Metrics
 
 ### Engagement
+
 - **Step completion rate**: Track drop-off at each step
 - **Time on AI report**: Measure aha moment impact
 - **Reset rate**: Users trying multiple cases = interest
 
 ### Quality
+
 - **User feedback**: "This helped me understand my case"
 - **Lawyer requests**: "Connect me with this lawyer"
 - **Waitlist signups**: Increased after demo
@@ -297,6 +328,7 @@ Each component:
 ## ✅ Summary
 
 **What's Working**:
+
 - ✅ Modular demo with 4-step flow
 - ✅ Smooth transitions & animations
 - ✅ Progressive case intake
@@ -307,12 +339,14 @@ Each component:
 - ✅ Complete state management
 
 **What's Next**:
+
 - 🚧 Lawyer matching (Step 3)
 - 🚧 Workspace preview (Step 4)
 - 🚧 Smart suggestions
 - 🚧 Real AI integration
 
 **Impact**:
+
 - Users get value BEFORE requesting lawyer
 - Aha moment builds trust
 - Clear flow, no overwhelm
@@ -320,6 +354,6 @@ Each component:
 
 ---
 
-*Last Updated: 2025-10-02*
-*Status: Steps 1-2 complete, Steps 3-4 ready to build*
-*Demo is LIVE and working at http://localhost:3000/bots/legal-expert#demo*
+_Last Updated: 2025-10-02_
+_Status: Steps 1-2 complete, Steps 3-4 ready to build_
+_Demo is LIVE and working at http://localhost:3000/bots/legal-expert#demo_

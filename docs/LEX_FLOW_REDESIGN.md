@@ -3,6 +3,7 @@
 ## 🎯 New User Journey
 
 ### The "Aha Moment" Strategy
+
 Instead of: Intake → Find Lawyers → Workspace
 **Now**: Intake → AI Report (Aha!) → Perfect Lawyer Match → Workspace
 
@@ -31,6 +32,7 @@ Step 4: Workspace Preview (Client + Lawyer views)
 **Fields - Progressive Disclosure**:
 
 **Phase 1 - Location First (Clean, Simple)**
+
 ```
 "Where are you located?"
 ┌─────────────┬─────────────┐
@@ -42,6 +44,7 @@ Step 4: Workspace Preview (Client + Lawyer views)
 ```
 
 **Phase 2 - Legal Area with Smart Suggestions**
+
 ```
 "What type of legal help do you need?"
 
@@ -57,6 +60,7 @@ All Areas: [Dropdown with full list]
 **When area is selected → Show contextual suggestions:**
 
 Example: Immigration selected
+
 ```
 💡 Common immigration matters in Zurich:
 • Work permit (B permit) applications
@@ -68,6 +72,7 @@ Example: Immigration selected
 ```
 
 **Phase 3 - Your Situation**
+
 ```
 "Tell us about your situation"
 
@@ -84,6 +89,7 @@ Example suggestions as pills:
 ```
 
 **Phase 4 - Optional Details (Expandable)**
+
 ```
 ▼ Add more details (optional)
   □ How urgent is this? [Standard / Urgent]
@@ -98,6 +104,7 @@ Example suggestions as pills:
 ### Step 2: AI Analysis Report (THE AHA MOMENT!)
 
 **Visual**:
+
 - Animated loading (3-5 seconds): "AI analyzing your case..."
 - Particles, progress indicators
 - Build anticipation!
@@ -147,6 +154,7 @@ Example suggestions as pills:
 ```
 
 **Value Props Below Report**:
+
 ```
 Why this helps:
 ✓ Understand your legal situation clearly
@@ -162,6 +170,7 @@ Why this helps:
 **Visual**: "Finding your perfect match..." animation
 
 **Matching Algorithm Display**:
+
 ```
 🎯 Matching based on:
 ✓ Your jurisdiction (Zurich, CH)
@@ -249,22 +258,26 @@ Why this helps:
 ### Progressive Disclosure Patterns
 
 **1. Step Indicators**
+
 ```
 Step 1 of 4: Case Details
 [━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━]
 ```
 
 **2. Animated Transitions**
+
 - Smooth fade between steps
 - Slide-up animations for new content
 - Loading states with personality
 
 **3. Smart Suggestions**
+
 - Context-aware based on jurisdiction + legal area
 - Click to auto-fill
 - Learn from popular cases
 
 **4. Visual Feedback**
+
 - Real-time validation (✓ 50 chars reached)
 - Progress indicators
 - Success confirmations
@@ -272,16 +285,19 @@ Step 1 of 4: Case Details
 ### Enjoyable Elements
 
 **1. Micro-interactions**
+
 - Button hover effects
 - Card selections (scale + shadow)
 - Confetti on successful match 🎉
 
 **2. Personality in Copy**
+
 - "Finding your perfect match..." (not "Searching lawyers")
 - "Great news! Your case has strong merit" (not "Analysis complete")
 - Friendly, conversational tone
 
 **3. Visual Hierarchy**
+
 - Large, clear CTAs
 - Important info highlighted
 - Scannable layout
@@ -312,11 +328,13 @@ Step 1 of 4: Case Details
 ### How Lawyers See It
 
 **1. Qualified Leads Only**
+
 - AI pre-screened case
 - Client expectations set
 - All details ready
 
 **2. Efficient Intake**
+
 ```
 New Case Alert 🔔
 
@@ -337,6 +355,7 @@ Client readiness: High
 ```
 
 **3. Better Matching**
+
 - Only cases matching expertise
 - Transparent client expectations
 - Higher conversion rate
@@ -346,17 +365,20 @@ Client readiness: High
 ## 📊 Success Metrics
 
 ### User Engagement
+
 - Complete flow rate (target: 70%+)
 - Time to complete (target: < 5 min)
 - AI report downloads (track value)
 - Lawyer match acceptance (target: 60%+)
 
 ### Aha Moment
+
 - Time spent on AI report (target: 2+ min)
 - Share/download report actions
 - Positive feedback on analysis
 
 ### Conversion
+
 - Lawyer selection rate
 - Workspace exploration rate
 - Trial to paid conversion
@@ -366,17 +388,20 @@ Client readiness: High
 ## 🚀 Implementation Priority
 
 ### Week 1: Core Flow
+
 - [x] Design new flow (this doc)
 - [ ] Update DemoOrchestrator with 4 steps
 - [ ] Build Step1_CaseIntake (progressive)
 - [ ] Build Step2_AIReport (aha moment)
 
 ### Week 2: Matching & Preview
+
 - [ ] Build Step3_LawyerMatch (top 3)
 - [ ] Build Step4_WorkspacePreview
 - [ ] Add animations & micro-interactions
 
 ### Week 3: Polish
+
 - [ ] Smart suggestions system
 - [ ] AI report PDF generation
 - [ ] Lawyer notification system
@@ -407,5 +432,5 @@ Client readiness: High
 
 ---
 
-*This flow transforms Lex from a directory to an intelligent legal assistant*
-*Client gets value immediately → Perfect match → Seamless workflow*
+_This flow transforms Lex from a directory to an intelligent legal assistant_
+_Client gets value immediately → Perfect match → Seamless workflow_

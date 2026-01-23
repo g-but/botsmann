@@ -26,9 +26,9 @@ export interface ConsultationRow {
 
 export interface UserSettingsRow {
   id: string;
-  preferred_model: 'groq' | 'openai' | 'ollama';
+  preferred_model: 'groq' | 'openrouter' | 'ollama';
   groq_api_key: string | null;
-  openai_api_key: string | null;
+  openrouter_api_key: string | null;
   ollama_url: string | null;
   created_at: string;
 }
@@ -78,7 +78,7 @@ export function getSupabaseClient(): SupabaseClient {
   if (!supabaseUrl || !supabaseAnonKey) {
     throw new Error(
       'Supabase environment variables not configured. ' +
-      'Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.'
+        'Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.',
     );
   }
 
@@ -101,13 +101,13 @@ export const supabase = {
     },
     signOut: () => {
       return getSupabaseClient().auth.signOut();
-    }
+    },
   },
   storage: {
     from: (bucket: string) => {
       return getSupabaseClient().storage.from(bucket);
-    }
-  }
+    },
+  },
 };
 
 // Server-side client with service role (for admin operations)
@@ -116,16 +116,14 @@ export function getServiceClient(): SupabaseClient {
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!supabaseUrl || !serviceRoleKey) {
-    throw new Error(
-      'Server-side Supabase requires SUPABASE_SERVICE_ROLE_KEY'
-    );
+    throw new Error('Server-side Supabase requires SUPABASE_SERVICE_ROLE_KEY');
   }
 
   return createClient(supabaseUrl, serviceRoleKey, {
     auth: {
       autoRefreshToken: false,
-      persistSession: false
-    }
+      persistSession: false,
+    },
   });
 }
 

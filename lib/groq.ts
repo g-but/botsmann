@@ -30,7 +30,7 @@ const DEFAULT_MODEL = 'llama-3.1-8b-instant';
 export async function generateWithGroq(
   systemPrompt: string,
   userMessage: string,
-  context: string
+  context: string,
 ): Promise<string> {
   const apiKey = process.env.GROQ_API_KEY;
 
@@ -42,19 +42,19 @@ export async function generateWithGroq(
   const messages: GroqMessage[] = [
     {
       role: 'system',
-      content: systemPrompt
+      content: systemPrompt,
     },
     {
       role: 'user',
-      content: `Context information:\n${context}\n\n---\nUser question: ${userMessage}`
-    }
+      content: `Context information:\n${context}\n\n---\nUser question: ${userMessage}`,
+    },
   ];
 
   try {
     const response = await fetch(GROQ_API_URL, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({

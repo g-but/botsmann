@@ -1,10 +1,4 @@
-import {
-  formatCurrency,
-  formatNumber,
-  formatDate,
-  formatPercent,
-  toISOString,
-} from '@/lib/format';
+import { formatCurrency, formatNumber, formatDate, formatPercent, toISOString } from '@/lib/format';
 
 describe('Format Utilities', () => {
   describe('formatCurrency', () => {

@@ -27,43 +27,43 @@ export default function Portal() {
       value: '$8,942.58',
       change: '+$412.12',
       trend: 'up' as const,
-      tooltip: 'Total tax payments for the current fiscal year'
+      tooltip: 'Total tax payments for the current fiscal year',
     },
     {
       label: 'Tax Allocation Efficiency',
       value: '94.3%',
       change: '+2.1%',
       trend: 'up' as const,
-      tooltip: 'Percentage of your tax dollars allocated to public goods'
+      tooltip: 'Percentage of your tax dollars allocated to public goods',
     },
     {
       label: 'Community Rank',
       value: '241',
       change: 'of 5280',
       trend: 'neutral' as const,
-      tooltip: 'Your ranking in the Solon community based on contribution and participation'
+      tooltip: 'Your ranking in the Solon community based on contribution and participation',
     },
     {
       label: 'Participation Score',
       value: '78.2',
       change: '+12.4',
       trend: 'up' as const,
-      tooltip: 'Score based on voting participation and community engagement'
+      tooltip: 'Score based on voting participation and community engagement',
     },
     {
       label: 'Tax Return Rate',
       value: '4.1%',
       change: '-0.3%',
       trend: 'down' as const,
-      tooltip: 'Percentage of taxes returned through efficiency gains'
+      tooltip: 'Percentage of taxes returned through efficiency gains',
     },
     {
       label: 'Budget Influence',
       value: 'Medium',
       change: '+1 tier',
       trend: 'up' as const,
-      tooltip: 'Your level of influence on budget allocation based on participation'
-    }
+      tooltip: 'Your level of influence on budget allocation based on participation',
+    },
   ];
 
   // Tax allocation breakdown for visualization
@@ -85,7 +85,7 @@ export default function Portal() {
       item: 'Highway Repair - Section 14A',
       time: '2 hours ago',
       path: '/projects/governance/open-pay',
-      taxImpact: 'Your contribution: $4.12'
+      taxImpact: 'Your contribution: $4.12',
     },
     {
       id: '2',
@@ -94,7 +94,7 @@ export default function Portal() {
       item: 'Public Parks Expansion Act',
       time: '1 day ago',
       path: '/projects/governance/open-law',
-      taxImpact: 'Affects $160 of your taxes annually'
+      taxImpact: 'Affects $160 of your taxes annually',
     },
     {
       id: '3',
@@ -103,7 +103,7 @@ export default function Portal() {
       item: 'Waste Management Services',
       time: '3 days ago',
       path: '/projects/governance/open-service',
-      taxImpact: 'Your contribution: $86.40 annually'
+      taxImpact: 'Your contribution: $86.40 annually',
     },
     {
       id: '4',
@@ -112,8 +112,8 @@ export default function Portal() {
       item: 'City Budget Allocation 2023',
       time: '1 week ago',
       path: '/projects/governance/open-vote',
-      taxImpact: 'Controls 100% of your tax allocation'
-    }
+      taxImpact: 'Controls 100% of your tax allocation',
+    },
   ];
 
   // Pending actions for the action center - using the interface defined in ActionCenter.tsx
@@ -125,7 +125,7 @@ export default function Portal() {
       description: 'Vote on $12M bond for road improvements',
       deadline: '3 days',
       taxImpact: 'Est. impact: +$28/year for 5 years',
-      path: '/projects/governance/open-vote'
+      path: '/projects/governance/open-vote',
     },
     {
       id: 'pa2',
@@ -134,7 +134,7 @@ export default function Portal() {
       description: 'Review and comment on 8% budget increase',
       deadline: '5 days',
       taxImpact: 'Est. impact: +$45/year ongoing',
-      path: '/projects/governance/open-law'
+      path: '/projects/governance/open-law',
     },
     {
       id: 'pa3',
@@ -143,8 +143,8 @@ export default function Portal() {
       description: 'Delegate your vote or vote directly',
       deadline: '1 week',
       taxImpact: 'Affects $384 of your annual taxes',
-      path: '/projects/governance/open-vote'
-    }
+      path: '/projects/governance/open-vote',
+    },
   ];
 
   // Tax-funded projects for tax flow tab
@@ -155,7 +155,7 @@ export default function Portal() {
       impact: 'Reduced travel time by 12 minutes for 15,000 daily commuters',
       contribution: '$4.12',
       total: '$249,800',
-      link: '/projects/governance/open-pay'
+      link: '/projects/governance/open-pay',
     },
     {
       category: 'Recreation',
@@ -163,7 +163,7 @@ export default function Portal() {
       impact: 'Benefits 1,200+ weekly park visitors and ensures safe equipment',
       contribution: '$0.94',
       total: '$56,750',
-      link: '/projects/governance/open-pay'
+      link: '/projects/governance/open-pay',
     },
     {
       category: 'Education',
@@ -171,7 +171,7 @@ export default function Portal() {
       impact: 'Upgraded technology for 3,500 students across 8 schools',
       contribution: '$20.63',
       total: '$1,250,000',
-      link: '/projects/governance/open-pay'
+      link: '/projects/governance/open-pay',
     },
     {
       category: 'Public Safety',
@@ -179,8 +179,8 @@ export default function Portal() {
       impact: 'Reduced response times by 1.8 minutes in emergency situations',
       contribution: '$8.22',
       total: '$498,600',
-      link: '/projects/governance/open-pay'
-    }
+      link: '/projects/governance/open-pay',
+    },
   ];
 
   // Component cards for navigation
@@ -191,7 +191,7 @@ export default function Portal() {
       description: 'Track, verify, and engage with government spending in real-time.',
       icon: '💸',
       color: 'blue',
-      path: '/projects/governance/open-pay'
+      path: '/projects/governance/open-pay',
     },
     {
       id: 'laws',
@@ -199,7 +199,7 @@ export default function Portal() {
       description: 'Review, comment on, and track the progress of legislation.',
       icon: '⚖️',
       color: 'amber',
-      path: '/projects/governance/open-law'
+      path: '/projects/governance/open-law',
     },
     {
       id: 'services',
@@ -207,7 +207,7 @@ export default function Portal() {
       description: 'Rate service providers, suggest improvements, and monitor contracts.',
       icon: '🛠️',
       color: 'green',
-      path: '/projects/governance/open-service'
+      path: '/projects/governance/open-service',
     },
     {
       id: 'voting',
@@ -215,15 +215,16 @@ export default function Portal() {
       description: 'Vote directly on issues that matter and see results in real-time.',
       icon: '🗳️',
       color: 'purple',
-      path: '/projects/governance/open-vote'
+      path: '/projects/governance/open-vote',
     },
     {
       id: 'citizen',
       title: 'My Citizen Profile',
-      description: 'View and manage your citizen profile, tax contributions, and government benefits.',
+      description:
+        'View and manage your citizen profile, tax contributions, and government benefits.',
       icon: '👤',
       color: 'blue',
-      path: '/projects/governance/citizen'
+      path: '/projects/governance/citizen',
     },
     {
       id: 'employees',
@@ -231,7 +232,7 @@ export default function Portal() {
       description: 'Explore government employees, their roles, and transparency scores.',
       icon: '👥',
       color: 'green',
-      path: '/projects/governance/employees'
+      path: '/projects/governance/employees',
     },
     {
       id: 'agencies',
@@ -239,8 +240,8 @@ export default function Portal() {
       description: 'View government agencies, their budgets, and transparency metrics.',
       icon: '🏛️',
       color: 'amber',
-      path: '/projects/governance/agencies'
-    }
+      path: '/projects/governance/agencies',
+    },
   ];
 
   // Tab definitions
@@ -258,37 +259,40 @@ export default function Portal() {
   const openLawPreview = {
     icon: '⚖️',
     title: 'Open Law Platform',
-    description: 'Track legislation, comment on proposals, and see the impact of laws in your community and on your taxes.',
+    description:
+      'Track legislation, comment on proposals, and see the impact of laws in your community and on your taxes.',
     ctaText: 'Go to Open Law',
     path: '/projects/governance/open-law',
-    color: 'amber'
+    color: 'amber',
   };
 
   const openServePreview = {
     icon: '🛠️',
     title: 'Public Service Marketplace',
-    description: 'Rate service providers, suggest improvements, and ensure your tax dollars fund quality public services.',
+    description:
+      'Rate service providers, suggest improvements, and ensure your tax dollars fund quality public services.',
     ctaText: 'Explore Services',
     path: '/projects/governance/open-service',
-    color: 'green'
+    color: 'green',
   };
 
   const demosPreview = {
     icon: '🗳️',
     title: 'Open Vote Platform',
-    description: 'Vote directly on issues that matter in your community and see the results and implementation in real-time.',
+    description:
+      'Vote directly on issues that matter in your community and see the results and implementation in real-time.',
     ctaText: 'Participate Now',
     path: '/projects/governance/open-vote',
-    color: 'purple'
+    color: 'purple',
   };
 
   // High-value citizen information
   const citizenData = {
-    name: "Alex Morgan",
-    id: "CIT-10045876",
-    district: "North Central",
-    taxContribution: "$15,500",
-    lastActivity: "Voted on School Budget Proposal (3 days ago)"
+    name: 'Alex Morgan',
+    id: 'CIT-10045876',
+    district: 'North Central',
+    taxContribution: '$15,500',
+    lastActivity: 'Voted on School Budget Proposal (3 days ago)',
   };
 
   return (
@@ -353,37 +357,59 @@ export default function Portal() {
           <div className="bg-white px-4 py-5 sm:p-6">
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
               <div>
-                <div className="text-xs font-medium text-gray-500 uppercase tracking-wide">Tax Contribution</div>
-                <div className="mt-1 text-xl font-semibold text-gray-900">{citizenData.taxContribution}</div>
+                <div className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Tax Contribution
+                </div>
+                <div className="mt-1 text-xl font-semibold text-gray-900">
+                  {citizenData.taxContribution}
+                </div>
                 <div className="mt-1">
-                  <Link href="/projects/governance/citizen#tax" className="text-sm text-blue-600 hover:text-blue-500">
+                  <Link
+                    href="/projects/governance/citizen#tax"
+                    className="text-sm text-blue-600 hover:text-blue-500"
+                  >
                     View Tax History
                   </Link>
                 </div>
               </div>
               <div>
-                <div className="text-xs font-medium text-gray-500 uppercase tracking-wide">Agency Distribution</div>
+                <div className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Agency Distribution
+                </div>
                 <div className="mt-1 text-sm text-gray-900">5 Agencies</div>
                 <div className="mt-1">
-                  <Link href="/projects/governance/citizen#advisory" className="text-sm text-blue-600 hover:text-blue-500">
+                  <Link
+                    href="/projects/governance/citizen#advisory"
+                    className="text-sm text-blue-600 hover:text-blue-500"
+                  >
                     Set Advisory Preferences
                   </Link>
                 </div>
               </div>
               <div>
-                <div className="text-xs font-medium text-gray-500 uppercase tracking-wide">Active Benefits</div>
+                <div className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Active Benefits
+                </div>
                 <div className="mt-1 text-sm text-gray-900">3 Benefits</div>
                 <div className="mt-1">
-                  <Link href="/projects/governance/citizen#benefits" className="text-sm text-blue-600 hover:text-blue-500">
+                  <Link
+                    href="/projects/governance/citizen#benefits"
+                    className="text-sm text-blue-600 hover:text-blue-500"
+                  >
                     View All Benefits
                   </Link>
                 </div>
               </div>
               <div>
-                <div className="text-xs font-medium text-gray-500 uppercase tracking-wide">Last Activity</div>
+                <div className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                  Last Activity
+                </div>
                 <div className="mt-1 text-sm text-gray-900">{citizenData.lastActivity}</div>
                 <div className="mt-1">
-                  <Link href="/projects/governance/portal" className="text-sm text-blue-600 hover:text-blue-500">
+                  <Link
+                    href="/projects/governance/portal"
+                    className="text-sm text-blue-600 hover:text-blue-500"
+                  >
                     View Activity
                   </Link>
                 </div>
@@ -399,7 +425,7 @@ export default function Portal() {
         <ComponentCards cards={componentCards} />
 
         {/* Portal Tabs with Filter */}
-        <TabsContainer 
+        <TabsContainer
           tabs={tabs}
           activeTab={activeTab}
           onTabChange={setActiveTab}
@@ -415,11 +441,11 @@ export default function Portal() {
 
           {/* Tax Flow Tab */}
           {activeTab === 'tax-flow' && (
-            <TaxFlow 
-              taxAllocation={taxAllocation} 
-              taxFundedProjects={taxFundedProjects} 
-              filter={filter} 
-              onFilterChange={setFilter} 
+            <TaxFlow
+              taxAllocation={taxAllocation}
+              taxFundedProjects={taxFundedProjects}
+              filter={filter}
+              onFilterChange={setFilter}
             />
           )}
 
@@ -441,10 +467,11 @@ export default function Portal() {
       <footer className="max-w-screen-xl mx-auto px-4 sm:px-6 mt-12">
         <div className="border-t border-gray-200 py-8">
           <p className="text-sm text-center text-gray-500">
-            Solon Governance Platform - Empowering citizens through tax transparency and participation
+            Solon Governance Platform - Empowering citizens through tax transparency and
+            participation
           </p>
         </div>
       </footer>
     </div>
   );
-} 
+}

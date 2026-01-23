@@ -16,11 +16,7 @@ interface ProfileTabsProps {
 /**
  * Reusable tab navigation component for governance profiles
  */
-export const ProfileTabs: FC<ProfileTabsProps> = ({
-  tabs,
-  activeTab,
-  onTabChange,
-}) => {
+export const ProfileTabs: FC<ProfileTabsProps> = ({ tabs, activeTab, onTabChange }) => {
   return (
     <div className="border-b border-gray-200">
       <nav className="-mb-px flex">

@@ -41,9 +41,7 @@ export function GuideCard({ guide }: GuideCardProps) {
       </h3>
 
       {/* Description */}
-      <p className="text-sm text-gray-600 line-clamp-2 mb-4">
-        {guide.description}
-      </p>
+      <p className="text-sm text-gray-600 line-clamp-2 mb-4">{guide.description}</p>
 
       {/* Footer with metadata */}
       <div className="flex items-center justify-between text-xs text-gray-500">
@@ -59,26 +57,19 @@ export function GuideCard({ guide }: GuideCardProps) {
             </span>
           )}
         </div>
-        <span className="text-blue-600 font-medium group-hover:underline">
-          Read guide
-        </span>
+        <span className="text-blue-600 font-medium group-hover:underline">Read guide</span>
       </div>
 
       {/* Tags */}
       {guide.tags.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mt-4 pt-4 border-t border-gray-100">
           {guide.tags.slice(0, 3).map((tag) => (
-            <span
-              key={tag}
-              className="px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded"
-            >
+            <span key={tag} className="px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded">
               {tag}
             </span>
           ))}
           {guide.tags.length > 3 && (
-            <span className="px-2 py-0.5 text-xs text-gray-400">
-              +{guide.tags.length - 3} more
-            </span>
+            <span className="px-2 py-0.5 text-xs text-gray-400">+{guide.tags.length - 3} more</span>
           )}
         </div>
       )}

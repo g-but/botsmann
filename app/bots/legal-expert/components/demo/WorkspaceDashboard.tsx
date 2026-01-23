@@ -1,7 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { type UploadedFile, type LawyerProfile, type ChatMessage, type CategoryWithFiles, type WorkspaceViewMode } from './types';
+import {
+  type UploadedFile,
+  type LawyerProfile,
+  type ChatMessage,
+  type CategoryWithFiles,
+  type WorkspaceViewMode,
+} from './types';
 import { FILE_CATEGORIES } from './constants';
 import {
   WorkspaceHeader,
@@ -94,10 +100,13 @@ const WorkspaceDashboard: React.FC<WorkspaceDashboardProps> = ({
 
     // Simulate upload
     newFiles.forEach((file, idx) => {
-      setTimeout(() => {
-        file.status = 'completed';
-        onFileUpload([file]);
-      }, 1000 * (idx + 1));
+      setTimeout(
+        () => {
+          file.status = 'completed';
+          onFileUpload([file]);
+        },
+        1000 * (idx + 1),
+      );
     });
   };
 

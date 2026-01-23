@@ -81,11 +81,7 @@ export function NavItem({ item, isActive, onNavigate }: NavItemProps) {
               leaveFrom="opacity-100 translate-y-0"
               leaveTo="opacity-0 translate-y-1"
             >
-              <Popover.Panel
-                static
-                style={getDropdownStyle()}
-                className="w-screen max-w-2xl"
-              >
+              <Popover.Panel static style={getDropdownStyle()} className="w-screen max-w-2xl">
                 <MegaMenuPanel
                   items={item.children!}
                   config={item.megaMenu}

@@ -15,11 +15,11 @@ export default function ClientMDXContent({ source, slug }: ClientMDXContentProps
     img: (imgProps: React.ImgHTMLAttributes<HTMLImageElement>) => {
       return MDXComponents.img({
         ...imgProps,
-        slug
+        slug,
       });
     },
     // Ensure Callout is explicitly passed as a prop to avoid the "Expected component `Callout` to be defined" error
-    Callout: MDXComponents.Callout
+    Callout: MDXComponents.Callout,
   };
 
   return (

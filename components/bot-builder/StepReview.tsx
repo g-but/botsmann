@@ -80,9 +80,7 @@ export function StepReview({
           </div>
         </div>
         <div className="p-4 bg-white">
-          <p className="text-gray-600 text-sm">
-            {description || 'No description provided.'}
-          </p>
+          <p className="text-gray-600 text-sm">{description || 'No description provided.'}</p>
         </div>
       </div>
 
@@ -163,8 +161,8 @@ export function StepReview({
           <p className="text-sm text-gray-600">
             {knowledgeChunks.length > 0 ? (
               <>
-                <span className="font-medium text-gray-900">{knowledgeChunks.length}</span> knowledge
-                chunk{knowledgeChunks.length !== 1 ? 's' : ''} added
+                <span className="font-medium text-gray-900">{knowledgeChunks.length}</span>{' '}
+                knowledge chunk{knowledgeChunks.length !== 1 ? 's' : ''} added
               </>
             ) : (
               'No knowledge added (optional)'

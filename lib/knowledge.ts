@@ -58,14 +58,16 @@ function calculateReadTime(content: string): string {
  * - Removes broken Unicode characters
  */
 function sanitizeMdxContent(content: string): string {
-  return content
-    // Escape < followed by numbers (e.g., "<1%" becomes "&lt;1%")
-    // This prevents MDX from interpreting it as JSX
-    .replace(/<(\d)/g, '&lt;$1')
-    // Remove replacement character (U+FFFD) and other broken Unicode
-    .replace(/\uFFFD/g, ' ')
-    // Remove other common problematic Unicode ranges (surrogate pairs)
-    .replace(/[\uD800-\uDFFF]/g, ' ');
+  return (
+    content
+      // Escape < followed by numbers (e.g., "<1%" becomes "&lt;1%")
+      // This prevents MDX from interpreting it as JSX
+      .replace(/<(\d)/g, '&lt;$1')
+      // Remove replacement character (U+FFFD) and other broken Unicode
+      .replace(/\uFFFD/g, ' ')
+      // Remove other common problematic Unicode ranges (surrogate pairs)
+      .replace(/[\uD800-\uDFFF]/g, ' ')
+  );
 }
 
 /**
@@ -76,7 +78,7 @@ export async function fetchAllGuides(): Promise<GuideMetadata[]> {
     // Fetch guides directory listing
     const res = await fetch(
       `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/guides`,
-      { next: { revalidate: REVALIDATE_INTERVAL } }
+      { next: { revalidate: REVALIDATE_INTERVAL } },
     );
 
     if (!res.ok) {
@@ -94,7 +96,7 @@ export async function fetchAllGuides(): Promise<GuideMetadata[]> {
       // Fetch guides in this category
       const categoryRes = await fetch(
         `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/guides/${category.name}`,
-        { next: { revalidate: REVALIDATE_INTERVAL } }
+        { next: { revalidate: REVALIDATE_INTERVAL } },
       );
 
       if (!categoryRes.ok) continue;
@@ -107,10 +109,9 @@ export async function fetchAllGuides(): Promise<GuideMetadata[]> {
         const slug = guide.name;
 
         // Fetch the index.mdx for this guide
-        const mdxRes = await fetch(
-          `${GITHUB_RAW_BASE}/guides/${category.name}/${slug}/index.mdx`,
-          { next: { revalidate: REVALIDATE_INTERVAL } }
-        );
+        const mdxRes = await fetch(`${GITHUB_RAW_BASE}/guides/${category.name}/${slug}/index.mdx`, {
+          next: { revalidate: REVALIDATE_INTERVAL },
+        });
 
         if (!mdxRes.ok) continue;
 
@@ -140,7 +141,7 @@ export async function fetchAllGuides(): Promise<GuideMetadata[]> {
 
     // Sort by date (newest first)
     return allGuides.sort(
-      (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+      (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
     );
   } catch (error) {
     console.info('Failed to fetch guides:', error);
@@ -157,10 +158,9 @@ export async function fetchGuideBySlug(slug: string): Promise<Guide | null> {
 
     // Try to find the guide in each difficulty category
     for (const difficulty of ['beginner', 'intermediate', 'advanced']) {
-      const mdxRes = await fetch(
-        `${GITHUB_RAW_BASE}/guides/${difficulty}/${slug}/index.mdx`,
-        { next: { revalidate: REVALIDATE_INTERVAL } }
-      );
+      const mdxRes = await fetch(`${GITHUB_RAW_BASE}/guides/${difficulty}/${slug}/index.mdx`, {
+        next: { revalidate: REVALIDATE_INTERVAL },
+      });
 
       if (!mdxRes.ok) continue;
 
@@ -205,7 +205,7 @@ export async function fetchGuideBySlug(slug: string): Promise<Guide | null> {
  * Fetch guides filtered by difficulty level
  */
 export async function fetchGuidesByDifficulty(
-  difficulty: DifficultyLevel
+  difficulty: DifficultyLevel,
 ): Promise<GuideMetadata[]> {
   const allGuides = await fetchAllGuides();
   return allGuides.filter((guide) => guide.difficulty === difficulty);
@@ -214,9 +214,7 @@ export async function fetchGuidesByDifficulty(
 /**
  * Fetch guides filtered by category
  */
-export async function fetchGuidesByCategory(
-  category: GuideCategory
-): Promise<GuideMetadata[]> {
+export async function fetchGuidesByCategory(category: GuideCategory): Promise<GuideMetadata[]> {
   const allGuides = await fetchAllGuides();
   return allGuides.filter((guide) => guide.category === category);
 }
@@ -224,9 +222,7 @@ export async function fetchGuidesByCategory(
 /**
  * Fetch guides with multiple filters
  */
-export async function fetchGuidesWithFilters(
-  filters: GuideFilters
-): Promise<GuideMetadata[]> {
+export async function fetchGuidesWithFilters(filters: GuideFilters): Promise<GuideMetadata[]> {
   let guides = await fetchAllGuides();
 
   if (filters.difficulty) {
@@ -238,9 +234,7 @@ export async function fetchGuidesWithFilters(
   }
 
   if (filters.tags && filters.tags.length > 0) {
-    guides = guides.filter((g) =>
-      filters.tags!.some((tag) => g.tags.includes(tag))
-    );
+    guides = guides.filter((g) => filters.tags!.some((tag) => g.tags.includes(tag)));
   }
 
   if (filters.search) {
@@ -249,7 +243,7 @@ export async function fetchGuidesWithFilters(
       (g) =>
         g.title.toLowerCase().includes(searchLower) ||
         g.description.toLowerCase().includes(searchLower) ||
-        g.tags.some((tag) => tag.toLowerCase().includes(searchLower))
+        g.tags.some((tag) => tag.toLowerCase().includes(searchLower)),
     );
   }
 
@@ -263,7 +257,7 @@ export async function fetchInfrastructureGuides(): Promise<ComparisonGuide[]> {
   try {
     const res = await fetch(
       `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/infrastructure`,
-      { next: { revalidate: REVALIDATE_INTERVAL } }
+      { next: { revalidate: REVALIDATE_INTERVAL } },
     );
 
     if (!res.ok) {
@@ -279,10 +273,9 @@ export async function fetchInfrastructureGuides(): Promise<ComparisonGuide[]> {
 
       const slug = item.name;
 
-      const mdxRes = await fetch(
-        `${GITHUB_RAW_BASE}/infrastructure/${slug}/index.mdx`,
-        { next: { revalidate: REVALIDATE_INTERVAL } }
-      );
+      const mdxRes = await fetch(`${GITHUB_RAW_BASE}/infrastructure/${slug}/index.mdx`, {
+        next: { revalidate: REVALIDATE_INTERVAL },
+      });
 
       if (!mdxRes.ok) continue;
 
@@ -318,15 +311,14 @@ export async function fetchInfrastructureGuides(): Promise<ComparisonGuide[]> {
  * Fetch a single infrastructure guide by slug
  */
 export async function fetchInfrastructureGuideBySlug(
-  slug: string
+  slug: string,
 ): Promise<(ComparisonGuide & { content: string; tableOfContents: TableOfContentsItem[] }) | null> {
   try {
     if (!slug) return null;
 
-    const mdxRes = await fetch(
-      `${GITHUB_RAW_BASE}/infrastructure/${slug}/index.mdx`,
-      { next: { revalidate: REVALIDATE_INTERVAL } }
-    );
+    const mdxRes = await fetch(`${GITHUB_RAW_BASE}/infrastructure/${slug}/index.mdx`, {
+      next: { revalidate: REVALIDATE_INTERVAL },
+    });
 
     if (!mdxRes.ok) return null;
 

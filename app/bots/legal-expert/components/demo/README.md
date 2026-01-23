@@ -1,6 +1,7 @@
 # Legal Expert Demo - Modular Architecture
 
 ## Overview
+
 A fully modular, production-ready demo showcasing Lex's core features: AI-powered lawyer matching, intelligent file organization, and collaborative workspaces with multi-level privacy controls.
 
 ## Architecture
@@ -8,23 +9,27 @@ A fully modular, production-ready demo showcasing Lex's core features: AI-powere
 ### Core Components
 
 #### 1. **DemoSection.tsx** (Main Component)
+
 - 3-step wizard: Case Input → Lawyer Matching → AI Workspace
 - State management for case context, files, and lawyer selection
 - Progress tracking with visual indicators
 
 #### 2. **FileUploader.tsx**
+
 - Drag-and-drop file upload
 - Simulated AI processing and categorization
 - Auto-detects file categories based on filename patterns
 - Supports PDF, DOC, DOCX, JPG, PNG
 
 #### 3. **LawyerMatcher.tsx**
+
 - Smart lawyer matching based on legal area expertise
 - Displays lawyer profiles with ratings, experience, availability
 - Shows hourly rates, response times, languages
 - Real-time availability status
 
 #### 4. **AIWorkspace.tsx**
+
 - Intelligent file organization into categories
 - AI-powered insights for each document category
 - Processing status indicators
@@ -33,6 +38,7 @@ A fully modular, production-ready demo showcasing Lex's core features: AI-powere
 ### Data Models
 
 #### 5. **types.ts**
+
 ```typescript
 - LegalArea: Law category with demand level
 - Jurisdiction: Geographic legal jurisdiction
@@ -43,6 +49,7 @@ A fully modular, production-ready demo showcasing Lex's core features: AI-powere
 ```
 
 #### 6. **constants.ts**
+
 - **LEGAL_AREAS**: 12 high-demand legal specialties
   - Immigration (high demand)
   - Family Law (high demand)
@@ -58,6 +65,7 @@ A fully modular, production-ready demo showcasing Lex's core features: AI-powere
 ## Features Demonstrated
 
 ### 1. Context-Aware Case Input
+
 - Multi-jurisdiction support
 - 12 legal areas (high-demand highlighted with 🔥)
 - Rich text area for case description (min 20 chars)
@@ -65,6 +73,7 @@ A fully modular, production-ready demo showcasing Lex's core features: AI-powere
 - Optional file upload
 
 ### 2. AI-Powered Lawyer Matching
+
 - Expertise-based filtering
 - Transparent pricing and availability
 - Multi-language support
@@ -72,6 +81,7 @@ A fully modular, production-ready demo showcasing Lex's core features: AI-powere
 - Response time metrics
 
 ### 3. Intelligent Workspace
+
 - **Auto-categorization**: Files organized by AI into 8 categories
   - Evidence & Documentation
   - Contracts & Agreements

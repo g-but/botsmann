@@ -1,3 +1,5 @@
+ARCHIVED: This document contains outdated MongoDB-era instructions. Prefer docs/SUPABASE_SETUP.md and docs/SSOT.md.
+
 # DevOps Audit - Executive Summary
 
 ## 🎯 Overview
@@ -9,21 +11,25 @@ Comprehensive DevOps audit completed for the Botsmann/Lex platform. This documen
 ## 🚨 CRITICAL FINDINGS
 
 ### 1. **Exposed Credentials in Git Repository**
+
 **Risk Level**: 🔴 **CRITICAL**
 
 **What We Found:**
+
 - `.env` file tracked in Git with real credentials
 - MongoDB connection string publicly visible
 - Email password exposed
 - Repository is public on GitHub
 
 **Immediate Impact:**
+
 - ❌ Database can be accessed by anyone
 - ❌ Email account compromised
 - ❌ All user data at risk
 - ❌ GDPR/compliance violations
 
 **Required Actions (DO IMMEDIATELY):**
+
 1. ✋ **STOP** - Do not deploy to production
 2. 🔄 **Rotate** - Change MongoDB password NOW
 3. 🔄 **Rotate** - Regenerate Gmail app password NOW
@@ -34,13 +40,13 @@ Comprehensive DevOps audit completed for the Botsmann/Lex platform. This documen
 
 ## 📊 Overall Assessment
 
-| Category | Status | Priority |
-|----------|--------|----------|
-| **Security** | 🔴 Critical | IMMEDIATE |
-| **CI/CD** | 🟠 Missing | HIGH |
-| **Monitoring** | 🟡 Basic | MEDIUM |
-| **Infrastructure** | 🟡 Manual | MEDIUM |
-| **Testing** | 🟢 Good | LOW |
+| Category           | Status      | Priority  |
+| ------------------ | ----------- | --------- |
+| **Security**       | 🔴 Critical | IMMEDIATE |
+| **CI/CD**          | 🟠 Missing  | HIGH      |
+| **Monitoring**     | 🟡 Basic    | MEDIUM    |
+| **Infrastructure** | 🟡 Manual   | MEDIUM    |
+| **Testing**        | 🟢 Good     | LOW       |
 
 ---
 
@@ -57,12 +63,14 @@ Comprehensive DevOps audit completed for the Botsmann/Lex platform. This documen
 ## ❌ What's Missing
 
 ### High Priority
+
 1. **No CI/CD pipeline** - Manual deployments only
 2. **No security scanning** - Vulnerabilities undetected
 3. **No containerization** - Environment inconsistency
 4. **Build script issues** - Installing deps during build
 
 ### Medium Priority
+
 5. **No monitoring** - Can't debug production issues
 6. **No infrastructure as code** - Manual setup
 7. **Logs not ignored** - Logs tracked in Git
@@ -72,6 +80,7 @@ Comprehensive DevOps audit completed for the Botsmann/Lex platform. This documen
 ## 🚀 Recommended Action Plan
 
 ### Week 1: Security Lockdown (URGENT)
+
 ```bash
 # Day 1 - Rotate credentials
 1. MongoDB: Change password in Atlas
@@ -91,16 +100,19 @@ Comprehensive DevOps audit completed for the Botsmann/Lex platform. This documen
 ```
 
 ### Week 2: Containerization
+
 - Create Dockerfile
 - Set up Docker Compose
 - Test containerized deployment
 
 ### Week 3: Monitoring
+
 - Set up Sentry (error tracking)
 - Configure logging
 - Add uptime monitoring
 
 ### Week 4-8: Advanced DevOps
+
 - Infrastructure as Code (Terraform)
 - E2E testing (Playwright)
 - Performance monitoring
@@ -111,10 +123,12 @@ Comprehensive DevOps audit completed for the Botsmann/Lex platform. This documen
 ## 💰 Investment & ROI
 
 **Time Investment:**
+
 - **Minimum**: 1 week (security fixes only)
 - **Recommended**: 6-8 weeks (full DevOps maturity)
 
 **Expected Benefits:**
+
 - 95% reduction in security risk
 - 80% faster deployments
 - 90% fewer production bugs
@@ -125,6 +139,7 @@ Comprehensive DevOps audit completed for the Botsmann/Lex platform. This documen
 ## 📋 Immediate Checklist
 
 ### Before Any Production Deployment:
+
 - [ ] ✋ Rotate MongoDB password
 - [ ] ✋ Rotate email password
 - [ ] ✋ Remove .env from Git history
@@ -135,6 +150,7 @@ Comprehensive DevOps audit completed for the Botsmann/Lex platform. This documen
 - [ ] ✋ Set up monitoring
 
 ### Nice to Have:
+
 - [ ] Dockerize application
 - [ ] Set up staging environment
 - [ ] Add E2E tests
@@ -164,12 +180,14 @@ Comprehensive DevOps audit completed for the Botsmann/Lex platform. This documen
 **Current State**: Code is great, but security is broken 🔴
 
 **What to do**:
+
 1. Rotate all passwords **TODAY**
 2. Remove secrets from Git **TODAY**
 3. Set up CI/CD **THIS WEEK**
 4. Add monitoring **NEXT WEEK**
 
 **Timeline to Production**:
+
 - Minimum: 1 week (just security)
 - Recommended: 6-8 weeks (proper DevOps)
 
@@ -178,6 +196,6 @@ Comprehensive DevOps audit completed for the Botsmann/Lex platform. This documen
 
 ---
 
-*Audit Completed: January 2025*
-*Next Steps: Follow DEVOPS_IMPLEMENTATION_PLAN.md*
-*Questions: Review DEVOPS_AUDIT_REPORT.md*
+_Audit Completed: January 2025_
+_Next Steps: Follow DEVOPS_IMPLEMENTATION_PLAN.md_
+_Questions: Review DEVOPS_AUDIT_REPORT.md_

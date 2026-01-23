@@ -101,9 +101,7 @@ export function StepBasicInfo({ title, slug, description, onChange, errors }: St
             maxLength={50}
           />
         </div>
-        <p className="mt-1 text-xs text-gray-500">
-          Lowercase letters, numbers, and hyphens only
-        </p>
+        <p className="mt-1 text-xs text-gray-500">Lowercase letters, numbers, and hyphens only</p>
       </div>
 
       {/* Description */}

@@ -10,13 +10,16 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
   const [lastScrollY, setLastScrollY] = useState(0);
 
   // Menu items for Heidi navigation
-  const menuItems = useMemo(() => [
-    { id: 'language-learning', label: 'Language Learning' },
-    { id: 'communication', label: 'Communication' },
-    { id: 'social', label: 'Social Integration' },
-    { id: 'content', label: 'Content Library' },
-    { id: 'future-vision', label: 'Roadmap' }
-  ], []);
+  const menuItems = useMemo(
+    () => [
+      { id: 'language-learning', label: 'Language Learning' },
+      { id: 'communication', label: 'Communication' },
+      { id: 'social', label: 'Social Integration' },
+      { id: 'content', label: 'Content Library' },
+      { id: 'future-vision', label: 'Roadmap' },
+    ],
+    [],
+  );
 
   // Handle scroll events to show/hide navigation and highlight active section
   useEffect(() => {
@@ -57,7 +60,7 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
     const element = document.getElementById(id);
     if (element) {
       window.scrollTo({
-        top: element.offsetTop - 100, 
+        top: element.offsetTop - 100,
         behavior: 'smooth',
       });
       setActiveSection(id);
@@ -65,7 +68,7 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
   };
 
   return (
-    <nav 
+    <nav
       className={`transition-all duration-300 w-full py-3 bg-white border-b border-gray-200 fixed top-0 ${
         isVisible ? 'transform-none shadow-md' : 'transform -translate-y-full'
       } ${className}`}
@@ -78,9 +81,9 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
             </div>
             <h2 className="text-xl font-bold text-gray-900">Heidi</h2>
           </div>
-          
+
           <div className="hidden md:flex space-x-1 overflow-x-auto no-scrollbar">
-            {menuItems.map(item => (
+            {menuItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
@@ -94,7 +97,7 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
               </button>
             ))}
           </div>
-          
+
           <Link
             href="https://chatgpt.com/g/g-GHYSu7LTj-heidi-swiss-german-teacher"
             target="_blank"
@@ -108,4 +111,4 @@ const Navigation: React.FC<{ className?: string }> = ({ className = '' }) => {
   );
 };
 
-export default Navigation; 
+export default Navigation;

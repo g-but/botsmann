@@ -9,21 +9,25 @@ The **Workspace Dashboard** is Lex's flagship feature - a full-screen, immersive
 ## ✨ Key Features
 
 ### 1. **Full-Screen Portal Experience**
+
 - Opens in dedicated full-screen view (separate from main demo flow)
 - Dark theme with animated gradient backgrounds for premium feel
 - Smooth entrance animations (fade + scale)
 - Persistent state management
 
 ### 2. **Multi-View Navigation**
+
 Five main views accessible via sidebar:
 
 #### 🏠 Overview
+
 - Welcome banner with case summary
 - Quick action cards (Files, Chat, Timeline, Settings)
 - File categories preview
 - Usage statistics
 
 #### 📁 Files
+
 - Category-based organization (8 categories)
 - File visibility controls (Private, Lawyer Only, Team, Public)
 - Drag-and-drop upload anywhere
@@ -31,6 +35,7 @@ Five main views accessible via sidebar:
 - Real-time status indicators
 
 #### 💬 Chat
+
 - Live messaging with AI + Lawyer
 - Typing indicators
 - Message history with timestamps
@@ -38,12 +43,14 @@ Five main views accessible via sidebar:
 - No appointments needed
 
 #### 📅 Timeline
+
 - Complete audit trail
 - Every action logged (messages, uploads, changes)
 - Chronological order
 - Filter by type
 
 #### ⚙️ Settings
+
 - Access control management
 - User permissions (Owner, Attorney, Paralegal, Advisor)
 - Notification preferences
@@ -52,6 +59,7 @@ Five main views accessible via sidebar:
 ### 3. **File Management System**
 
 #### Categories (Auto-organized by AI)
+
 1. **📎 Evidence & Documentation** - Photos, recordings, proof
 2. **📄 Contracts & Agreements** - Legal contracts, MOUs
 3. **✉️ Correspondence** - Emails, letters, messages
@@ -62,12 +70,14 @@ Five main views accessible via sidebar:
 8. **📁 Other Documents** - Miscellaneous files
 
 #### Visibility Levels
+
 - **🔒 Private** - Only you can see
 - **👨‍⚖️ Lawyer Only** - You + your attorney
 - **👥 Team** - You + attorney + paralegals/advisors
 - **🌐 Public** - Everyone with access to data room
 
 #### File Operations
+
 - **Upload**: Drag-and-drop anywhere in workspace
 - **View**: Preview in browser
 - **Delete**: Remove file (with confirmation)
@@ -78,10 +88,12 @@ Five main views accessible via sidebar:
 ### 4. **Real-Time Chat**
 
 #### Participants
+
 - **🤖 Lex AI** - Available 24/7, instant responses
 - **👨‍⚖️ Human Lawyer** - Your assigned attorney, joins when needed
 
 #### Message Features
+
 - Typing indicators (animated dots)
 - Timestamps
 - Avatar identification
@@ -89,6 +101,7 @@ Five main views accessible via sidebar:
 - Smart AI responses based on context
 
 #### AI Capabilities
+
 - Document analysis questions
 - Legal research
 - Deadline tracking
@@ -98,12 +111,14 @@ Five main views accessible via sidebar:
 ### 5. **Security & Privacy**
 
 #### Encryption
+
 - End-to-end encryption (client-to-client)
 - TLS 1.3 for all connections
 - Zero-knowledge architecture
 - AES-256 at rest
 
 #### Access Control
+
 - Role-based permissions
 - Granular file access
 - Temporary access (time-limited)
@@ -111,6 +126,7 @@ Five main views accessible via sidebar:
 - Two-factor authentication
 
 #### Compliance
+
 - GDPR compliant
 - HIPAA ready
 - Attorney-client privilege protected
@@ -241,28 +257,33 @@ WorkspaceDashboard (reflects changes)
 ### Color Palette
 
 **Dark Theme Base**
+
 - Background: `slate-900` to `slate-800` gradient
 - Borders: `slate-700`
 - Cards: `slate-800/50` with backdrop blur
 
 **Accent Colors**
+
 - Primary: Blue-to-Cyan gradient (`from-blue-600 to-cyan-600`)
 - Success: Green (`green-500`)
 - Warning: Orange (`orange-500`)
 - Error: Red (`red-500`)
 
 **Category Colors**
+
 - Files: `from-blue-500 to-cyan-500`
 - Chat: `from-purple-500 to-pink-500`
 - Timeline: `from-green-500 to-emerald-500`
 - Settings: `from-orange-500 to-red-500`
 
 ### Typography
+
 - Headings: Bold, White text
 - Body: `slate-300` to `slate-400`
 - Emphasis: White or gradient text
 
 ### Spacing
+
 - Padding: `p-4` to `p-8` (16px - 32px)
 - Gap: `gap-4` to `gap-6` (16px - 24px)
 - Margin: `mb-6` to `mb-12` (24px - 48px)
@@ -270,24 +291,34 @@ WorkspaceDashboard (reflects changes)
 ### Animations
 
 **Entrance (Workspace opens)**
+
 ```css
 @keyframes workspaceEnter {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 ```
 
 **Background Pulse**
+
 - Animated gradient blobs
 - Opacity: 20%
 - Blur: `blur-3xl`
 
 **Hover Effects**
+
 - Scale: `hover:scale-105` to `hover:scale-110`
 - Shadow: `hover:shadow-lg` to `hover:shadow-xl`
 - Border: `hover:border-slate-600`
 
 **Transitions**
+
 - Default: `transition-all`
 - Duration: 200ms - 300ms
 - Easing: `cubic-bezier(0.4, 0, 0.2, 1)`
@@ -297,6 +328,7 @@ WorkspaceDashboard (reflects changes)
 ## 📱 Responsive Design
 
 ### Breakpoints
+
 - **Mobile**: Base (< 640px)
 - **Tablet**: `sm:` (640px+)
 - **Desktop**: `lg:` (1024px+)
@@ -305,6 +337,7 @@ WorkspaceDashboard (reflects changes)
 ### Adaptations
 
 **Mobile (< 640px)**
+
 - Sidebar: Icon-only (20px width)
 - Stats: Hidden
 - Chat: Full width
@@ -312,12 +345,14 @@ WorkspaceDashboard (reflects changes)
 - Touch targets: 44x44px minimum
 
 **Tablet (640px - 1024px)**
+
 - Sidebar: Shows labels (64px width)
 - Stats: Visible
 - Chat: 2-column layout
 - Files: 2-column grid
 
 **Desktop (1024px+)**
+
 - Sidebar: Full width (256px)
 - All features visible
 - Multi-column layouts
@@ -330,6 +365,7 @@ WorkspaceDashboard (reflects changes)
 ### From Demo Flow
 
 **Step 3 → Workspace Dashboard**
+
 ```typescript
 // DemoSection.tsx
 const handleProceed = () => {
@@ -354,35 +390,34 @@ const handleProceed = () => {
 ### Callbacks
 
 **File Upload**
+
 ```typescript
 const handleFilesUploaded = (newFiles: UploadedFile[]) => {
-  setCaseContext(prev => ({
+  setCaseContext((prev) => ({
     ...prev,
-    files: [...prev.files, ...newFiles.filter(nf =>
-      !prev.files.some(pf => pf.id === nf.id)
-    )]
+    files: [...prev.files, ...newFiles.filter((nf) => !prev.files.some((pf) => pf.id === nf.id))],
   }));
 };
 ```
 
 **File Delete**
+
 ```typescript
 const handleFileDelete = (fileId: string) => {
-  setCaseContext(prev => ({
+  setCaseContext((prev) => ({
     ...prev,
-    files: prev.files.filter(f => f.id !== fileId)
+    files: prev.files.filter((f) => f.id !== fileId),
   }));
 };
 ```
 
 **Visibility Change**
+
 ```typescript
 const handleFileVisibilityChange = (fileId: string, visibility: string) => {
-  setCaseContext(prev => ({
+  setCaseContext((prev) => ({
     ...prev,
-    files: prev.files.map(f =>
-      f.id === fileId ? { ...f, visibility: visibility as any } : f
-    )
+    files: prev.files.map((f) => (f.id === fileId ? { ...f, visibility: visibility as any } : f)),
   }));
 };
 ```
@@ -411,16 +446,19 @@ const handleFileVisibilityChange = (fileId: string, visibility: string) => {
 ### Typical Workflow
 
 **First Time User**
+
 ```
 Overview → Files (upload docs) → Chat (ask AI) → Timeline (review)
 ```
 
 **Returning User**
+
 ```
 Chat → Files (check new uploads) → Settings (manage access)
 ```
 
 **During Case**
+
 ```
 Chat (discuss with lawyer) → Files (review evidence) → Timeline (track progress)
 ```
@@ -432,16 +470,19 @@ Chat (discuss with lawyer) → Files (review evidence) → Timeline (track progr
 ### Simulated Behaviors
 
 **AI Responses**
+
 - Context-aware based on keywords
 - Predefined responses for common queries
 - 2-second typing delay for realism
 
 **File Processing**
+
 - 1-second upload simulation per file
 - Auto-categorization based on file type
 - Mock AI insights
 
 **Lawyer Presence**
+
 - Welcome message on workspace open
 - Joins chat when complex query detected
 - "Online" status indicator
@@ -449,23 +490,27 @@ Chat (discuss with lawyer) → Files (review evidence) → Timeline (track progr
 ### Real Implementation (Production)
 
 **AI Integration**
+
 - OpenAI GPT-4 / Anthropic Claude API
 - Vector database for case context
 - Real-time document analysis
 
 **WebSocket Chat**
+
 - Socket.io for live communication
 - Presence detection
 - Read receipts
 - Typing indicators
 
 **File Storage**
+
 - AWS S3 / Azure Blob Storage
 - Virus scanning
 - OCR for scanned documents
 - Version control
 
 **Authentication**
+
 - Auth0 / Firebase Auth
 - 2FA support
 - Session management
@@ -478,21 +523,25 @@ Chat (discuss with lawyer) → Files (review evidence) → Timeline (track progr
 ### Optimizations
 
 **Lazy Loading**
+
 - Views loaded on demand
 - Messages paginated (20 per load)
 - Files loaded incrementally
 
 **Memoization**
+
 - React.memo for expensive components
 - useMemo for computed values
 - useCallback for event handlers
 
 **Bundle Size**
+
 - Code splitting by view
 - Dynamic imports
 - Tree shaking
 
 **Animations**
+
 - GPU-accelerated (transform, opacity)
 - Will-change hints
 - RequestAnimationFrame for smooth 60fps
@@ -500,6 +549,7 @@ Chat (discuss with lawyer) → Files (review evidence) → Timeline (track progr
 ### Metrics
 
 **Target Performance**
+
 - Initial load: < 2 seconds
 - View switch: < 200ms
 - Message send: < 100ms
@@ -547,18 +597,21 @@ Chat (discuss with lawyer) → Files (review evidence) → Timeline (track progr
 ## 🎯 Future Enhancements
 
 ### Phase 1 (Q1 2025)
+
 - [ ] Video consultation integration
 - [ ] Voice messages
 - [ ] File annotations
 - [ ] @mentions in chat
 
 ### Phase 2 (Q2 2025)
+
 - [ ] E-signature workflow
 - [ ] Court filing automation
 - [ ] Calendar integration
 - [ ] Mobile apps (iOS/Android)
 
 ### Phase 3 (Q3 2025+)
+
 - [ ] AI document drafting
 - [ ] Predictive analytics
 - [ ] Smart contracts
@@ -571,6 +624,7 @@ Chat (discuss with lawyer) → Files (review evidence) → Timeline (track progr
 ### Adding a New View
 
 1. **Create view component**
+
 ```typescript
 const MyNewView: React.FC<any> = ({ data }) => (
   <div className="space-y-6 animate-fadeIn">
@@ -581,16 +635,19 @@ const MyNewView: React.FC<any> = ({ data }) => (
 ```
 
 2. **Add to ViewMode type**
+
 ```typescript
 type ViewMode = 'overview' | 'files' | 'chat' | 'timeline' | 'settings' | 'mynew';
 ```
 
 3. **Add navigation item**
+
 ```typescript
 { id: 'mynew', icon: '🎨', label: 'My New View' }
 ```
 
 4. **Render conditionally**
+
 ```typescript
 {viewMode === 'mynew' && <MyNewView data={data} />}
 ```
@@ -598,6 +655,7 @@ type ViewMode = 'overview' | 'files' | 'chat' | 'timeline' | 'settings' | 'mynew
 ### Adding File Category
 
 1. **Update constants.ts**
+
 ```typescript
 export const FILE_CATEGORIES = [
   // ... existing
@@ -605,8 +663,8 @@ export const FILE_CATEGORIES = [
     id: 'mynew',
     title: 'My New Category',
     icon: '🎨',
-    description: 'Description here'
-  }
+    description: 'Description here',
+  },
 ];
 ```
 
@@ -642,6 +700,6 @@ function getAIResponse(message: string): string {
 
 ---
 
-*Last Updated: January 2025*
-*Version: 2.0.0*
-*Status: Production-Ready (Demo Mode)*
+_Last Updated: January 2025_
+_Version: 2.0.0_
+_Status: Production-Ready (Demo Mode)_

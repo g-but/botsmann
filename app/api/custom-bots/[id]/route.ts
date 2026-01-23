@@ -46,7 +46,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         `
         *,
         knowledge_count:bot_knowledge_chunks(count)
-      `
+      `,
       )
       .eq('id', id)
       .eq('user_id', user.id)

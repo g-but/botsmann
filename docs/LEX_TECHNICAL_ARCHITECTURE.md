@@ -3,6 +3,7 @@
 ## 📐 System Architecture
 
 ### High-Level Overview
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                     Client Layer                         │
@@ -43,6 +44,7 @@
 ### Core Entities
 
 #### User
+
 ```typescript
 interface User {
   id: string;
@@ -57,6 +59,7 @@ interface User {
 ```
 
 #### Case
+
 ```typescript
 interface Case {
   id: string;
@@ -72,6 +75,7 @@ interface Case {
 ```
 
 #### DataRoom
+
 ```typescript
 interface DataRoom {
   id: string;
@@ -98,6 +102,7 @@ interface Permission {
 ```
 
 #### Message
+
 ```typescript
 interface Message {
   id: string;
@@ -118,6 +123,7 @@ interface Message {
 ```
 
 #### File
+
 ```typescript
 interface File {
   id: string;
@@ -151,6 +157,7 @@ type FileCategory =
 ```
 
 #### Lawyer
+
 ```typescript
 interface Lawyer {
   id: string;
@@ -176,6 +183,7 @@ interface Lawyer {
 ## 🔐 Security Architecture
 
 ### Authentication Flow
+
 ```
 1. User visits app
 2. Redirect to Auth0 login
@@ -189,11 +197,13 @@ interface Lawyer {
 ### Encryption Layers
 
 #### 1. Transport Layer (TLS)
+
 - All connections use HTTPS/WSS
 - TLS 1.3 minimum
 - Perfect forward secrecy
 
 #### 2. Application Layer (E2E)
+
 ```typescript
 // Message encryption flow
 async function sendMessage(content: string) {
@@ -210,27 +220,29 @@ async function receiveMessage(encrypted: string) {
 ```
 
 #### 3. Storage Layer
+
 - Files encrypted at rest (AES-256)
 - Database fields encrypted (column-level)
 - Key management via AWS KMS/Azure Key Vault
 
 ### Access Control Matrix
 
-| Role | View Files | Upload | Edit | Delete | Invite | Manage Permissions |
-|------|-----------|--------|------|--------|--------|-------------------|
-| Owner (Client) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Attorney | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ |
-| Paralegal | 🔒* | ✅ | 🔒* | ❌ | ❌ | ❌ |
-| Advisor | 🔒* | ❌ | ❌ | ❌ | ❌ | ❌ |
-| Viewer | 🔒* | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Role           | View Files | Upload | Edit | Delete | Invite | Manage Permissions |
+| -------------- | ---------- | ------ | ---- | ------ | ------ | ------------------ |
+| Owner (Client) | ✅         | ✅     | ✅   | ✅     | ✅     | ✅                 |
+| Attorney       | ✅         | ✅     | ✅   | ❌     | ✅     | ✅                 |
+| Paralegal      | 🔒\*       | ✅     | 🔒\* | ❌     | ❌     | ❌                 |
+| Advisor        | 🔒\*       | ❌     | ❌   | ❌     | ❌     | ❌                 |
+| Viewer         | 🔒\*       | ❌     | ❌   | ❌     | ❌     | ❌                 |
 
-*🔒 = Based on granted permissions
+\*🔒 = Based on granted permissions
 
 ---
 
 ## 🤖 AI Integration
 
 ### AI Service Architecture
+
 ```
 ┌─────────────┐
 │   Client    │
@@ -258,6 +270,7 @@ async function receiveMessage(encrypted: string) {
 ### AI Capabilities
 
 #### 1. Document Analysis
+
 ```python
 async def analyze_document(file_path: str) -> Analysis:
     # Extract text
@@ -283,6 +296,7 @@ async def analyze_document(file_path: str) -> Analysis:
 ```
 
 #### 2. Smart Categorization
+
 ```python
 async def categorize_file(filename: str, content: str) -> FileCategory:
     # Lightweight filename check
@@ -298,6 +312,7 @@ async def categorize_file(filename: str, content: str) -> FileCategory:
 ```
 
 #### 3. Conversational AI
+
 ```python
 async def generate_response(
     message: str,
@@ -335,6 +350,7 @@ async def generate_response(
 ## 📡 Real-Time Communication
 
 ### WebSocket Architecture
+
 ```typescript
 // Server-side (Node.js + Socket.io)
 io.on('connection', (socket) => {
@@ -363,13 +379,14 @@ io.on('connection', (socket) => {
   socket.on('typing', () => {
     socket.to(`dataroom-${user.dataRoomId}`).emit('userTyping', {
       userId: user.id,
-      username: user.name
+      username: user.name,
     });
   });
 });
 ```
 
 ### Message Queue (Future: Production)
+
 ```
 ┌─────────────┐
 │   Client    │
@@ -398,6 +415,7 @@ io.on('connection', (socket) => {
 ## 📊 File Processing Pipeline
 
 ### Upload Flow
+
 ```
 1. Client selects file
 2. Client-side validation (size, type)
@@ -412,6 +430,7 @@ io.on('connection', (socket) => {
 ```
 
 ### Processing Pipeline (Detailed)
+
 ```typescript
 async function processFile(fileId: string) {
   const file = await getFile(fileId);
@@ -431,8 +450,8 @@ async function processFile(fileId: string) {
     values: embeddings,
     metadata: {
       caseId: file.caseId,
-      category: file.category
-    }
+      category: file.category,
+    },
   });
 
   // Step 5: AI analysis
@@ -441,14 +460,14 @@ async function processFile(fileId: string) {
   // Step 6: Update database
   await updateFile(fileId, {
     aiAnalysis: analysis,
-    status: 'processed'
+    status: 'processed',
   });
 
   // Step 7: Notify user
   await notifyUser(file.uploaderId, {
     type: 'file_processed',
     fileId,
-    summary: analysis.summary
+    summary: analysis.summary,
   });
 }
 ```
@@ -458,6 +477,7 @@ async function processFile(fileId: string) {
 ## 🔍 Search & Discovery
 
 ### Vector Search (Semantic)
+
 ```python
 async def search_documents(query: str, case_id: str) -> List[SearchResult]:
     # Generate query embedding
@@ -478,6 +498,7 @@ async def search_documents(query: str, case_id: str) -> List[SearchResult]:
 ```
 
 ### Hybrid Search (Keyword + Semantic)
+
 ```python
 async def hybrid_search(
     query: str,
@@ -514,6 +535,7 @@ async def hybrid_search(
 ## 📈 Performance Optimization
 
 ### Caching Strategy
+
 ```typescript
 // Multi-layer caching
 class CacheService {
@@ -553,6 +575,7 @@ class CacheService {
 ```
 
 ### Database Optimization
+
 ```sql
 -- Indexes for fast queries
 CREATE INDEX idx_cases_client_id ON cases(client_id);
@@ -567,6 +590,7 @@ CREATE INDEX idx_files_content_search ON files USING GIN(to_tsvector('english', 
 ```
 
 ### CDN Strategy
+
 ```
 Static Assets:
   - Images → CloudFlare CDN
@@ -584,6 +608,7 @@ Dynamic Content:
 ## 🧪 Testing Strategy
 
 ### Unit Tests (Jest + React Testing Library)
+
 ```typescript
 describe('JurisdictionSelector', () => {
   it('should show popular jurisdictions first', () => {
@@ -606,6 +631,7 @@ describe('JurisdictionSelector', () => {
 ```
 
 ### Integration Tests (Playwright)
+
 ```typescript
 test('complete case creation flow', async ({ page }) => {
   // Step 1: Jurisdiction
@@ -634,6 +660,7 @@ test('complete case creation flow', async ({ page }) => {
 ```
 
 ### E2E Tests (Cypress)
+
 ```typescript
 describe('Data Room Chat', () => {
   beforeEach(() => {
@@ -642,15 +669,13 @@ describe('Data Room Chat', () => {
   });
 
   it('should send message and receive AI response', () => {
-    cy.get('input[placeholder="Type your message..."]')
-      .type('What documents do I need?{enter}');
+    cy.get('input[placeholder="Type your message..."]').type('What documents do I need?{enter}');
 
     // Verify message sent
     cy.contains('What documents do I need?').should('be.visible');
 
     // Wait for AI response
-    cy.contains('Based on your case', { timeout: 5000 })
-      .should('be.visible');
+    cy.contains('Based on your case', { timeout: 5000 }).should('be.visible');
   });
 });
 ```
@@ -660,6 +685,7 @@ describe('Data Room Chat', () => {
 ## 🚀 Deployment
 
 ### CI/CD Pipeline (GitHub Actions)
+
 ```yaml
 name: Deploy to Production
 
@@ -691,6 +717,7 @@ jobs:
 ```
 
 ### Infrastructure as Code (Terraform)
+
 ```hcl
 # AWS Infrastructure
 resource "aws_s3_bucket" "file_storage" {
@@ -723,6 +750,7 @@ resource "aws_rds_instance" "postgres" {
 ```
 
 ### Monitoring & Observability
+
 ```typescript
 // Sentry for error tracking
 Sentry.init({
@@ -735,7 +763,7 @@ Sentry.init({
       delete event.request.headers.authorization;
     }
     return event;
-  }
+  },
 });
 
 // DataDog for metrics
@@ -750,7 +778,7 @@ app.use((req, res, next) => {
     dogstatsd.histogram('api.request.duration', duration, {
       endpoint: req.path,
       method: req.method,
-      status: res.statusCode
+      status: res.statusCode,
     });
   });
   next();
@@ -762,6 +790,7 @@ app.use((req, res, next) => {
 ## 📚 API Documentation
 
 ### GraphQL Schema (Future)
+
 ```graphql
 type Query {
   case(id: ID!): Case
@@ -785,6 +814,7 @@ type Subscription {
 ```
 
 ### REST API Endpoints (Current)
+
 ```
 POST   /api/auth/login
 POST   /api/auth/logout
@@ -810,4 +840,4 @@ WS     /ws/dataroom/:id
 
 ---
 
-*This architecture is designed to scale from MVP to millions of users while maintaining security, performance, and developer experience.*
+_This architecture is designed to scale from MVP to millions of users while maintaining security, performance, and developer experience._

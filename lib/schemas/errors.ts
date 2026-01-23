@@ -1,4 +1,4 @@
-export type ErrorCode = 
+export type ErrorCode =
   | 'UNAUTHORIZED'
   | 'VALIDATION_ERROR'
   | 'RATE_LIMIT'
@@ -20,7 +20,7 @@ export interface ErrorResponse {
 export function createErrorResponse(
   message: string,
   code: ErrorCode,
-  details?: ErrorDetail[]
+  details?: ErrorDetail[],
 ): ErrorResponse {
   return {
     error: message,

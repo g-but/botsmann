@@ -28,10 +28,7 @@ export const ChevronIcon: FC<IconProps & { open?: boolean }> = ({
 /**
  * Close (X) icon - used for dismissible elements
  */
-export const CloseIcon: FC<IconProps> = ({
-  className = 'h-6 w-6',
-  ...props
-}) => (
+export const CloseIcon: FC<IconProps> = ({ className = 'h-6 w-6', ...props }) => (
   <svg
     className={className}
     fill="none"
@@ -47,10 +44,7 @@ export const CloseIcon: FC<IconProps> = ({
 /**
  * Hamburger menu icon - used for mobile menu toggle
  */
-export const MenuIcon: FC<IconProps> = ({
-  className = 'h-6 w-6',
-  ...props
-}) => (
+export const MenuIcon: FC<IconProps> = ({ className = 'h-6 w-6', ...props }) => (
   <svg
     className={className}
     fill="none"
@@ -59,6 +53,11 @@ export const MenuIcon: FC<IconProps> = ({
     aria-hidden="true"
     {...props}
   >
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M4 6h16M4 12h16M4 18h16"
+    />
   </svg>
 );

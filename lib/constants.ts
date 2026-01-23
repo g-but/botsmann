@@ -4,7 +4,7 @@
  * Centralized constants for error messages, API configuration, etc.
  * Import from here instead of hardcoding strings.
  *
- * Note: Basic API error messages and HTTP status codes are in lib/api-utils.ts
+ * Note: Basic API response helpers and HTTP status codes are in lib/api (SSOT: lib/api/responses)
  * This file contains domain-specific constants.
  */
 
@@ -23,7 +23,8 @@ export const DOMAIN_ERRORS = {
   FAILED_DELETE_DOCUMENT: 'Failed to delete document',
   FAILED_SEARCH_DOCUMENTS: 'Failed to search documents',
   FAILED_PROCESS_DOCUMENT: 'Failed to process document',
-  NO_DOCUMENTS: "You don't have any processed documents yet. Please upload and process some documents first.",
+  NO_DOCUMENTS:
+    "You don't have any processed documents yet. Please upload and process some documents first.",
 
   // Form errors
   FAILED_SUBMIT_FORM: 'Failed to submit form. Please try again.',
@@ -98,7 +99,7 @@ export const VALIDATION = {
 /**
  * Supported LLM model providers
  */
-export const MODEL_PROVIDERS = ['groq', 'openai', 'ollama'] as const;
+export const MODEL_PROVIDERS = ['groq', 'openrouter', 'ollama'] as const;
 export type ModelProviderType = (typeof MODEL_PROVIDERS)[number];
 
 /**
@@ -107,7 +108,7 @@ export type ModelProviderType = (typeof MODEL_PROVIDERS)[number];
 export const DEFAULT_USER_SETTINGS = {
   preferred_model: 'groq' as ModelProviderType,
   groq_api_key: null,
-  openai_api_key: null,
+  openrouter_api_key: null,
   ollama_url: null,
 } as const;
 

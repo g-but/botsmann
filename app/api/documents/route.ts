@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
       return jsonError(
         `Unsupported file type: ${file.type}. Supported: PDF, TXT, MD`,
         'VALIDATION_ERROR',
-        HTTP_STATUS.BAD_REQUEST
+        HTTP_STATUS.BAD_REQUEST,
       );
     }
 
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
       return jsonError(
         `File too large. Maximum size: ${MAX_FILE_SIZE / 1024 / 1024}MB`,
         'VALIDATION_ERROR',
-        HTTP_STATUS.BAD_REQUEST
+        HTTP_STATUS.BAD_REQUEST,
       );
     }
 
@@ -94,7 +94,11 @@ export async function POST(request: NextRequest) {
       console.error('Database insert error:', dbError);
       // Clean up uploaded file
       await supabase.storage.from('documents').remove([storagePath]);
-      return jsonError('Failed to create document record', 'DATABASE_ERROR', HTTP_STATUS.INTERNAL_ERROR);
+      return jsonError(
+        'Failed to create document record',
+        'DATABASE_ERROR',
+        HTTP_STATUS.INTERNAL_ERROR,
+      );
     }
 
     // Trigger async processing (will be handled separately)
@@ -170,10 +174,7 @@ export async function DELETE(request: NextRequest) {
     await supabase.storage.from('documents').remove([document.storage_path]);
 
     // Delete document record (chunks will cascade delete)
-    const { error: deleteError } = await supabase
-      .from('documents')
-      .delete()
-      .eq('id', documentId);
+    const { error: deleteError } = await supabase.from('documents').delete().eq('id', documentId);
 
     if (deleteError) {
       console.error('Database delete error:', deleteError);

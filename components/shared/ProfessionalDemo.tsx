@@ -89,6 +89,11 @@ export const ProfessionalDemo: FC<ProfessionalDemoProps> = ({ professional }) =>
     setIsLoading(true);
 
     try {
+      // Build conversation history (exclude welcome message, only include actual exchanges)
+      const conversationHistory = messages
+        .filter((m) => m.id !== 'welcome')
+        .map((m) => ({ role: m.role, content: m.content }));
+
       const response = await fetch('/api/quick-chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -96,6 +101,7 @@ export const ProfessionalDemo: FC<ProfessionalDemoProps> = ({ professional }) =>
           message: userMessage.content,
           systemPrompt: professional.systemPromptBase,
           additionalContext: `Professional: ${professional.name} (${professional.title}). Role: ${professional.role}.`,
+          conversationHistory,
         }),
       });
 
