@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { Conversation, ConversationBotType } from '@/types/conversation';
 import { ConversationItem } from './ConversationItem';
 
@@ -27,11 +27,7 @@ export const ConversationList = ({
   const [loading, setLoading] = useState(true);
   const [isExpanded, setIsExpanded] = useState(true);
 
-  useEffect(() => {
-    loadConversations();
-  }, [botType, botId, documentId, refreshTrigger]);
-
-  const loadConversations = async () => {
+  const loadConversations = useCallback(async () => {
     try {
       const params = new URLSearchParams();
       params.set('bot_type', botType);
@@ -49,7 +45,11 @@ export const ConversationList = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [botType, botId, documentId]);
+
+  useEffect(() => {
+    loadConversations();
+  }, [loadConversations, refreshTrigger]);
 
   const handleDelete = async (id: string) => {
     try {

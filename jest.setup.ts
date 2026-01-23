@@ -16,7 +16,6 @@ const mockFetch = jest.fn().mockImplementation(
     }),
 );
 
-// @ts-expect-error - fetch mock
 global.fetch = mockFetch;
 
 // Store original env and test env vars
