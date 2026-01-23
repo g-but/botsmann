@@ -28,20 +28,20 @@ describe('API Response Helpers', () => {
   describe('jsonSuccess', () => {
     it('returns success response with data', async () => {
       const response = jsonSuccess({ user: 'test' });
-      const data = await response.json();
+      const result = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.success).toBe(true);
-      expect(data.user).toBe('test');
+      expect(result.success).toBe(true);
+      expect(result.data.user).toBe('test');
     });
 
     it('returns success response with message', async () => {
       const response = jsonSuccess({ id: 1 }, 'Created successfully');
-      const data = await response.json();
+      const result = await response.json();
 
-      expect(data.success).toBe(true);
-      expect(data.message).toBe('Created successfully');
-      expect(data.id).toBe(1);
+      expect(result.success).toBe(true);
+      expect(result.message).toBe('Created successfully');
+      expect(result.data.id).toBe(1);
     });
 
     it('returns success response with custom status', async () => {
@@ -101,14 +101,15 @@ describe('API Response Helpers', () => {
 
   describe('jsonValidationError', () => {
     it('returns 400 validation error response', async () => {
-      const response = jsonValidationError('Invalid input', { field: 'email' });
+      const details = [{ field: 'email', message: 'Invalid email format' }];
+      const response = jsonValidationError('Invalid input', details);
       const data = await response.json();
 
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
       expect(data.error).toBe('Invalid input');
       expect(data.code).toBe('VALIDATION_ERROR');
-      expect(data.details).toEqual({ field: 'email' });
+      expect(data.details).toEqual(details);
     });
   });
 
@@ -127,8 +128,10 @@ describe('API Response Helpers', () => {
       if (!result.success) {
         const formatted = formatZodErrors(result.error);
 
-        expect(formatted).toHaveProperty('email');
-        expect(formatted).toHaveProperty('password');
+        // formatZodErrors returns an array of { field, message } objects
+        expect(Array.isArray(formatted)).toBe(true);
+        expect(formatted.some((e) => e.field === 'email')).toBe(true);
+        expect(formatted.some((e) => e.field === 'password')).toBe(true);
       }
     });
 
@@ -145,7 +148,8 @@ describe('API Response Helpers', () => {
 
       if (!result.success) {
         const formatted = formatZodErrors(result.error);
-        expect(formatted).toBeDefined();
+        expect(Array.isArray(formatted)).toBe(true);
+        expect(formatted.some((e) => e.field === 'user.email')).toBe(true);
       }
     });
   });
