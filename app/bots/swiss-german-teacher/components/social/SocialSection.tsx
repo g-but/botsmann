@@ -156,11 +156,11 @@ const SocialSection = ({ getTryLink }: SocialSectionProps) => {
           
           <div className="mt-6 text-center md:col-span-2">
             <button
-              onClick={() => document.getElementById('waitlist-form')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' })}
               className={btnSecondary}
-              aria-label="Get notified when cultural insights are available"
+              aria-label="Try Heidi to learn about Swiss culture"
             >
-              Get Notified When Available
+              Ask Heidi About Swiss Culture
             </button>
           </div>
         </div>

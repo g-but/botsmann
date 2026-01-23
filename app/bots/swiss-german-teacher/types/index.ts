@@ -26,24 +26,6 @@ export interface ConversationExample {
   translation: string;
 }
 
-// Waitlist form types
-export interface WaitlistPreferences {
-  learningTools: boolean;
-  communityFeatures: boolean;
-  authenticContent: boolean;
-  culturalInsights: boolean;
-  earlyAccess: boolean;
-  emailUpdates: boolean;
-}
-
-export interface WaitlistFormState {
-  email: string;
-  preferences: WaitlistPreferences;
-  isSubmitting: boolean;
-  isSubmitted: boolean;
-  error: string | null;
-}
-
 // Demo mode types
 export interface DemoState {
   isActive: boolean;
