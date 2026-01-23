@@ -2,6 +2,8 @@
  * Document types for the RAG system
  */
 
+import { type DocumentStatusType } from '@/lib/constants';
+
 export interface Document {
   id: string;
   user_id: string;
@@ -9,7 +11,7 @@ export interface Document {
   type: string;
   size_bytes: number;
   storage_path: string;
-  status: 'pending' | 'processing' | 'ready' | 'error';
+  status: DocumentStatusType;
   error_message?: string;
   chunk_count?: number;
   created_at: string;
