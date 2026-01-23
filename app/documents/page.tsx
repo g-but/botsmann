@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback, type FormEvent, type ChangeEv
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth';
 import { documentToasts, conversationToasts } from '@/lib/toast';
+import { PageLoading, InlineLoading, LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import { ConversationList } from '@/components/conversations';
 import { AddToBotModal } from '@/components/documents';
 import type { Document } from '@/types/document';
@@ -356,11 +357,7 @@ export default function DocumentsPage() {
   };
 
   if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
-      </div>
-    );
+    return <PageLoading />;
   }
 
   if (!user) {
@@ -474,9 +471,7 @@ export default function DocumentsPage() {
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Documents</h2>
 
               {loading ? (
-                <div className="flex justify-center py-8">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600" />
-                </div>
+                <InlineLoading />
               ) : documents.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
                   <svg
@@ -660,7 +655,7 @@ export default function DocumentsPage() {
                   {chatLoading && (
                     <div className="bg-gray-100 p-4 rounded-lg mr-8">
                       <div className="flex items-center gap-2 text-gray-500">
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600" />
+                        <LoadingSpinner size="sm" className="border-gray-600" />
                         Thinking...
                       </div>
                     </div>

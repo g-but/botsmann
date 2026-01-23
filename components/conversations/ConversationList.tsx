@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { Conversation, ConversationBotType } from '@/types/conversation';
 import { ConversationItem } from './ConversationItem';
+import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 
 interface ConversationListProps {
   botType?: ConversationBotType;
@@ -106,7 +107,7 @@ export const ConversationList = ({
         <div className="p-2 max-h-64 overflow-y-auto">
           {loading ? (
             <div className="flex justify-center py-4">
-              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600" />
+              <LoadingSpinner size="sm" />
             </div>
           ) : conversations.length === 0 ? (
             <div className="text-center py-4 text-gray-500 text-sm">

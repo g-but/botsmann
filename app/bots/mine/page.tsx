@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRequireAuth } from '@/lib/auth';
 import { botToasts } from '@/lib/toast';
+import { PageLoading, InlineLoading } from '@/components/shared/LoadingSpinner';
 import type { CustomBotWithStats } from '@/types/custom-bot';
 
 export default function MyBotsPage() {
@@ -89,11 +90,7 @@ export default function MyBotsPage() {
   };
 
   if (authLoading || !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
-      </div>
-    );
+    return <PageLoading />;
   }
 
   return (
@@ -123,9 +120,7 @@ export default function MyBotsPage() {
 
         {/* Bots List */}
         {loading ? (
-          <div className="flex justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
-          </div>
+          <InlineLoading className="py-12" />
         ) : bots.length === 0 ? (
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
             <span className="text-6xl mb-4 block">🤖</span>

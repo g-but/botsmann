@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { ROUTES } from '@/lib/routes';
+import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 
 type CallbackStatus = 'loading' | 'success' | 'error';
 type CallbackType = 'signup' | 'recovery' | 'email_change' | 'unknown';
@@ -124,7 +125,9 @@ function AuthCallbackContent() {
     <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
       {status === 'loading' && (
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
+          <div className="flex justify-center mb-4">
+            <LoadingSpinner size="lg" className="h-12 w-12" />
+          </div>
           <h2 className="text-xl font-semibold text-gray-900 mb-2">Verifying...</h2>
           <p className="text-gray-600">Please wait while we verify your link.</p>
         </div>
@@ -135,7 +138,9 @@ function AuthCallbackContent() {
           <div className="text-green-600 text-5xl mb-4">✓</div>
           <h2 className="text-xl font-semibold text-gray-900 mb-2">{getSuccessMessage().title}</h2>
           <p className="text-gray-600 mb-6">{getSuccessMessage().description}</p>
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto" />
+          <div className="flex justify-center">
+            <LoadingSpinner size="md" />
+          </div>
         </div>
       )}
 
@@ -173,7 +178,9 @@ function LoadingFallback() {
   return (
     <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
       <div className="text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
+        <div className="flex justify-center mb-4">
+          <LoadingSpinner size="lg" className="h-12 w-12" />
+        </div>
         <h2 className="text-xl font-semibold text-gray-900 mb-2">Loading...</h2>
         <p className="text-gray-600">Please wait...</p>
       </div>
