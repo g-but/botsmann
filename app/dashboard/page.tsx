@@ -5,6 +5,7 @@ import Link from 'next/link';
 import type { Route } from 'next';
 import { useRequireAuth } from '@/lib/auth';
 import { UserAvatar } from '@/components/shared/UserAvatar';
+import { PageLoading, InlineLoading } from '@/components/shared/LoadingSpinner';
 import { OnboardingChecklist } from '@/components/onboarding';
 import { DashboardEmptyState } from '@/components/dashboard';
 import type { Document } from '@/types/document';
@@ -105,11 +106,7 @@ export default function DashboardPage() {
   }, [user]);
 
   if (authLoading || !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
-      </div>
-    );
+    return <PageLoading />;
   }
 
   const recentDocuments = documents.slice(0, 3);
@@ -321,9 +318,7 @@ export default function DashboardPage() {
                 </div>
 
                 {loading ? (
-                  <div className="flex justify-center py-8">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600" />
-                  </div>
+                  <InlineLoading />
                 ) : recentDocuments.length === 0 ? (
                   <EmptyState
                     icon={
@@ -373,9 +368,7 @@ export default function DashboardPage() {
                 </div>
 
                 {loading ? (
-                  <div className="flex justify-center py-8">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600" />
-                  </div>
+                  <InlineLoading />
                 ) : recentBots.length === 0 ? (
                   <EmptyState
                     icon={<span className="text-5xl">🤖</span>}

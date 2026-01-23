@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, type FormEvent, type ChangeEvent } from 'react';
 import Link from 'next/link';
 import { useRequireAuth } from '@/lib/auth';
+import { PageLoading, InlineLoading, LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import type { Document } from '@/types/document';
 
 interface ChatMessage {
@@ -238,11 +239,7 @@ export default function MyDataPage() {
   };
 
   if (authLoading || !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
-      </div>
-    );
+    return <PageLoading />;
   }
 
   const readyDocuments = (documents || []).filter((d) => d.status === 'ready');
@@ -360,9 +357,7 @@ export default function MyDataPage() {
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Your Documents</h2>
 
             {loading ? (
-              <div className="flex justify-center py-8">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600" />
-              </div>
+              <InlineLoading />
             ) : documents.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
                 <svg
@@ -528,7 +523,7 @@ export default function MyDataPage() {
                   {chatLoading && (
                     <div className="bg-gray-100 p-4 rounded-lg mr-8">
                       <div className="flex items-center gap-2 text-gray-500">
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600" />
+                        <LoadingSpinner size="sm" className="border-gray-600" />
                         Thinking...
                       </div>
                     </div>

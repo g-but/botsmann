@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRequireAuth } from '@/lib/auth';
 import { botToasts } from '@/lib/toast';
+import { PageLoading } from '@/components/shared/LoadingSpinner';
 import type { CustomBot } from '@/types/custom-bot';
 
 const ACCENT_COLORS = [
@@ -114,20 +115,8 @@ export default function EditBotPage() {
     }
   };
 
-  if (authLoading || !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
-      </div>
-    );
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
-      </div>
-    );
+  if (authLoading || !user || loading) {
+    return <PageLoading />;
   }
 
   if (error && !bot) {
