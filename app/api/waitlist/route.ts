@@ -1,6 +1,4 @@
 import { type NextRequest } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 import { z } from 'zod';
 import {
   jsonMessage,
@@ -9,6 +7,7 @@ import {
   handleError,
 } from '@/lib/api';
 import { DOMAIN_ERRORS } from '@/lib/constants';
+import { WaitlistModel } from '@/lib/models/waitlist';
 
 const WaitlistSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -20,17 +19,6 @@ const WaitlistSchema = z.object({
   }).optional(),
 });
 
-interface WaitlistEntry {
-  email: string;
-  preferences: {
-    events: boolean;
-    newsletters: boolean;
-    blog: boolean;
-    videos: boolean;
-  };
-  timestamp: string;
-}
-
 export async function POST(req: NextRequest) {
   try {
     // Validate input
@@ -41,8 +29,14 @@ export async function POST(req: NextRequest) {
 
     const { email, preferences } = validation.data;
 
-    // Create entry
-    const waitlistEntry: WaitlistEntry = {
+    // Check if email already exists
+    const existing = await WaitlistModel.findByEmail(email);
+    if (existing) {
+      return jsonMessage('Email already registered for waitlist');
+    }
+
+    // Create entry in Supabase
+    await WaitlistModel.create({
       email,
       preferences: {
         events: Boolean(preferences?.events),
@@ -50,36 +44,7 @@ export async function POST(req: NextRequest) {
         blog: Boolean(preferences?.blog),
         videos: Boolean(preferences?.videos),
       },
-      timestamp: new Date().toISOString(),
-    };
-
-    // Store to local JSON file (development only)
-    const waitlistFilePath = path.join(process.cwd(), 'data', 'waitlist.json');
-    let waitlist: WaitlistEntry[] = [];
-
-    try {
-      if (fs.existsSync(waitlistFilePath)) {
-        const fileContent = fs.readFileSync(waitlistFilePath, 'utf8');
-        waitlist = JSON.parse(fileContent);
-      }
-    } catch (error) {
-      console.error('Error reading waitlist file:', error);
-      waitlist = [];
-    }
-
-    // Check if email already exists
-    const emailExists = waitlist.some((entry) => entry.email === email);
-    if (emailExists) {
-      return jsonMessage('Email already registered for waitlist');
-    }
-
-    waitlist.push(waitlistEntry);
-
-    try {
-      fs.writeFileSync(waitlistFilePath, JSON.stringify(waitlist, null, 2), 'utf8');
-    } catch {
-      // On Vercel/serverless, file write will fail - that's expected
-    }
+    });
 
     return jsonMessage('Successfully added to waitlist');
   } catch (error) {
