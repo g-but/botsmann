@@ -38,7 +38,7 @@ const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const OPENROUTER_DEFAULT_MODEL = 'anthropic/claude-3.5-sonnet'; // Default to Claude
 
 // Ollama configuration
-const OLLAMA_MODEL = 'llama3.1:8b';
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'llama3.2:latest';
 
 /**
  * Generate a response using the specified LLM provider
@@ -181,6 +181,7 @@ async function generateWithOllama(
           num_predict: maxTokens,
         },
       }),
+      signal: AbortSignal.timeout(60000), // 60 second timeout for model loading
     });
 
     if (!response.ok) {
@@ -219,4 +220,92 @@ export async function chat(
 
   const response = await generateLLMResponse(messages, options);
   return response.content;
+}
+
+/**
+ * Check if Ollama is available and running
+ */
+export async function isOllamaAvailable(ollamaUrl?: string): Promise<boolean> {
+  const baseUrl = ollamaUrl || process.env.OLLAMA_URL || 'http://localhost:11434';
+  try {
+    const response = await fetch(`${baseUrl}/api/tags`, {
+      method: 'GET',
+      signal: AbortSignal.timeout(2000), // 2 second timeout
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Get the best available provider based on configuration
+ * Priority: Ollama (local, free) > Groq (cloud, free) > OpenRouter (cloud, paid)
+ */
+export async function getBestProvider(): Promise<{
+  provider: ModelProvider;
+  available: boolean;
+  reason: string;
+}> {
+  // Check Ollama first (local = best for privacy)
+  const ollamaAvailable = await isOllamaAvailable();
+  if (ollamaAvailable) {
+    return {
+      provider: 'ollama',
+      available: true,
+      reason: 'Local Ollama running',
+    };
+  }
+
+  // Check Groq (free cloud)
+  if (process.env.GROQ_API_KEY) {
+    return {
+      provider: 'groq',
+      available: true,
+      reason: 'Groq API key configured',
+    };
+  }
+
+  // Check OpenRouter (paid cloud)
+  if (process.env.OPENROUTER_API_KEY) {
+    return {
+      provider: 'openrouter',
+      available: true,
+      reason: 'OpenRouter API key configured',
+    };
+  }
+
+  // No provider available
+  return {
+    provider: 'ollama',
+    available: false,
+    reason: 'No LLM provider available. Start Ollama or configure API keys.',
+  };
+}
+
+/**
+ * Generate a response using the best available provider
+ */
+export async function generateWithBestProvider(
+  messages: LLMMessage[],
+  options?: Partial<Omit<LLMOptions, 'provider'>>,
+): Promise<LLMResponse & { providerInfo: string }> {
+  const { provider, available, reason } = await getBestProvider();
+
+  if (!available) {
+    throw new Error(reason);
+  }
+
+  const fullOptions: LLMOptions = {
+    provider,
+    apiKey: provider === 'groq' ? process.env.GROQ_API_KEY : process.env.OPENROUTER_API_KEY,
+    ollamaUrl: process.env.OLLAMA_URL,
+    ...options,
+  };
+
+  const response = await generateLLMResponse(messages, fullOptions);
+  return {
+    ...response,
+    providerInfo: reason,
+  };
 }
