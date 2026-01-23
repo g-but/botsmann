@@ -21,7 +21,7 @@ interface CitizenProfileProps {
   agencies: AgencyData[];
 }
 
-const CitizenProfile: React.FC<CitizenProfileProps> = ({ citizen, agencies }) => {
+const CitizenProfile: React.FC<CitizenProfileProps> = ({ citizen, agencies: _agencies }) => {
   const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [advisoryDistribution, setAdvisoryDistribution] = useState<AdvisoryDistribution[]>([]);
   const [sliderTotal, setSliderTotal] = useState(100);

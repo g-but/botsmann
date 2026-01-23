@@ -8,8 +8,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { createRouteHandlerClient } from '@/lib/supabase-server';
 import { z } from 'zod';
 import { rateLimit, RATE_LIMIT_CONFIGS } from '@/lib/middleware/rate-limit';
 
@@ -40,7 +39,7 @@ export async function GET(req: NextRequest) {
   if (rateLimitResult) return rateLimitResult;
 
   try {
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabase = createRouteHandlerClient();
 
     const {
       data: { user },
@@ -94,7 +93,7 @@ export async function PUT(req: NextRequest) {
   if (rateLimitResult) return rateLimitResult;
 
   try {
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabase = createRouteHandlerClient();
 
     // Check authentication
     const {

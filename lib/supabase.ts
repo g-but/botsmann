@@ -11,6 +11,7 @@
  */
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { createBrowserClient } from '@supabase/ssr';
 
 // Database row types
 export interface ConsultationRow {
@@ -126,4 +127,63 @@ export function getServiceClient(): SupabaseClient {
       persistSession: false
     }
   });
+}
+
+/**
+ * Create Supabase client for client components
+ * Replaces deprecated createClientComponentClient from @supabase/auth-helpers-nextjs
+ *
+ * During SSG/SSR without env vars, returns a mock client to prevent build errors.
+ * The real client is created on the client side when env vars are available.
+ */
+export function createClientComponentClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  // During SSG or when env vars are missing, return a mock client
+  // This prevents build failures; the real client is created client-side
+  if (!supabaseUrl || !supabaseAnonKey) {
+    // Only throw in browser where we actually need the client
+    if (typeof window !== 'undefined') {
+      throw new Error(
+        'Supabase environment variables not configured. ' +
+        'Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.'
+      );
+    }
+    // Return mock during SSG - will be replaced on hydration
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const mockClient: any = {
+      auth: {
+        getSession: () => Promise.resolve({ data: { session: null }, error: null }),
+        getUser: () => Promise.resolve({ data: { user: null }, error: null }),
+        onAuthStateChange: (_event: string, _callback: (event: string, session: null) => void) => {
+          // Return immediately with no-op subscription
+          return { data: { subscription: { unsubscribe: () => { /* no-op */ } } } };
+        },
+        signInWithPassword: () => Promise.resolve({ data: { user: null, session: null }, error: null }),
+        signUp: () => Promise.resolve({ data: { user: null, session: null }, error: null }),
+        signOut: () => Promise.resolve({ error: null }),
+        updateUser: () => Promise.resolve({ data: { user: null }, error: null }),
+        resend: () => Promise.resolve({ error: null }),
+        exchangeCodeForSession: () => Promise.resolve({ data: { session: null }, error: null }),
+        resetPasswordForEmail: () => Promise.resolve({ error: null }),
+      },
+      from: () => ({
+        select: () => ({ single: () => Promise.resolve({ data: null, error: null }) }),
+        insert: () => ({ select: () => ({ single: () => Promise.resolve({ data: null, error: null }) }) }),
+        update: () => ({ eq: () => Promise.resolve({ data: null, error: null }) }),
+        delete: () => ({ eq: () => Promise.resolve({ data: null, error: null }) }),
+      }),
+      storage: {
+        from: () => ({
+          upload: () => Promise.resolve({ data: null, error: null }),
+          download: () => Promise.resolve({ data: null, error: null }),
+          remove: () => Promise.resolve({ data: null, error: null }),
+        }),
+      },
+    };
+    return mockClient;
+  }
+
+  return createBrowserClient(supabaseUrl, supabaseAnonKey);
 }
