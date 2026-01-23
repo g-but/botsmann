@@ -10,20 +10,13 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import type { CustomBot } from '@/types/custom-bot';
 import { PageLoading } from '@/components/shared/LoadingSpinner';
+import { COLOR_CLASSES, type AccentColor } from '@/lib/config/colors';
 
 interface Message {
   id: string;
   role: 'user' | 'assistant';
   content: string;
 }
-
-const COLOR_CLASSES: Record<string, { bg: string; text: string; border: string }> = {
-  blue: { bg: 'bg-blue-500', text: 'text-blue-600', border: 'border-blue-200' },
-  green: { bg: 'bg-green-500', text: 'text-green-600', border: 'border-green-200' },
-  indigo: { bg: 'bg-indigo-500', text: 'text-indigo-600', border: 'border-indigo-200' },
-  red: { bg: 'bg-red-500', text: 'text-red-600', border: 'border-red-200' },
-  amber: { bg: 'bg-amber-500', text: 'text-amber-600', border: 'border-amber-200' },
-};
 
 export default function CustomBotPage() {
   const params = useParams();
@@ -220,7 +213,7 @@ export default function CustomBotPage() {
     );
   }
 
-  const colors = COLOR_CLASSES[bot.accent_color] || COLOR_CLASSES.blue;
+  const colors = COLOR_CLASSES[bot.accent_color as AccentColor] || COLOR_CLASSES.blue;
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
