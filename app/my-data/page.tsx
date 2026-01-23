@@ -4,6 +4,8 @@ import { useState, useEffect, useRef, type FormEvent, type ChangeEvent } from 'r
 import Link from 'next/link';
 import { useRequireAuth } from '@/lib/auth';
 import { PageLoading, InlineLoading, LoadingSpinner } from '@/components/shared/LoadingSpinner';
+import { DocumentStatusBadge } from '@/components/shared/DocumentStatusBadge';
+import { DOCUMENT_STATUS } from '@/lib/constants';
 import type { Document } from '@/types/document';
 
 interface ChatMessage {
@@ -205,33 +207,6 @@ export default function MyDataPage() {
     window.location.href = '/';
   };
 
-  const getStatusBadge = (status: Document['status']) => {
-    switch (status) {
-      case 'pending':
-        return (
-          <span className="px-2 py-1 text-xs bg-yellow-100 text-yellow-700 rounded-full">
-            Pending
-          </span>
-        );
-      case 'processing':
-        return (
-          <span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">
-            Processing...
-          </span>
-        );
-      case 'ready':
-        return (
-          <span className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded-full">Ready</span>
-        );
-      case 'error':
-        return (
-          <span className="px-2 py-1 text-xs bg-red-100 text-red-700 rounded-full">Error</span>
-        );
-      default:
-        return null;
-    }
-  };
-
   const formatFileSize = (bytes: number) => {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
@@ -242,7 +217,7 @@ export default function MyDataPage() {
     return <PageLoading />;
   }
 
-  const readyDocuments = (documents || []).filter((d) => d.status === 'ready');
+  const readyDocuments = (documents || []).filter((d) => d.status === DOCUMENT_STATUS.READY);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
@@ -391,7 +366,7 @@ export default function MyDataPage() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
                           <h3 className="font-medium text-gray-900 truncate">{doc.name}</h3>
-                          {getStatusBadge(doc.status)}
+                          <DocumentStatusBadge status={doc.status} />
                         </div>
                         <p className="text-sm text-gray-500 mt-1">
                           {formatFileSize(doc.size_bytes || 0)}
@@ -402,7 +377,7 @@ export default function MyDataPage() {
                         )}
                       </div>
                       <div className="flex items-center gap-2 ml-4">
-                        {doc.status === 'pending' && (
+                        {doc.status === DOCUMENT_STATUS.PENDING && (
                           <button
                             onClick={() => handleProcess(doc.id)}
                             disabled={processing === doc.id}
@@ -411,7 +386,7 @@ export default function MyDataPage() {
                             {processing === doc.id ? 'Processing...' : 'Process'}
                           </button>
                         )}
-                        {doc.status === 'ready' && (
+                        {doc.status === DOCUMENT_STATUS.READY && (
                           <button
                             onClick={() =>
                               setSelectedDocId(selectedDocId === doc.id ? null : doc.id)

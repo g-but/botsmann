@@ -1,109 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import type { Route } from 'next';
 import { useRequireAuth } from '@/lib/auth';
+import { useDashboardStats, type CustomBot } from '@/lib/hooks/useDashboardStats';
 import { UserAvatar } from '@/components/shared/UserAvatar';
 import { PageLoading, InlineLoading } from '@/components/shared/LoadingSpinner';
+import { DocumentStatusBadge } from '@/components/shared/DocumentStatusBadge';
 import { OnboardingChecklist } from '@/components/onboarding';
 import { DashboardEmptyState } from '@/components/dashboard';
 import type { Document } from '@/types/document';
-import type { UsageStats } from '@/types/conversation';
-
-interface CustomBot {
-  id: string;
-  slug: string;
-  title: string;
-  description: string | null;
-  emoji: string;
-  accent_color: string;
-  is_public: boolean;
-  is_published: boolean;
-  knowledge_count: number;
-  created_at: string;
-  updated_at: string;
-}
-
-interface DashboardStats {
-  documentsTotal: number;
-  documentsReady: number;
-  documentsPending: number;
-  botsTotal: number;
-  botsPublished: number;
-  conversationsTotal: number;
-  messagesTotal: number;
-}
 
 export default function DashboardPage() {
   const { user, loading: authLoading, displayName, avatarUrl } = useRequireAuth();
-  const [documents, setDocuments] = useState<Document[]>([]);
-  const [bots, setBots] = useState<CustomBot[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState<DashboardStats>({
-    documentsTotal: 0,
-    documentsReady: 0,
-    documentsPending: 0,
-    botsTotal: 0,
-    botsPublished: 0,
-    conversationsTotal: 0,
-    messagesTotal: 0,
-  });
-
-  // Load dashboard data
-  useEffect(() => {
-    if (!user) return;
-
-    const loadData = async () => {
-      try {
-        const [docsResponse, botsResponse, statsResponse] = await Promise.all([
-          fetch('/api/documents'),
-          fetch('/api/custom-bots'),
-          fetch('/api/stats'),
-        ]);
-
-        const docsData = await docsResponse.json();
-        const botsData = await botsResponse.json();
-        const statsData = await statsResponse.json();
-
-        if (docsData.success) {
-          const docs = docsData.documents || [];
-          setDocuments(docs);
-          setStats((prev) => ({
-            ...prev,
-            documentsTotal: docs.length,
-            documentsReady: docs.filter((d: Document) => d.status === 'ready').length,
-            documentsPending: docs.filter((d: Document) => d.status === 'pending').length,
-          }));
-        }
-
-        if (botsData.success) {
-          const botsList = botsData.data?.bots || botsData.bots || [];
-          setBots(botsList);
-          setStats((prev) => ({
-            ...prev,
-            botsTotal: botsList.length,
-            botsPublished: botsList.filter((b: CustomBot) => b.is_published).length,
-          }));
-        }
-
-        if (statsData.success && statsData.data?.stats) {
-          const apiStats: UsageStats = statsData.data.stats;
-          setStats((prev) => ({
-            ...prev,
-            conversationsTotal: apiStats.total_conversations,
-            messagesTotal: apiStats.total_messages,
-          }));
-        }
-      } catch {
-        // Silently handle errors - dashboard will show zeros
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadData();
-  }, [user]);
+  const { stats, documents, bots, loading, isEmptyState } = useDashboardStats(user?.id);
 
   if (authLoading || !user) {
     return <PageLoading />;
@@ -111,13 +21,6 @@ export default function DashboardPage() {
 
   const recentDocuments = documents.slice(0, 3);
   const recentBots = bots.slice(0, 3);
-
-  // Check if user is in "empty" state (no meaningful data yet)
-  const isEmptyState =
-    !loading &&
-    stats.documentsTotal === 0 &&
-    stats.conversationsTotal === 0 &&
-    stats.botsTotal === 0;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
@@ -493,21 +396,6 @@ function EmptyState({ icon, message, action }: EmptyStateProps) {
 }
 
 function DocumentRow({ document }: { document: Document }) {
-  const statusBadge = {
-    pending: (
-      <span className="px-2 py-0.5 text-xs bg-yellow-100 text-yellow-700 rounded-full">
-        Pending
-      </span>
-    ),
-    processing: (
-      <span className="px-2 py-0.5 text-xs bg-blue-100 text-blue-700 rounded-full">Processing</span>
-    ),
-    ready: (
-      <span className="px-2 py-0.5 text-xs bg-green-100 text-green-700 rounded-full">Ready</span>
-    ),
-    error: <span className="px-2 py-0.5 text-xs bg-red-100 text-red-700 rounded-full">Error</span>,
-  };
-
   const formatSize = (bytes: number) => {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
@@ -535,7 +423,7 @@ function DocumentRow({ document }: { document: Document }) {
           <p className="text-xs text-gray-400">{formatSize(document.size_bytes || 0)}</p>
         </div>
       </div>
-      {statusBadge[document.status]}
+      <DocumentStatusBadge status={document.status} />
     </div>
   );
 }
