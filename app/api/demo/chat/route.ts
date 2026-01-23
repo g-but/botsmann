@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { jsonError, jsonValidationError, formatZodErrors, HTTP_STATUS } from '@/lib/api';
-import { API_CONFIG } from '@/lib/constants';
+import { generateWithBestProvider, type ModelProvider } from '@/lib/llm-client';
 
 // ============================================================================
 // Types
@@ -22,11 +22,8 @@ interface SearchResult {
 }
 
 // ============================================================================
-// Groq Integration (Free LLM)
+// LLM Integration (Ollama local / Groq cloud / OpenRouter)
 // ============================================================================
-
-const GROQ_API_URL = API_CONFIG.GROQ_API_URL;
-const GROQ_MODEL = API_CONFIG.GROQ_MODEL;
 
 const SYSTEM_PROMPT = `You are a helpful assistant for Botsmann, a platform that builds private AI assistants.
 
@@ -54,19 +51,18 @@ Key value propositions:
 - No subscriptions for local setups
 - Expert consulting available`;
 
-async function generateWithGroq(
+interface LLMResult {
+  content: string;
+  provider: ModelProvider;
+  model: string;
+}
+
+async function generateResponse(
   userMessage: string,
   context: string,
   customSystemPrompt?: string,
   additionalContext?: string,
-): Promise<string> {
-  const apiKey = process.env.GROQ_API_KEY;
-
-  if (!apiKey) {
-    // Fallback to template response if no API key
-    return context;
-  }
-
+): Promise<LLMResult> {
   // Use custom system prompt if provided, otherwise use default
   const systemPrompt = customSystemPrompt || SYSTEM_PROMPT;
 
@@ -81,33 +77,24 @@ async function generateWithGroq(
   userContent += `User message: ${userMessage}`;
 
   try {
-    const response = await fetch(GROQ_API_URL, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: GROQ_MODEL,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userContent },
-        ],
-        temperature: 0.7,
-        max_tokens: 1024,
-      }),
-    });
+    const result = await generateWithBestProvider([
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userContent },
+    ]);
 
-    if (!response.ok) {
-      console.error('Groq API error:', await response.text());
-      return context;
-    }
-
-    const data = await response.json();
-    return data.choices?.[0]?.message?.content || context;
+    return {
+      content: result.content,
+      provider: result.provider,
+      model: result.model,
+    };
   } catch (error) {
-    console.error('Groq request failed:', error);
-    return context;
+    console.error('LLM generation failed:', error);
+    // Fallback to context-only response
+    return {
+      content: context,
+      provider: 'ollama', // placeholder
+      model: 'fallback',
+    };
   }
 }
 
@@ -437,8 +424,8 @@ export async function POST(request: NextRequest) {
           : "I don't have specific information about that. Try asking about Botsmann's AI assistants (Heidi, Lex, Imhotep, Nerd, Trident, Muse), how to get started, our consulting services, or privacy practices!";
     }
 
-    // Generate response with Groq (or fallback to context)
-    const response = await generateWithGroq(message, context, systemPrompt, additionalContext);
+    // Generate response with best available LLM (Ollama > Groq > OpenRouter)
+    const llmResult = await generateResponse(message, context, systemPrompt, additionalContext);
 
     // Build response data
     const responseData: {
@@ -448,12 +435,14 @@ export async function POST(request: NextRequest) {
         sources?: Array<{ title: string; content: string; relevance?: number }>;
         context?: string;
         provider: string;
+        model: string;
       };
     } = {
       success: true,
       data: {
-        response,
-        provider: process.env.GROQ_API_KEY ? 'groq' : 'fallback',
+        response: llmResult.content,
+        provider: llmResult.provider,
+        model: llmResult.model,
       },
     };
 
@@ -482,12 +471,21 @@ export async function POST(request: NextRequest) {
 
 // GET handler for debugging/health check
 export async function GET() {
+  // Check available providers
+  const hasOllama = process.env.OLLAMA_URL || 'http://localhost:11434';
+  const hasGroq = !!process.env.GROQ_API_KEY;
+  const hasOpenRouter = !!process.env.OPENROUTER_API_KEY;
+
   return NextResponse.json({
     status: 'ok',
     message: 'Botsmann AI Assistant API',
     chunks: knowledgeChunks.length,
     topics: Array.from(new Set(knowledgeChunks.map((c) => c.topic))),
-    llmEnabled: !!process.env.GROQ_API_KEY,
-    llmProvider: 'Groq (free tier)',
+    providers: {
+      ollama: { configured: true, url: hasOllama },
+      groq: { configured: hasGroq },
+      openrouter: { configured: hasOpenRouter },
+    },
+    priority: 'ollama > groq > openrouter',
   });
 }
