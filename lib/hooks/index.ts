@@ -14,3 +14,7 @@ export type { UseFormSubmitOptions, UseFormSubmitReturn } from './useFormSubmit'
 // Bot builder hooks
 export { useBotBuilder } from './useBotBuilder';
 export type { BotBuilderState, KnowledgeChunkDraft, UseBotBuilderReturn } from './useBotBuilder';
+
+// Dashboard hooks
+export { useDashboardStats } from './useDashboardStats';
+export type { CustomBot, DashboardStats } from './useDashboardStats';
