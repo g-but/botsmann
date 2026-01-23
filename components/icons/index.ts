@@ -5,4 +5,16 @@
  * SSOT for shared icons used across the application
  */
 
-export { ChevronIcon, CloseIcon, MenuIcon } from './Icons';
+export {
+  ChevronIcon,
+  CloseIcon,
+  MenuIcon,
+  CheckIcon,
+  ClockIcon,
+  EditIcon,
+  ChevronRightIcon,
+  HomeIcon,
+  DocumentIcon,
+  SettingsIcon,
+  UserIcon,
+} from './Icons';

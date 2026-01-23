@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useAuth } from '@/lib/auth';
 import { ResetPasswordSchema, PASSWORD_MIN_LENGTH } from '@/lib/schemas/auth';
 import { ROUTES } from '@/lib/routes';
+import { PageLoading } from '@/components/shared/LoadingSpinner';
 
 export default function ResetPasswordPage() {
   const { updatePassword, loading: authLoading, session } = useAuth();
@@ -58,11 +59,7 @@ export default function ResetPasswordPage() {
 
   // Loading state
   if (authLoading || isValidSession === null) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
-      </div>
-    );
+    return <PageLoading />;
   }
 
   // Invalid or expired link

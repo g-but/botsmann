@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useRequireAuth } from '@/lib/auth';
 import { UpdateProfileSchema, DISPLAY_NAME_MAX_LENGTH } from '@/lib/schemas/auth';
 import { UserAvatar } from '@/components/shared/UserAvatar';
+import { PageLoading } from '@/components/shared/LoadingSpinner';
+import { CheckIcon, ChevronRightIcon } from '@/components/icons';
 import { InfrastructureWidget } from '@/components/infrastructure';
 import { type ProviderId, type ConnectionStatus } from '@/lib/infrastructure';
 
@@ -125,11 +127,7 @@ export default function SettingsPage() {
   };
 
   if (authLoading || !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
-      </div>
-    );
+    return <PageLoading />;
   }
 
   return (
@@ -290,19 +288,7 @@ export default function SettingsPage() {
 
           <div className="flex items-start gap-4">
             <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-              <svg
-                className="w-5 h-5 text-green-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
+              <CheckIcon className="w-5 h-5 text-green-600" />
             </div>
             <div>
               <p className="font-medium text-gray-900">AI is ready to use</p>
@@ -319,14 +305,7 @@ export default function SettingsPage() {
               className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
             >
               Go to My Documents
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
+              <ChevronRightIcon className="w-4 h-4" />
             </Link>
           </div>
         </div>

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useAuth, isRateLimitError, getRateLimitRetryAfter } from '@/lib/auth';
 import { ForgotPasswordSchema } from '@/lib/schemas/auth';
 import { ROUTES } from '@/lib/routes';
+import { PageLoading } from '@/components/shared/LoadingSpinner';
 
 export default function ForgotPasswordPage() {
   const { resetPassword, loading: authLoading, user } = useAuth();
@@ -72,11 +73,7 @@ export default function ForgotPasswordPage() {
   };
 
   if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
-      </div>
-    );
+    return <PageLoading />;
   }
 
   const isRateLimited = rateLimitSeconds > 0;
