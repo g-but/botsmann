@@ -2,23 +2,17 @@
  * Email Configuration
  *
  * Centralized configuration for all email-related settings.
- * Uses environment variables with sensible defaults for development.
+ * Uses environment variables with sensible defaults for development/build.
+ * Validation happens at runtime when email service is used.
  */
-
-const isDevelopment = process.env.NODE_ENV !== 'production';
 
 /**
- * Get required environment variable or throw in production
+ * Get environment variable with fallback default
+ * Defaults are used for development and build, but should be overridden
+ * in production via environment variables.
  */
-const getRequiredEnv = (key: string, devDefault: string): string => {
-  const value = process.env[key];
-  if (value) return value;
-
-  if (isDevelopment) {
-    return devDefault;
-  }
-
-  throw new Error(`Missing required environment variable: ${key}`);
+const getEnvWithDefault = (key: string, fallback: string): string => {
+  return process.env[key] || fallback;
 };
 
 /**
@@ -37,13 +31,13 @@ export const AWS_CONFIG = {
  */
 export const EMAIL_ADDRESSES = {
   /** Email address used as the sender for outgoing emails */
-  from: getRequiredEnv('FROM_EMAIL', 'noreply@botsmann.com'),
+  from: getEnvWithDefault('FROM_EMAIL', 'noreply@botsmann.com'),
 
   /** Email address for admin notifications */
-  admin: getRequiredEnv('ADMIN_EMAIL', 'admin@botsmann.com'),
+  admin: getEnvWithDefault('ADMIN_EMAIL', 'admin@botsmann.com'),
 
   /** Email address for customer support */
-  support: getRequiredEnv('SUPPORT_EMAIL', 'support@botsmann.com'),
+  support: getEnvWithDefault('SUPPORT_EMAIL', 'support@botsmann.com'),
 } as const;
 
 /**

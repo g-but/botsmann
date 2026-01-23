@@ -9,8 +9,7 @@
  */
 
 import { type NextRequest } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { createRouteHandlerClient } from '@/lib/supabase-server';
 import {
   jsonSuccess,
   jsonError,
@@ -27,7 +26,7 @@ import { UpdateUserProfileSchema } from '@/lib/validations/user-profile';
  */
 export async function GET() {
   try {
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabase = createRouteHandlerClient();
 
     // Check authentication
     const {
@@ -61,7 +60,7 @@ export async function GET() {
  */
 export async function PATCH(request: NextRequest) {
   try {
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabase = createRouteHandlerClient();
 
     // Check authentication
     const {

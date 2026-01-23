@@ -19,6 +19,9 @@ export const ROUTES = {
   PROJECTS: '/projects',
   SETTINGS: '/settings',
   SOLUTIONS: '/solutions',
+  PROFESSIONALS: '/bots',
+  MY_DATA: '/settings',
+  ENTERPRISE: '/solutions',
   AUTH: {
     SIGNIN: '/auth/signin',
     SIGNUP: '/auth/signup',

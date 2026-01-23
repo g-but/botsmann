@@ -1,25 +1,42 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createClientComponentClient } from '@/lib/supabase';
 import { ROUTES } from '@/lib/routes';
 
 type CallbackStatus = 'loading' | 'success' | 'error';
 type CallbackType = 'signup' | 'recovery' | 'email_change' | 'unknown';
 
 /**
- * Auth Callback Page
- *
- * Handles redirects from Supabase email links:
- * - Email verification (signup confirmation)
- * - Password reset
- * - Email change confirmation
- *
- * Supabase adds tokens to the URL hash which this page processes.
+ * Loading fallback for Suspense boundary
  */
-export default function AuthCallbackPage() {
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center px-4">
+      <div className="max-w-md w-full">
+        <div className="text-center mb-8">
+          <Link href="/" className="text-3xl font-bold text-gray-900">
+            Botsmann
+          </Link>
+        </div>
+        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">Loading...</h2>
+            <p className="text-gray-600">Please wait...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Auth Callback Content - uses useSearchParams
+ */
+function AuthCallbackContent() {
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<CallbackStatus>('loading');
   const [callbackType, setCallbackType] = useState<CallbackType>('unknown');
@@ -186,5 +203,23 @@ export default function AuthCallbackPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * Auth Callback Page
+ *
+ * Handles redirects from Supabase email links:
+ * - Email verification (signup confirmation)
+ * - Password reset
+ * - Email change confirmation
+ *
+ * Supabase adds tokens to the URL hash which this page processes.
+ */
+export default function AuthCallbackPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <AuthCallbackContent />
+    </Suspense>
   );
 }
