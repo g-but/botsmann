@@ -12,15 +12,8 @@ import Link from 'next/link';
 import { useRequireAuth } from '@/lib/auth';
 import { botToasts } from '@/lib/toast';
 import { PageLoading } from '@/components/shared/LoadingSpinner';
+import { ACCENT_COLOR_OPTIONS } from '@/lib/config/colors';
 import type { CustomBot } from '@/types/custom-bot';
-
-const ACCENT_COLORS = [
-  { value: 'blue', label: 'Blue', class: 'bg-blue-500' },
-  { value: 'green', label: 'Green', class: 'bg-green-500' },
-  { value: 'indigo', label: 'Indigo', class: 'bg-indigo-500' },
-  { value: 'red', label: 'Red', class: 'bg-red-500' },
-  { value: 'amber', label: 'Amber', class: 'bg-amber-500' },
-];
 
 export default function EditBotPage() {
   const params = useParams();
@@ -194,7 +187,7 @@ export default function EditBotPage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Accent Color</label>
               <div className="flex gap-2">
-                {ACCENT_COLORS.map((color) => (
+                {ACCENT_COLOR_OPTIONS.map((color) => (
                   <button
                     key={color.value}
                     type="button"

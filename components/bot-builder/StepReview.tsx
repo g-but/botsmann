@@ -8,6 +8,7 @@
 
 import type { BotAccentColor } from '@/types/bot';
 import type { KnowledgeChunkDraft } from '@/lib/hooks/useBotBuilder';
+import { COLOR_CLASSES, ACCENT_COLOR_OPTIONS } from '@/lib/config/colors';
 
 interface StepReviewProps {
   title: string;
@@ -23,21 +24,10 @@ interface StepReviewProps {
   onGoToStep: (step: number) => void;
 }
 
-const COLOR_LABELS: Record<BotAccentColor, string> = {
-  blue: 'Blue',
-  green: 'Green',
-  indigo: 'Indigo',
-  red: 'Red',
-  amber: 'Amber',
-};
-
-const COLOR_CLASSES: Record<BotAccentColor, string> = {
-  blue: 'bg-blue-500',
-  green: 'bg-green-500',
-  indigo: 'bg-indigo-500',
-  red: 'bg-red-500',
-  amber: 'bg-amber-500',
-};
+/** Get color label from centralized config */
+function getColorLabel(color: BotAccentColor): string {
+  return ACCENT_COLOR_OPTIONS.find((c) => c.value === color)?.label ?? color;
+}
 
 export function StepReview({
   title,
@@ -70,7 +60,7 @@ export function StepReview({
 
       {/* Preview Card */}
       <div className="rounded-xl border border-gray-200 overflow-hidden">
-        <div className={`${COLOR_CLASSES[accentColor]} p-4 text-white`}>
+        <div className={`${COLOR_CLASSES[accentColor].bg} p-4 text-white`}>
           <div className="flex items-center gap-3">
             <span className="text-4xl">{emoji}</span>
             <div>
@@ -131,8 +121,8 @@ export function StepReview({
               <div>
                 <dt className="text-gray-500">Color</dt>
                 <dd className="flex items-center gap-2">
-                  <span className={`w-4 h-4 rounded-full ${COLOR_CLASSES[accentColor]}`} />
-                  <span className="font-medium text-gray-900">{COLOR_LABELS[accentColor]}</span>
+                  <span className={`w-4 h-4 rounded-full ${COLOR_CLASSES[accentColor].bg}`} />
+                  <span className="font-medium text-gray-900">{getColorLabel(accentColor)}</span>
                 </dd>
               </div>
             </div>

@@ -8,6 +8,7 @@
  */
 
 import type { BotAccentColor } from '@/types/bot';
+import { ACCENT_COLOR_OPTIONS } from '@/lib/config/colors';
 
 interface StepPersonalityProps {
   emoji: string;
@@ -18,14 +19,6 @@ interface StepPersonalityProps {
 }
 
 const EMOJI_OPTIONS = ['🤖', '👔', '⚖️', '🏥', '📊', '💼', '🎯', '🧠', '📚', '🔬', '💡', '🛡️'];
-
-const COLOR_OPTIONS: { value: BotAccentColor; label: string; classes: string }[] = [
-  { value: 'blue', label: 'Blue', classes: 'bg-blue-500' },
-  { value: 'green', label: 'Green', classes: 'bg-green-500' },
-  { value: 'indigo', label: 'Indigo', classes: 'bg-indigo-500' },
-  { value: 'red', label: 'Red', classes: 'bg-red-500' },
-  { value: 'amber', label: 'Amber', classes: 'bg-amber-500' },
-];
 
 const PROMPT_TEMPLATES = [
   {
@@ -151,7 +144,7 @@ export function StepPersonality({
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">Accent Color</label>
         <div className="flex gap-3">
-          {COLOR_OPTIONS.map((color) => (
+          {ACCENT_COLOR_OPTIONS.map((color) => (
             <button
               key={color.value}
               type="button"
@@ -162,7 +155,7 @@ export function StepPersonality({
                   : 'hover:bg-gray-50'
               }`}
             >
-              <span className={`w-8 h-8 rounded-full ${color.classes}`} />
+              <span className={`w-8 h-8 rounded-full ${color.class}`} />
               <span className="text-xs text-gray-600">{color.label}</span>
             </button>
           ))}
