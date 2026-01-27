@@ -4,6 +4,8 @@
  * Pre-configured templates that make bot creation as easy as picking an emoji
  */
 
+import { type AccentColor } from '@/lib/config/colors';
+
 export type TemplateCategory = 'memorial' | 'legends' | 'gods' | 'magical' | 'helpers';
 
 export interface BotTemplate {
@@ -23,7 +25,7 @@ export interface BotTemplate {
 
   systemPromptTemplate: string;
   starterQuestions: string[];
-  accentColor: string;
+  accentColor: AccentColor;
 
   // What user needs to provide
   requiredFields: ('name' | 'photo' | 'memories' | 'relationship')[];

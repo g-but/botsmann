@@ -6,11 +6,13 @@
  */
 
 import { z } from 'zod';
+import { CustomBotAccentColorSchema } from '@/lib/config/colors';
 
 /**
  * Valid accent colors for bot themes
+ * Re-exported from SSOT in lib/config/colors.ts
  */
-export const AccentColorSchema = z.enum(['blue', 'green', 'indigo', 'red', 'amber']);
+export const AccentColorSchema = CustomBotAccentColorSchema;
 
 /**
  * Bot menu item schema
