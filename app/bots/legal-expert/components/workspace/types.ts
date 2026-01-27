@@ -196,15 +196,3 @@ export interface CaseTimeline {
   details?: Record<string, unknown>;
 }
 
-// Portal-specific types
-export interface ClientPortalProps {
-  caseId: string;
-  case: Case;
-  onClose?: () => void;
-}
-
-export interface LawyerPortalProps {
-  caseId: string;
-  case: Case;
-  onClose?: () => void;
-}
