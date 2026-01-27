@@ -92,6 +92,7 @@ Guidelines:
 // Validation constants
 export const VALIDATION = {
   MAX_FILE_SIZE: 10 * 1024 * 1024, // 10MB
+  DEMO_MAX_FILE_SIZE: 5 * 1024 * 1024, // 5MB - for demo/try pages
   MAX_MESSAGE_LENGTH: 10000,
   MIN_PASSWORD_LENGTH: 8,
 } as const;

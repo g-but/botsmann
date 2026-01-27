@@ -50,8 +50,8 @@ export default function MyDataPage() {
         if (data.success) {
           setDocuments(data.documents || []);
         }
-      } catch (err) {
-        console.error('Failed to load documents:', err);
+      } catch {
+        // Failed to load documents - showing empty state
       } finally {
         setLoading(false);
       }

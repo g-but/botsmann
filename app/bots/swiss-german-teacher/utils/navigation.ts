@@ -15,6 +15,8 @@ export const openHeidiBot = (query?: string) => {
     alert('Please allow pop-ups to open Heidi in a new tab, or click this link: ' + url);
 
     // Copy the URL to clipboard as another fallback
-    navigator.clipboard.writeText(url).catch((err) => console.error('Could not copy URL: ', err));
+    navigator.clipboard.writeText(url).catch(() => {
+      // Clipboard write failed - user already alerted
+    });
   }
 };

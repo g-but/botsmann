@@ -23,7 +23,7 @@ const HeroSection: React.FC = () => {
               <a href="#components" className="btn-primary">
                 Explore Features
               </a>
-              <a href="/projects/governance/build" className="btn-secondary">
+              <a href="/contact" className="btn-secondary">
                 Build With Us
               </a>
               <a href="#request-demo" className="btn-outline">
@@ -105,7 +105,7 @@ const HeroSection: React.FC = () => {
           </div>
 
           {/* Visual content - replacing dark background with lighter design */}
-          <div className="order-1 lg:order-2 animate-fadeIn" style={{ animationDelay: '0.2s' }}>
+          <div className="order-1 lg:order-2 animate-fadeIn animation-delay-200">
             <div className="rounded-xl overflow-hidden shadow-lg border border-gray-200">
               <div className="bg-white p-6">
                 <h2 className="text-2xl font-bold text-gray-800 mb-4">

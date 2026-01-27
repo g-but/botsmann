@@ -65,8 +65,7 @@ const EmailGenerator = ({ getTryLink: _getTryLink }: EmailGeneratorProps) => {
 
     try {
       openHeidiBot(`Generate an email: ${prompt}`);
-    } catch (err) {
-      console.error('Error generating email:', err);
+    } catch {
       setError('Failed to connect to Heidi. Please try again.');
     } finally {
       setIsLoading(false);

@@ -106,3 +106,23 @@ export const formatPercent = (value: number, options?: { decimals?: number }): s
     maximumFractionDigits: decimals,
   }).format(value);
 };
+
+/**
+ * Format bytes to human-readable size
+ * @param bytes The number of bytes
+ * @param decimals Number of decimal places (default: 1)
+ * @returns Formatted size string (e.g., "1.5 MB")
+ * @example
+ * formatBytes(1024) // "1.0 KB"
+ * formatBytes(1048576) // "1.0 MB"
+ * formatBytes(1073741824) // "1.0 GB"
+ */
+export const formatBytes = (bytes: number, decimals: number = 1): string => {
+  if (bytes === 0) return '0 Bytes';
+
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(decimals))} ${sizes[i]}`;
+};

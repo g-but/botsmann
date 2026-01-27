@@ -26,8 +26,8 @@ export default function MyBotsPage() {
         if (data.success) {
           setBots(data.data?.bots || []);
         }
-      } catch (err) {
-        console.error('Failed to load bots:', err);
+      } catch {
+        // Failed to load bots - showing empty state
       } finally {
         setLoading(false);
       }

@@ -66,4 +66,6 @@ export const SUPPORTED_FILE_TYPES: SupportedFileType[] = [
   'application/pdf',
 ];
 
-export const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+// Re-exported from SSOT for backwards compatibility
+export { VALIDATION } from '@/lib/constants';
+export const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB - TODO: migrate imports to use VALIDATION.MAX_FILE_SIZE

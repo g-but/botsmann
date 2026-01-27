@@ -73,8 +73,8 @@ export default function InfrastructurePage() {
             }));
           }
         }
-      } catch (err) {
-        console.error('Failed to load settings:', err);
+      } catch {
+        // Settings load failed - using defaults
       }
     };
 

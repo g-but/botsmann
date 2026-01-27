@@ -72,8 +72,8 @@ export default function SettingsPage() {
             }
           }
         }
-      } catch (err) {
-        console.error('Failed to load settings:', err);
+      } catch {
+        // Failed to load settings - using defaults
       }
     };
 

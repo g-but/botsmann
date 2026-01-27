@@ -11,12 +11,10 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { PDFParse } from 'pdf-parse';
 import { rateLimit } from '@/lib/rate-limit';
 import { getClientIp } from '@/lib/request';
+import { VALIDATION } from '@/lib/constants';
 
 // Extend function timeout for PDF parsing
 export const maxDuration = 30;
-
-// Maximum file size (5MB)
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 export async function POST(request: NextRequest) {
   try {
@@ -47,7 +45,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate file size
-    if (file.size > MAX_FILE_SIZE) {
+    if (file.size > VALIDATION.DEMO_MAX_FILE_SIZE) {
       return NextResponse.json(
         { success: false, error: 'File too large. Maximum size is 5MB.' },
         { status: 400 },
