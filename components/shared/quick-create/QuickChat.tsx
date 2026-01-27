@@ -2,6 +2,7 @@
 
 import { type FC, useState, useRef, useEffect, useCallback } from 'react';
 import { type BotTemplate } from '@/lib/bot-templates';
+import { getAccentColorBgClass } from '@/lib/config/colors';
 
 interface CreatedBot {
   template: BotTemplate;
@@ -142,8 +143,8 @@ export const QuickChat: FC<QuickChatProps> = ({ bot, onReset }) => {
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
-    } catch (error) {
-      console.error('Chat error:', error);
+    } catch {
+      // Error already handled by showing user-friendly message below
       const errorMessage: Message = {
         id: `error-${Date.now()}`,
         role: 'assistant',
@@ -161,26 +162,7 @@ export const QuickChat: FC<QuickChatProps> = ({ bot, onReset }) => {
     inputRef.current?.focus({ preventScroll: true });
   };
 
-  const accentColors: Record<string, string> = {
-    blue: 'bg-blue-500',
-    pink: 'bg-pink-500',
-    rose: 'bg-rose-500',
-    purple: 'bg-purple-500',
-    amber: 'bg-amber-500',
-    green: 'bg-green-500',
-    red: 'bg-red-500',
-    orange: 'bg-orange-500',
-    slate: 'bg-slate-500',
-    indigo: 'bg-indigo-500',
-    teal: 'bg-teal-500',
-    cyan: 'bg-cyan-500',
-    yellow: 'bg-yellow-500',
-    sky: 'bg-sky-500',
-    stone: 'bg-stone-500',
-    violet: 'bg-violet-500',
-  };
-
-  const accentColor = accentColors[bot.template.accentColor] || 'bg-purple-500';
+  const accentColor = getAccentColorBgClass(bot.template.accentColor);
 
   return (
     <div className="max-w-3xl mx-auto">

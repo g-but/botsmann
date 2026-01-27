@@ -149,6 +149,9 @@ export function createClientComponentClient() {
       );
     }
     // Return mock during SSG - will be replaced on hydration
+    // Using 'any' here because properly typing the full Supabase client mock
+    // would require importing internal Supabase types that aren't exported.
+    // This mock is only used during build-time SSG, never at runtime.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const mockClient: any = {
       auth: {

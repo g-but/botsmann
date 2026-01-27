@@ -1,4 +1,5 @@
 import React from 'react';
+import { type CustomBotAccentColor } from '@/lib/config/colors';
 
 export interface Feature {
   title: string;
@@ -31,9 +32,10 @@ export interface BotMenuItem {
 }
 
 /**
- * Accent colors available for bot pages
+ * Accent colors available for bot pages (restricted set of 5 colors)
+ * Re-exported from SSOT in lib/config/colors.ts
  */
-export type BotAccentColor = 'blue' | 'green' | 'indigo' | 'red' | 'amber';
+export type { CustomBotAccentColor as BotAccentColor } from '@/lib/config/colors';
 
 /**
  * Navigation configuration for bot pages
@@ -46,7 +48,7 @@ export interface BotNavConfig {
   /** Short description shown in nav */
   navDescription?: string;
   /** Accent color theme */
-  accentColor: BotAccentColor;
+  accentColor: CustomBotAccentColor;
   /** Menu items for page sections */
   menuItems: BotMenuItem[];
 }
