@@ -3,45 +3,10 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { formatCurrency } from '@/lib/format';
+import { type EnhancedTransaction } from '../types';
 
-// Enhanced transaction type with law traceability and agency information
-export interface EnhancedTransaction {
-  id: string;
-  date: string;
-  department: string;
-  departmentId: string;
-  recipient: string;
-  description: string;
-  amount: number;
-  status: string;
-  metrics: {
-    costPerUnit: string;
-    timeline: string;
-    qualityScore: number;
-    contractCompliance: number;
-  };
-  transparencyScore: number;
-  socialData: {
-    publicComments: number;
-    likes: number;
-    concerns: number;
-    shares: number;
-  };
-  enablingLaws: Array<{
-    id: string;
-    name: string;
-  }>;
-  documents: Array<{
-    id: string;
-    name: string;
-    url: string;
-  }>;
-  timeline: Array<{
-    date: string;
-    event: string;
-    description: string;
-  }>;
-}
+// Re-export for backwards compatibility
+export type { EnhancedTransaction } from '../types';
 
 interface TransactionWithTraceabilityProps {
   transaction: EnhancedTransaction;

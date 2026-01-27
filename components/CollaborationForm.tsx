@@ -26,26 +26,19 @@ export default function CollaborationForm() {
     formState: { errors },
   } = useForm<FormData>();
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (_data: FormData) => {
     setIsSubmitting(true);
     setSubmitError(null);
 
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1500));
-      console.info('Collaboration form submitted:', data);
 
-      // In production, we would send this data to an API endpoint
-      // await fetch('/api/collaboration', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(data),
-      // });
+      // TODO: In production, send _data to an API endpoint
 
       setSubmitSuccess(true);
       reset();
-    } catch (error) {
-      console.info('Error submitting form:', error);
+    } catch {
       setSubmitError('Something went wrong. Please try again later.');
     } finally {
       setIsSubmitting(false);

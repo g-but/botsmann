@@ -56,8 +56,8 @@ export default function DocumentsPage() {
         if (data.success) {
           setDocuments(data.documents);
         }
-      } catch (err) {
-        console.error('Failed to load documents:', err);
+      } catch {
+        // Failed to load documents - showing empty state
       } finally {
         setLoading(false);
       }
@@ -95,8 +95,7 @@ export default function DocumentsPage() {
             })),
           );
         }
-      } catch (err) {
-        console.error('Failed to load conversation:', err);
+      } catch {
         conversationToasts.loadError();
       }
     };
@@ -207,8 +206,7 @@ export default function DocumentsPage() {
         setConversationRefreshTrigger((prev) => prev + 1);
         return data.data.conversation.id;
       }
-    } catch (err) {
-      console.error('Failed to create conversation:', err);
+    } catch {
       conversationToasts.createError();
     }
     return null;
@@ -225,8 +223,8 @@ export default function DocumentsPage() {
           sources: message.sources,
         }),
       });
-    } catch (err) {
-      console.error('Failed to save message:', err);
+    } catch {
+      // Failed to persist message - non-critical
     }
   };
 

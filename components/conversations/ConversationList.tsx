@@ -41,8 +41,8 @@ export const ConversationList = ({
       if (data.success) {
         setConversations(data.data?.conversations ?? []);
       }
-    } catch (err) {
-      console.error('Failed to load conversations:', err);
+    } catch {
+      // Failed to load conversations - showing empty state
     } finally {
       setLoading(false);
     }
@@ -64,8 +64,8 @@ export const ConversationList = ({
           onSelectConversation(null);
         }
       }
-    } catch (err) {
-      console.error('Failed to delete conversation:', err);
+    } catch {
+      // Failed to delete conversation - UI unchanged
     }
   };
 

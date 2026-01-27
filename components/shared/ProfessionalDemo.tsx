@@ -123,8 +123,7 @@ export const ProfessionalDemo: FC<ProfessionalDemoProps> = ({ professional }) =>
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
-    } catch (error) {
-      console.error('Chat error:', error);
+    } catch {
       const errorMessage: Message = {
         id: `error-${Date.now()}`,
         role: 'assistant',
@@ -180,18 +179,9 @@ export const ProfessionalDemo: FC<ProfessionalDemoProps> = ({ professional }) =>
             <div className="bg-gray-100 rounded-2xl px-4 py-3 flex items-center gap-2">
               <span className="text-lg">{professional.emoji}</span>
               <div className="flex gap-1">
-                <span
-                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                  style={{ animationDelay: '0ms' }}
-                />
-                <span
-                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                  style={{ animationDelay: '150ms' }}
-                />
-                <span
-                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                  style={{ animationDelay: '300ms' }}
-                />
+                <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
+                <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:150ms]" />
+                <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:300ms]" />
               </div>
             </div>
           </div>

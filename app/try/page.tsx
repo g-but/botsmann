@@ -2,6 +2,8 @@
 
 import { useState, useRef, type FormEvent, type ChangeEvent } from 'react';
 import Link from 'next/link';
+import { VALIDATION } from '@/lib/constants';
+import { formatBytes } from '@/lib/format';
 
 interface UploadedDocument {
   id: string;
@@ -57,8 +59,8 @@ export default function TryPage() {
           continue;
         }
 
-        // Check file size (max 5MB)
-        if (file.size > 5 * 1024 * 1024) {
+        // Check file size
+        if (file.size > VALIDATION.DEMO_MAX_FILE_SIZE) {
           setError(`File too large: ${file.name}. Maximum size is 5MB.`);
           continue;
         }
@@ -99,8 +101,7 @@ export default function TryPage() {
           content,
           size: file.size,
         });
-      } catch (err) {
-        console.error('Error reading file:', err);
+      } catch {
         setError(`Failed to read file: ${file.name}`);
       }
     }
@@ -162,8 +163,7 @@ export default function TryPage() {
           { role: 'assistant', content: `Error: ${data.error || 'Something went wrong'}` },
         ]);
       }
-    } catch (err) {
-      console.error('Chat error:', err);
+    } catch {
       setMessages((prev) => [
         ...prev,
         { role: 'assistant', content: 'Failed to get response. Please try again.' },
@@ -174,12 +174,6 @@ export default function TryPage() {
         chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
       }, 100);
     }
-  };
-
-  const formatFileSize = (bytes: number) => {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
 
   return (
@@ -329,7 +323,7 @@ export default function TryPage() {
                     >
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 truncate">{doc.name}</p>
-                        <p className="text-xs text-gray-500">{formatFileSize(doc.size)}</p>
+                        <p className="text-xs text-gray-500">{formatBytes(doc.size)}</p>
                       </div>
                       <button
                         onClick={() => handleRemoveDocument(doc.id)}

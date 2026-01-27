@@ -105,14 +105,25 @@ export const ACCENT_COLOR_OPTIONS = [
 ] as const;
 
 /**
- * Composite color classes for themed UI (for restricted color set)
+ * Composite color classes for themed UI (supports all accent colors)
  */
-export const COLOR_CLASSES: Record<CustomBotAccentColor, { bg: string; text: string; border: string }> = {
+export const COLOR_CLASSES: Record<AccentColor, { bg: string; text: string; border: string }> = {
   blue: { bg: 'bg-blue-500', text: 'text-blue-600', border: 'border-blue-200' },
   green: { bg: 'bg-green-500', text: 'text-green-600', border: 'border-green-200' },
   indigo: { bg: 'bg-indigo-500', text: 'text-indigo-600', border: 'border-indigo-200' },
   red: { bg: 'bg-red-500', text: 'text-red-600', border: 'border-red-200' },
   amber: { bg: 'bg-amber-500', text: 'text-amber-600', border: 'border-amber-200' },
+  pink: { bg: 'bg-pink-500', text: 'text-pink-600', border: 'border-pink-200' },
+  rose: { bg: 'bg-rose-500', text: 'text-rose-600', border: 'border-rose-200' },
+  purple: { bg: 'bg-purple-500', text: 'text-purple-600', border: 'border-purple-200' },
+  orange: { bg: 'bg-orange-500', text: 'text-orange-600', border: 'border-orange-200' },
+  slate: { bg: 'bg-slate-500', text: 'text-slate-600', border: 'border-slate-200' },
+  yellow: { bg: 'bg-yellow-500', text: 'text-yellow-600', border: 'border-yellow-200' },
+  sky: { bg: 'bg-sky-500', text: 'text-sky-600', border: 'border-sky-200' },
+  stone: { bg: 'bg-stone-500', text: 'text-stone-600', border: 'border-stone-200' },
+  violet: { bg: 'bg-violet-500', text: 'text-violet-600', border: 'border-violet-200' },
+  cyan: { bg: 'bg-cyan-500', text: 'text-cyan-600', border: 'border-cyan-200' },
+  teal: { bg: 'bg-teal-500', text: 'text-teal-600', border: 'border-teal-200' },
 };
 
 /**

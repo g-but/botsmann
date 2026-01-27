@@ -93,7 +93,7 @@ export default function CreateBotPage() {
         });
 
         if (!chunksResponse.ok) {
-          console.warn('Failed to add knowledge chunks, but bot was created');
+          // Knowledge chunks failed but bot was created - non-critical
         }
       }
 

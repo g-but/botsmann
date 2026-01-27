@@ -114,7 +114,7 @@ export default function CustomBotPage() {
         setSuggestions(data.data.suggestions);
       }
     } catch (err) {
-      console.error('Chat error:', err);
+      // Chat error handled via UI message
       const errorMessage: Message = {
         id: crypto.randomUUID(),
         role: 'assistant',
@@ -178,7 +178,7 @@ export default function CustomBotPage() {
           setSuggestions(data.data.suggestions);
         }
       } catch (err) {
-        console.error('Chat error:', err);
+        // Chat error handled via UI message
         const errorMessage: Message = {
           id: crypto.randomUUID(),
           role: 'assistant',
