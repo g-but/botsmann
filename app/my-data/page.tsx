@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, type FormEvent, type ChangeEvent } from 'react';
 import Link from 'next/link';
 import { useRequireAuth } from '@/lib/auth';
+import { formatBytes } from '@/lib/format';
 import { PageLoading, InlineLoading, LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import { DocumentStatusBadge } from '@/components/shared/DocumentStatusBadge';
 import { DOCUMENT_STATUS } from '@/lib/constants';
@@ -207,12 +208,6 @@ export default function MyDataPage() {
     window.location.href = '/';
   };
 
-  const formatFileSize = (bytes: number) => {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-  };
-
   if (authLoading || !user) {
     return <PageLoading />;
   }
@@ -369,7 +364,7 @@ export default function MyDataPage() {
                           <DocumentStatusBadge status={doc.status} />
                         </div>
                         <p className="text-sm text-gray-500 mt-1">
-                          {formatFileSize(doc.size_bytes || 0)}
+                          {formatBytes(doc.size_bytes || 0)}
                           {doc.chunk_count ? ` • ${doc.chunk_count} chunks` : ''}
                         </p>
                         {doc.error_message && (
