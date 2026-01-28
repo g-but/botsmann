@@ -7,7 +7,8 @@
  */
 
 import { type NextRequest } from 'next/server';
-import { SUPPORTED_FILE_TYPES, MAX_FILE_SIZE, type SupportedFileType } from '@/types/document';
+import { SUPPORTED_FILE_TYPES, type SupportedFileType } from '@/types/document';
+import { VALIDATION } from '@/lib/constants';
 import { getServiceClient } from '@/lib/supabase';
 import { verifyUser } from '@/lib/api-utils';
 import {
@@ -47,9 +48,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate file size
-    if (file.size > MAX_FILE_SIZE) {
+    if (file.size > VALIDATION.MAX_FILE_SIZE) {
       return jsonError(
-        `File too large. Maximum size: ${MAX_FILE_SIZE / 1024 / 1024}MB`,
+        `File too large. Maximum size: ${VALIDATION.MAX_FILE_SIZE / 1024 / 1024}MB`,
         'VALIDATION_ERROR',
         HTTP_STATUS.BAD_REQUEST,
       );

@@ -70,83 +70,19 @@ export default function CustomBotPage() {
     }
   }, [slug]);
 
-  // Send message
-  const sendMessage = useCallback(async () => {
-    if (!input.trim() || !bot || sending) return;
-
-    const userMessage: Message = {
-      id: crypto.randomUUID(),
-      role: 'user',
-      content: input.trim(),
-    };
-
-    setMessages((prev) => [...prev, userMessage]);
-    setInput('');
-    setSending(true);
-    setSuggestions([]); // Clear previous suggestions
-
-    try {
-      const response = await fetch(`/api/custom-bots/${bot.id}/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: userMessage.content,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to get response');
-      }
-
-      const data = await response.json();
-
-      const assistantMessage: Message = {
-        id: crypto.randomUUID(),
-        role: 'assistant',
-        content:
-          data.data?.content || data.data?.response || 'Sorry, I could not generate a response.',
-      };
-
-      setMessages((prev) => [...prev, assistantMessage]);
-
-      // Store context-aware suggestions
-      if (data.data?.suggestions && Array.isArray(data.data.suggestions)) {
-        setSuggestions(data.data.suggestions);
-      }
-    } catch (err) {
-      // Chat error handled via UI message
-      const errorMessage: Message = {
-        id: crypto.randomUUID(),
-        role: 'assistant',
-        content: 'Sorry, there was an error processing your message. Please try again.',
-      };
-      setMessages((prev) => [...prev, errorMessage]);
-    } finally {
-      setSending(false);
-      inputRef.current?.focus();
-    }
-  }, [input, bot, sending]);
-
-  // Handle keyboard submit
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  };
-
-  // Handle suggestion click - directly send the suggestion
-  const handleSuggestionClick = useCallback(
-    async (suggestion: string) => {
+  // Core message sending logic (DRY: shared between sendMessage and suggestion clicks)
+  const sendMessageWithContent = useCallback(
+    async (content: string, clearInput = false) => {
       if (!bot || sending) return;
 
       const userMessage: Message = {
         id: crypto.randomUUID(),
         role: 'user',
-        content: suggestion,
+        content,
       };
 
       setMessages((prev) => [...prev, userMessage]);
+      if (clearInput) setInput('');
       setSuggestions([]);
       setSending(true);
 
@@ -154,9 +90,7 @@ export default function CustomBotPage() {
         const response = await fetch(`/api/custom-bots/${bot.id}/chat`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            message: suggestion,
-          }),
+          body: JSON.stringify({ message: content }),
         });
 
         if (!response.ok) {
@@ -177,8 +111,7 @@ export default function CustomBotPage() {
         if (data.data?.suggestions && Array.isArray(data.data.suggestions)) {
           setSuggestions(data.data.suggestions);
         }
-      } catch (err) {
-        // Chat error handled via UI message
+      } catch {
         const errorMessage: Message = {
           id: crypto.randomUUID(),
           role: 'assistant',
@@ -187,9 +120,30 @@ export default function CustomBotPage() {
         setMessages((prev) => [...prev, errorMessage]);
       } finally {
         setSending(false);
+        inputRef.current?.focus();
       }
     },
     [bot, sending],
+  );
+
+  // Send message from input
+  const sendMessage = useCallback(() => {
+    if (!input.trim()) return;
+    sendMessageWithContent(input.trim(), true);
+  }, [input, sendMessageWithContent]);
+
+  // Handle keyboard submit
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
+
+  // Handle suggestion click
+  const handleSuggestionClick = useCallback(
+    (suggestion: string) => sendMessageWithContent(suggestion),
+    [sendMessageWithContent],
   );
 
   if (loading) {
@@ -281,14 +235,8 @@ export default function CustomBotPage() {
               <div className={`bg-white border ${colors.border} rounded-2xl px-4 py-3`}>
                 <div className="flex gap-1">
                   <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
-                  <span
-                    className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                    style={{ animationDelay: '0.1s' }}
-                  />
-                  <span
-                    className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                    style={{ animationDelay: '0.2s' }}
-                  />
+                  <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:100ms]" />
+                  <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:200ms]" />
                 </div>
               </div>
             </div>
