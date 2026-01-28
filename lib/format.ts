@@ -90,6 +90,18 @@ export const toISOString = (date?: Date): string => {
 };
 
 /**
+ * Format a date to YYYY-MM-DD string (ISO date without time)
+ * @param date Optional date (defaults to now)
+ * @returns Date string in YYYY-MM-DD format
+ * @example
+ * toDateString() // "2024-01-15"
+ * toDateString(new Date('2024-06-30')) // "2024-06-30"
+ */
+export const toDateString = (date?: Date): string => {
+  return (date ?? new Date()).toISOString().split('T')[0];
+};
+
+/**
  * Format a percentage value
  * @param value The decimal value (0.5 = 50%)
  * @param options Optional formatting options
