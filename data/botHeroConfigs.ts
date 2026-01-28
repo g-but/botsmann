@@ -160,6 +160,36 @@ export const botHeroConfigs: Record<string, BotHeroConfig> = {
       { emoji: '🔧', text: 'Cursor-Optimized' },
     ],
   },
+
+  'artistic-advisor': {
+    badge: { emoji: '🎨', text: 'AI Creative Companion' },
+    title: 'Muse',
+    titleSuffix: 'Your AI Artistic Advisor',
+    subtitle:
+      'Unlock your creative potential with AI-powered guidance on style, composition, and artistic technique.',
+    primaryCTA: { text: 'Chat with Muse', href: '', external: true },
+    secondaryCTA: { text: 'Try Demo', href: '#demo' },
+    botInfo: {
+      name: 'Muse',
+      emoji: '🎨',
+      description: 'AI Artistic Advisor',
+    },
+    chatMessages: [
+      { role: 'bot', content: 'What creative project are you working on today?' },
+      { role: 'user', content: 'I want to create an abstract landscape with bold colors.' },
+      {
+        role: 'bot',
+        content:
+          "That sounds exciting! Let's explore color theory and composition techniques that could bring your vision to life.",
+      },
+    ],
+    keyBenefits: [
+      { emoji: '🎨', text: 'Style Analysis' },
+      { emoji: '💡', text: 'Creative Prompts' },
+      { emoji: '📚', text: 'Art History' },
+      { emoji: '🖌️', text: 'Technique Tips' },
+    ],
+  },
 };
 
 /**
