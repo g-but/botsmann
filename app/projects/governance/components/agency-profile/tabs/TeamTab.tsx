@@ -22,6 +22,7 @@ export const TeamTab: React.FC<TeamTabProps> = ({ team }) => (
           <div className="flex-1 flex flex-col p-8">
             <div className="w-24 h-24 flex-shrink-0 mx-auto rounded-full bg-gray-200 overflow-hidden">
               {member.imageUrl ? (
+                /* eslint-disable-next-line @next/next/no-img-element -- Dynamic external image URL from data */
                 <img
                   className="w-24 h-24 object-cover"
                   src={member.imageUrl}
