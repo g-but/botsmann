@@ -2,12 +2,19 @@
 
 import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from 'react';
 import type { User, Session } from '@supabase/supabase-js';
-import { createClientComponentClient } from '@/lib/supabase';
+import { createClientComponentClient, isSupabaseConfigured } from '@/lib/supabase';
 import { ROUTES } from '@/lib/routes';
 import type { UserProfile } from '@/lib/schemas/auth';
 
-// Client-side Supabase client via auth-helpers (keeps cookies in sync)
-const supabaseClient = createClientComponentClient();
+// Lazy-loaded client - only created when Supabase is configured and first used
+let _supabaseClient: ReturnType<typeof createClientComponentClient> | null = null;
+
+function getSupabaseClient() {
+  if (!_supabaseClient && isSupabaseConfigured()) {
+    _supabaseClient = createClientComponentClient();
+  }
+  return _supabaseClient;
+}
 
 /**
  * Auth error with optional code for specific handling (e.g., rate limiting)
@@ -54,7 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const isConfigured = true;
+  const isConfigured = isSupabaseConfigured();
 
   // Check if email is verified
   // Supabase sets email_confirmed_at when email is verified
@@ -65,8 +72,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const avatarUrl = (user?.user_metadata?.avatar_url as string) || null;
 
   useEffect(() => {
+    const client = getSupabaseClient();
+
+    // If Supabase is not configured, just set loading to false
+    if (!client) {
+      setLoading(false);
+      return;
+    }
+
     // Get initial session
-    supabaseClient.auth.getSession().then(({ data }: { data: { session: Session | null } }) => {
+    client.auth.getSession().then(({ data }: { data: { session: Session | null } }) => {
       setSession(data.session);
       setUser(data.session?.user ?? null);
       setLoading(false);
@@ -75,7 +90,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabaseClient.auth.onAuthStateChange((_event: string, newSession: Session | null) => {
+    } = client.auth.onAuthStateChange((_event: string, newSession: Session | null) => {
       setSession(newSession);
       setUser(newSession?.user ?? null);
     });
@@ -103,7 +118,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       // Refresh the session after successful API login
-      await supabaseClient.auth.getSession();
+      await getSupabaseClient()?.auth.getSession();
 
       return { error: null };
     } catch (err) {
@@ -141,7 +156,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signOut = async () => {
-    await supabaseClient.auth.signOut();
+    await getSupabaseClient()?.auth.signOut();
   };
 
   /**
@@ -180,7 +195,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    * This still uses Supabase directly as the user already has a session
    */
   const updatePassword = async (newPassword: string) => {
-    const { error } = await supabaseClient.auth.updateUser({
+    const { error } = await getSupabaseClient()?.auth.updateUser({
       password: newPassword,
     });
     if (error) {
@@ -244,7 +259,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
 
         // Refresh the session to get updated user metadata
-        await supabaseClient.auth.getSession();
+        await getSupabaseClient()?.auth.getSession();
 
         return { error: null, profile: result.profile as UserProfile };
       } catch (err) {
