@@ -8,6 +8,7 @@ import type {
   TableOfContentsItem,
   ComparisonGuide,
 } from '@/types/knowledge';
+import { toDateString } from './format';
 
 // GitHub repository configuration for knowledge content
 const GITHUB_USERNAME = 'g-but';
@@ -128,7 +129,7 @@ export async function fetchAllGuides(): Promise<GuideMetadata[]> {
           difficulty: data.difficulty || 'Beginner',
           readTime: data.readTime || calculateReadTime(mdxContent),
           author: data.author,
-          publishedAt: data.publishedAt || new Date().toISOString().split('T')[0],
+          publishedAt: data.publishedAt || toDateString(),
           updatedAt: data.updatedAt,
           tags: data.tags || [],
           prerequisites: data.prerequisites,
@@ -181,7 +182,7 @@ export async function fetchGuideBySlug(slug: string): Promise<Guide | null> {
           difficulty: data.difficulty || 'Beginner',
           readTime: data.readTime || calculateReadTime(sanitizedContent),
           author: data.author,
-          publishedAt: data.publishedAt || new Date().toISOString().split('T')[0],
+          publishedAt: data.publishedAt || toDateString(),
           updatedAt: data.updatedAt,
           tags: data.tags || [],
           prerequisites: data.prerequisites,
@@ -290,7 +291,7 @@ export async function fetchInfrastructureGuides(): Promise<ComparisonGuide[]> {
         description: data.description || '',
         difficulty: data.difficulty || 'Intermediate',
         readTime: data.readTime || calculateReadTime(mdxContent),
-        publishedAt: data.publishedAt || new Date().toISOString().split('T')[0],
+        publishedAt: data.publishedAt || toDateString(),
         tags: data.tags || [],
         category: 'infrastructure',
         published: true,
@@ -336,7 +337,7 @@ export async function fetchInfrastructureGuideBySlug(
       description: data.description || '',
       difficulty: data.difficulty || 'Intermediate',
       readTime: data.readTime || calculateReadTime(sanitizedContent),
-      publishedAt: data.publishedAt || new Date().toISOString().split('T')[0],
+      publishedAt: data.publishedAt || toDateString(),
       tags: data.tags || [],
       category: 'infrastructure',
       published: true,

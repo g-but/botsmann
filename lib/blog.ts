@@ -1,4 +1,5 @@
 import matter from 'gray-matter';
+import { toDateString } from './format';
 
 // Interface for blog post metadata and content
 export interface BlogPost {
@@ -45,14 +46,9 @@ async function fileExistsOnGitHub(path: string): Promise<boolean> {
   }
 }
 
-// Function to get the current date in YYYY-MM-DD format
-function getCurrentDate(): string {
-  return new Date().toISOString().split('T')[0]; // e.g., "2023-03-05"
-}
-
 // Function to determine the post date based on our configuration and the post data
 function determinePostDate(data: { published?: boolean; date?: string }): string {
-  const currentDate = getCurrentDate();
+  const currentDate = toDateString();
 
   // If post is published
   if (data.published === true) {
