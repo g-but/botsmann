@@ -3,108 +3,6 @@ import Link from 'next/link';
 import bots from '@/data/bots';
 import { getChatPathFromBotSlug } from '@/data/professionals';
 
-// Bot display data with detailed explanations
-const botDetails: Record<
-  string,
-  {
-    name: string;
-    type: string;
-    emoji: string;
-    tagline: string;
-    whatItDoes: string;
-    inputData: string;
-    output: string;
-    useCases: string[];
-  }
-> = {
-  'legal-expert': {
-    name: 'Lex',
-    type: 'Legal Assistant',
-    emoji: '⚖️',
-    tagline: 'Your AI-powered legal companion',
-    whatItDoes:
-      'Analyzes legal cases, matches you with expert lawyers, and provides secure collaborative workspaces',
-    inputData: 'Legal documents, case descriptions, jurisdiction info',
-    output: 'AI case analysis, lawyer matches, secure data room',
-    useCases: ['Immigration cases', 'Employment disputes', 'Real estate contracts', 'Business law'],
-  },
-  'swiss-german-teacher': {
-    name: 'Heidi',
-    type: 'Swiss German Teacher',
-    emoji: '🇨🇭',
-    tagline: 'Master Schwyzerdütsch naturally',
-    whatItDoes:
-      'Provides contextual Swiss German learning with cultural insights and canton-specific variations',
-    inputData: 'Your German level, target canton, learning goals',
-    output: 'Personalized lessons, pronunciation guides, cultural context',
-    useCases: [
-      'Moving to Switzerland',
-      'Work in Swiss companies',
-      'Connect with locals',
-      'Canton-specific dialects',
-    ],
-  },
-  'research-assistant': {
-    name: 'Nerd',
-    type: 'Research Assistant',
-    emoji: '🧠',
-    tagline: 'Accelerate your research workflow',
-    whatItDoes:
-      'Organizes research materials, tracks citations, finds relevant papers, and synthesizes findings',
-    inputData: 'Research papers, notes, queries, data sets',
-    output: 'Literature reviews, citation networks, summaries, insights',
-    useCases: [
-      'Academic research',
-      'Market analysis',
-      'Patent research',
-      'Technical documentation',
-    ],
-  },
-  'medical-expert': {
-    name: 'Imhotep',
-    type: 'Medical Expert',
-    emoji: '⚕️',
-    tagline: 'Evidence-based health insights',
-    whatItDoes:
-      'Analyzes medical literature, symptoms, and data to provide evidence-based health information',
-    inputData: 'Symptoms, medical history, lab results, research papers',
-    output: 'Evidence-based insights, specialist recommendations, treatment options',
-    useCases: [
-      'Second opinions',
-      'Research rare conditions',
-      'Treatment comparisons',
-      'Clinical studies',
-    ],
-  },
-  'artistic-advisor': {
-    name: 'Artr',
-    type: 'Creative Assistant',
-    emoji: '🎨',
-    tagline: 'Your creative co-pilot',
-    whatItDoes:
-      'Analyzes art styles, generates creative concepts, and provides artistic feedback and guidance',
-    inputData: 'Art references, style preferences, project briefs',
-    output: 'Style analysis, creative concepts, technical feedback',
-    useCases: [
-      'Style exploration',
-      'Concept development',
-      'Art history research',
-      'Portfolio review',
-    ],
-  },
-  'product-manager': {
-    name: 'Trident',
-    type: 'Product Manager',
-    emoji: '🔱',
-    tagline: 'Strategic product development',
-    whatItDoes:
-      'Analyzes market data, user feedback, and competitive landscape to guide product strategy',
-    inputData: 'User feedback, market data, feature requests, analytics',
-    output: 'Product roadmaps, prioritization, competitive analysis',
-    useCases: ['Feature prioritization', 'Market analysis', 'User research', 'Roadmap planning'],
-  },
-};
-
 export default function BotsList() {
   // Only mark bots as "ready" if they have actual working try links
   // Currently only Heidi (swiss-german-teacher) has a GPT link
@@ -160,19 +58,24 @@ export default function BotsList() {
         {/* Bots Grid */}
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {bots.map((bot) => {
-            const details = botDetails[bot.slug] || {
-              name: bot.title,
-              type: bot.slug
+            // Derive display data from bot.display with sensible fallbacks
+            const display = bot.display || {
+              tagline: bot.description,
+              whatItDoes: bot.overview,
+              inputData: 'Your data',
+              output: 'AI insights',
+              useCases: bot.features.slice(0, 4),
+            };
+
+            // Derive name/type/emoji from nav or fallback
+            const name = bot.nav?.navTitle || bot.title;
+            const type =
+              bot.nav?.navDescription?.replace(/^AI\s+/, '') ||
+              bot.slug
                 .split('-')
                 .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(' '),
-              emoji: '🤖',
-              tagline: 'AI-powered assistant',
-              whatItDoes: 'Helps with various tasks',
-              inputData: 'Your data',
-              output: 'Helpful insights',
-              useCases: [],
-            };
+                .join(' ');
+            const emoji = bot.nav?.emoji || '🤖';
 
             const isReady = readyBots.includes(bot.slug);
 
@@ -192,14 +95,14 @@ export default function BotsList() {
                 <div className="p-6 pb-4">
                   <div className="flex items-center mb-3">
                     <div className="w-14 h-14 rounded-full flex items-center justify-center mr-4 bg-gradient-to-br from-gray-100 to-gray-200">
-                      <span className="text-3xl">{details.emoji}</span>
+                      <span className="text-3xl">{emoji}</span>
                     </div>
                     <div>
-                      <h2 className="text-2xl font-bold text-gray-900">{details.name}</h2>
-                      <p className="text-sm text-gray-500">{details.type}</p>
+                      <h2 className="text-2xl font-bold text-gray-900">{name}</h2>
+                      <p className="text-sm text-gray-500">{type}</p>
                     </div>
                   </div>
-                  <p className="text-gray-600 italic text-sm mb-4">"{details.tagline}"</p>
+                  <p className="text-gray-600 italic text-sm mb-4">"{display.tagline}"</p>
                 </div>
 
                 {/* What It Does */}
@@ -207,7 +110,7 @@ export default function BotsList() {
                   <h3 className="text-xs font-semibold text-gray-500 uppercase mb-2">
                     What it does
                   </h3>
-                  <p className="text-sm text-gray-700 leading-relaxed">{details.whatItDoes}</p>
+                  <p className="text-sm text-gray-700 leading-relaxed">{display.whatItDoes}</p>
                 </div>
 
                 {/* Data Flow */}
@@ -216,24 +119,24 @@ export default function BotsList() {
                     <div className="grid grid-cols-2 gap-3 text-xs">
                       <div>
                         <div className="font-semibold text-gray-700 mb-1">📥 Input</div>
-                        <div className="text-gray-600">{details.inputData}</div>
+                        <div className="text-gray-600">{display.inputData}</div>
                       </div>
                       <div>
                         <div className="font-semibold text-gray-700 mb-1">📤 Output</div>
-                        <div className="text-gray-600">{details.output}</div>
+                        <div className="text-gray-600">{display.output}</div>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Use Cases */}
-                {details.useCases && details.useCases.length > 0 && (
+                {display.useCases && display.useCases.length > 0 && (
                   <div className="px-6 pb-4">
                     <h3 className="text-xs font-semibold text-gray-500 uppercase mb-2">
                       Perfect for
                     </h3>
                     <div className="flex flex-wrap gap-1.5">
-                      {details.useCases.slice(0, 3).map((useCase, idx) => (
+                      {display.useCases.slice(0, 3).map((useCase, idx) => (
                         <span
                           key={idx}
                           className="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded"

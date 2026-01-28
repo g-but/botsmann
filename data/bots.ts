@@ -16,6 +16,14 @@ export interface Bot {
     accentColor: BotAccentColor;
     menuItems: BotMenuItem[];
   };
+  // Display metadata for bots list page (optional with fallbacks)
+  display?: {
+    tagline: string;
+    whatItDoes: string;
+    inputData: string;
+    output: string;
+    useCases: string[];
+  };
 }
 
 const bots: Bot[] = [
@@ -47,6 +55,19 @@ const bots: Bot[] = [
         { id: 'communication', label: 'Communication', icon: '✉️', section: 'communication' },
         { id: 'culture', label: 'Culture', icon: '🏔️', section: 'culture' },
         { id: 'waitlist', label: 'Join Waitlist', icon: '📝', section: 'waitlist' },
+      ],
+    },
+    display: {
+      tagline: 'Master Schwyzerdütsch naturally',
+      whatItDoes:
+        'Provides contextual Swiss German learning with cultural insights and canton-specific variations',
+      inputData: 'Your German level, target canton, learning goals',
+      output: 'Personalized lessons, pronunciation guides, cultural context',
+      useCases: [
+        'Moving to Switzerland',
+        'Work in Swiss companies',
+        'Connect with locals',
+        'Canton-specific dialects',
       ],
     },
   },
@@ -84,6 +105,19 @@ const bots: Bot[] = [
         { id: 'roadmap', label: 'Roadmap', icon: '🗺️', section: 'roadmap' },
       ],
     },
+    display: {
+      tagline: 'Accelerate your research workflow',
+      whatItDoes:
+        'Organizes research materials, tracks citations, finds relevant papers, and synthesizes findings',
+      inputData: 'Research papers, notes, queries, data sets',
+      output: 'Literature reviews, citation networks, summaries, insights',
+      useCases: [
+        'Academic research',
+        'Market analysis',
+        'Patent research',
+        'Technical documentation',
+      ],
+    },
   },
   {
     slug: 'medical-expert',
@@ -111,6 +145,19 @@ const bots: Bot[] = [
         { id: 'professionals', label: 'For Professionals', icon: '👨‍⚕️', section: 'professionals' },
         { id: 'harm-reduction', label: 'Harm Reduction', icon: '🛡️', section: 'harm-reduction' },
         { id: 'vision', label: 'Vision', icon: '🚀', section: 'vision' },
+      ],
+    },
+    display: {
+      tagline: 'Evidence-based health insights',
+      whatItDoes:
+        'Analyzes medical literature, symptoms, and data to provide evidence-based health information',
+      inputData: 'Symptoms, medical history, lab results, research papers',
+      output: 'Evidence-based insights, specialist recommendations, treatment options',
+      useCases: [
+        'Second opinions',
+        'Research rare conditions',
+        'Treatment comparisons',
+        'Clinical studies',
       ],
     },
   },
@@ -142,6 +189,14 @@ const bots: Bot[] = [
         { id: 'get-started', label: 'Join Waitlist', icon: '✨', section: 'get-started' },
       ],
     },
+    display: {
+      tagline: 'Your AI-powered legal companion',
+      whatItDoes:
+        'Analyzes legal cases, matches you with expert lawyers, and provides secure collaborative workspaces',
+      inputData: 'Legal documents, case descriptions, jurisdiction info',
+      output: 'AI case analysis, lawyer matches, secure data room',
+      useCases: ['Immigration cases', 'Employment disputes', 'Real estate contracts', 'Business law'],
+    },
   },
   {
     slug: 'artistic-advisor',
@@ -169,6 +224,19 @@ const bots: Bot[] = [
         { id: 'styles', label: 'Styles', icon: '🎭', section: 'styles' },
         { id: 'techniques', label: 'Techniques', icon: '🖌️', section: 'techniques' },
         { id: 'get-started', label: 'Get Started', icon: '🚀', section: 'get-started' },
+      ],
+    },
+    display: {
+      tagline: 'Your creative co-pilot',
+      whatItDoes:
+        'Analyzes art styles, generates creative concepts, and provides artistic feedback and guidance',
+      inputData: 'Art references, style preferences, project briefs',
+      output: 'Style analysis, creative concepts, technical feedback',
+      useCases: [
+        'Style exploration',
+        'Concept development',
+        'Art history research',
+        'Portfolio review',
       ],
     },
   },
@@ -204,6 +272,14 @@ const bots: Bot[] = [
         { id: 'pricing', label: 'Pricing', icon: '💰', section: 'pricing' },
         { id: 'get-started', label: 'Get Started', icon: '🚀', section: 'get-started' },
       ],
+    },
+    display: {
+      tagline: 'Strategic product development',
+      whatItDoes:
+        'Analyzes market data, user feedback, and competitive landscape to guide product strategy',
+      inputData: 'User feedback, market data, feature requests, analytics',
+      output: 'Product roadmaps, prioritization, competitive analysis',
+      useCases: ['Feature prioritization', 'Market analysis', 'User research', 'Roadmap planning'],
     },
   },
 ];

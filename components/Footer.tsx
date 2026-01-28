@@ -4,6 +4,7 @@ import { FaGithub, FaTwitter } from 'react-icons/fa';
 import { Logo } from '@/components/shared/Logo';
 import { site } from '@/lib/site';
 import { ROUTES } from '@/lib/routes';
+import bots from '@/data/bots';
 
 export function Footer() {
   return (
@@ -23,42 +24,24 @@ export function Footer() {
         <div>
           <h2 className="mb-4 font-semibold text-gray-800">AI Assistants</h2>
           <ul className="space-y-2 text-gray-600">
-            <li>
-              <Link href="/bots/legal-expert" className="hover:text-blue-600 transition-colors">
-                Lex (Legal)
-              </Link>
-            </li>
-            <li>
-              <Link href="/bots/medical-expert" className="hover:text-blue-600 transition-colors">
-                Imhotep (Health)
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/bots/research-assistant"
-                className="hover:text-blue-600 transition-colors"
-              >
-                Nerd (Research)
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/bots/swiss-german-teacher"
-                className="hover:text-blue-600 transition-colors"
-              >
-                Heidi (Language)
-              </Link>
-            </li>
-            <li>
-              <Link href="/bots/artistic-advisor" className="hover:text-blue-600 transition-colors">
-                Muse (Creative)
-              </Link>
-            </li>
-            <li>
-              <Link href="/bots/product-manager" className="hover:text-blue-600 transition-colors">
-                Trident (Business)
-              </Link>
-            </li>
+            {bots
+              .filter((b) => b.nav)
+              .map((bot) => {
+                // Extract short category from navDescription (e.g., "AI Legal Assistant" -> "Legal")
+                const category =
+                  bot.nav!.navDescription?.replace(/^AI\s+/, '').replace(/\s+Assistant$/, '') ||
+                  'Assistant';
+                return (
+                  <li key={bot.slug}>
+                    <Link
+                      href={`/bots/${bot.slug}`}
+                      className="hover:text-blue-600 transition-colors"
+                    >
+                      {bot.nav!.navTitle} ({category})
+                    </Link>
+                  </li>
+                );
+              })}
           </ul>
         </div>
 
