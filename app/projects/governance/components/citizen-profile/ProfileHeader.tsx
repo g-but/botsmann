@@ -14,6 +14,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ citizen }) => {
         <div className="md:flex md:items-center md:justify-between">
           <div className="flex-1 min-w-0 flex items-center">
             {citizen.avatarUrl ? (
+              /* eslint-disable-next-line @next/next/no-img-element -- Dynamic external avatar URL from data */
               <img
                 className="h-16 w-16 rounded-full border-4 border-white"
                 src={citizen.avatarUrl}
