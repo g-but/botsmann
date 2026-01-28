@@ -3,6 +3,7 @@
 import { useState, useRef, type FC, type DragEvent, type ChangeEvent } from 'react';
 import type { FileCategory, UploadedFile } from '@/lib/demo/types';
 import type { BotAccentColor } from '@/types/bot';
+import { formatBytes } from '@/lib/format';
 
 interface DemoFileUploadProps {
   files: UploadedFile[];
@@ -20,12 +21,6 @@ const accentColorClasses: Record<BotAccentColor, { border: string; bg: string; t
   red: { border: 'border-red-300', bg: 'bg-red-50', text: 'text-red-600' },
   amber: { border: 'border-amber-300', bg: 'bg-amber-50', text: 'text-amber-600' },
 };
-
-function formatFileSize(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-}
 
 function getStatusIcon(status: UploadedFile['status']) {
   switch (status) {
@@ -222,7 +217,7 @@ export const DemoFileUpload: FC<DemoFileUploadProps> = ({
                   <div className="min-w-0">
                     <p className="text-sm font-medium text-gray-900 truncate">{file.name}</p>
                     <p className="text-xs text-gray-500">
-                      {formatFileSize(file.size)} &bull; {getStatusText(file.status)}
+                      {formatBytes(file.size)} &bull; {getStatusText(file.status)}
                       {file.errorMessage && (
                         <span className="text-red-500 ml-1">- {file.errorMessage}</span>
                       )}

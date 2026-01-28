@@ -1,15 +1,8 @@
 import { type UploadedFile } from '../types';
+import { formatBytes } from '@/lib/format';
 
-/**
- * Format file size in human-readable format
- */
-export function formatFileSize(bytes: number): string {
-  if (bytes === 0) return '0 Bytes';
-  const k = 1024;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
-}
+// Re-export for backwards compatibility
+export const formatFileSize = formatBytes;
 
 /**
  * Calculate and format total size of files
