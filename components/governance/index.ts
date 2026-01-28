@@ -5,5 +5,3 @@
  * Components for Swiss governance transparency features
  */
 export { ProfileHeader } from './ProfileHeader';
-export { ProfileTabs } from './ProfileTabs';
-export { InfoBox } from './InfoBox';
