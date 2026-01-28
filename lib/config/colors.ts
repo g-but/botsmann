@@ -184,3 +184,59 @@ export function getAccentTextClass(color: string | null | undefined): string {
  * Default accent color
  */
 export const DEFAULT_ACCENT_COLOR: CustomBotAccentColor = 'blue';
+
+/**
+ * Comprehensive accent class set for themed components
+ */
+export interface AccentClasses {
+  primary: string;
+  text: string;
+  border: string;
+  lightBg: string;
+  badge: string;
+}
+
+const ACCENT_CLASS_SETS: Record<CustomBotAccentColor, AccentClasses> = {
+  blue: {
+    primary: 'bg-blue-500',
+    text: 'text-blue-600',
+    border: 'border-blue-500',
+    lightBg: 'bg-blue-100',
+    badge: 'bg-blue-100 text-blue-800',
+  },
+  green: {
+    primary: 'bg-green-500',
+    text: 'text-green-600',
+    border: 'border-green-500',
+    lightBg: 'bg-green-100',
+    badge: 'bg-green-100 text-green-800',
+  },
+  indigo: {
+    primary: 'bg-indigo-500',
+    text: 'text-indigo-600',
+    border: 'border-indigo-500',
+    lightBg: 'bg-indigo-100',
+    badge: 'bg-indigo-100 text-indigo-800',
+  },
+  red: {
+    primary: 'bg-red-500',
+    text: 'text-red-600',
+    border: 'border-red-500',
+    lightBg: 'bg-red-100',
+    badge: 'bg-red-100 text-red-800',
+  },
+  amber: {
+    primary: 'bg-amber-500',
+    text: 'text-amber-600',
+    border: 'border-amber-500',
+    lightBg: 'bg-amber-100',
+    badge: 'bg-amber-100 text-amber-800',
+  },
+};
+
+/**
+ * Get comprehensive accent classes for a color
+ */
+export function getAccentClasses(color: string | null | undefined): AccentClasses {
+  return ACCENT_CLASS_SETS[color as CustomBotAccentColor] || ACCENT_CLASS_SETS.blue;
+}
