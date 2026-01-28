@@ -53,13 +53,13 @@ describe('API Response Helpers', () => {
 
   describe('jsonError', () => {
     it('returns error response', async () => {
-      const response = jsonError('Something went wrong', 'TEST_ERROR', 400);
+      const response = jsonError('Something went wrong', 'VALIDATION_ERROR', 400);
       const data = await response.json();
 
       expect(response.status).toBe(400);
       expect(data.success).toBe(false);
       expect(data.error).toBe('Something went wrong');
-      expect(data.code).toBe('TEST_ERROR');
+      expect(data.code).toBe('VALIDATION_ERROR');
     });
 
     it('uses default status 500', async () => {
