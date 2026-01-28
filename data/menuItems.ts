@@ -1,5 +1,49 @@
-import type { MenuItem } from '@/types/navigation';
+import type { MenuItem, MenuChildItem } from '@/types/navigation';
 import type { Route } from 'next';
+import bots from '@/data/bots';
+
+/**
+ * Map bot slug to professional category path
+ * This mapping allows bots to link to their corresponding professional page
+ */
+const BOT_TO_PROFESSIONAL_PATH: Record<string, string> = {
+  'legal-expert': 'legal',
+  'medical-expert': 'health',
+  'research-assistant': 'research',
+  'swiss-german-teacher': 'language',
+  'artistic-advisor': 'creative',
+  'product-manager': 'business',
+};
+
+/**
+ * Generate professional menu children from bots.ts
+ * SSOT: Bot data drives navigation
+ */
+const generateProfessionalChildren = (): MenuChildItem[] => {
+  const allProfessionals: MenuChildItem = {
+    label: 'All Professionals',
+    path: '/professionals' as Route,
+    description: 'Browse all AI professionals.',
+    icon: '👥',
+  };
+
+  const botItems: MenuChildItem[] = bots
+    .filter((b) => b.nav)
+    .map((bot) => {
+      const professionalPath = BOT_TO_PROFESSIONAL_PATH[bot.slug] || bot.slug;
+      // Extract short category from navDescription (e.g., "AI Legal Assistant" -> "Legal")
+      const category =
+        bot.nav!.navDescription?.replace(/^AI\s+/, '').replace(/\s+Assistant$/, '') || 'Assistant';
+      return {
+        label: `${bot.nav!.navTitle} (${category})`,
+        path: `/professionals/${professionalPath}` as Route,
+        description: bot.description,
+        icon: bot.nav!.emoji,
+      };
+    });
+
+  return [allProfessionals, ...botItems];
+};
 
 /**
  * Main site navigation menu items
@@ -14,50 +58,7 @@ export const menuItems: MenuItem[] = [
   {
     label: 'Professionals',
     path: '/professionals' as Route,
-    children: [
-      {
-        label: 'All Professionals',
-        path: '/professionals' as Route,
-        description: 'Browse all AI professionals.',
-        icon: '👥',
-      },
-      {
-        label: 'Dr. Lex (Legal)',
-        path: '/professionals/legal' as Route,
-        description: 'AI legal advisor for contracts and legal questions.',
-        icon: '⚖️',
-      },
-      {
-        label: 'Dr. Imhotep (Health)',
-        path: '/professionals/health' as Route,
-        description: 'AI health advisor for wellness guidance.',
-        icon: '⚕️',
-      },
-      {
-        label: 'Prof. Nerd (Research)',
-        path: '/professionals/research' as Route,
-        description: 'AI research assistant for academic work.',
-        icon: '🔬',
-      },
-      {
-        label: 'Heidi (Language)',
-        path: '/professionals/language' as Route,
-        description: 'AI language coach for German learning.',
-        icon: '🇨🇭',
-      },
-      {
-        label: 'Artr (Creative)',
-        path: '/professionals/creative' as Route,
-        description: 'AI creative advisor for artistic projects.',
-        icon: '🎨',
-      },
-      {
-        label: 'Trident (Business)',
-        path: '/professionals/business' as Route,
-        description: 'AI business strategist for planning.',
-        icon: '🔱',
-      },
-    ],
+    children: generateProfessionalChildren(),
     megaMenu: {
       columns: 2,
       header: {
