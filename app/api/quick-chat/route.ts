@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
       const llmResponse = await generateLLMResponse(messages, {
         provider: 'groq', // Use Groq as default (fast and free tier)
         temperature: 0.8, // Slightly higher for more personality
-        maxTokens: 256, // Keep responses short for preview
+        maxTokens: 1024, // Increased from 256 to prevent response cutoff
       });
 
       console.log('[Quick Chat API] LLM response in', Date.now() - llmStartTime, 'ms');
