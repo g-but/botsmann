@@ -13,3 +13,6 @@ export type { BotBuilderState, KnowledgeChunkDraft, UseBotBuilderReturn } from '
 // Dashboard hooks
 export { useDashboardStats } from './useDashboardStats';
 export type { CustomBot, DashboardStats } from './useDashboardStats';
+
+// Rate limit hooks
+export { useRateLimitCountdown } from './useRateLimitCountdown';
