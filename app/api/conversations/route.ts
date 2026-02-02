@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    return jsonSuccess({ conversation }, undefined, HTTP_STATUS.CREATED);
+    return jsonSuccess({ conversation }, { cache: 'NONE' }, HTTP_STATUS.CREATED);
   } catch (error) {
     return handleError(error, DOMAIN_ERROR);
   }
@@ -118,7 +118,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    return jsonSuccess({ conversations: conversations ?? [] });
+    return jsonSuccess({ conversations: conversations ?? [] }, { cache: 'PRIVATE_SHORT' });
   } catch (error) {
     return handleError(error, DOMAIN_ERROR);
   }

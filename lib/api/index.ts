@@ -22,8 +22,11 @@ export {
   handleError,
   // Constants
   HTTP_STATUS,
+  CACHE_CONTROL,
   // Types
   type ApiResponse,
   type ErrorCode,
   type ValidationError,
+  type CacheControlPreset,
+  type ResponseOptions,
 } from './responses';

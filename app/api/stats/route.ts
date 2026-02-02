@@ -66,17 +66,20 @@ export async function GET(request: NextRequest) {
     const totalBots = bots.length;
     const botsPublished = bots.filter((b) => b.is_published).length;
 
-    return jsonSuccess({
-      stats: {
-        total_conversations: totalConversations,
-        total_messages: totalMessages,
-        total_documents: totalDocuments,
-        documents_ready: documentsReady,
-        documents_pending: documentsPending,
-        total_bots: totalBots,
-        bots_published: botsPublished,
+    return jsonSuccess(
+      {
+        stats: {
+          total_conversations: totalConversations,
+          total_messages: totalMessages,
+          total_documents: totalDocuments,
+          documents_ready: documentsReady,
+          documents_pending: documentsPending,
+          total_bots: totalBots,
+          bots_published: botsPublished,
+        },
       },
-    });
+      { cache: 'PRIVATE_SHORT' },
+    );
   } catch (error) {
     return handleError(error, DOMAIN_ERROR);
   }
