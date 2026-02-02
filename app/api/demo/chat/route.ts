@@ -1,7 +1,15 @@
+/* eslint-disable no-console */
+
 import { type NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { jsonError, jsonValidationError, formatZodErrors, HTTP_STATUS } from '@/lib/api';
 import { generateWithBestProvider, type ModelProvider } from '@/lib/llm-client';
+import {
+  sanitizeSystemPrompt,
+  sanitizeUserMessage,
+  wrapUserContext,
+  PROMPT_LIMITS,
+} from '@/lib/prompt-sanitizer';
 
 // ============================================================================
 // Types
@@ -63,18 +71,32 @@ async function generateResponse(
   customSystemPrompt?: string,
   additionalContext?: string,
 ): Promise<LLMResult> {
-  // Use custom system prompt if provided, otherwise use default
-  const systemPrompt = customSystemPrompt || SYSTEM_PROMPT;
+  // Sanitize user message
+  const sanitizedMessage = sanitizeUserMessage(userMessage);
+
+  // Use custom system prompt if provided (sanitized), otherwise use default
+  let systemPrompt = SYSTEM_PROMPT;
+  if (customSystemPrompt) {
+    const sanitized = sanitizeSystemPrompt(customSystemPrompt);
+    systemPrompt = sanitized.sanitized;
+    if (sanitized.warnings.length > 0) {
+      console.log('[Demo Chat] System prompt sanitized:', sanitized.warnings);
+    }
+  }
 
   // Build user message content with all context
   let userContent = '';
   if (additionalContext) {
-    userContent += `${additionalContext}\n\n---\n`;
+    // Wrap additional context to prevent injection
+    const wrapped = wrapUserContext(additionalContext, 'Additional Context');
+    if (wrapped) {
+      userContent += `${wrapped}\n\n---\n`;
+    }
   }
   if (context) {
     userContent += `Context information:\n${context}\n\n---\n`;
   }
-  userContent += `User message: ${userMessage}`;
+  userContent += `User message: ${sanitizedMessage.sanitized}`;
 
   try {
     const result = await generateWithBestProvider([
@@ -389,11 +411,11 @@ const knowledgeChunks: KnowledgeChunk[] = [
 // ============================================================================
 
 const ChatRequestSchema = z.object({
-  message: z.string().min(1, 'Message is required'),
+  message: z.string().min(1, 'Message is required').max(PROMPT_LIMITS.message),
   includeContext: z.boolean().optional().default(false),
-  // Optional overrides for bot-specific demos
-  systemPrompt: z.string().optional(),
-  additionalContext: z.string().optional(),
+  // Optional overrides for bot-specific demos (with length limits)
+  systemPrompt: z.string().max(PROMPT_LIMITS.systemPrompt).optional(),
+  additionalContext: z.string().max(PROMPT_LIMITS.additionalContext).optional(),
 });
 
 // ============================================================================
