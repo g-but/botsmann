@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable @next/next/no-html-link-for-pages */
+
 /**
  * Global Error Boundary
  *
@@ -36,9 +38,7 @@ export default function GlobalError({
               </div>
             </div>
 
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Application Error
-            </h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Application Error</h1>
 
             <p className="text-gray-600 mb-6">
               We encountered a critical error. Our team has been notified.
@@ -46,13 +46,9 @@ export default function GlobalError({
 
             {process.env.NODE_ENV === 'development' && error.message && (
               <div className="mb-6 p-4 bg-gray-100 rounded-lg text-left">
-                <p className="text-sm font-mono text-gray-700 break-all">
-                  {error.message}
-                </p>
+                <p className="text-sm font-mono text-gray-700 break-all">{error.message}</p>
                 {error.digest && (
-                  <p className="text-xs text-gray-500 mt-2">
-                    Error ID: {error.digest}
-                  </p>
+                  <p className="text-xs text-gray-500 mt-2">Error ID: {error.digest}</p>
                 )}
               </div>
             )}

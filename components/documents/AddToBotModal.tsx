@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { documentToasts } from '@/lib/toast';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 
@@ -128,12 +129,12 @@ export const AddToBotModal = ({
             <div className="text-center py-8">
               <span className="text-4xl mb-3 block">🤖</span>
               <p className="text-gray-600 mb-4">No bots yet</p>
-              <a
+              <Link
                 href="/bots/create"
                 className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm"
               >
                 Create your first bot
-              </a>
+              </Link>
             </div>
           ) : (
             <div className="space-y-2">
@@ -183,9 +184,12 @@ export const AddToBotModal = ({
 
         {/* Footer */}
         <div className="flex items-center justify-between p-4 border-t border-gray-200 bg-gray-50">
-          <a href="/bots/create" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+          <Link
+            href="/bots/create"
+            className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+          >
             + Create new bot
-          </a>
+          </Link>
           <button
             onClick={onClose}
             className="px-4 py-2 text-gray-700 hover:bg-gray-200 rounded-lg transition-colors text-sm font-medium"

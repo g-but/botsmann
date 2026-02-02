@@ -3,13 +3,8 @@ import { Footer } from '@/components/Footer';
 import { Providers } from '@/components/Providers';
 import { site } from '@/lib/site';
 import './globals.css';
-import dynamic from 'next/dynamic';
 import { Toaster } from 'sonner';
-
-const Analytics = dynamic(
-  () => import('@vercel/analytics/react').then((m) => m.Analytics).catch(() => () => null),
-  { ssr: false },
-);
+import { Analytics } from '@vercel/analytics/react';
 
 export const metadata = {
   title: `${site.name} - ${site.tagline}`,

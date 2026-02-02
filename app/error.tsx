@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import Link from 'next/link';
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -43,9 +44,7 @@ export default function Error({ error, reset }: ErrorProps) {
           </div>
         </div>
 
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
-          Something went wrong
-        </h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Something went wrong</h2>
 
         <p className="text-gray-600 mb-6">
           An unexpected error occurred. Don&apos;t worry, your data is safe.
@@ -53,9 +52,7 @@ export default function Error({ error, reset }: ErrorProps) {
 
         {process.env.NODE_ENV === 'development' && error.message && (
           <div className="mb-6 p-4 bg-gray-100 rounded-lg text-left">
-            <p className="text-sm font-mono text-gray-700 break-all">
-              {error.message}
-            </p>
+            <p className="text-sm font-mono text-gray-700 break-all">{error.message}</p>
           </div>
         )}
 
@@ -66,12 +63,12 @@ export default function Error({ error, reset }: ErrorProps) {
           >
             Try again
           </button>
-          <a
+          <Link
             href="/"
             className="px-6 py-3 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors"
           >
             Go home
-          </a>
+          </Link>
         </div>
       </div>
     </div>
