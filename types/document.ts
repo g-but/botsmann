@@ -4,6 +4,45 @@
 
 import { type DocumentStatusType } from '@/lib/constants';
 
+/**
+ * Document categories that map to professionals
+ */
+export type DocumentCategory =
+  | 'legal'
+  | 'health'
+  | 'research'
+  | 'language'
+  | 'creative'
+  | 'business'
+  | 'general';
+
+export const DOCUMENT_CATEGORIES: {
+  value: DocumentCategory;
+  label: string;
+  emoji: string;
+  description: string;
+}[] = [
+  { value: 'general', label: 'General', emoji: '📄', description: 'Uncategorized documents' },
+  { value: 'legal', label: 'Legal', emoji: '⚖️', description: 'Contracts, agreements, legal docs' },
+  { value: 'health', label: 'Health', emoji: '⚕️', description: 'Medical records, health info' },
+  { value: 'research', label: 'Research', emoji: '🔬', description: 'Papers, studies, data' },
+  { value: 'business', label: 'Business', emoji: '🔱', description: 'Plans, financials, strategy' },
+  { value: 'creative', label: 'Creative', emoji: '🎨', description: 'Art, design, portfolios' },
+  { value: 'language', label: 'Language', emoji: '🇨🇭', description: 'Learning materials, translations' },
+];
+
+/**
+ * Map professional slugs to document categories they can access
+ */
+export const PROFESSIONAL_DOCUMENT_ACCESS: Record<string, DocumentCategory[]> = {
+  legal: ['legal', 'general'],
+  health: ['health', 'general'],
+  research: ['research', 'general'],
+  business: ['business', 'general'],
+  creative: ['creative', 'general'],
+  language: ['language', 'general'],
+};
+
 export interface Document {
   id: string;
   user_id: string;
@@ -12,6 +51,7 @@ export interface Document {
   size_bytes: number;
   storage_path: string;
   status: DocumentStatusType;
+  category: DocumentCategory;
   error_message?: string;
   chunk_count?: number;
   created_at: string;
