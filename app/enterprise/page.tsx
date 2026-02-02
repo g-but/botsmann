@@ -1,11 +1,6 @@
 import { type Metadata } from 'next';
 import Link from 'next/link';
-import nextDynamic from 'next/dynamic';
-
-const ConsultationForm = nextDynamic(() => import('@/components/ConsultationForm'), {
-  loading: () => <div className="min-h-[200px] flex items-center justify-center">Loading...</div>,
-  ssr: false,
-});
+import { ConsultationFormLoader } from '@/components/ConsultationFormLoader';
 
 export const metadata: Metadata = {
   title: 'Enterprise | Botsmann',
@@ -335,7 +330,7 @@ export default function EnterprisePage() {
           </div>
 
           <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 max-w-xl mx-auto">
-            <ConsultationForm />
+            <ConsultationFormLoader />
           </div>
         </section>
       </main>

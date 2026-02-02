@@ -1,4 +1,5 @@
 import { type Metadata } from 'next';
+import Link from 'next/link';
 import { professionals } from '@/data/professionals';
 import { ProfessionalCard } from '@/components/shared/ProfessionalCard';
 
@@ -65,20 +66,20 @@ export default function ProfessionalsPage() {
               expert if needed.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <a
+              <Link
                 href="/professionals/legal"
                 className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors"
               >
                 <span>⚖️</span>
                 Start with Legal
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/professionals/health"
                 className="inline-flex items-center justify-center gap-2 bg-green-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors"
               >
                 <span>⚕️</span>
                 Start with Health
-              </a>
+              </Link>
             </div>
           </div>
         </section>
