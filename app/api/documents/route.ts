@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
     // Trigger async processing (will be handled separately)
     // For now, the document is created with status 'pending'
 
-    return jsonSuccess({ document });
+    return jsonSuccess({ document }, { cache: 'NONE' });
   } catch (error) {
     return handleError(error, DOMAIN_ERRORS.FAILED_UPLOAD_DOCUMENT);
   }
@@ -134,7 +134,7 @@ export async function GET(request: NextRequest) {
       return jsonError('Failed to fetch documents', 'DATABASE_ERROR', HTTP_STATUS.INTERNAL_ERROR);
     }
 
-    return jsonSuccess({ documents });
+    return jsonSuccess({ documents }, { cache: 'PRIVATE_SHORT' });
   } catch (error) {
     return handleError(error, DOMAIN_ERRORS.FAILED_GET_DOCUMENTS);
   }
@@ -182,7 +182,7 @@ export async function DELETE(request: NextRequest) {
       return jsonError('Failed to delete document', 'DATABASE_ERROR', HTTP_STATUS.INTERNAL_ERROR);
     }
 
-    return jsonSuccess({ deleted: true });
+    return jsonSuccess({ deleted: true }, { cache: 'NONE' });
   } catch (error) {
     return handleError(error, DOMAIN_ERRORS.FAILED_DELETE_DOCUMENT);
   }

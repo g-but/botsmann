@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
       throw error;
     }
 
-    return jsonSuccess({ settings: settings || DEFAULT_USER_SETTINGS });
+    return jsonSuccess({ settings: settings || DEFAULT_USER_SETTINGS }, { cache: 'PRIVATE_SHORT' });
   } catch (error) {
     return handleError(error, DOMAIN_ERRORS.FAILED_GET_SETTINGS);
   }
@@ -70,7 +70,7 @@ export async function PUT(req: NextRequest) {
       throw error;
     }
 
-    return jsonSuccess({ updated: true });
+    return jsonSuccess({ updated: true }, { cache: 'NONE' });
   } catch (error) {
     return handleError(error, DOMAIN_ERRORS.FAILED_UPDATE_SETTINGS);
   }

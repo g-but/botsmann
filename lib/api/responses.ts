@@ -4,10 +4,73 @@
  *
  * SSOT for API response patterns across all routes.
  * Consolidates response creation, error handling, and Zod validation.
+ * Includes HTTP caching headers for performance optimization.
  */
 
 import { NextResponse } from 'next/server';
 import { ZodError, type ZodSchema } from 'zod';
+
+// ============================================================================
+// Cache Control
+// ============================================================================
+
+/**
+ * Cache control presets for different response types
+ */
+export const CACHE_CONTROL = {
+  /** No caching - for mutations, auth, sensitive data */
+  NONE: 'no-store, no-cache, must-revalidate',
+
+  /** Private short cache - user-specific data (1 minute) */
+  PRIVATE_SHORT: 'private, max-age=60',
+
+  /** Private medium cache - user data that changes less frequently (5 minutes) */
+  PRIVATE_MEDIUM: 'private, max-age=300',
+
+  /** Public short cache - public data (5 minutes) */
+  PUBLIC_SHORT: 'public, max-age=300',
+
+  /** Public medium cache - semi-static public data (1 hour) */
+  PUBLIC_MEDIUM: 'public, max-age=3600',
+
+  /** Immutable - truly static data (1 day, immutable) */
+  IMMUTABLE: 'public, max-age=86400, immutable',
+} as const;
+
+export type CacheControlPreset = keyof typeof CACHE_CONTROL;
+
+/**
+ * Response options including cache control
+ */
+export interface ResponseOptions {
+  /** Cache control preset or custom header value */
+  cache?: CacheControlPreset | string;
+  /** Additional headers to include */
+  headers?: Record<string, string>;
+}
+
+/**
+ * Build headers object with cache control
+ */
+function buildHeaders(options?: ResponseOptions): HeadersInit {
+  const headers: Record<string, string> = {};
+
+  // Add cache control
+  if (options?.cache) {
+    const cacheValue =
+      options.cache in CACHE_CONTROL
+        ? CACHE_CONTROL[options.cache as CacheControlPreset]
+        : options.cache;
+    headers['Cache-Control'] = cacheValue;
+  }
+
+  // Add any additional headers
+  if (options?.headers) {
+    Object.assign(headers, options.headers);
+  }
+
+  return headers;
+}
 
 /**
  * Standard API response shape
@@ -64,26 +127,55 @@ type HttpStatusCode = (typeof HTTP_STATUS)[keyof typeof HTTP_STATUS];
 
 /**
  * Create a successful JSON response
+ *
+ * @param data - Response data
+ * @param options - Response options (cache, headers) or just a message string for backwards compatibility
+ * @param status - HTTP status code
  */
 export function jsonSuccess<T>(
   data: T,
-  message?: string,
+  options?: ResponseOptions | string,
   status: HttpStatusCode = HTTP_STATUS.OK,
 ): NextResponse<ApiResponse<T>> {
   const response: ApiResponse<T> = { success: true, data };
-  if (message) response.message = message;
-  return NextResponse.json(response, { status });
+
+  // Handle backwards compatibility: options can be a message string
+  let responseOptions: ResponseOptions | undefined;
+  if (typeof options === 'string') {
+    response.message = options;
+  } else {
+    responseOptions = options;
+  }
+
+  const headers = buildHeaders(responseOptions);
+
+  return NextResponse.json(response, {
+    status,
+    headers: Object.keys(headers).length > 0 ? headers : undefined,
+  });
 }
 
 /**
  * Create a success response with just a message (no data)
  */
-export function jsonMessage(message: string, status = HTTP_STATUS.OK): NextResponse<ApiResponse> {
-  return NextResponse.json({ success: true, message }, { status });
+export function jsonMessage(
+  message: string,
+  status = HTTP_STATUS.OK,
+  options?: ResponseOptions,
+): NextResponse<ApiResponse> {
+  const headers = buildHeaders(options);
+  return NextResponse.json(
+    { success: true, message },
+    {
+      status,
+      headers: Object.keys(headers).length > 0 ? headers : undefined,
+    },
+  );
 }
 
 /**
  * Create an error JSON response
+ * Errors are never cached (Cache-Control: no-store)
  */
 export function jsonError(
   error: string,
@@ -93,7 +185,10 @@ export function jsonError(
 ): NextResponse<ApiResponse> {
   const response: ApiResponse = { success: false, error, code };
   if (details?.length) response.details = details;
-  return NextResponse.json(response, { status });
+  return NextResponse.json(response, {
+    status,
+    headers: { 'Cache-Control': CACHE_CONTROL.NONE },
+  });
 }
 
 /**

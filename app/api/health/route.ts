@@ -13,7 +13,7 @@ export async function GET() {
       throw error;
     }
 
-    return jsonSuccess({ status: 'healthy', database: 'connected' });
+    return jsonSuccess({ status: 'healthy', database: 'connected' }, { cache: 'PUBLIC_SHORT' });
   } catch (error) {
     console.error('Health check failed:', error);
     return jsonServiceUnavailable('Database connection failed');
