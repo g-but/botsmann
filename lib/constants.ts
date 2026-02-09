@@ -53,6 +53,10 @@ export const API_CONFIG = {
   GROQ_API_URL: 'https://api.groq.com/openai/v1/chat/completions',
   GROQ_MODEL: 'llama-3.1-8b-instant',
 
+  // OpenRouter
+  OPENROUTER_API_URL: 'https://openrouter.ai/api/v1/chat/completions',
+  OPENROUTER_DEFAULT_MODEL: 'anthropic/claude-3.5-sonnet',
+
   // Token limits
   MAX_CONTEXT_CHARS: 8000,
   MAX_TOKENS_RESPONSE: 1024,

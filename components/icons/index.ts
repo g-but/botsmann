@@ -17,4 +17,10 @@ export {
   DocumentIcon,
   SettingsIcon,
   UserIcon,
+  DashboardIcon,
+  NavDocumentIcon,
+  BotIcon,
+  ProfileIcon,
+  NavSettingsIcon,
+  SignOutIcon,
 } from './Icons';

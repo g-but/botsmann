@@ -35,13 +35,7 @@ export const ACCENT_COLORS = [
  * Accent colors available for custom bots (user-created).
  * Subset of ACCENT_COLORS - matches database CHECK constraint.
  */
-export const CUSTOM_BOT_ACCENT_COLORS = [
-  'blue',
-  'green',
-  'indigo',
-  'red',
-  'amber',
-] as const;
+export const CUSTOM_BOT_ACCENT_COLORS = ['blue', 'green', 'indigo', 'red', 'amber'] as const;
 
 /**
  * Type for all accent colors in the system
@@ -179,6 +173,32 @@ export function getAccentBgClass(color: string | null | undefined): string {
 export function getAccentTextClass(color: string | null | undefined): string {
   return ACCENT_TEXT_CLASSES[color as CustomBotAccentColor] || ACCENT_TEXT_CLASSES.blue;
 }
+
+/**
+ * Starter question hover classes for professional demos
+ * Uses ProfessionalAccentColor set (includes 'purple')
+ */
+export const ACCENT_STARTER_HOVER_CLASSES: Record<string, string> = {
+  blue: 'hover:border-blue-300 hover:bg-blue-50',
+  green: 'hover:border-green-300 hover:bg-green-50',
+  indigo: 'hover:border-indigo-300 hover:bg-indigo-50',
+  red: 'hover:border-red-300 hover:bg-red-50',
+  amber: 'hover:border-amber-300 hover:bg-amber-50',
+  purple: 'hover:border-purple-300 hover:bg-purple-50',
+};
+
+/**
+ * Focus border classes for professional demo inputs
+ * Uses ProfessionalAccentColor set (includes 'purple')
+ */
+export const ACCENT_FOCUS_BORDER_CLASSES: Record<string, string> = {
+  blue: 'focus:border-blue-500',
+  green: 'focus:border-green-500',
+  indigo: 'focus:border-indigo-500',
+  red: 'focus:border-red-500',
+  amber: 'focus:border-amber-500',
+  purple: 'focus:border-purple-500',
+};
 
 /**
  * Default accent color

@@ -33,32 +33,8 @@ export interface CustomBot {
   updated_at: string;
 }
 
-/**
- * Input for creating a new custom bot
- */
-export interface CreateCustomBotInput {
-  slug: string;
-  title: string;
-  description?: string;
-  emoji?: string;
-  accent_color?: BotAccentColor;
-  system_prompt: string;
-  nav_config?: CustomBotNavConfig;
-}
-
-/**
- * Input for updating an existing custom bot
- */
-export interface UpdateCustomBotInput {
-  title?: string;
-  description?: string;
-  emoji?: string;
-  accent_color?: BotAccentColor;
-  system_prompt?: string;
-  nav_config?: CustomBotNavConfig;
-  is_published?: boolean;
-  is_public?: boolean;
-}
+// Input types derived from Zod schemas (SSOT: lib/validations/custom-bot.ts)
+export type { CreateCustomBotInput, UpdateCustomBotInput } from '@/lib/validations/custom-bot';
 
 /**
  * Knowledge chunk for custom bot RAG
@@ -76,30 +52,11 @@ export interface BotKnowledgeChunk {
   created_at: string;
 }
 
-/**
- * Input for creating a knowledge chunk
- */
-export interface CreateKnowledgeChunkInput {
-  bot_id: string;
-  topic?: string;
-  question?: string;
-  content: string;
-  keywords?: string[];
-  source?: string;
-  metadata?: Record<string, unknown>;
-}
-
-/**
- * Input for updating a knowledge chunk
- */
-export interface UpdateKnowledgeChunkInput {
-  topic?: string;
-  question?: string;
-  content?: string;
-  keywords?: string[];
-  source?: string;
-  metadata?: Record<string, unknown>;
-}
+// Knowledge chunk input types derived from Zod schemas (SSOT: lib/validations/custom-bot.ts)
+export type {
+  CreateKnowledgeChunkInput,
+  UpdateKnowledgeChunkInput,
+} from '@/lib/validations/custom-bot';
 
 /**
  * Knowledge chunk with similarity score (from vector search)
