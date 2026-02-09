@@ -7,6 +7,8 @@
  * - Ollama (local)
  */
 
+import { API_CONFIG } from '@/lib/constants';
+
 export type ModelProvider = 'groq' | 'openrouter' | 'ollama';
 
 interface LLMMessage {
@@ -28,14 +30,6 @@ interface LLMResponse {
   provider: ModelProvider;
   model: string;
 }
-
-// Groq configuration
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const GROQ_MODEL = 'llama-3.1-8b-instant';
-
-// OpenRouter configuration
-const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const OPENROUTER_DEFAULT_MODEL = 'anthropic/claude-3.5-sonnet'; // Default to Claude
 
 // Ollama configuration
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'llama3.2:latest';
@@ -79,14 +73,14 @@ async function generateWithGroq(
     throw new Error('Groq API key not configured');
   }
 
-  const response = await fetch(GROQ_API_URL, {
+  const response = await fetch(API_CONFIG.GROQ_API_URL, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${key}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: GROQ_MODEL,
+      model: API_CONFIG.GROQ_MODEL,
       messages,
       temperature,
       max_tokens: maxTokens,
@@ -103,7 +97,7 @@ async function generateWithGroq(
   return {
     content: data.choices[0]?.message?.content || '',
     provider: 'groq',
-    model: GROQ_MODEL,
+    model: API_CONFIG.GROQ_MODEL,
   };
 }
 
@@ -122,9 +116,9 @@ async function generateWithOpenRouter(
     throw new Error('OpenRouter API key required');
   }
 
-  const selectedModel = model || OPENROUTER_DEFAULT_MODEL;
+  const selectedModel = model || API_CONFIG.OPENROUTER_DEFAULT_MODEL;
 
-  const response = await fetch(OPENROUTER_API_URL, {
+  const response = await fetch(API_CONFIG.OPENROUTER_API_URL, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${apiKey}`,

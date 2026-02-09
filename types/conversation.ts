@@ -53,31 +53,12 @@ export interface ConversationWithMessages extends Conversation {
   messages: ConversationMessage[];
 }
 
-/**
- * Input for creating a new conversation
- */
-export interface CreateConversationInput {
-  title?: string;
-  bot_type?: ConversationBotType;
-  bot_id?: string;
-  document_id?: string;
-}
-
-/**
- * Input for updating a conversation
- */
-export interface UpdateConversationInput {
-  title?: string;
-}
-
-/**
- * Input for adding a message to a conversation
- */
-export interface AddMessageInput {
-  role: 'user' | 'assistant';
-  content: string;
-  sources?: MessageSource[];
-}
+// Input types derived from Zod schemas (SSOT: lib/validations/conversation.ts)
+export type {
+  CreateConversationInput,
+  UpdateConversationInput,
+  AddMessageInput,
+} from '@/lib/validations/conversation';
 
 /**
  * API response for conversation list
