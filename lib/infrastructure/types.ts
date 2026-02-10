@@ -39,4 +39,5 @@ export interface ProviderColorClasses {
   border: string;
   hover: string;
   ring: string;
+  focusRing: string;
 }

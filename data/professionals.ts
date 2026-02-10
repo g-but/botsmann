@@ -332,6 +332,7 @@ export const getAccentColorClasses = (color: ProfessionalAccentColor) => {
       text: 'text-blue-600',
       border: 'border-blue-500',
       hover: 'hover:bg-blue-600',
+      groupHoverText: 'group-hover:text-blue-600',
     },
     green: {
       bg: 'bg-green-500',
@@ -340,6 +341,7 @@ export const getAccentColorClasses = (color: ProfessionalAccentColor) => {
       text: 'text-green-600',
       border: 'border-green-500',
       hover: 'hover:bg-green-600',
+      groupHoverText: 'group-hover:text-green-600',
     },
     indigo: {
       bg: 'bg-indigo-500',
@@ -348,6 +350,7 @@ export const getAccentColorClasses = (color: ProfessionalAccentColor) => {
       text: 'text-indigo-600',
       border: 'border-indigo-500',
       hover: 'hover:bg-indigo-600',
+      groupHoverText: 'group-hover:text-indigo-600',
     },
     red: {
       bg: 'bg-red-500',
@@ -356,6 +359,7 @@ export const getAccentColorClasses = (color: ProfessionalAccentColor) => {
       text: 'text-red-600',
       border: 'border-red-500',
       hover: 'hover:bg-red-600',
+      groupHoverText: 'group-hover:text-red-600',
     },
     amber: {
       bg: 'bg-amber-500',
@@ -364,6 +368,7 @@ export const getAccentColorClasses = (color: ProfessionalAccentColor) => {
       text: 'text-amber-600',
       border: 'border-amber-500',
       hover: 'hover:bg-amber-600',
+      groupHoverText: 'group-hover:text-amber-600',
     },
     purple: {
       bg: 'bg-purple-500',
@@ -372,6 +377,7 @@ export const getAccentColorClasses = (color: ProfessionalAccentColor) => {
       text: 'text-purple-600',
       border: 'border-purple-500',
       hover: 'hover:bg-purple-600',
+      groupHoverText: 'group-hover:text-purple-600',
     },
   };
   return colors[color];
