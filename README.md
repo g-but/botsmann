@@ -18,7 +18,7 @@ Expert guidance from AI advisors in law, health, research, language, art, and bu
 ## Technology Stack
 
 - **Frontend**: React, Next.js 14, TailwindCSS
-- **Backend**: Next.js API routes, OpenAI/Groq API
+- **Backend**: Next.js API routes, Groq/OpenRouter LLM APIs
 - **Database**: Supabase (PostgreSQL + pgvector)
 - **Deployment**: Vercel
 
@@ -27,7 +27,8 @@ Expert guidance from AI advisors in law, health, research, language, art, and bu
 ### Prerequisites
 
 - Node.js 18+
-- OpenAI or Groq API key
+- Supabase project (database + auth)
+- Groq or OpenRouter API key
 
 ### Installation
 

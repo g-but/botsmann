@@ -9,33 +9,6 @@ export async function searchAmazon(
     return [];
   }
 
-  try {
-    // TODO: Implement real Amazon Product Advertising API integration
-    // This is a mock implementation for development
-    await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate API delay
-
-    return [
-      {
-        id: 'amzn1',
-        title: 'Example Product 1',
-        description: 'This is a mock product from Amazon',
-        price: 99.99,
-        image: 'https://via.placeholder.com/300',
-        url: 'https://amazon.com/product1',
-        platform: 'Amazon',
-      },
-      {
-        id: 'amzn2',
-        title: 'Example Product 2',
-        description: 'Another mock product from Amazon',
-        price: 149.99,
-        image: 'https://via.placeholder.com/300',
-        url: 'https://amazon.com/product2',
-        platform: 'Amazon',
-      },
-    ];
-  } catch (error) {
-    console.info('Amazon search error:', error);
-    return [];
-  }
+  // Real Amazon Product Advertising API integration not yet implemented
+  return [];
 }
