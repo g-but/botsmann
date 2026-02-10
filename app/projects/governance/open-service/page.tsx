@@ -43,7 +43,7 @@ export default function OpenService() {
                       <h3 className="text-lg font-medium text-gray-900">
                         Waste Management Services
                       </h3>
-                      <p className="text-sm text-gray-500">Contract Term: 2023-2026</p>
+                      <p className="text-sm text-gray-500">Contract Term: 2025-2028</p>
                     </div>
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                       Active

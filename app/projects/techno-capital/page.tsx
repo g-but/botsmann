@@ -33,7 +33,7 @@ export default function TechnoCapital() {
             <span className="inline-block bg-openai-green text-white text-xs font-medium px-2 py-1 rounded">
               Coming Soon
             </span>
-            <span className="text-sm text-gray-500">Investment fund launching 2025</span>
+            <span className="text-sm text-gray-500">Investment fund launching 2026</span>
           </div>
           <h1 className="mb-4 text-4xl font-semibold tracking-tight text-gray-900">
             Botsmann Techno-Capital (BTC)

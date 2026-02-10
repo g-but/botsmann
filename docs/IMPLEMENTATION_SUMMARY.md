@@ -570,7 +570,7 @@ We've built:
 ---
 
 _Built with ❤️ by the Lex team_
-_January 2025_
+_January 2026_
 
 ---
 
@@ -588,4 +588,4 @@ _January 2025_
 
 **Status**: ✅ Complete
 **Version**: 1.0.0
-**Last Updated**: January 2025
+**Last Updated**: January 2026

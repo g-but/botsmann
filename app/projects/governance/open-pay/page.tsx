@@ -82,11 +82,11 @@ export default function OpenPay() {
                     <h3 className="text-lg font-medium text-gray-900">
                       Department of Transportation
                     </h3>
-                    <p className="text-sm text-gray-500">Transaction #TX-2023-06-15-001</p>
+                    <p className="text-sm text-gray-500">Transaction #TX-2026-01-15-001</p>
                   </div>
                   <div className="text-right">
                     <p className="text-xl font-semibold text-gray-900">$249,800</p>
-                    <p className="text-xs text-gray-500">June 15, 2023</p>
+                    <p className="text-xs text-gray-500">January 15, 2026</p>
                   </div>
                 </div>
                 <p className="text-sm text-gray-600 mb-4">Highway Repair - Section 14A</p>

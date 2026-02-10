@@ -109,7 +109,7 @@ export default function Portal() {
       id: '4',
       type: 'vote' as 'transaction' | 'law' | 'service' | 'vote',
       action: 'voted on',
-      item: 'City Budget Allocation 2023',
+      item: 'City Budget Allocation 2026',
       time: '1 week ago',
       path: '/projects/governance/open-vote',
       taxImpact: 'Controls 100% of your tax allocation',

@@ -700,6 +700,6 @@ function getAIResponse(message: string): string {
 
 ---
 
-_Last Updated: January 2025_
+_Last Updated: January 2026_
 _Version: 2.0.0_
 _Status: Production-Ready (Demo Mode)_

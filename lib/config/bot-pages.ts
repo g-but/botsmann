@@ -285,32 +285,27 @@ export const botPageConfigs: Record<string, BotPageConfig> = {
             {
               icon: '🔐',
               title: 'Multi-Level Access Control',
-              description:
-                'Granular permissions for your entire team. Control who sees what.',
+              description: 'Granular permissions for your entire team. Control who sees what.',
             },
             {
               icon: '📁',
               title: 'Smart File Organization',
-              description:
-                'AI auto-categorizes and analyzes documents. 8 intelligent categories.',
+              description: 'AI auto-categorizes and analyzes documents. 8 intelligent categories.',
             },
             {
               icon: '🌍',
               title: '130+ Jurisdictions',
-              description:
-                'All 50 US states, 27 EU countries, 26 Swiss cantons, and more.',
+              description: 'All 50 US states, 27 EU countries, 26 Swiss cantons, and more.',
             },
             {
               icon: '📋',
               title: 'Complete Audit Trail',
-              description:
-                'Every action logged and encrypted. Full transparency for compliance.',
+              description: 'Every action logged and encrypted. Full transparency for compliance.',
             },
             {
               icon: '💬',
               title: 'Real-Time Collaboration',
-              description:
-                'Live chat, file sharing, annotations. Everyone stays in sync.',
+              description: 'Live chat, file sharing, annotations. Everyone stays in sync.',
             },
           ],
         } as FeaturesContent,
@@ -330,14 +325,12 @@ export const botPageConfigs: Record<string, BotPageConfig> = {
             {
               icon: '🎯',
               title: 'Match with Lawyer',
-              description:
-                'AI finds the perfect attorney based on expertise and availability.',
+              description: 'AI finds the perfect attorney based on expertise and availability.',
             },
             {
               icon: '🏗️',
               title: 'Workspace Created',
-              description:
-                'Private data room set up with files organized and encrypted.',
+              description: 'Private data room set up with files organized and encrypted.',
             },
             {
               icon: '🚀',
@@ -449,7 +442,7 @@ export const botPageConfigs: Record<string, BotPageConfig> = {
               phase: 'Phase 1',
               status: 'in-progress',
               title: 'AI Legal Assistant',
-              timeline: '2025',
+              timeline: '2025-2026',
               description:
                 'Lex assists lawyers with research, document analysis, and compliance checking.',
               capabilities: [
@@ -478,8 +471,7 @@ export const botPageConfigs: Record<string, BotPageConfig> = {
               status: 'vision',
               title: 'AI Judge',
               timeline: '2028+',
-              description:
-                'Impartial adjudication for specific case types, with human oversight.',
+              description: 'Impartial adjudication for specific case types, with human oversight.',
               capabilities: [
                 'Small claims adjudication',
                 'Dispute resolution assistance',
@@ -528,9 +520,18 @@ export const botPageConfigs: Record<string, BotPageConfig> = {
             {
               title: 'AI & ML',
               items: [
-                { title: 'Large Language Models', description: 'Claude, GPT-4, custom fine-tuned models' },
-                { title: 'Vector Databases', description: 'Pinecone, Weaviate for semantic search' },
-                { title: 'RAG Architecture', description: 'Retrieval-Augmented Generation for accuracy' },
+                {
+                  title: 'Large Language Models',
+                  description: 'Claude, GPT-4, custom fine-tuned models',
+                },
+                {
+                  title: 'Vector Databases',
+                  description: 'Pinecone, Weaviate for semantic search',
+                },
+                {
+                  title: 'RAG Architecture',
+                  description: 'Retrieval-Augmented Generation for accuracy',
+                },
               ],
             },
             {
@@ -538,7 +539,11 @@ export const botPageConfigs: Record<string, BotPageConfig> = {
               items: [
                 { title: 'Case Law APIs', description: 'Integration with legal databases' },
                 { title: 'Document Processing', description: 'OCR, NLP for contract analysis' },
-                { icon: '🕸️', title: 'Knowledge Graphs', description: 'Structured legal relationships' },
+                {
+                  icon: '🕸️',
+                  title: 'Knowledge Graphs',
+                  description: 'Structured legal relationships',
+                },
               ],
             },
             {
@@ -590,7 +595,7 @@ export const botPageConfigs: Record<string, BotPageConfig> = {
             { label: 'Waitlist Members', dynamic: true },
             { label: 'Active Cases', dynamic: true },
             { label: 'Data Rooms Created', dynamic: true },
-            { label: 'Expected Launch', value: 'Q2 2025' },
+            { label: 'Expected Launch', value: 'Q2 2026' },
           ],
           note: 'We believe in transparency. These numbers update in real-time.',
         } as CTAContent,
@@ -711,7 +716,7 @@ export const botPageConfigs: Record<string, BotPageConfig> = {
               phase: 'Phase 1',
               status: 'in-progress',
               title: 'Health Information Assistant',
-              timeline: '2025',
+              timeline: '2025-2026',
               description: 'AI-powered health education and guidance.',
               capabilities: [
                 'Symptom information',
@@ -930,7 +935,7 @@ export const botPageConfigs: Record<string, BotPageConfig> = {
               phase: 'Phase 1',
               status: 'in-progress',
               title: 'Research Assistant',
-              timeline: '2025',
+              timeline: '2025-2026',
               description: 'Organization, search, and synthesis tools.',
               capabilities: [
                 'Material organization',
@@ -1092,8 +1097,7 @@ export const botPageConfigs: Record<string, BotPageConfig> = {
         type: 'demo',
         content: {
           title: 'Try Muse Now',
-          subtitle:
-            'Experience AI-powered creative guidance. Share your project and get inspired.',
+          subtitle: 'Experience AI-powered creative guidance. Share your project and get inspired.',
         } as DemoContent,
       },
       {

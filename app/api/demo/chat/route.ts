@@ -47,11 +47,11 @@ Guidelines:
 
 Available AI Assistants:
 - Heidi: Swiss German Teacher (live)
-- Lex: Legal Expert (coming soon)
-- Imhotep: Medical Expert (coming soon)
-- Nerd: Research Assistant (coming soon)
-- Trident: AI Product Manager (coming soon)
-- Muse: Artistic Advisor (coming soon)
+- Lex: Legal Expert (demo available)
+- Imhotep: Medical Expert (demo available)
+- Nerd: Research Assistant (demo available)
+- Trident: AI Product Manager (demo available)
+- Muse: Artistic Advisor (demo available)
 
 Key value propositions:
 - Your data stays yours (privacy-first)
@@ -401,7 +401,7 @@ const knowledgeChunks: KnowledgeChunk[] = [
     id: 'bots-overview',
     topic: 'AI Assistants',
     question: 'What AI assistants does Botsmann offer?',
-    content: `Botsmann offers six specialized AI assistants: 1) Heidi - Swiss German Teacher (live), 2) Lex - Legal Expert (coming soon), 3) Imhotep - Medical Expert (coming soon), 4) Nerd - Research Assistant (coming soon), 5) Trident - AI Product Manager (coming soon), and 6) Muse - Artistic Advisor (coming soon). Each bot is specialized for its domain while keeping your data private and secure.`,
+    content: `Botsmann offers six specialized AI assistants: 1) Heidi - Swiss German Teacher (live), 2) Lex - Legal Expert (demo available), 3) Imhotep - Medical Expert (demo available), 4) Nerd - Research Assistant (demo available), 5) Trident - AI Product Manager (demo available), and 6) Muse - Artistic Advisor (demo available). Each bot is specialized for its domain while keeping your data private and secure.`,
     keywords: ['bots', 'assistants', 'all', 'list', 'available', 'offer', 'which'],
   },
 ];

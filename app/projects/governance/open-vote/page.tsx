@@ -60,7 +60,7 @@ export default function OpenVote() {
                         <h3 className="text-lg font-medium text-gray-900">
                           Community Budget Allocation
                         </h3>
-                        <p className="text-sm text-gray-500">Active until: June 15, 2023</p>
+                        <p className="text-sm text-gray-500">Active until: June 15, 2026</p>
                       </div>
                     </div>
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">

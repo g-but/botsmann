@@ -55,7 +55,7 @@ Default settings are conservative to work with limited Claude subscriptions:
 When running Ralph on Botsmann, ensure tasks include:
 
 - **SSOT**: Use `data/bots.ts`, `data/menuItems.ts`, `types/`
-- **Validation**: Use Zod schemas from `src/lib/schemas/`
+- **Validation**: Use Zod schemas from `lib/validations/`
 - **No `any`**: Use proper types or `unknown`
 - **Server Components**: Default to server, only 'use client' when needed
 - **Tailwind**: No inline styles
