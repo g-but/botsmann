@@ -85,10 +85,7 @@ const TaxFlow: React.FC<TaxFlowProps> = ({
           ))}
         </div>
         <div className="mt-6 border-t border-gray-200 pt-4 text-sm text-gray-500">
-          <p>
-            Note: Visualization represents FY 2023-2024 tax allocations. Future visualizations will
-            include interactive Sankey diagrams.
-          </p>
+          <p>Note: Visualization represents FY 2025-2026 tax allocations.</p>
         </div>
       </div>
 

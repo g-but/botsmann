@@ -1,9 +1,5 @@
 # Shared Context - Botsmann Architecture
 
-ARCHIVE NOTICE FOR MONGODB SECTIONS
-
-- The database is Supabase (PostgreSQL with RLS). Any sections mentioning MongoDB/Mongoose are historical context and are not current. Prefer docs/SUPABASE_SETUP.md and docs/SSOT.md for the source of truth.
-
 This document provides comprehensive technical context for the Botsmann project.
 
 ---
@@ -37,8 +33,6 @@ This document provides comprehensive technical context for the Botsmann project.
 | Vercel   | Hosting & deployment             |
 | Supabase | Database, Auth, Storage, SQL API |
 | AWS SES  | Email delivery                   |
-| SendGrid | Backup email                     |
-| Mailgun  | Backup email                     |
 
 ### Development Tools
 
@@ -58,56 +52,56 @@ botsmann/
 ├── .claude/                # Claude Code configuration
 │   └── CLAUDE.md           # Claude-specific instructions
 ├── .github/                # GitHub configuration
-│   ├── workflows/          # CI/CD workflows
-│   └── dependabot.yml      # Dependency updates
+│   └── workflows/          # CI/CD workflows
 ├── app/                    # Next.js App Router
 │   ├── api/                # API routes (serverless)
-│   │   ├── consultations/  # Consultation booking
-│   │   ├── health/         # Health check endpoint
-│   │   ├── products/       # Product data
-│   │   ├── rebuild/        # Cache rebuild
-│   │   └── waitlist/       # Waitlist signup
+│   │   ├── auth/           # Auth endpoints
+│   │   ├── chat/           # Chat API
+│   │   ├── conversations/  # Conversation CRUD
+│   │   ├── custom-bots/    # Custom bot management
+│   │   ├── documents/      # Document management
+│   │   └── ...             # Other API routes
+│   ├── auth/               # Auth pages (signin, signup, etc.)
 │   ├── bots/               # Bot pages
 │   │   ├── [slug]/         # Dynamic bot routing
-│   │   ├── legal-expert/   # Lex - Legal assistant
-│   │   ├── medical-expert/ # Imhotep - Medical advisor
-│   │   ├── research-assistant/ # Nerd - Research helper
-│   │   └── swiss-german-teacher/ # Swiss German tutor
-│   ├── about/              # About page
-│   ├── blog/               # Blog section
-│   ├── contact/            # Contact form
+│   │   ├── create/         # Bot builder
+│   │   ├── custom/         # Custom bot pages
+│   │   └── mine/           # User's bots
+│   ├── dashboard/          # User dashboard
+│   ├── documents/          # Document management
+│   ├── profile/            # User profile
+│   ├── settings/           # User settings
+│   ├── professionals/      # Professional bot pages
 │   ├── projects/           # Projects showcase
 │   ├── solutions/          # Business solutions
-│   ├── globals.css         # Global styles
 │   ├── layout.tsx          # Root layout
 │   └── page.tsx            # Homepage
 ├── components/             # Shared UI components
-│   ├── blog/               # Blog components
-│   ├── CollaborationForm.tsx
-│   ├── ConsultationForm.tsx
-│   ├── Footer.tsx
-│   ├── Header.tsx
-│   ├── MegaMenu.tsx
-│   ├── Navigation.tsx
-│   ├── SolutionLayout.tsx
-│   └── TableOfContents.tsx
+│   ├── chat/               # Chat components
+│   ├── dashboard/          # Dashboard components
+│   ├── documents/          # Document components
+│   ├── icons/              # Icon components
+│   ├── navigation/         # AuthNav, MobileNav
+│   ├── shared/             # Shared components
+│   └── ...                 # Other component groups
 ├── data/                   # Static data & configuration
-│   └── bots.ts             # Bot configurations (SSOT)
+│   ├── bots.ts             # Bot configurations (SSOT)
+│   └── professionals.ts    # Professional configurations
 ├── docs/                   # Documentation
 │   ├── BEST_PRACTICES.md   # Coding principles
 │   ├── COMMANDS.md         # npm scripts
+│   ├── SSOT.md             # Single Source of Truth map
+│   ├── SUPABASE_SETUP.md   # Database setup guide
 │   └── SHARED_CONTEXT.md   # This file
 ├── lib/                    # Utilities & helpers
+│   ├── config/             # Config files (colors, navigation, etc.)
+│   ├── validations/        # Zod schemas (SSOT for input types)
+│   └── ...                 # Domain logic, API utils, etc.
 ├── public/                 # Static assets
-│   └── images/             # Image files
-├── src/                    # Additional source (legacy)
-│   ├── components/         # Bot-specific components
-│   └── lib/                # Additional utilities
 ├── tests/                  # Test files
 ├── types/                  # TypeScript definitions
 ├── AGENTS.md               # AI agent instructions
 ├── README.md               # Project overview
-├── SECURITY.md             # Security policy
 ├── next.config.js          # Next.js configuration
 ├── tailwind.config.js      # Tailwind configuration
 ├── tsconfig.json           # TypeScript configuration
@@ -127,13 +121,14 @@ We use the App Router for:
 - Built-in loading/error states
 - Simplified data fetching
 
-### MongoDB with Mongoose
+### Supabase (PostgreSQL)
 
 Chosen for:
 
-- Flexible schema for diverse bot data
-- Easy scaling with MongoDB Atlas
-- Good TypeScript support via Mongoose
+- Row Level Security (RLS) for multi-tenant data isolation
+- pgvector for embedding-based semantic search
+- Built-in Auth, Storage, and realtime subscriptions
+- Strong TypeScript support via generated types
 
 ### Serverless API Routes
 
@@ -147,16 +142,19 @@ All backend logic runs in Vercel serverless functions:
 
 ## Environment Variables
 
-| Variable                     | Required | Description                 |
-| ---------------------------- | -------- | --------------------------- |
-| `MONGODB_URI`                | Yes      | MongoDB connection string   |
-| `API_KEY`                    | Yes      | Internal API authentication |
-| `NEXT_PUBLIC_API_KEY`        | Yes      | Client-side API key         |
-| `NEXT_AWS_ACCESS_KEY_ID`     | No       | AWS SES access key          |
-| `NEXT_AWS_SECRET_ACCESS_KEY` | No       | AWS SES secret              |
-| `NEXT_AWS_REGION`            | No       | AWS region                  |
-| `FROM_EMAIL`                 | No       | Sender email address        |
-| `ADMIN_EMAIL`                | No       | Admin notification email    |
+| Variable                        | Required | Description                 |
+| ------------------------------- | -------- | --------------------------- |
+| `NEXT_PUBLIC_SUPABASE_URL`      | Yes      | Supabase project URL        |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Yes      | Supabase anonymous key      |
+| `SUPABASE_SERVICE_ROLE_KEY`     | Yes      | Supabase service role key   |
+| `GROQ_API_KEY`                  | No       | Groq LLM API key            |
+| `API_KEY`                       | Yes      | Internal API authentication |
+| `NEXT_PUBLIC_API_KEY`           | Yes      | Client-side API key         |
+| `NEXT_AWS_ACCESS_KEY_ID`        | No       | AWS SES access key          |
+| `NEXT_AWS_SECRET_ACCESS_KEY`    | No       | AWS SES secret              |
+| `NEXT_AWS_REGION`               | No       | AWS region                  |
+| `FROM_EMAIL`                    | No       | Sender email address        |
+| `ADMIN_EMAIL`                   | No       | Admin notification email    |
 
 **Setup:** Copy `.env.example` to `.env` and fill in values.
 
@@ -183,7 +181,7 @@ Client → app/api/[route]/route.ts
                 ↓
         Zod validation
                 ↓
-        MongoDB (if needed)
+        Supabase (if needed)
                 ↓
         JSON response
 ```
@@ -197,7 +195,7 @@ User → components/*Form.tsx
                 ↓
         app/api/[endpoint]/route.ts
                 ↓
-        MongoDB + Email service
+        Supabase + Email service
                 ↓
         Success/Error response
 ```
@@ -206,13 +204,13 @@ User → components/*Form.tsx
 
 ## Key Files Reference
 
-| File                        | Purpose            | When to Modify         |
-| --------------------------- | ------------------ | ---------------------- |
-| `data/bots.ts`              | Bot configurations | Adding/editing bots    |
-| `app/layout.tsx`            | Root layout        | Global UI changes      |
-| `components/Navigation.tsx` | Main nav           | Adding pages           |
-| `tailwind.config.js`        | Theme config       | Styling changes        |
-| `types/*.ts`                | Type definitions   | Data structure changes |
+| File                       | Purpose            | When to Modify         |
+| -------------------------- | ------------------ | ---------------------- |
+| `data/bots.ts`             | Bot configurations | Adding/editing bots    |
+| `app/layout.tsx`           | Root layout        | Global UI changes      |
+| `lib/config/navigation.ts` | Nav config (SSOT)  | Adding nav items       |
+| `tailwind.config.js`       | Theme config       | Styling changes        |
+| `types/*.ts`               | Type definitions   | Data structure changes |
 
 ---
 
@@ -244,12 +242,4 @@ Every PR gets a preview URL automatically.
 
 ---
 
-## Known Limitations
-
-1. **src/ directory**: Legacy structure, prefer `app/` for new code
-2. **Multiple component directories**: Consolidation pending
-3. **Email services**: Three providers configured (AWS SES, SendGrid, Mailgun) - needs cleanup
-
----
-
-**Last Updated:** 2026-01-07
+**Last Updated:** 2026-02-10
