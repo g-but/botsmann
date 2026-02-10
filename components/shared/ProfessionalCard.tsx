@@ -49,7 +49,7 @@ export const ProfessionalCard: FC<ProfessionalCardProps> = ({ professional, size
 
         {/* Name & Role */}
         <h3
-          className={`font-bold text-gray-900 mb-1 group-hover:${colors.text} transition-colors ${
+          className={`font-bold text-gray-900 mb-1 ${colors.groupHoverText} transition-colors ${
             isLarge ? 'text-xl' : 'text-lg'
           }`}
         >

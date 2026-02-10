@@ -105,7 +105,7 @@ export const APIKeyInput: FC<APIKeyInputProps> = ({
               ? 'border-red-300 focus:ring-red-500'
               : status === 'connected'
                 ? 'border-green-300 focus:ring-green-500'
-                : `border-gray-200 focus:${colors.ring}`
+                : `border-gray-200 ${colors.focusRing}`
           }`}
         />
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">

@@ -61,6 +61,7 @@ export const getProviderColorClasses = (color: ProviderColor): ProviderColorClas
       border: 'border-orange-500',
       hover: 'hover:bg-orange-600',
       ring: 'ring-orange-500',
+      focusRing: 'focus:ring-orange-500',
     },
     green: {
       bg: 'bg-green-500',
@@ -70,6 +71,7 @@ export const getProviderColorClasses = (color: ProviderColor): ProviderColorClas
       border: 'border-green-500',
       hover: 'hover:bg-green-600',
       ring: 'ring-green-500',
+      focusRing: 'focus:ring-green-500',
     },
     purple: {
       bg: 'bg-purple-500',
@@ -79,6 +81,7 @@ export const getProviderColorClasses = (color: ProviderColor): ProviderColorClas
       border: 'border-purple-500',
       hover: 'hover:bg-purple-600',
       ring: 'ring-purple-500',
+      focusRing: 'focus:ring-purple-500',
     },
     blue: {
       bg: 'bg-blue-500',
@@ -88,6 +91,7 @@ export const getProviderColorClasses = (color: ProviderColor): ProviderColorClas
       border: 'border-blue-500',
       hover: 'hover:bg-blue-600',
       ring: 'ring-blue-500',
+      focusRing: 'focus:ring-blue-500',
     },
   };
   return colors[color];
