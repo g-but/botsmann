@@ -21,6 +21,10 @@ Expert guidance from AI advisors in law, health, research, language, art, and bu
 - **Backend**: Next.js API routes, OpenAI/Groq API
 - **Database**: Supabase (PostgreSQL + pgvector)
 - **Deployment**: Vercel
+## API Endpoint
+
+Consultation form submissions are handled via a Next.js API route in `app/api/consultations/route.ts`. Submit requests using `POST /api/consultations`.
+
 
 ## Getting Started
 
