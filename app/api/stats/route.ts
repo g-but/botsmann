@@ -5,6 +5,8 @@
  */
 
 import { type NextRequest } from 'next/server';
+
+export const dynamic = 'force-dynamic';
 import { getServiceClient } from '@/lib/supabase';
 import { verifyUser } from '@/lib/api-utils';
 import { jsonSuccess, jsonError, jsonUnauthorized, handleError, HTTP_STATUS } from '@/lib/api';
